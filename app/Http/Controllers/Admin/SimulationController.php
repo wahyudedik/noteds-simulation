@@ -4,11 +4,11 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Simulation;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Illuminate\View\View;
-use Illuminate\Http\RedirectResponse;
 use ZipArchive;
 
 class SimulationController extends Controller
@@ -55,26 +55,26 @@ class SimulationController extends Controller
         $slug = Str::slug($validated['title']);
         $existing = Simulation::where('slug', $slug)->count();
         if ($existing > 0) {
-            $slug = $slug . '-' . Str::random(5);
+            $slug = $slug.'-'.Str::random(5);
         }
 
         // Handle simulation zip upload
         $zipFile = $request->file('simulation_file');
-        $zipFilename = time() . '_' . Str::random(10) . '.zip';
-        $zipPath = $zipFile->storeAs('simulations/' . $slug, $zipFilename, 'local');
+        $zipFilename = time().'_'.Str::random(10).'.zip';
+        $zipPath = $zipFile->storeAs($slug, $zipFilename, 'simulations');
 
         // Extract zip and read manifest
-        $extractPath = storage_path('app/simulations/' . $slug . '/extracted');
-        $zip = new ZipArchive();
+        $extractPath = storage_path('app/simulations/'.$slug.'/extracted');
+        $zip = new ZipArchive;
         $entryPoint = 'index.html';
         $manifestData = [];
 
-        if ($zip->open(storage_path('app/' . $zipPath)) === true) {
+        if ($zip->open(storage_path('app/simulations/'.$zipPath)) === true) {
             $zip->extractTo($extractPath);
             $zip->close();
 
             // Try to read manifest.json
-            $manifestPath = $extractPath . '/manifest.json';
+            $manifestPath = $extractPath.'/manifest.json';
             if (file_exists($manifestPath)) {
                 $manifestData = json_decode(file_get_contents($manifestPath), true) ?? [];
 
@@ -95,9 +95,9 @@ class SimulationController extends Controller
         $thumbnailPath = null;
         if ($request->hasFile('thumbnail')) {
             $thumbnailPath = $request->file('thumbnail')->store('thumbnails', 'public');
-        } elseif (file_exists($extractPath . '/assets/images/thumbnail.png')) {
+        } elseif (file_exists($extractPath.'/assets/images/thumbnail.png')) {
             // Try to use thumbnail from zip
-            $thumbnailPath = Storage::disk('public')->putFile('thumbnails', $extractPath . '/assets/images/thumbnail.png');
+            $thumbnailPath = Storage::disk('public')->putFile('thumbnails', $extractPath.'/assets/images/thumbnail.png');
         }
 
         // Create simulation record
@@ -127,6 +127,7 @@ class SimulationController extends Controller
     public function show(Simulation $simulation): View
     {
         $simulation->load('user');
+
         return view('admin.simulations.show', compact('simulation'));
     }
 
@@ -179,13 +180,18 @@ class SimulationController extends Controller
      */
     public function destroy(Simulation $simulation): RedirectResponse
     {
-        // Delete zip file
+        // Delete zip file and extracted folder from simulations disk
         if ($simulation->zip_path) {
-            Storage::delete($simulation->zip_path);
+            Storage::disk('simulations')->delete($simulation->zip_path);
             // Delete extracted folder
-            $extractDir = storage_path('app/simulations/' . $simulation->slug . '/extracted');
+            $extractDir = storage_path('app/simulations/'.$simulation->slug.'/extracted');
             if (is_dir($extractDir)) {
                 $this->deleteDirectory($extractDir);
+            }
+            // Delete the parent slug directory if empty
+            $slugDir = storage_path('app/simulations/'.$simulation->slug);
+            if (is_dir($slugDir) && $this->isDirectoryEmpty($slugDir)) {
+                rmdir($slugDir);
             }
         }
 
@@ -223,11 +229,21 @@ class SimulationController extends Controller
         if (is_dir($path)) {
             $files = array_diff(scandir($path), ['.', '..']);
             foreach ($files as $file) {
-                $this->deleteDirectory($path . DIRECTORY_SEPARATOR . $file);
+                $this->deleteDirectory($path.DIRECTORY_SEPARATOR.$file);
             }
             rmdir($path);
         } else {
             unlink($path);
         }
+    }
+
+    /**
+     * Check if a directory is empty.
+     */
+    private function isDirectoryEmpty(string $path): bool
+    {
+        $items = array_diff(scandir($path), ['.', '..']);
+
+        return count($items) === 0;
     }
 }

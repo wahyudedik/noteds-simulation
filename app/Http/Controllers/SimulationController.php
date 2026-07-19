@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Simulation;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
+use ZipArchive;
 
 class SimulationController extends Controller
 {
@@ -75,7 +76,7 @@ class SimulationController extends Controller
     }
 
     /**
-     * Play a simulation (increment play count and serve the sim).
+     * Increment play count (called via AJAX when user plays simulation).
      */
     public function play(string $slug)
     {
@@ -85,13 +86,105 @@ class SimulationController extends Controller
 
         $simulation->increment('play_count');
 
-        $zipPath = storage_path('app/' . $simulation->zip_path);
-
-        if (! file_exists($zipPath)) {
-            abort(404, 'Simulation file not found.');
+        if (request()->ajax() || request()->wantsJson()) {
+            return response()->json([
+                'success' => true,
+                'play_count' => $simulation->fresh()->play_count,
+            ]);
         }
 
-        return response()->download($zipPath);
+        return redirect()->route('simulations.show', $slug);
+    }
+
+    /**
+     * Serve a file from the extracted simulation directory.
+     * Used by iframe to load simulation assets (HTML, CSS, JS, images).
+     * Auto-extracts ZIP on first request if not yet extracted.
+     */
+    public function serve(string $slug, string $path = '')
+    {
+        $simulation = Simulation::published()
+            ->where('slug', $slug)
+            ->firstOrFail();
+
+        $extractPath = storage_path('app/simulations/'.$slug.'/extracted');
+
+        // Auto-extract if not yet extracted
+        if (! is_dir($extractPath)) {
+            $this->extractSimulation($slug, $extractPath);
+        }
+
+        $filePath = $extractPath.'/'.$path;
+
+        // Security: prevent directory traversal
+        $realExtractPath = realpath($extractPath);
+        $realFilePath = realpath($filePath);
+
+        if ($realExtractPath === false || $realFilePath === false || ! str_starts_with($realFilePath, $realExtractPath)) {
+            abort(403, 'Access denied.');
+        }
+
+        if (! file_exists($filePath)) {
+            abort(404, 'File not found.');
+        }
+
+        // Determine content type
+        $mimeType = mime_content_type($filePath);
+        if ($mimeType === false) {
+            $mimeType = 'application/octet-stream';
+        }
+
+        return response()->file($filePath, [
+            'Content-Type' => $mimeType,
+            'Cache-Control' => 'public, max-age=86400',
+        ]);
+    }
+
+    /**
+     * Extract simulation ZIP to the target directory.
+     * Checks both new path (simulations disk) and legacy path (private/simulations).
+     */
+    private function extractSimulation(string $slug, string $extractPath): void
+    {
+        // Try new path: storage/app/simulations/{slug}/*.zip
+        $simDir = storage_path('app/simulations/'.$slug);
+        $zipFile = $this->findZipInDirectory($simDir);
+
+        // Fallback: legacy path storage/app/private/simulations/{slug}/*.zip
+        if ($zipFile === null) {
+            $legacyDir = storage_path('app/private/simulations/'.$slug);
+            $zipFile = $this->findZipInDirectory($legacyDir);
+        }
+
+        if ($zipFile === null) {
+            abort(404, 'Simulation package not found.');
+        }
+
+        $zip = new ZipArchive;
+        if ($zip->open($zipFile) === true) {
+            // Ensure extract directory exists
+            if (! is_dir($extractPath)) {
+                mkdir($extractPath, 0775, true);
+            }
+            $zip->extractTo($extractPath);
+            $zip->close();
+        } else {
+            abort(500, 'Failed to extract simulation package.');
+        }
+    }
+
+    /**
+     * Find the first .zip file in a directory.
+     */
+    private function findZipInDirectory(string $directory): ?string
+    {
+        if (! is_dir($directory)) {
+            return null;
+        }
+
+        $files = glob($directory.'/*.zip');
+
+        return $files[0] ?? null;
     }
 
     /**
