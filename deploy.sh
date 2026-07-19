@@ -41,6 +41,17 @@ cd "$PROJECT_DIR"
 echo -e "${YELLOW}Working directory: $(pwd)${NC}"
 echo ""
 
+# Detect web server user (www-data, www, apache, nginx, etc.)
+WEB_USER="www-data"
+for user in www-data www apache nginx http nobody; do
+    if id "$user" &>/dev/null; then
+        WEB_USER="$user"
+        break
+    fi
+done
+echo -e "${YELLOW}Web server user: ${WEB_USER}${NC}"
+echo ""
+
 # Step 0: Create required directories & set permissions FIRST
 echo -e "${BLUE}Step 0: Preparing directories & permissions...${NC}"
 mkdir -p storage/app/simulations
@@ -52,7 +63,7 @@ mkdir -p storage/framework/testing
 mkdir -p storage/logs
 mkdir -p bootstrap/cache
 chmod -R 775 storage bootstrap/cache 2>/dev/null || true
-chown -R www-data:www-data storage bootstrap/cache 2>/dev/null || true
+chown -R "${WEB_USER}:${WEB_USER}" storage bootstrap/cache 2>/dev/null || true
 echo -e "${GREEN}Directories & permissions ready.${NC}"
 echo ""
 
@@ -142,13 +153,13 @@ else
 fi
 echo ""
 
-# Step 9: Fix ownership BEFORE cache (so cache files are owned by www-data)
+# Step 9: Fix ownership BEFORE cache (so cache files are owned by web user)
 echo -e "${BLUE}Step 9: Setting ownership before cache...${NC}"
 mkdir -p storage/framework/views
 mkdir -p storage/framework/cache/data
 mkdir -p storage/framework/sessions
 mkdir -p bootstrap/cache
-chown -R www-data:www-data storage bootstrap/cache 2>/dev/null || true
+chown -R "${WEB_USER}:${WEB_USER}" storage bootstrap/cache 2>/dev/null || true
 chmod -R 775 storage bootstrap/cache 2>/dev/null || true
 echo -e "${GREEN}Ownership set.${NC}"
 echo ""
@@ -162,13 +173,13 @@ php artisan event:cache --no-interaction 2>/dev/null || true
 echo -e "${GREEN}Cache optimized.${NC}"
 echo ""
 
-# Step 11: Fix ownership AFTER cache (files created by root need www-data ownership)
+# Step 11: Fix ownership AFTER cache (files created by root need web user ownership)
 echo -e "${BLUE}Step 11: Fixing ownership after cache...${NC}"
-chown -R www-data:www-data storage/framework/views 2>/dev/null || true
-chown -R www-data:www-data storage/framework/cache 2>/dev/null || true
-chown -R www-data:www-data storage/framework/sessions 2>/dev/null || true
-chown -R www-data:www-data storage/logs 2>/dev/null || true
-chown -R www-data:www-data bootstrap/cache 2>/dev/null || true
+chown -R "${WEB_USER}:${WEB_USER}" storage/framework/views 2>/dev/null || true
+chown -R "${WEB_USER}:${WEB_USER}" storage/framework/cache 2>/dev/null || true
+chown -R "${WEB_USER}:${WEB_USER}" storage/framework/sessions 2>/dev/null || true
+chown -R "${WEB_USER}:${WEB_USER}" storage/logs 2>/dev/null || true
+chown -R "${WEB_USER}:${WEB_USER}" bootstrap/cache 2>/dev/null || true
 chmod -R 775 storage bootstrap/cache 2>/dev/null || true
 echo -e "${GREEN}Ownership fixed.${NC}"
 echo ""
