@@ -134,8 +134,19 @@ else
 fi
 echo ""
 
-# Step 9: Rebuild cache
-echo -e "${BLUE}Step 9: Optimizing application...${NC}"
+# Step 9: Fix ownership BEFORE cache (so cache files are owned by www-data)
+echo -e "${BLUE}Step 9: Setting ownership before cache...${NC}"
+mkdir -p storage/framework/views
+mkdir -p storage/framework/cache/data
+mkdir -p storage/framework/sessions
+mkdir -p bootstrap/cache
+chown -R www-data:www-data storage bootstrap/cache 2>/dev/null || true
+chmod -R 775 storage bootstrap/cache 2>/dev/null || true
+echo -e "${GREEN}Ownership set.${NC}"
+echo ""
+
+# Step 10: Rebuild cache (as root, but chown after)
+echo -e "${BLUE}Step 10: Optimizing application...${NC}"
 php artisan config:cache --no-interaction 2>/dev/null || true
 php artisan route:cache --no-interaction 2>/dev/null || true
 php artisan view:cache --no-interaction 2>/dev/null || true
@@ -143,17 +154,21 @@ php artisan event:cache --no-interaction 2>/dev/null || true
 echo -e "${GREEN}Cache optimized.${NC}"
 echo ""
 
-# Step 10: Restart queue worker
-echo -e "${BLUE}Step 10: Restarting queue worker...${NC}"
-php artisan queue:restart 2>/dev/null || true
-echo -e "${GREEN}Queue restarted.${NC}"
+# Step 11: Fix ownership AFTER cache (files created by root need www-data ownership)
+echo -e "${BLUE}Step 11: Fixing ownership after cache...${NC}"
+chown -R www-data:www-data storage/framework/views 2>/dev/null || true
+chown -R www-data:www-data storage/framework/cache 2>/dev/null || true
+chown -R www-data:www-data storage/framework/sessions 2>/dev/null || true
+chown -R www-data:www-data storage/logs 2>/dev/null || true
+chown -R www-data:www-data bootstrap/cache 2>/dev/null || true
+chmod -R 775 storage bootstrap/cache 2>/dev/null || true
+echo -e "${GREEN}Ownership fixed.${NC}"
 echo ""
 
-# Step 11: Final permissions
-echo -e "${BLUE}Step 11: Setting final permissions...${NC}"
-chmod -R 775 storage bootstrap/cache 2>/dev/null || true
-chown -R www-data:www-data storage bootstrap/cache 2>/dev/null || true
-echo -e "${GREEN}Permissions set.${NC}"
+# Step 12: Restart queue worker
+echo -e "${BLUE}Step 12: Restarting queue worker...${NC}"
+php artisan queue:restart 2>/dev/null || true
+echo -e "${GREEN}Queue restarted.${NC}"
 echo ""
 
 echo -e "${GREEN}================================================${NC}"
