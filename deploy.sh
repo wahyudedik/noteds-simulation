@@ -16,6 +16,7 @@
 # ============================================================
 
 set -e  # Exit on error
+trap 'echo -e "${RED}Deploy failed at line $LINENO${NC}"; exit 1' ERR
 
 # Colors for output
 RED='\033[0;31m'
@@ -58,6 +59,8 @@ echo ""
 # Step 1: Pull latest code
 echo -e "${BLUE}Step 1: Pulling latest code...${NC}"
 if [ -d ".git" ]; then
+    # Discard local changes to prevent merge conflicts
+    git checkout -- . 2>/dev/null || true
     git pull origin main 2>/dev/null || git pull origin master 2>/dev/null || {
         echo -e "${YELLOW}No git remote found, skipping pull.${NC}"
     }
