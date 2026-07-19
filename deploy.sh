@@ -58,6 +58,7 @@ echo ""
 
 # Step 1: Pull latest code
 echo -e "${BLUE}Step 1: Pulling latest code...${NC}"
+DEPLOY_SCRIPT_HASH_BEFORE=$(md5sum "$0" 2>/dev/null | awk '{print $1}')
 if [ -d ".git" ]; then
     # Discard local changes to prevent merge conflicts
     git checkout -- . 2>/dev/null || true
@@ -67,6 +68,13 @@ if [ -d ".git" ]; then
     echo -e "${GREEN}Code updated.${NC}"
 else
     echo -e "${YELLOW}Not a git repository, skipping pull.${NC}"
+fi
+
+# Re-exec if deploy.sh was updated by git pull
+DEPLOY_SCRIPT_HASH_AFTER=$(md5sum "$0" 2>/dev/null | awk '{print $1}')
+if [ "$DEPLOY_SCRIPT_HASH_BEFORE" != "$DEPLOY_SCRIPT_HASH_AFTER" ]; then
+    echo -e "${YELLOW}deploy.sh updated, re-executing...${NC}"
+    exec bash "$0" "$@"
 fi
 echo ""
 
