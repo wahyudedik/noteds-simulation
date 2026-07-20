@@ -73,6 +73,7 @@ Route::middleware('auth')->group(function () {
     Route::delete('/my-collections/{collection}', [CollectionController::class, 'destroy'])->name('collections.destroy');
     Route::post('/collections/add-simulation', [CollectionController::class, 'addSimulation'])->name('collections.add-simulation');
     Route::post('/collections/remove-simulation', [CollectionController::class, 'removeSimulation'])->name('collections.remove-simulation');
+    Route::get('/collections/search-simulations', [CollectionController::class, 'searchSimulations'])->name('collections.search-simulations');
 });
 
 // Public collection view

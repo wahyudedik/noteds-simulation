@@ -199,7 +199,7 @@
                                     </div>
                                     @forelse($userCollections as $collection)
                                         <button
-                                            @click="addToCollection({{ $collection->id }}, this)"
+                                            @click="addToCollection({{ $collection->id }})"
                                             class="flex items-center gap-3 w-full px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-50 transition text-left"
                                         >
                                             <svg class="w-4 h-4 text-blue-500 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/></svg>
@@ -624,32 +624,15 @@
         }
 
         // ========== Add to Collection ==========
-        function addToCollection(collectionId, btnEl) {
-            if (btnEl.disabled) return;
-            btnEl.disabled = true;
-            var originalText = btnEl.querySelector('span.truncate').textContent;
-            btnEl.querySelector('span.truncate').textContent = 'Menambahkan...';
+        function addToCollection(collectionId) {
             ajaxPost('{{ route("collections.add-simulation") }}', {
                 collection_id: collectionId,
                 simulation_id: {{ $simulation->id }}
             }, function(result) {
-                btnEl.disabled = false;
-                if (result.success) {
-                    btnEl.querySelector('span.truncate').textContent = '✓ ' + originalText;
-                    btnEl.classList.add('text-green-600');
-                    // Update the dropdown trigger text
-                    var dropdown = btnEl.closest('[x-data]');
-                    if (dropdown) {
-                        var triggerSpan = dropdown.querySelector('button span');
-                        if (triggerSpan) {
-                            triggerSpan.textContent = 'Tersimpan!';
-                            setTimeout(function() { triggerSpan.textContent = 'Collection'; }, 2000);
-                        }
-                    }
-                } else {
-                    btnEl.querySelector('span.truncate').textContent = originalText;
-                }
                 showToast(result.message);
+                if (result.success) {
+                    setTimeout(function() { window.location.reload(); }, 500);
+                }
             });
         }
 

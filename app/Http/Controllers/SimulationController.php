@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Simulation;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
@@ -78,13 +79,17 @@ class SimulationController extends Controller
         $ratingModel = $simulation->getRatingBy($user);
         $userRating = $ratingModel ? $ratingModel->rating : 0;
         $userReactions = $simulation->getReactionsBy($user)->pluck('type')->toArray();
-        $isFollowing = $user && $simulation->user_id !== $user->id
-            ? $user->isFollowing($simulation->user)
-            : false;
-        $reactionCounts = $simulation->reaction_counts;
+        $isFollowing = false;
+        $userCollections = collect();
 
-        // User's collections (for "Add to Collection" feature)
-        $userCollections = $user ? $user->collections()->withCount('simulations')->get() : collect();
+        if ($user instanceof User) {
+            $isFollowing = $simulation->user_id !== $user->id
+                ? $user->isFollowing($simulation->user)
+                : false;
+            $userCollections = $user->collections()->withCount('simulations')->get();
+        }
+
+        $reactionCounts = $simulation->reaction_counts;
 
         // Related simulations (same category)
         $related = Simulation::published()

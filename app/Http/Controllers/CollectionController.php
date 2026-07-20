@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Collection;
+use App\Models\Simulation;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -81,9 +82,9 @@ class CollectionController extends Controller
     /**
      * Show edit form.
      */
-    public function edit(Collection $collection): View
+    public function edit(Request $request, Collection $collection): View
     {
-        if ($collection->user_id !== auth()->id()) {
+        if ($collection->user_id !== $request->user()->id) {
             abort(403);
         }
 
@@ -97,7 +98,7 @@ class CollectionController extends Controller
      */
     public function update(Request $request, Collection $collection): RedirectResponse
     {
-        if ($collection->user_id !== auth()->id()) {
+        if ($collection->user_id !== $request->user()->id) {
             abort(403);
         }
 
@@ -129,9 +130,9 @@ class CollectionController extends Controller
     /**
      * Delete a collection.
      */
-    public function destroy(Collection $collection): RedirectResponse
+    public function destroy(Request $request, Collection $collection): RedirectResponse
     {
-        if ($collection->user_id !== auth()->id()) {
+        if ($collection->user_id !== $request->user()->id) {
             abort(403);
         }
 
@@ -153,7 +154,7 @@ class CollectionController extends Controller
 
         $collection = Collection::findOrFail($request->collection_id);
 
-        if ($collection->user_id !== auth()->id()) {
+        if ($collection->user_id !== $request->user()->id) {
             return response()->json(['success' => false, 'message' => 'Unauthorized'], 403);
         }
 
@@ -184,7 +185,7 @@ class CollectionController extends Controller
 
         $collection = Collection::findOrFail($request->collection_id);
 
-        if ($collection->user_id !== auth()->id()) {
+        if ($collection->user_id !== $request->user()->id) {
             return response()->json(['success' => false, 'message' => 'Unauthorized'], 403);
         }
 
@@ -194,5 +195,23 @@ class CollectionController extends Controller
             'success' => true,
             'message' => 'Simulasi berhasil dihapus dari collection',
         ]);
+    }
+
+    /**
+     * Search published simulations for adding to collection (AJAX).
+     */
+    public function searchSimulations(Request $request): JsonResponse
+    {
+        $query = $request->input('q', '');
+
+        $simulations = Simulation::published()
+            ->where('title', 'like', '%'.$query.'%')
+            ->orWhere('slug', 'like', '%'.$query.'%')
+            ->select('id', 'title', 'slug', 'thumbnail', 'category')
+            ->orderByDesc('play_count')
+            ->limit(10)
+            ->get();
+
+        return response()->json(['simulations' => $simulations]);
     }
 }
