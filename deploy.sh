@@ -43,13 +43,24 @@ echo ""
 
 # Detect web server user (www-data, www, apache, nginx, etc.)
 WEB_USER="www-data"
-for user in www-data www apache nginx http nobody; do
+for user in www www-data apache nginx http nobody; do
     if id "$user" &>/dev/null; then
         WEB_USER="$user"
         break
     fi
 done
 echo -e "${YELLOW}Web server user: ${WEB_USER}${NC}"
+
+IS_ROOT=false
+if [ "$EUID" -eq 0 ] 2>/dev/null || [ "$(id -u)" -eq 0 ] 2>/dev/null; then
+    IS_ROOT=true
+fi
+
+if [ "$IS_ROOT" = false ]; then
+    echo -e "${YELLOW}WARNING: You are not running this script as root/sudo.${NC}"
+    echo -e "${YELLOW}Ownership changes (chown) to '${WEB_USER}' might fail.${NC}"
+    echo -e "${YELLOW}If you encounter permission or 500 errors, please run: sudo bash deploy.sh${NC}"
+fi
 echo ""
 
 # Step 0: Create required directories & set permissions FIRST
@@ -62,8 +73,8 @@ mkdir -p storage/framework/views
 mkdir -p storage/framework/testing
 mkdir -p storage/logs
 mkdir -p bootstrap/cache
-chmod -R 775 storage bootstrap/cache 2>/dev/null || true
-chown -R "${WEB_USER}:${WEB_USER}" storage bootstrap/cache 2>/dev/null || true
+chmod -R 775 storage bootstrap/cache || true
+chown -R "${WEB_USER}:${WEB_USER}" storage bootstrap/cache || true
 echo -e "${GREEN}Directories & permissions ready.${NC}"
 echo ""
 
@@ -159,8 +170,8 @@ mkdir -p storage/framework/views
 mkdir -p storage/framework/cache/data
 mkdir -p storage/framework/sessions
 mkdir -p bootstrap/cache
-chown -R "${WEB_USER}:${WEB_USER}" storage bootstrap/cache 2>/dev/null || true
-chmod -R 775 storage bootstrap/cache 2>/dev/null || true
+chown -R "${WEB_USER}:${WEB_USER}" storage bootstrap/cache || true
+chmod -R 775 storage bootstrap/cache || true
 echo -e "${GREEN}Ownership set.${NC}"
 echo ""
 
@@ -175,12 +186,12 @@ echo ""
 
 # Step 11: Fix ownership AFTER cache (files created by root need web user ownership)
 echo -e "${BLUE}Step 11: Fixing ownership after cache...${NC}"
-chown -R "${WEB_USER}:${WEB_USER}" storage/framework/views 2>/dev/null || true
-chown -R "${WEB_USER}:${WEB_USER}" storage/framework/cache 2>/dev/null || true
-chown -R "${WEB_USER}:${WEB_USER}" storage/framework/sessions 2>/dev/null || true
-chown -R "${WEB_USER}:${WEB_USER}" storage/logs 2>/dev/null || true
-chown -R "${WEB_USER}:${WEB_USER}" bootstrap/cache 2>/dev/null || true
-chmod -R 775 storage bootstrap/cache 2>/dev/null || true
+chown -R "${WEB_USER}:${WEB_USER}" storage/framework/views || true
+chown -R "${WEB_USER}:${WEB_USER}" storage/framework/cache || true
+chown -R "${WEB_USER}:${WEB_USER}" storage/framework/sessions || true
+chown -R "${WEB_USER}:${WEB_USER}" storage/logs || true
+chown -R "${WEB_USER}:${WEB_USER}" bootstrap/cache || true
+chmod -R 775 storage bootstrap/cache || true
 echo -e "${GREEN}Ownership fixed.${NC}"
 echo ""
 
