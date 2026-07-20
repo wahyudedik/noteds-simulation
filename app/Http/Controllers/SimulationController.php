@@ -129,10 +129,21 @@ class SimulationController extends Controller
         }
 
         // Determine content type
-        $mimeType = mime_content_type($filePath);
-        if ($mimeType === false) {
-            $mimeType = 'application/octet-stream';
-        }
+        $extension = strtolower(pathinfo($filePath, PATHINFO_EXTENSION));
+        $mimes = [
+            'css' => 'text/css',
+            'js' => 'application/javascript',
+            'svg' => 'image/svg+xml',
+            'png' => 'image/png',
+            'jpg' => 'image/jpeg',
+            'jpeg' => 'image/jpeg',
+            'gif' => 'image/gif',
+            'html' => 'text/html',
+            'htm' => 'text/html',
+            'json' => 'application/json',
+        ];
+
+        $mimeType = $mimes[$extension] ?? (mime_content_type($filePath) ?: 'application/octet-stream');
 
         return response()->file($filePath, [
             'Content-Type' => $mimeType,
