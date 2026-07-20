@@ -58,6 +58,26 @@
         body.fullscreen-mode {
             overflow: hidden;
         }
+        /* Custom scrollbar globally for the parent page */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #111827; /* bg-gray-900 */
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #374151; /* bg-gray-700 */
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #4b5563; /* bg-gray-600 */
+        }
+        /* Firefox */
+        * {
+            scrollbar-width: thin;
+            scrollbar-color: #374151 #111827;
+        }
     </style>
 </head>
 <body class="bg-gray-900 font-sans antialiased">
