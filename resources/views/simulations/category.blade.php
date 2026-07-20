@@ -11,27 +11,7 @@
 </head>
 <body class="bg-gray-50 font-sans antialiased">
 
-    {{-- Navigation --}}
-    <nav class="bg-white shadow-sm border-b border-gray-100">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex items-center justify-between h-14">
-                <a href="{{ route('home') }}" class="flex items-center gap-2">
-                    <img src="{{ asset('logo.jpeg') }}" alt="NotEDs" class="w-7 h-7 rounded-lg object-cover" />
-                    <span class="text-lg font-bold text-gray-900">Noteds</span>
-                </a>
-                <div class="flex items-center gap-3">
-                    @auth
-                        @if(auth()->user()->isAdmin())
-                            <a href="{{ route('admin.dashboard') }}" class="text-sm text-blue-600 font-medium">Studio</a>
-                        @endif
-                        <a href="{{ route('dashboard') }}" class="text-sm text-gray-700">{{ auth()->user()->name }}</a>
-                    @else
-                        <a href="{{ route('login') }}" class="text-sm text-gray-700">Masuk</a>
-                    @endauth
-                </div>
-            </div>
-        </div>
-    </nav>
+    @include('components.app-header')
 
     <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div class="flex items-center gap-3 mb-6">

@@ -10,7 +10,6 @@
     <link href="https://fonts.bunny.net/css?family=roboto:400,500,700&display=swap" rel="stylesheet" />
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     <style>
-        /* Sticky player when scrolled past */
         .player-sticky-active {
             position: fixed;
             top: 0;
@@ -27,7 +26,6 @@
         .player-sticky-active #player-poster {
             border-radius: 0;
         }
-        /* Fullscreen styles */
         .player-fullscreen {
             position: fixed !important;
             top: 0 !important;
@@ -54,62 +52,45 @@
             right: 0;
             z-index: 10000;
         }
-        /* Hide scrollbar in fullscreen */
         body.fullscreen-mode {
             overflow: hidden;
         }
-        /* Custom scrollbar globally for the parent page */
         ::-webkit-scrollbar {
             width: 8px;
             height: 8px;
         }
         ::-webkit-scrollbar-track {
-            background: #111827; /* bg-gray-900 */
+            background: #111827;
         }
         ::-webkit-scrollbar-thumb {
-            background: #374151; /* bg-gray-700 */
+            background: #374151;
             border-radius: 4px;
         }
         ::-webkit-scrollbar-thumb:hover {
-            background: #4b5563; /* bg-gray-600 */
+            background: #4b5563;
         }
-        /* Firefox */
         * {
             scrollbar-width: thin;
             scrollbar-color: #374151 #111827;
         }
+        .reaction-btn.active { background-color: #2563eb; color: white; }
+        .bookmark-btn.active { color: #facc15; }
+        .rating-star { cursor: pointer; transition: color 0.15s; }
+        .rating-star:hover, .rating-star.active { color: #facc15; }
+        .comment-reply { display: none; }
+        .comment-reply.show { display: block; }
     </style>
 </head>
 <body class="bg-gray-900 font-sans antialiased">
 
-    {{-- Top Navigation --}}
-    <nav id="main-nav" class="bg-white shadow-sm border-b border-gray-100 relative z-50">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex items-center justify-between h-14">
-                <a href="{{ route('home') }}" class="flex items-center gap-2">
-                    <img src="{{ asset('logo.jpeg') }}" alt="NotEDs" class="w-7 h-7 rounded-lg object-cover" />
-                    <span class="text-lg font-bold text-gray-900">Noteds</span>
-                </a>
-                <div class="flex items-center gap-3">
-                    @auth
-                        @if(auth()->user()->isAdmin())
-                            <a href="{{ route('admin.dashboard') }}" class="text-sm text-blue-600 hover:text-blue-700 font-medium">Studio</a>
-                        @endif
-                        <a href="{{ route('dashboard') }}" class="text-sm text-gray-700 hover:text-blue-600">{{ auth()->user()->name }}</a>
-                    @else
-                        <a href="{{ route('login') }}" class="text-sm text-gray-700 hover:text-blue-600">Masuk</a>
-                    @endauth
-                </div>
-            </div>
-        </div>
-    </nav>
+    @include('components.app-header')
 
     <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
         <div class="flex flex-col lg:flex-row gap-6">
 
             {{-- Left: Player & Info --}}
             <div class="flex-1 min-w-0">
-                {{-- Player Wrapper (for sticky + fullscreen) --}}
+                {{-- Player Wrapper --}}
                 <div id="player-wrapper">
                     {{-- Thumbnail / Poster --}}
                     <div id="player-poster" class="bg-black rounded-xl overflow-hidden aspect-video relative">
@@ -125,7 +106,6 @@
                             </div>
                         @endif
 
-                        {{-- Play button overlay --}}
                         <div id="play-overlay" class="absolute inset-0 flex items-center justify-center bg-black/30 cursor-pointer" onclick="playSimulation()">
                             <div class="w-20 h-20 bg-white/90 hover:bg-white rounded-full flex items-center justify-center shadow-2xl transition duration-200 hover:scale-110">
                                 <svg class="w-8 h-8 text-blue-600 ml-1" fill="currentColor" viewBox="0 0 24 24">
@@ -135,7 +115,7 @@
                         </div>
                     </div>
 
-                    {{-- Simulation Player (hidden by default) --}}
+                    {{-- Simulation Player --}}
                     <div id="player-iframe-container" class="hidden bg-black overflow-hidden aspect-video relative">
                         <iframe id="simulation-iframe" class="w-full h-full border-0" src="" allowfullscreen></iframe>
                     </div>
@@ -143,18 +123,15 @@
                     {{-- Player Control Bar --}}
                     <div id="player-controls" class="hidden bg-gray-900 border-t border-gray-800 px-3 py-2 flex items-center justify-between rounded-b-xl">
                         <div class="flex items-center gap-2">
-                            {{-- Close / Stop --}}
                             <button onclick="closeSimulation()" class="p-1.5 text-gray-400 hover:text-white rounded-lg hover:bg-gray-800 transition" title="Tutup simulasi">
                                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
                             </button>
-                            {{-- Reload --}}
                             <button onclick="reloadSimulation()" class="p-1.5 text-gray-400 hover:text-white rounded-lg hover:bg-gray-800 transition" title="Muat ulang">
                                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" /></svg>
                             </button>
                         </div>
                         <div class="flex items-center gap-1">
                             <span class="text-xs text-gray-500 mr-2 hidden sm:inline">{{ $simulation->title }}</span>
-                            {{-- Fullscreen --}}
                             <button onclick="toggleFullscreen()" id="btn-fullscreen" class="p-1.5 text-gray-400 hover:text-white rounded-lg hover:bg-gray-800 transition" title="Layar penuh">
                                 <svg id="icon-fullscreen-enter" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4" /></svg>
                                 <svg id="icon-fullscreen-exit" class="w-5 h-5 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 9V4.5M9 9H4.5M9 9L3.75 3.75M9 15v4.5M9 15H4.5M9 15l-5.25 5.25M15 9h4.5M15 9V4.5M15 9l5.25-5.25M15 15h4.5M15 15v4.5m0-4.5l5.25 5.25" /></svg>
@@ -168,28 +145,104 @@
                     <h1 class="text-xl font-bold text-white">{{ $simulation->title }}</h1>
 
                     <div class="flex items-center gap-4 mt-2 text-sm text-gray-400">
-                        <span>{{ number_format($simulation->view_count) }} dilihat</span>
+                        <span>{{ $simulation->formatted_view_count }} dilihat</span>
                         <span>&middot;</span>
-                        <span>{{ number_format($simulation->play_count) }} dimainkan</span>
+                        <span>{{ $simulation->formatted_play_count }} dimainkan</span>
                         <span>&middot;</span>
                         <span>{{ $simulation->time_ago }}</span>
                     </div>
 
+                    {{-- Rating Display --}}
+                    <div class="flex items-center gap-2 mt-2">
+                        @php $avgRating = $simulation->ratings()->avg('rating'); @endphp
+                        @if($avgRating)
+                            <div class="flex items-center gap-1">
+                                @for($i = 1; $i <= 5; $i++)
+                                    <svg class="w-4 h-4 {{ $i <= round($avgRating) ? 'text-yellow-400' : 'text-gray-600' }}" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                                @endfor
+                                <span class="text-sm text-gray-400 ml-1">{{ number_format($avgRating, 1) }}</span>
+                                <span class="text-xs text-gray-500">({{ $simulation->ratings()->count() }})</span>
+                            </div>
+                        @endif
+                    </div>
+
                     {{-- Action buttons --}}
                     <div class="flex items-center gap-2 mt-4 flex-wrap">
-                        <button class="flex items-center gap-1.5 px-4 py-2 bg-gray-800 hover:bg-gray-700 text-white text-sm font-medium rounded-full transition">
-                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" /></svg>
-                            Suka
-                        </button>
-                        <button class="flex items-center gap-1.5 px-4 py-2 bg-gray-800 hover:bg-gray-700 text-white text-sm font-medium rounded-full transition">
-                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z" /></svg>
-                            Bookmark
-                        </button>
+                        {{-- Bookmark Button --}}
+                        @auth
+                            <button
+                                id="bookmark-btn"
+                                onclick="toggleBookmark()"
+                                class="bookmark-btn flex items-center gap-1.5 px-4 py-2 bg-gray-800 hover:bg-gray-700 text-white text-sm font-medium rounded-full transition {{ $isBookmarked ? 'active' : '' }}"
+                            >
+                                <svg class="w-4 h-4" fill="{{ $isBookmarked ? 'currentColor' : 'none' }}" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z" /></svg>
+                                <span id="bookmark-text">{{ $isBookmarked ? 'Tersimpan' : 'Bookmark' }}</span>
+                            </button>
+                        @else
+                            <a href="{{ route('login') }}" class="flex items-center gap-1.5 px-4 py-2 bg-gray-800 hover:bg-gray-700 text-white text-sm font-medium rounded-full transition">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z" /></svg>
+                                Bookmark
+                            </a>
+                        @endauth
+
                         <button onclick="copyLink()" class="flex items-center gap-1.5 px-4 py-2 bg-gray-800 hover:bg-gray-700 text-white text-sm font-medium rounded-full transition">
                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z" /></svg>
                             Share
                         </button>
                     </div>
+
+                    {{-- Reactions Section --}}
+                    @auth
+                    <div class="mt-4 p-4 bg-gray-800 rounded-xl">
+                        <h3 class="text-white font-semibold text-sm mb-3">Bagaimana simulasi ini?</h3>
+                        <div class="flex items-center gap-2 flex-wrap" id="reactions-container">
+                            @php
+                                $reactionTypes = [
+                                    'mudah_dipahami' => ['icon' => '🧠', 'label' => 'Mudah Dipahami'],
+                                    'membuka_wawasan' => ['icon' => '💡', 'label' => 'Membuka Wawasan'],
+                                    'sangat_membantu' => ['icon' => '✅', 'label' => 'Sangat Membantu'],
+                                    'interaktif' => ['icon' => '🎮', 'label' => 'Interaktif'],
+                                    'favorit' => ['icon' => '⭐', 'label' => 'Favorit'],
+                                ];
+                            @endphp
+                            @foreach($reactionTypes as $type => $info)
+                                <button
+                                    onclick="toggleReaction('{{ $type }}')"
+                                    id="reaction-{{ $type }}"
+                                    class="reaction-btn flex items-center gap-1.5 px-3 py-1.5 bg-gray-700 hover:bg-gray-600 text-gray-300 text-xs font-medium rounded-full transition {{ in_array($type, $userReactions) ? 'active' : '' }}"
+                                >
+                                    <span>{{ $info['icon'] }}</span>
+                                    <span>{{ $info['label'] }}</span>
+                                    <span id="reaction-count-{{ $type }}" class="ml-1 text-gray-400">({{ $reactionCounts[$type] ?? 0 }})</span>
+                                </button>
+                            @endforeach
+                        </div>
+                    </div>
+                    @endauth
+
+                    {{-- Rating Section --}}
+                    @auth
+                    <div class="mt-4 p-4 bg-gray-800 rounded-xl">
+                        <h3 class="text-white font-semibold text-sm mb-3">Beri Rating</h3>
+                        <div class="flex items-center gap-1" id="rating-stars">
+                            @for($i = 1; $i <= 5; $i++)
+                                <svg
+                                    class="rating-star w-7 h-7 {{ $i <= $userRating ? 'active text-yellow-400' : 'text-gray-600' }}"
+                                    onclick="setRating({{ $i }})"
+                                    fill="currentColor"
+                                    viewBox="0 0 24 24"
+                                ><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                            @endfor
+                            <span id="rating-text" class="text-sm text-gray-400 ml-2">
+                                @if($userRating)
+                                    {{ $userRating }}/5
+                                @else
+                                    Klik untuk memberi rating
+                                @endif
+                            </span>
+                        </div>
+                    </div>
+                    @endauth
 
                     {{-- Category & Tags --}}
                     <div class="flex items-center gap-2 mt-4 flex-wrap">
@@ -210,13 +263,30 @@
 
                     {{-- Creator --}}
                     <div class="flex items-center gap-3 mt-5 p-4 bg-gray-800 rounded-xl">
-                        <div class="w-10 h-10 rounded-full bg-gray-700 flex items-center justify-center text-white font-semibold">
-                            {{ strtoupper(substr($simulation->user->name, 0, 1)) }}
-                        </div>
-                        <div>
-                            <p class="text-white font-medium text-sm">{{ $simulation->user->name }}</p>
-                            <p class="text-gray-400 text-xs">{{ $simulation->user->simulations()->published()->count() }} simulasi</p>
-                        </div>
+                        <a href="{{ route('creators.show', $simulation->user->id) }}" class="flex items-center gap-3 flex-1">
+                            <div class="w-10 h-10 rounded-full bg-gray-700 flex items-center justify-center text-white font-semibold overflow-hidden">
+                                @if($simulation->user->avatar)
+                                    <img src="{{ Storage::disk('public')->url($simulation->user->avatar) }}" alt="{{ $simulation->user->name }}" class="w-full h-full object-cover" />
+                                @else
+                                    {{ strtoupper(substr($simulation->user->name, 0, 1)) }}
+                                @endif
+                            </div>
+                            <div>
+                                <p class="text-white font-medium text-sm">{{ $simulation->user->name }}</p>
+                                <p class="text-gray-400 text-xs">{{ $simulation->user->simulations()->published()->count() }} simulasi &middot; {{ $simulation->user->followers()->count() }} pengikut</p>
+                            </div>
+                        </a>
+                        @auth
+                            @if(auth()->id() !== $simulation->user_id)
+                                <button
+                                    id="follow-btn"
+                                    onclick="toggleFollow({{ $simulation->user->id }})"
+                                    class="px-4 py-2 text-sm font-medium rounded-full transition {{ $isFollowing ? 'bg-gray-600 text-white hover:bg-gray-500' : 'bg-blue-600 text-white hover:bg-blue-700' }}"
+                                >
+                                    <span id="follow-text">{{ $isFollowing ? 'Mengikuti' : 'Ikuti' }}</span>
+                                </button>
+                            @endif
+                        @endauth
                     </div>
 
                     {{-- Description --}}
@@ -226,6 +296,62 @@
                         <p class="text-gray-300 text-sm whitespace-pre-line">{{ $simulation->description }}</p>
                     </div>
                     @endif
+                </div>
+
+                {{-- Comments Section --}}
+                <div class="mt-6">
+                    <div class="flex items-center justify-between mb-4">
+                        <h3 class="text-white font-semibold">Komentar ({{ $comments->count() }})</h3>
+                    </div>
+
+                    {{-- Comment Form --}}
+                    @auth
+                        <div class="flex gap-3 mb-6">
+                            <div class="w-8 h-8 rounded-full bg-gray-700 flex items-center justify-center text-white text-xs font-semibold flex-shrink-0 overflow-hidden">
+                                @if(auth()->user()->avatar)
+                                    <img src="{{ Storage::disk('public')->url(auth()->user()->avatar) }}" alt="" class="w-full h-full object-cover" />
+                                @else
+                                    {{ strtoupper(substr(auth()->user()->name, 0, 1)) }}
+                                @endif
+                            </div>
+                            <div class="flex-1">
+                                <textarea
+                                    id="comment-input"
+                                    class="w-full bg-gray-800 border border-gray-700 rounded-lg px-3 py-2 text-white text-sm resize-none focus:outline-none focus:ring-2 focus:ring-blue-500 placeholder-gray-500"
+                                    rows="2"
+                                    placeholder="Tulis komentar..."
+                                ></textarea>
+                                <div class="flex justify-end mt-2">
+                                    <button
+                                        onclick="postComment()"
+                                        class="px-4 py-1.5 bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium rounded-lg transition"
+                                    >
+                                        Kirim
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    @else
+                        <div class="mb-6 p-4 bg-gray-800 rounded-xl text-center">
+                            <p class="text-gray-400 text-sm">
+                                <a href="{{ route('login') }}" class="text-blue-400 hover:text-blue-300 font-medium">Masuk</a> untuk memberikan komentar.
+                            </p>
+                        </div>
+                    @endauth
+
+                    {{-- Comments List --}}
+                    <div class="space-y-4" id="comments-container">
+                        @forelse($comments as $comment)
+                            @if(!$comment->parent_id)
+                                @include('simulations._comment', ['comment' => $comment, 'depth' => 0])
+                            @endif
+                        @empty
+                            <div class="text-center py-8">
+                                <svg class="w-12 h-12 text-gray-700 mx-auto mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" /></svg>
+                                <p class="text-gray-500 text-sm">Belum ada komentar. Jadilah yang pertama!</p>
+                            </div>
+                        @endforelse
+                    </div>
                 </div>
             </div>
 
@@ -259,6 +385,7 @@
     </main>
 
     <script>
+        // ========== Player Controls ==========
         var isPlaying = false;
         var isFullscreen = false;
         var isSticky = false;
@@ -271,25 +398,15 @@
 
         function playSimulation() {
             isPlaying = true;
-
-            // Hide poster, show iframe + controls
             poster.classList.add('hidden');
             container.classList.remove('hidden');
             controls.classList.remove('hidden');
-
-            // Set iframe source to serve route
             var serveUrl = '{{ route("simulations.serve", ["slug" => $simulation->slug, "path" => $simulation->entry_point ?? "index.html"]) }}';
             iframe.src = serveUrl;
-
-            // Calculate sticky threshold (player bottom position)
             updateStickyThreshold();
-
-            // Increment play count via AJAX
             fetch('{{ route("simulations.play", $simulation->slug) }}', {
                 method: 'GET',
-                headers: {
-                    'X-Requested-With': 'XMLHttpRequest',
-                }
+                headers: { 'X-Requested-With': 'XMLHttpRequest' }
             }).catch(function() {});
         }
 
@@ -297,7 +414,6 @@
             isPlaying = false;
             exitFullscreen();
             exitSticky();
-
             container.classList.add('hidden');
             controls.classList.add('hidden');
             poster.classList.remove('hidden');
@@ -305,25 +421,17 @@
         }
 
         function reloadSimulation() {
-            if (iframe.src) {
-                iframe.src = iframe.src;
-            }
+            if (iframe.src) { iframe.src = iframe.src; }
         }
 
         function toggleFullscreen() {
-            if (isFullscreen) {
-                exitFullscreen();
-            } else {
-                enterFullscreen();
-            }
+            isFullscreen ? exitFullscreen() : enterFullscreen();
         }
 
         function enterFullscreen() {
             isFullscreen = true;
             document.body.classList.add('fullscreen-mode');
             playerWrapper.classList.add('player-fullscreen');
-
-            // Swap icons
             document.getElementById('icon-fullscreen-enter').classList.add('hidden');
             document.getElementById('icon-fullscreen-exit').classList.remove('hidden');
         }
@@ -332,8 +440,6 @@
             isFullscreen = false;
             document.body.classList.remove('fullscreen-mode');
             playerWrapper.classList.remove('player-fullscreen');
-
-            // Swap icons
             document.getElementById('icon-fullscreen-enter').classList.remove('hidden');
             document.getElementById('icon-fullscreen-exit').classList.add('hidden');
         }
@@ -346,7 +452,6 @@
         function enterSticky() {
             isSticky = true;
             playerWrapper.classList.add('player-sticky-active');
-            // Set width to match container
             playerWrapper.style.maxWidth = playerWrapper.parentElement.offsetWidth + 'px';
         }
 
@@ -356,18 +461,14 @@
             playerWrapper.style.maxWidth = '';
         }
 
-        // Scroll handler for sticky player
         var scrollTicking = false;
         window.addEventListener('scroll', function () {
             if (!scrollTicking) {
                 window.requestAnimationFrame(function () {
                     if (isPlaying && !isFullscreen) {
                         var scrollPos = window.scrollY;
-                        if (scrollPos > stickyThreshold && !isSticky) {
-                            enterSticky();
-                        } else if (scrollPos <= stickyThreshold && isSticky) {
-                            exitSticky();
-                        }
+                        if (scrollPos > stickyThreshold && !isSticky) { enterSticky(); }
+                        else if (scrollPos <= stickyThreshold && isSticky) { exitSticky(); }
                     }
                     scrollTicking = false;
                 });
@@ -375,37 +476,156 @@
             }
         });
 
-        // Recalculate threshold on resize
         window.addEventListener('resize', function () {
             if (isPlaying) {
-                if (isSticky) {
-                    playerWrapper.style.maxWidth = '';
-                }
+                if (isSticky) { playerWrapper.style.maxWidth = ''; }
                 updateStickyThreshold();
-                if (isSticky) {
-                    playerWrapper.style.maxWidth = playerWrapper.parentElement.offsetWidth + 'px';
-                }
+                if (isSticky) { playerWrapper.style.maxWidth = playerWrapper.parentElement.offsetWidth + 'px'; }
             }
         });
 
-        // Exit fullscreen on ESC
         document.addEventListener('keydown', function (e) {
-            if (e.key === 'Escape' && isFullscreen) {
-                exitFullscreen();
-            }
+            if (e.key === 'Escape' && isFullscreen) { exitFullscreen(); }
         });
 
         function copyLink() {
             navigator.clipboard.writeText(window.location.href).then(function() {
-                // Small toast notification instead of alert
-                var toast = document.createElement('div');
-                toast.className = 'fixed bottom-6 left-1/2 -translate-x-1/2 bg-gray-800 text-white text-sm px-4 py-2 rounded-lg shadow-lg z-[99999] transition-opacity duration-300';
-                toast.textContent = 'Link berhasil disalin!';
-                document.body.appendChild(toast);
-                setTimeout(function() { toast.style.opacity = '0'; }, 1500);
-                setTimeout(function() { toast.remove(); }, 1800);
+                showToast('Link berhasil disalin!');
             });
         }
+
+        function showToast(message) {
+            var toast = document.createElement('div');
+            toast.className = 'fixed bottom-6 left-1/2 -translate-x-1/2 bg-gray-800 text-white text-sm px-4 py-2 rounded-lg shadow-lg z-[99999] transition-opacity duration-300';
+            toast.textContent = message;
+            document.body.appendChild(toast);
+            setTimeout(function() { toast.style.opacity = '0'; }, 1500);
+            setTimeout(function() { toast.remove(); }, 1800);
+        }
+
+        // ========== AJAX Helpers ==========
+        function ajaxPost(url, data, callback) {
+            fetch(url, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+                    'X-Requested-With': 'XMLHttpRequest',
+                    'Accept': 'application/json'
+                },
+                body: JSON.stringify(data)
+            })
+            .then(function(response) { return response.json(); })
+            .then(function(result) { if (callback) callback(result); })
+            .catch(function(err) { console.error('AJAX Error:', err); });
+        }
+
+        // ========== Bookmark ==========
+        function toggleBookmark() {
+            ajaxPost('{{ route("bookmarks.toggle") }}', { simulation_id: {{ $simulation->id }} }, function(result) {
+                var btn = document.getElementById('bookmark-btn');
+                var text = document.getElementById('bookmark-text');
+                if (result.bookmarked) {
+                    btn.classList.add('active');
+                    btn.querySelector('svg').setAttribute('fill', 'currentColor');
+                    text.textContent = 'Tersimpan';
+                } else {
+                    btn.classList.remove('active');
+                    btn.querySelector('svg').setAttribute('fill', 'none');
+                    text.textContent = 'Bookmark';
+                }
+                showToast(result.message);
+            });
+        }
+
+        // ========== Reactions ==========
+        function toggleReaction(type) {
+            ajaxPost('{{ route("reactions.toggle") }}', { simulation_id: {{ $simulation->id }}, type: type }, function(result) {
+                var btn = document.getElementById('reaction-' + type);
+                var countEl = document.getElementById('reaction-count-' + type);
+                if (result.active) {
+                    btn.classList.add('active');
+                } else {
+                    btn.classList.remove('active');
+                }
+                countEl.textContent = '(' + (result.count || 0) + ')';
+            });
+        }
+
+        // ========== Rating ==========
+        function setRating(value) {
+            ajaxPost('{{ route("ratings.store") }}', { simulation_id: {{ $simulation->id }}, rating: value }, function(result) {
+                var stars = document.querySelectorAll('#rating-stars .rating-star');
+                stars.forEach(function(star, index) {
+                    if (index < value) {
+                        star.classList.add('active', 'text-yellow-400');
+                        star.classList.remove('text-gray-600');
+                    } else {
+                        star.classList.remove('active', 'text-yellow-400');
+                        star.classList.add('text-gray-600');
+                    }
+                });
+                document.getElementById('rating-text').textContent = value + '/5';
+                showToast('Rating berhasil dikirim!');
+            });
+        }
+
+        // ========== Follow ==========
+        function toggleFollow(userId) {
+            ajaxPost('/follows/' + userId + '/toggle', {}, function(result) {
+                var btn = document.getElementById('follow-btn');
+                var text = document.getElementById('follow-text');
+                if (result.following) {
+                    btn.classList.remove('bg-blue-600', 'hover:bg-blue-700');
+                    btn.classList.add('bg-gray-600', 'hover:bg-gray-500');
+                    text.textContent = 'Mengikuti';
+                } else {
+                    btn.classList.remove('bg-gray-600', 'hover:bg-gray-500');
+                    btn.classList.add('bg-blue-600', 'hover:bg-blue-700');
+                    text.textContent = 'Ikuti';
+                }
+                showToast(result.message);
+            });
+        }
+
+        // ========== Comments ==========
+        function postComment(parentId) {
+            var inputId = parentId ? 'reply-input-' + parentId : 'comment-input';
+            var input = document.getElementById(inputId);
+            var content = input.value.trim();
+            if (!content) return;
+
+            var data = { simulation_id: {{ $simulation->id }}, body: content };
+            if (parentId) { data.parent_id = parentId; }
+
+            ajaxPost('{{ route("comments.store", $simulation->slug) }}', data, function(result) {
+                if (result.success) {
+                    input.value = '';
+                    // Reload page to show new comment (simple approach)
+                    window.location.reload();
+                } else {
+                    showToast(result.message || 'Gagal mengirim komentar');
+                }
+            });
+        }
+
+        function deleteComment(commentId) {
+            if (!confirm('Hapus komentar ini?')) return;
+            ajaxPost('{{ route("comments.destroy", ":id") }}'.replace(':id', commentId), { _method: 'DELETE' }, function(result) {
+                if (result.success) {
+                    showToast('Komentar berhasil dihapus');
+                    window.location.reload();
+                } else {
+                    showToast(result.message || 'Gagal menghapus komentar');
+                }
+            });
+        }
+
+        function toggleReplyForm(commentId) {
+            var form = document.getElementById('reply-form-' + commentId);
+            form.classList.toggle('show');
+        }
+
     </script>
 </body>
 </html>

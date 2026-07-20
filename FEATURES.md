@@ -561,7 +561,7 @@ Platform ini bukan sekadar "website edukasi" — ia adalah **produk kategori bar
 *   **Testing**: Pest 4
 *   **Deployment**: VPS dengan deploy.sh
 
-### Struktur Database (MVP)
+### Struktur Database Ringkas (MVP)
 *   `users` — id, name, email, password, role (superadmin/admin/creator/user), avatar, bio
 *   `simulations` — id, user_id, title, slug, description, category, subcategory, tags, thumbnail, version, zip_path, entry_point, is_published, is_featured, play_count, view_count, like_count, bookmark_count, share_count, average_rating, rating_count, published_at
 *   `cache` — Laravel cache table
@@ -571,3 +571,1135 @@ Platform ini bukan sekadar "website edukasi" — ia adalah **produk kategori bar
 *   Script `deploy.sh` untuk VPS deployment
 *   Git-based workflow: push -> pull -> migrate -> build -> cache
 *   Zero-downtime deployment strategy
+
+---
+
+## 11. Struktur Database Lengkap (MVP)
+
+Berikut adalah struktur tabel lengkap yang dibutuhkan untuk mendukung semua fitur yang dijelaskan pada bagian 4–6.
+
+### A. Tabel Inti
+
+#### `users`
+| Kolom | Tipe | Keterangan |
+|:---|:---|:---|
+| `id` | `bigint` PK | Auto-increment |
+| `name` | `string(255)` | Nama tampilan |
+| `email` | `string(255)` UNIQUE | Email untuk login |
+| `password` | `string(255)` | Hashed password |
+| `role` | `enum('superadmin','admin','creator','user')` | Peran pengguna |
+| `avatar` | `string(255)` nullable | Path foto profil |
+| `bio` | `text` nullable | Deskripsi singkat |
+| `slug` | `string(255)` UNIQUE | URL-friendly identifier |
+| `level` | `tinyint` default 1 | Level gamifikasi |
+| `points` | `bigint` default 0 | Total poin |
+| `current_streak` | `int` default 0 | Streak belajar saat ini |
+| `longest_streak` | `int` default 0 | Streak terpanjang sepanjang masa |
+| `email_verified_at` | `timestamp` nullable | Waktu verifikasi email |
+| `remember_token` | `string(100)` nullable | Token "remember me" |
+| `created_at` | `timestamp` | Waktu registrasi |
+| `updated_at` | `timestamp` | Waktu update terakhir |
+
+#### `simulations`
+| Kolom | Tipe | Keterangan |
+|:---|:---|:---|
+| `id` | `bigint` PK | Auto-increment |
+| `user_id` | `bigint` FK → users | Kreator pemilik |
+| `title` | `string(255)` | Judul simulasi |
+| `slug` | `string(255)` UNIQUE | URL-friendly identifier |
+| `description` | `text` nullable | Deskripsi panjang |
+| `category` | `string(100)` | Kategori utama (Fisika, Kimia, dll.) |
+| `subcategory` | `string(100)` nullable | Subkategori |
+| `thumbnail` | `string(255)` nullable | Path thumbnail |
+| `version` | `string(20)` default '1.0.0' | Versi saat ini |
+| `zip_path` | `string(500)` | Path file ZIP simulasi |
+| `extracted_path` | `string(500)` | Path folder hasil ekstrak |
+| `entry_point` | `string(255)` default 'index.html' | File HTML utama |
+| `min_resolution` | `string(20)` nullable | Resolusi minimum (misal: "1024x768") |
+| `is_published` | `boolean` default false | Status publikasi |
+| `is_featured` | `boolean` default false | Ditampilkan di halaman utama |
+| `is_premium` | `boolean` default false | Simulasi berbayar |
+| `price` | `decimal(10,2)` nullable | Harga (untuk marketplace) |
+| `play_count` | `bigint` default 0 | Jumlah kali dimainkan |
+| `view_count` | `bigint` default 0 | Jumlah kali dilihat |
+| `like_count` | `bigint` default 0 | Jumlah total like/reaksi |
+| `bookmark_count` | `bigint` default 0 | Jumlah total bookmark |
+| `share_count` | `bigint` default 0 | Jumlah total share |
+| `comment_count` | `bigint` default 0 | Jumlah total komentar |
+| `average_rating` | `decimal(3,2)` default 0 | Rata-rata rating |
+| `rating_count` | `bigint` default 0 | Jumlah total rating |
+| `published_at` | `timestamp` nullable | Waktu publikasi |
+| `created_at` | `timestamp` | Waktu pembuatan |
+| `updated_at` | `timestamp` | Waktu update terakhir |
+
+### B. Tabel Interaksi Pengguna
+
+#### `comments`
+| Kolom | Tipe | Keterangan |
+|:---|:---|:---|
+| `id` | `bigint` PK | Auto-increment |
+| `user_id` | `bigint` FK → users | Penulis komentar |
+| `simulation_id` | `bigint` FK → simulations | Simulasi terkait |
+| `parent_id` | `bigint` FK → comments nullable | ID komentar induk (untuk balasan) |
+| `body` | `text` | Isi komentar |
+| `is_pinned` | `boolean` default false | Disematkan oleh kreator |
+| `is_reported` | `boolean` default false | Dilaporkan oleh pengguna |
+| `reported_by` | `bigint` FK → users nullable | Siapa yang melaporkan |
+| `created_at` | `timestamp` | Waktu komentar |
+| `updated_at` | `timestamp` | Waktu edit komentar |
+
+#### `ratings`
+| Kolom | Tipe | Keterangan |
+|:---|:---|:---|
+| `id` | `bigint` PK | Auto-increment |
+| `user_id` | `bigint` FK → users | Pemberi rating |
+| `simulation_id` | `bigint` FK → simulations | Simulasi dinilai |
+| `rating` | `tinyint` (1–5) | Nilai rating bintang |
+| `created_at` | `timestamp` | Waktu rating |
+| `updated_at` | `timestamp` | Waktu update rating |
+
+> **Unique constraint:** (`user_id`, `simulation_id`) — satu pengguna hanya bisa memberikan satu rating per simulasi.
+
+#### `reactions`
+| Kolom | Tipe | Keterangan |
+|:---|:---|:---|
+| `id` | `bigint` PK | Auto-increment |
+| `user_id` | `bigint` FK → users | Pemberi reaksi |
+| `simulation_id` | `bigint` FK → simulations | Simulasi direaksikan |
+| `type` | `enum('mudah_dipahami','membuka_wawasan','sangat_membantu','interaktif','favorit')` | Jenis reaksi |
+| `created_at` | `timestamp` | Waktu reaksi |
+
+> **Unique constraint:** (`user_id`, `simulation_id`, `type`) — satu pengguna hanya bisa memberikan satu jenis reaksi tertentu per simulasi, tetapi boleh memilih **lebih dari satu jenis**.
+
+#### `bookmarks`
+| Kolom | Tipe | Keterangan |
+|:---|:---|:---|
+| `id` | `bigint` PK | Auto-increment |
+| `user_id` | `bigint` FK → users | Pemilik bookmark |
+| `simulation_id` | `bigint` FK → simulations | Simulasi di-bookmark |
+| `created_at` | `timestamp` | Waktu bookmark |
+
+> **Unique constraint:** (`user_id`, `simulation_id`).
+
+#### `favorites`
+| Kolom | Tipe | Keterangan |
+|:---|:---|:---|
+| `id` | `bigint` PK | Auto-increment |
+| `user_id` | `bigint` FK → users | Pemilik favorit |
+| `simulation_id` | `bigint` FK → simulations | Simulasi difavoritkan |
+| `created_at` | `timestamp` | Waktu favorit |
+
+> **Unique constraint:** (`user_id`, `simulation_id`).
+
+#### `shares`
+| Kolom | Tipe | Keterangan |
+|:---|:---|:---|
+| `id` | `bigint` PK | Auto-increment |
+| `user_id` | `bigint` FK → users nullable | Pengguna yang share (null jika anonymous) |
+| `simulation_id` | `bigint` FK → simulations | Simulasi di-share |
+| `platform` | `enum('copy_link','whatsapp','telegram','twitter','facebook')` | Platform tujuan share |
+| `created_at` | `timestamp` | Waktu share |
+
+#### `play_history`
+| Kolom | Tipe | Keterangan |
+|:---|:---|:---|
+| `id` | `bigint` PK | Auto-increment |
+| `user_id` | `bigint` FK → users nullable | Pengguna (null jika anonymous) |
+| `simulation_id` | `bigint` FK → simulations | Simulasi yang dimainkan |
+| `duration_seconds` | `int` nullable | Durasi sesi bermain (detik) |
+| `completed` | `boolean` default false | Apakah simulasi selesai dimainkan |
+| `created_at` | `timestamp` | Waktu mulai bermain |
+| `updated_at` | `timestamp` | Waktu terakhir interaksi |
+
+### C. Tabel Relasi & Social
+
+#### `follows`
+| Kolom | Tipe | Keterangan |
+|:---|:---|:---|
+| `id` | `bigint` PK | Auto-increment |
+| `follower_id` | `bigint` FK → users | Pengguna yang mengikuti |
+| `followable_id` | `bigint` | ID yang diikuti (user/creator) |
+| `followable_type` | `string` | Tipe yang diikuti ('App\\Models\\User') |
+| `created_at` | `timestamp` | Waktu follow |
+
+> **Unique constraint:** (`follower_id`, `followable_id`, `followable_type`).
+
+#### `collections`
+| Kolom | Tipe | Keterangan |
+|:---|:---|:---|
+| `id` | `bigint` PK | Auto-increment |
+| `user_id` | `bigint` FK → users | Pembuat collection |
+| `title` | `string(255)` | Judul collection |
+| `slug` | `string(255)` UNIQUE | URL-friendly identifier |
+| `description` | `text` nullable | Deskripsi collection |
+| `thumbnail` | `string(255)` nullable | Path thumbnail |
+| `is_public` | `boolean` default true | Publik atau privat |
+| `view_count` | `bigint` default 0 | Jumlah views |
+| `created_at` | `timestamp` | Waktu pembuatan |
+| `updated_at` | `timestamp` | Waktu update terakhir |
+
+#### `collection_simulations`
+| Kolom | Tipe | Keterangan |
+|:---|:---|:---|
+| `id` | `bigint` PK | Auto-increment |
+| `collection_id` | `bigint` FK → collections | Collection induk |
+| `simulation_id` | `bigint` FK → simulations | Simulasi dalam collection |
+| `position` | `int` default 0 | Urutan dalam collection |
+| `created_at` | `timestamp` | Waktu penambahan |
+
+> **Unique constraint:** (`collection_id`, `simulation_id`).
+
+#### `saved_collections`
+| Kolom | Tipe | Keterangan |
+|:---|:---|:---|
+| `id` | `bigint` PK | Auto-increment |
+| `user_id` | `bigint` FK → users | Pengguna yang menyimpan |
+| `collection_id` | `bigint` FK → collections | Collection yang disimpan |
+| `created_at` | `timestamp` | Waktu penyimpanan |
+
+> **Unique constraint:** (`user_id`, `collection_id`).
+
+### D. Tabel Notifikasi
+
+#### `notifications`
+| Kolom | Tipe | Keterangan |
+|:---|:---|:---|
+| `id` | `bigint` PK | Auto-increment |
+| `user_id` | `bigint` FK → users | Penerima notifikasi |
+| `type` | `string(100)` | Tipe notifikasi (NewSimulation, CommentReply, Mention, Achievement, CollectionUpdate) |
+| `title` | `string(255)` | Judul notifikasi |
+| `body` | `text` | Isi notifikasi |
+| `data` | `json` nullable | Data tambahan (deep link, entitas terkait) |
+| `read_at` | `timestamp` nullable | Waktu dibaca (null = belum dibaca) |
+| `created_at` | `timestamp` | Waktu pembuatan |
+
+### E. Tabel Gamifikasi
+
+#### `badges`
+| Kolom | Tipe | Keterangan |
+|:---|:---|:---|
+| `id` | `bigint` PK | Auto-increment |
+| `name` | `string(100)` UNIQUE | Nama badge (misal: "Master Mekanika") |
+| `slug` | `string(100)` UNIQUE | URL-friendly identifier |
+| `description` | `text` | Deskripsi badge |
+| `icon` | `string(255)` | Path ikon badge |
+| `category` | `string(100)` | Kategori (science, achievement, social) |
+| `criteria` | `json` | Kriteria pencapaian (JSON) |
+| `points_reward` | `int` default 0 | Poin hadiah saat mendapat badge |
+| `created_at` | `timestamp` | Waktu pembuatan |
+
+#### `user_badges`
+| Kolom | Tipe | Keterangan |
+|:---|:---|:---|
+| `id` | `bigint` PK | Auto-increment |
+| `user_id` | `bigint` FK → users | Pemilik badge |
+| `badge_id` | `bigint` FK → badges | Badge yang didapat |
+| `earned_at` | `timestamp` | Waktu mendapat badge |
+
+> **Unique constraint:** (`user_id`, `badge_id`).
+
+#### `user_points_log`
+| Kolom | Tipe | Keterangan |
+|:---|:---|:---|
+| `id` | `bigint` PK | Auto-increment |
+| `user_id` | `bigint` FK → users | Pengguna |
+| `points` | `int` | Jumlah poin (positif = tambah, negatif = kurang) |
+| `type` | `enum('play','comment','reaction','streak','badge','admin')` | Sumber poin |
+| `description` | `string(255)` | Keterangan |
+| `created_at` | `timestamp` | Waktu poin ditambahkan |
+
+### F. Tabel Analitik
+
+#### `simulation_analytics`
+| Kolom | Tipe | Keterangan |
+|:---|:---|:---|
+| `id` | `bigint` PK | Auto-increment |
+| `simulation_id` | `bigint` FK → simulations | Simulasi terkait |
+| `date` | `date` | Tanggal pencatatan |
+| `views` | `int` default 0 | Views pada hari tersebut |
+| `plays` | `int` default 0 | Plays pada hari tersebut |
+| `likes` | `int` default 0 | Likes pada hari tersebut |
+| `bookmarks` | `int` default 0 | Bookmarks pada hari tersebut |
+| `shares` | `int` default 0 | Shares pada hari tersebut |
+| `comments` | `int` default 0 | Komentar pada hari tersebut |
+| `avg_duration_seconds` | `int` default 0 | Rata-rata durasi bermain |
+| `completions` | `int` default 0 | Jumlah yang menyelesaikan simulasi |
+| `created_at` | `timestamp` | Waktu pencatatan |
+
+> **Unique constraint:** (`simulation_id`, `date`).
+
+#### `simulation_daily_metrics`
+| Kolom | Tipe | Keterangan |
+|:---|:---|:---|
+| `id` | `bigint` PK | Auto-increment |
+| `simulation_id` | `bigint` FK → simulations | Simulasi terkait |
+| `date` | `date` | Tanggal |
+| `metric_type` | `enum('view','play','like','bookmark','share','reaction','comment')` | Tipe metrik |
+| `count` | `int` default 0 | Jumlah kejadian |
+| `created_at` | `timestamp` | Waktu pencatatan |
+
+> **Unique constraint:** (`simulation_id`, `date`, `metric_type`).
+
+### G. Tabel Kreator
+
+#### `simulation_versions`
+| Kolom | Tipe | Keterangan |
+|:---|:---|:---|
+| `id` | `bigint` PK | Auto-increment |
+| `simulation_id` | `bigint` FK → simulations | Simulasi terkait |
+| `version` | `string(20)` | Nomor versi |
+| `zip_path` | `string(500)` | Path file ZIP versi ini |
+| `changelog` | `text` nullable | Catatan perubahan |
+| `created_at` | `timestamp` | Waktu upload versi ini |
+
+### H. Tabel Tags
+
+#### `tags`
+| Kolom | Tipe | Keterangan |
+|:---|:---|:---|
+| `id` | `bigint` PK | Auto-increment |
+| `name` | `string(100)` UNIQUE | Nama tag |
+| `slug` | `string(100)` UNIQUE | URL-friendly identifier |
+| `created_at` | `timestamp` | Waktu pembuatan |
+
+#### `simulation_tags`
+| Kolom | Tipe | Keterangan |
+|:---|:---|:---|
+| `id` | `bigint` PK | Auto-increment |
+| `simulation_id` | `bigint` FK → simulations | Simulasi terkait |
+| `tag_id` | `bigint` FK → tags | Tag yang ditautkan |
+| `created_at` | `timestamp` | Waktu penautan |
+
+> **Unique constraint:** (`simulation_id`, `tag_id`).
+
+### Diagram Relasi (ER)
+
+```mermaid
+erDiagram
+    users ||--o{ simulations : "membuat"
+    users ||--o{ comments : "menulis"
+    users ||--o{ ratings : "memberi rating"
+    users ||--o{ reactions : "memberi reaksi"
+    users ||--o{ bookmarks : "mem-bookmark"
+    users ||--o{ favorites : "memfavoritkan"
+    users ||--o{ shares : "share"
+    users ||--o{ play_history : "bermain"
+    users ||--o{ follows : "mengikuti"
+    users ||--o{ collections : "membuat collection"
+    users ||--o{ notifications : "menerima"
+    users ||--o{ user_badges : "mencapai badge"
+    users ||--o{ user_points_log : "mendapat poin"
+    users ||--o{ saved_collections : "menyimpan collection"
+
+    simulations ||--o{ comments : "memiliki komentar"
+    simulations ||--o{ ratings : "dinilai"
+    simulations ||--o{ reactions : "direaksi"
+    simulations ||--o{ bookmarks : "di-bookmark"
+    simulations ||--o{ favorites : "difavoritkan"
+    simulations ||--o{ shares : "di-share"
+    simulations ||--o{ play_history : "dimainkan"
+    simulations ||--o{ collection_simulations : "masuk collection"
+    simulations ||--o{ simulation_versions : "memiliki versi"
+    simulations ||--o{ simulation_analytics : "memiliki analitik"
+    simulations ||--o{ simulation_daily_metrics : "metrik harian"
+    simulations ||--o{ simulation_tags : "ditandai"
+
+    comments ||--o{ comments : "balasan"
+    collections ||--o{ collection_simulations : "berisi simulasi"
+    collections ||--o{ saved_collections : "disimpan oleh"
+    badges ||--o{ user_badges : "dimiliki oleh"
+    tags ||--o{ simulation_tags : "menandai"
+```
+
+---
+
+## 12. Struktur Direktori Laravel
+
+```
+app/
+├── Console/
+│   └── Commands/
+│       ├── CalculateAnalytics.php
+│       ├── SendWeeklyDigest.php
+│       └── AwardBadges.php
+├── Exceptions/
+│   └── Handler.php
+├── Http/
+│   ├── Controllers/
+│   │   ├── Controller.php
+│   │   ├── HomeController.php
+│   │   ├── ExploreController.php
+│   │   ├── SimulationController.php
+│   │   ├── CreatorController.php
+│   │   ├── ProfileController.php
+│   │   ├── CollectionController.php
+│   │   ├── CommentController.php
+│   │   ├── ReactionController.php
+│   │   ├── NotificationController.php
+│   │   ├── SearchController.php
+│   │   ├── Auth/
+│   │   │   ├── AuthenticatedSessionController.php
+│   │   │   ├── RegisteredUserController.php
+│   │   │   ├── PasswordController.php
+│   │   │   ├── PasswordResetLinkController.php
+│   │   │   ├── NewPasswordController.php
+│   │   │   ├── EmailVerificationPromptController.php
+│   │   │   ├── VerifyEmailController.php
+│   │   │   └── ConfirmablePasswordController.php
+│   │   ├── Studio/
+│   │   │   ├── DashboardController.php
+│   │   │   ├── SimulationController.php
+│   │   │   ├── VersionController.php
+│   │   │   ├── CommentController.php
+│   │   │   ├── FollowerController.php
+│   │   │   └── SettingController.php
+│   │   ├── Admin/
+│   │   │   ├── DashboardController.php
+│   │   │   ├── SimulationController.php
+│   │   │   ├── UserController.php
+│   │   │   ├── CategoryController.php
+│   │   │   └── FeaturedController.php
+│   │   └── Api/
+│   │       ├── SimulationApiController.php
+│   │       ├── CommentApiController.php
+│   │       ├── NotificationApiController.php
+│   │       └── SearchApiController.php
+│   ├── Middleware/
+│   │   ├── CheckRole.php
+│   │   ├── TrackPlayHistory.php
+│   │   └── IncrementViewCount.php
+│   └── Requests/
+│       ├── Auth/
+│       ├── Simulation/
+│       │   ├── StoreSimulationRequest.php
+│       │   ├── UpdateSimulationRequest.php
+│       │   └── UploadSimulationZipRequest.php
+│       ├── Comment/
+│       │   └── StoreCommentRequest.php
+│       └── ProfileUpdateRequest.php
+├── Models/
+│   ├── User.php
+│   ├── Simulation.php
+│   ├── Comment.php
+│   ├── Rating.php
+│   ├── Reaction.php
+│   ├── Bookmark.php
+│   ├── Favorite.php
+│   ├── Share.php
+│   ├── PlayHistory.php
+│   ├── Follow.php
+│   ├── Collection.php
+│   ├── CollectionSimulation.php
+│   ├── SavedCollection.php
+│   ├── Notification.php
+│   ├── Badge.php
+│   ├── UserBadge.php
+│   ├── UserPointsLog.php
+│   ├── SimulationAnalytics.php
+│   ├── SimulationDailyMetric.php
+│   ├── SimulationVersion.php
+│   ├── Tag.php
+│   └── SimulationTag.php
+├── Services/
+│   ├── SimulationService.php
+│   ├── ZipExtractorService.php
+│   ├── ManifestParserService.php
+│   ├── AnalyticsService.php
+│   ├── GamificationService.php
+│   ├── NotificationService.php
+│   ├── TrendingService.php
+│   └── RecommendationService.php
+├── Events/
+│   ├── SimulationPublished.php
+│   ├── SimulationPlayed.php
+│   ├── SimulationViewed.php
+│   ├── CommentCreated.php
+│   ├── BadgeEarned.php
+│   └── LevelUp.php
+├── Listeners/
+│   ├── SendNewSimulationNotification.php
+│   ├── UpdateSimulationAnalytics.php
+│   ├── AwardPlayPoints.php
+│   ├── CheckBadgeCriteria.php
+│   └── SendAchievementNotification.php
+├── Observers/
+│   ├── SimulationObserver.php
+│   └── CommentObserver.php
+└── View/
+    └── Components/
+        ├── SimulationCard.php
+        ├── CommentThread.php
+        ├── NotificationBadge.php
+        ├── StarRating.php
+        └── ReactionButtons.php
+
+database/
+├── factories/
+│   ├── UserFactory.php
+│   ├── SimulationFactory.php
+│   ├── CommentFactory.php
+│   ├── RatingFactory.php
+│   └── CollectionFactory.php
+├── migrations/
+│   ├── 0001_01_01_000000_create_users_table.php
+│   ├── 0001_01_01_000001_create_cache_table.php
+│   ├── 0001_01_01_000002_create_jobs_table.php
+│   ├── 2026_07_19_034244_add_role_to_users_table.php
+│   ├── 2026_07_19_034248_create_simulations_table.php
+│   ├── xxxx_create_comments_table.php
+│   ├── xxxx_create_ratings_table.php
+│   ├── xxxx_create_reactions_table.php
+│   ├── xxxx_create_bookmarks_table.php
+│   ├── xxxx_create_favorites_table.php
+│   ├── xxxx_create_shares_table.php
+│   ├── xxxx_create_play_history_table.php
+│   ├── xxxx_create_follows_table.php
+│   ├── xxxx_create_collections_table.php
+│   ├── xxxx_create_collection_simulations_table.php
+│   ├── xxxx_create_saved_collections_table.php
+│   ├── xxxx_create_notifications_table.php
+│   ├── xxxx_create_tags_table.php
+│   ├── xxxx_create_simulation_tags_table.php
+│   ├── xxxx_create_simulation_versions_table.php
+│   ├── xxxx_create_badges_table.php
+│   ├── xxxx_create_user_badges_table.php
+│   ├── xxxx_create_user_points_log_table.php
+│   ├── xxxx_create_simulation_analytics_table.php
+│   └── xxxx_create_simulation_daily_metrics_table.php
+└── seeders/
+    ├── DatabaseSeeder.php
+    ├── SuperAdminSeeder.php
+    ├── CategorySeeder.php
+    ├── BadgeSeeder.php
+    └── TagSeeder.php
+
+resources/
+├── views/
+│   ├── layouts/
+│   │   ├── app.blade.php
+│   │   ├── studio.blade.php
+│   │   ├── guest.blade.php
+│   │   └── embed.blade.php
+│   ├── home/
+│   │   ├── index.blade.php
+│   │   └── partials/
+│   │       ├── trending.blade.php
+│   │       ├── latest.blade.php
+│   │       ├── popular.blade.php
+│   │       └── recommended.blade.php
+│   ├── simulations/
+│   │   ├── show.blade.php
+│   │   ├── category.blade.php
+│   │   └── partials/
+│   │       ├── player.blade.php
+│   │       ├── info.blade.php
+│   │       ├── reactions.blade.php
+│   │       ├── comments.blade.php
+│   │       └── related.blade.php
+│   ├── explore/
+│   │   ├── index.blade.php
+│   │   └── search.blade.php
+│   ├── creators/
+│   │   ├── show.blade.php
+│   │   └── partials/
+│   │       ├── header.blade.php
+│   │       └── simulation-grid.blade.php
+│   ├── collections/
+│   │   ├── index.blade.php
+│   │   ├── show.blade.php
+│   │   └── create.blade.php
+│   ├── profile/
+│   │   ├── edit.blade.php
+│   │   └── partials/
+│   │       ├── bookmarks.blade.php
+│   │       ├── history.blade.php
+│   │       ├── following.blade.php
+│   │       └── achievements.blade.php
+│   ├── notifications/
+│   │   ├── index.blade.php
+│   │   └── partials/
+│   │       └── dropdown.blade.php
+│   ├── studio/
+│   │   ├── dashboard.blade.php
+│   │   ├── simulations/
+│   │   │   ├── index.blade.php
+│   │   │   ├── create.blade.php
+│   │   │   ├── edit.blade.php
+│   │   │   ├── versions.blade.php
+│   │   │   └── analytics.blade.php
+│   │   ├── comments.blade.php
+│   │   ├── followers.blade.php
+│   │   └── settings.blade.php
+│   └── admin/
+│       ├── dashboard.blade.php
+│       ├── simulations/
+│       ├── users/
+│       ├── categories/
+│       └── settings.blade.php
+├── css/
+│   └── app.css
+└── js/
+    └── app.js
+
+routes/
+├── web.php
+├── auth.php
+├── studio.php
+├── admin.php
+├── api.php
+└── console.php
+```
+
+---
+
+## 13. Spesifikasi Rute (Routes)
+
+### Rute Web (User Side)
+```
+GET     /                                   # Beranda & feed
+GET     /explore                             # Halaman explore
+GET     /explore/{category}                  # Kategori tertentu
+GET     /explore/{category}/{subcategory}    # Subkategori tertentu
+GET     /search                              # Pencarian
+GET     /simulasi/{slug}                     # Detail simulasi
+POST    /simulasi/{slug}/play                # Catatan play
+POST    /simulasi/{slug}/view                # Catatan view
+POST    /simulasi/{slug}/rate                # Beri rating
+POST    /simulasi/{slug}/react               # Beri reaksi
+POST    /simulasi/{slug}/bookmark            # Toggle bookmark
+POST    /simulasi/{slug}/favorite            # Toggle favorite
+POST    /simulasi/{slug}/share               # Catatan share
+GET     /simulasi/{slug}/comments            # Ambil komentar (AJAX)
+POST    /simulasi/{slug}/comments            # Kirim komentar
+DELETE  /comments/{id}                       # Hapus komentar (sendiri)
+GET     /creator/{slug}                      # Profil kreator publik
+GET     /collections                         # Semua collections publik
+GET     /collections/{slug}                  # Detail collection
+POST    /collections/{slug}/save             # Simpan collection ke profil
+DELETE  /collections/{slug}/save             # Hapus collection dari profil
+GET     /profile                             # Profil saya
+GET     /profile/bookmarks                   # Bookmark saya
+GET     /profile/history                     # Riwayat bermain
+GET     /profile/following                   # Daftar follow
+GET     /profile/collections                 # Collections saya
+POST    /profile/collections                 # Buat collection baru
+DELETE  /profile/collections/{slug}          # Hapus collection
+GET     /notifications                       # Semua notifikasi
+GET     /notifications/unread-count          # Jumlah belum dibaca (AJAX)
+POST    /notifications/{id}/read             # Tandai sudah dibaca
+POST    /notifications/read-all              # Tandai semua sudah dibaca
+POST    /creator/{slug}/follow               # Follow kreator
+DELETE  /creator/{slug}/follow               # Unfollow kreator
+```
+
+### Rute Simulation Studio
+```
+GET     /studio                              # Dashboard kreator
+GET     /studio/simulations                  # Daftar simulasi kreator
+GET     /studio/simulations/create           # Form upload baru
+POST    /studio/simulations                  # Proses upload & simpan
+GET     /studio/simulations/{slug}/edit      # Form edit simulasi
+PUT     /studio/simulations/{slug}           # Proses update simulasi
+DELETE  /studio/simulations/{slug}           # Hapus simulasi
+GET     /studio/simulations/{slug}/versions  # Riwayat versi
+POST    /studio/simulations/{slug}/versions  # Upload versi baru
+GET     /studio/simulations/{slug}/analytics # Analitik per simulasi
+GET     /studio/comments                     # Semua komentar (dengan filter)
+POST    /studio/comments/{id}/reply          # Balas komentar
+POST    /studio/comments/{id}/pin            # Sematkan komentar
+DELETE  /studio/comments/{id}/pin            # Lepas sematan
+DELETE  /studio/comments/{id}                # Hapus komentar
+GET     /studio/followers                    # Daftar followers
+POST    /studio/followers/broadcast          # Kirim broadcast (opsional)
+GET     /studio/settings                     # Pengaturan studio
+PUT     /studio/settings                     # Update pengaturan
+```
+
+### Rute Admin
+```
+GET     /admin                               # Dashboard admin
+GET     /admin/simulations                   # Kelola simulasi
+GET     /admin/simulations/{id}              # Detail & moderasi simulasi
+DELETE  /admin/simulations/{id}              # Hapus simulasi
+GET     /admin/users                         # Kelola pengguna
+PUT     /admin/users/{id}/role               # Ubah role pengguna
+GET     /admin/categories                    # Kelola kategori
+POST    /admin/categories                    # Tambah kategori
+PUT     /admin/categories/{id}               # Edit kategori
+DELETE  /admin/categories/{id}               # Hapus kategori
+POST    /admin/featured/toggle               # Toggle fitur featured
+```
+
+### Rute API Internal (AJAX)
+```
+GET     /api/simulations                     # Daftar simulasi (JSON)
+GET     /api/simulations/{slug}              # Detail simulasi (JSON)
+GET     /api/simulations/{slug}/comments     # Komentar simulasi (JSON)
+GET     /api/notifications                   # Notifikasi (JSON)
+GET     /api/search                          # Pencarian (JSON)
+GET     /api/trending                        # Trending (JSON)
+GET     /api/categories                      # Kategori (JSON)
+GET     /api/creator/{slug}/simulations      # Simulasi kreator (JSON)
+```
+
+---
+
+## 14. Spesifikasi Keamanan & Autentikasi
+
+### Autentikasi
+*   Menggunakan **Laravel Breeze** dengan Blade + Alpine.js.
+*   **Session-based** authentication (bukan API token untuk user biasa).
+*   Password di-hash menggunakan **bcrypt** (cost factor: 12).
+*   Rate limiting pada login: **5 percobaan per 60 detik** per IP.
+*   Email verification wajib untuk fitur interaktif (komentar, bookmark, follow).
+
+### Otorisasi (Role-Based Access Control)
+| Role | Akses |
+|:---|:---|
+| **superadmin** | Akses penuh ke seluruh fitur admin, kelola user, kelola konten, pengaturan sistem |
+| **admin** | Akses panel admin (moderasi konten, kelola user), akses Simulation Studio |
+| **creator** | Akses Simulation Studio penuh, akses semua fitur user |
+| **user** | Akses fitur user (browse, play, komentar, bookmark, follow) |
+
+### Middleware
+*   `CheckRole` — Memeriksa role pengguna sebelum mengakses rute tertentu.
+*   `TrackPlayHistory` — Mencatat sesi bermain saat simulasi dijalankan.
+*   `IncrementViewCount` — Mencatat view saat halaman detail dibuka (sekali per sesi).
+
+### Perlindungan CSRF & XSS
+*   Semua form menggunakan **CSRF token** bawaan Laravel.
+*   User input dibersihkan menggunakan `strip_tags` atau `Purifier` untuk mencegah XSS.
+*   Content Security Policy (CSP) header diaktifkan untuk iframe sandboxing.
+
+### Rate Limiting
+| Endpoint | Batas |
+|:---|:---|
+| Login | 5 request / 60 detik / IP |
+| Register | 3 request / 30 detik / IP |
+| Comment | 10 request / 60 detik / user |
+| Rating | 5 request / 60 detik / user |
+| Reaction | 20 request / 60 detik / user |
+| Search | 30 request / 60 detik / IP |
+| API (authenticated) | 60 request / menit / API key |
+
+---
+
+## 15. Spesifikasi Caching Strategy
+
+### Apa yang Di-Cache
+| Data | TTL | Strategy |
+|:---|:---|:---|
+| **Trending simulations** | 15 menit | Cache per periode (hari/minggu/bulan/tahun) |
+| **Kategori & subkategori** | 24 jam | Cache until invalidated |
+| **Simulation detail** | 5 menit | Cache per slug, invalidasi saat update |
+| **Counters** (view, play, like) | Real-time di DB | Gunakan `CACHE_DRIVER=database` untuk counter |
+| **Notifikasi unread count** | 1 menit | Cache per user, invalidasi saat notifikasi baru |
+| **Leaderboard / Top Learner** | 30 menit | Cache per periode |
+| **Search results** | 10 menit | Cache per query hash |
+
+### Redis vs Database Cache
+*   **Development**: `CACHE_DRIVER=database` (menggunakan tabel `cache` bawaan Laravel).
+*   **Production**: `CACHE_DRIVER=redis` untuk performa lebih baik, terutama untuk trending & real-time counters.
+
+### Cache Invalidation
+*   **Simulation updated** → Invalidate cache simulasi tersebut + cache kategori terkait + cache trending.
+*   **New comment/reaction** → Invalidate cache komentar & counters.
+*   **Published/unpublished** → Invalidate cache trending, kategori, dan beranda.
+
+---
+
+## 16. Spesifikasi SEO & Meta Tags
+
+### URL Structure
+| Halaman | URL Pattern |
+|:---|:---|
+| Beranda | `/` |
+| Explore | `/explore` |
+| Kategori | `/explore/{category}` |
+| Subkategori | `/explore/{category}/{subcategory}` |
+| Detail simulasi | `/simulasi/{slug}` |
+| Profil kreator | `/creator/{slug}` |
+| Collection | `/collections/{slug}` |
+| Profil pengguna | `/profile` |
+| Search | `/search?q={query}` |
+
+### Meta Tags (per halaman)
+```html
+<!-- Contoh untuk halaman detail simulasi -->
+<title>{Judul Simulasi} - Simulasi Interaktif | {Nama Platform}</title>
+<meta name="description" content="{Deskripsi simulasi, max 160 karakter}">
+<meta name="keywords" content="{tag1}, {tag2}, {category}, simulasi interaktif">
+<link rel="canonical" href="https://domain.tld/simulasi/{slug}">
+
+<!-- Open Graph (Facebook, LinkedIn) -->
+<meta property="og:title" content="{Judul Simulasi}">
+<meta property="og:description" content="{Deskripsi}">
+<meta property="og:image" content="https://domain.tld/storage/{thumbnail}">
+<meta property="og:url" content="https://domain.tld/simulasi/{slug}">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="{Nama Platform}">
+
+<!-- Twitter Card -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="{Judul Simulasi}">
+<meta name="twitter:description" content="{Deskripsi}">
+<meta name="twitter:image" content="https://domain.tld/storage/{thumbnail}">
+```
+
+### Structured Data (Schema.org)
+```json
+{
+  "@context": "https://schema.org",
+  "@type": "LearningResource",
+  "name": "Hukum Newton",
+  "description": "Simulasi interaktif Hukum Newton Gerak",
+  "url": "https://domain.tld/simulasi/hukum-newton",
+  "thumbnailUrl": "https://domain.tld/storage/thumbnails/hukum-newton.png",
+  "educationalLevel": "SMA",
+  "teaches": "Hukum Newton Gerak",
+  "interactionType": "https://schema.org/InteractiveApplication",
+  "isPartOf": {
+    "@type": "CollectionPage",
+    "name": "Fisika - Mekanika"
+  },
+  "author": {
+    "@type": "Person",
+    "name": "Creator Name"
+  },
+  "aggregateRating": {
+    "@type": "AggregateRating",
+    "ratingValue": "4.5",
+    "ratingCount": "120"
+  }
+}
+```
+
+### Sitemap
+*   Generate `sitemap.xml` secara otomatis menggunakan **spatie/laravel-sitemap**.
+*   Include: `/`, `/explore`, `/simulasi/{slug}`, `/creator/{slug}`, `/collections/{slug}`.
+*   Update sitemap setiap kali simulasi baru dipublikasikan.
+*   Submit ke Google Search Console.
+
+### robots.txt
+```
+User-agent: *
+Allow: /
+Disallow: /admin/
+Disallow: /studio/
+Disallow: /api/
+Disallow: /profile/
+Sitemap: https://domain.tld/sitemap.xml
+```
+
+---
+
+## 17. Spesifikasi Accessibility (a11y)
+
+### Standar yang Diikuti
+*   **WCAG 2.1 Level AA** sebagai target minimum.
+
+### Implementasi
+| Aspek | Implementasi |
+|:---|:---|
+| **Keyboard Navigation** | Semua interaksi (tombol, link, modal) dapat diakses dengan `Tab` + `Enter`/`Space` |
+| **Focus Indicators** | Ring visible pada elemen yang difokuskan (`focus-visible:ring-2`) |
+| **Color Contrast** | Minimal 4.5:1 untuk teks normal, 3:1 untuk teks besar |
+| **Alt Text** | Semua gambar/thumbnail memiliki `alt` text yang deskriptif |
+| **ARIA Labels** | Tombol interaktif menggunakan `aria-label` jika tidak memiliki teks visible |
+| **Semantic HTML** | Menggunakan `<header>`, `<nav>`, `<main>`, `<section>`, `<article>`, `<footer>` |
+| **Skip to Content** | Link "Skip to main content" di bagian atas setiap halaman |
+| **Form Labels** | Setiap input memiliki `<label>` yang terhubung via `for`/`id` |
+| **Error Messages** | Error validasi form menggunakan `aria-describedby` dan `aria-invalid` |
+| **Simulation Player** | Player menyediakan kontrol keyboard alternatif |
+| **Screen Reader** | Konten simulasi memiliki deskripsi text alternatif (aria-live region untuk perubahan dinamis) |
+| **Responsive** | Semua halaman responsif hingga 320px width (mobile) |
+
+### Contoh Implementasi Tailwind + Accessibility
+```html
+<!-- Skip to content -->
+<a href="#main-content" class="sr-only focus:not-sr-only focus:absolute focus:z-50 ...">
+  Skip to main content
+</a>
+
+<!-- Focus ring pada tombol -->
+<button class="focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 focus-visible:ring-offset-2">
+  Bookmark
+</button>
+
+<!-- Alt text pada thumbnail -->
+<img src="{{ $simulation->thumbnail }}" alt="Simulasi interaktif {{ $simulation->title }}">
+
+<!-- ARIA live region untuk notifikasi -->
+<div aria-live="polite" aria-atomic="true" class="sr-only">
+  {{ $unreadCount }} notifikasi belum dibaca
+</div>
+```
+
+---
+
+## 18. Spesifikasi Monitoring & Error Handling
+
+### Error Handler
+*   Menggunakan Laravel's default exception handler dengan penyesuaian:
+*   **404 Not Found** → Halaman 404 kustom dengan navigasi kembali ke beranda.
+*   **403 Forbidden** → Halaman 403 kustom dengan pesan akses ditolak.
+*   **419 Page Expired** → Redirect ke halaman sebelumnya dengan pesan session expired.
+*   **429 Too Many Requests** → Halaman 429 kustom dengan pesan rate limit.
+*   **500 Server Error** → Halaman 500 kustom + log error otomatis.
+
+### Logging
+*   **Channel logging** di `config/logging.php`:
+    *   `default` → `stack` (daily + stderr)
+    *   `daily` → File log harian di `storage/logs/laravel.log` (rotate setiap 30 hari)
+    *   `errorlog` → PHP error log
+*   Log level: `debug` (development), `warning` (production)
+*   PII (Personally Identifiable Information) tidak boleh dicantumkan dalam log
+
+### Monitoring Tools
+| Tool | Kegunaan |
+|:---|:---|
+| **Laravel Pail** | Real-time log streaming saat development |
+| **Laravel Telescope** (opsional) | Debug bar, request profiling, query analysis (development only) |
+| **Uptime monitoring** | UptimeRobot atau BetterStack untuk memantau uptime server |
+| **Application Performance** | Sentry atau Bugsnag untuk error tracking di production |
+
+### Health Check Endpoint
+```
+GET /health
+Response 200: { "status": "ok", "database": "connected", "cache": "connected" }
+```
+
+---
+
+## 19. Spesifikasi CI/CD & Testing Strategy
+
+### Testing Menggunakan Pest
+| Tipe | Deskripsi | Target |
+|:---|:---|:---|
+| **Unit Test** | Testing metode/model individual (tanpa HTTP) | Model, Service, Helper |
+| **Feature Test** | Testing rute HTTP & respons | Controller, Middleware, Auth |
+| **Browser Test** | Testing interaksi frontend (via Laravel Dusk) | Simulasi player, komentar, dll. |
+
+### Struktur Test
+```
+tests/
+├── Pest.php
+├── TestCase.php
+├── Unit/
+│   ├── Models/
+│   │   ├── SimulationTest.php
+│   │   ├── UserTest.php
+│   │   ├── CommentTest.php
+│   │   └── CollectionTest.php
+│   ├── Services/
+│   │   ├── SimulationServiceTest.php
+│   │   ├── ZipExtractorServiceTest.php
+│   │   ├── ManifestParserServiceTest.php
+│   │   ├── AnalyticsServiceTest.php
+│   │   └── GamificationServiceTest.php
+│   └── Helpers/
+│       └── TrendingCalculatorTest.php
+├── Feature/
+│   ├── Auth/
+│   │   ├── RegistrationTest.php
+│   │   ├── LoginTest.php
+│   │   └── PasswordResetTest.php
+│   ├── Simulation/
+│   │   ├── ViewSimulationTest.php
+│   │   ├── PlaySimulationTest.php
+│   │   ├── RateSimulationTest.php
+│   │   ├── ReactToSimulationTest.php
+│   │   ├── BookmarkSimulationTest.php
+│   │   └── ShareSimulationTest.php
+│   ├── Comment/
+│   │   ├── CreateCommentTest.php
+│   │   ├── ReplyToCommentTest.php
+│   │   └── DeleteCommentTest.php
+│   ├── Collection/
+│   │   ├── CreateCollectionTest.php
+│   │   ├── AddToCollectionTest.php
+│   │   └── SaveCollectionTest.php
+│   ├── Creator/
+│   │   ├── FollowCreatorTest.php
+│   │   └── ViewCreatorProfileTest.php
+│   ├── Explore/
+│   │   ├── BrowseCategoryTest.php
+│   │   └── SearchSimulationTest.php
+│   ├── Studio/
+│   │   ├── UploadSimulationTest.php
+│   │   ├── EditSimulationTest.php
+│   │   ├── VersioningTest.php
+│   │   └── ModerationTest.php
+│   └── Notification/
+│       ├── ReceiveNotificationTest.php
+│       └── MarkAsReadTest.php
+└── Browser/
+    └── SimulationPlayerTest.php
+```
+
+### Contoh Test (Pest)
+```php
+<?php
+
+// tests/Feature/Simulation/ViewSimulationTest.php
+
+it('increments view count when simulation page is opened', function () {
+    $simulation = Simulation::factory()->published()->create([
+        'view_count' => 100,
+    ]);
+
+    $this->get(route('simulations.show', $simulation->slug))
+        ->assertOk();
+
+    $simulation->refresh();
+    expect($simulation->view_count)->toBe(101);
+});
+
+it('does not increment view count for same session twice', function () {
+    $simulation = Simulation::factory()->published()->create([
+        'view_count' => 100,
+    ]);
+
+    $this->get(route('simulations.show', $simulation->slug))->assertOk();
+    $this->get(route('simulations.show', $simulation->slug))->assertOk();
+
+    $simulation->refresh();
+    expect($simulation->view_count)->toBe(101); // Hanya +1
+});
+
+it('increments play count when user clicks play', function () {
+    $simulation = Simulation::factory()->published()->create([
+        'play_count' => 50,
+    ]);
+
+    $this->post(route('simulations.play', $simulation->slug))
+        ->assertOk();
+
+    $simulation->refresh();
+    expect($simulation->play_count)->toBe(51);
+});
+```
+
+### CI/CD Pipeline
+```yaml
+# .github/workflows/ci.yml
+name: CI Pipeline
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup PHP 8.4
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.4'
+          extensions: mbstring, xml, curl, zip, sqlite3
+          coverage: pcov
+
+      - name: Install Dependencies
+        run: composer install --no-progress
+
+      - name: Setup Environment
+        run: cp .env.example .env && php artisan key:generate
+
+      - name: Run Migrations
+        run: php artisan migrate --force
+
+      - name: Run Pint (Code Style)
+        run: vendor/bin/pint --test
+
+      - name: Run Pest Tests
+        run: php artisan test --compact --coverage --min=80
+
+      - name: Build Frontend
+        run: npm ci && npm run build
+```
+
+### Code Coverage
+*   Target minimum **80% code coverage** untuk Pest tests.
+*   Coverage diukur menggunakan `phpunit` dengan driver `pcov`.
+
+### Deployment Checklist
+Sebelum deploy ke production:
+*   [ ] Semua test passing (`php artisan test --compact`)
+*   [ ] Code style valid (`vendor/bin/pint --test`)
+*   [ ] Tidak ada query N+1 (cek logs query)
+*   [ ] Cache config, route, view dijalankan
+*   [ ] Migration berjalan tanpa error
+*   [ ] Seeders diperlukan sudah dijalankan
+*   [ ] Thumbnail & asset tersedia
+*   [ ] robots.txt & sitemap.xml sudah di-deploy
+*   [ ] SSL certificate aktif
+*   [ ] Backup database terjadwal
+
+---
+
+## 20. Spesifikasi Performa
+
+### Target Performa
+| Metrik | Target |
+|:---|:---|
+| **Time to First Byte (TTFB)** | < 200ms |
+| **Largest Contentful Paint (LCP)** | < 2.5 detik |
+| **First Input Delay (FID)** | < 100ms |
+| **Cumulative Layout Shift (CLS)** | < 0.1 |
+| **Page Load (3G)** | < 5 detik |
+
+### Strategi Optimasi
+
+**Backend:**
+*   Gunakan **Eloquent eager loading** untuk menghindari N+1 queries.
+*   Gunakan **database indexing** pada kolom yang sering di-query: `slug`, `category`, `user_id`, `is_published`, `created_at`.
+*   Gunakan **query caching** untuk data yang jarang berubah (kategori, trending).
+*   Gunakan **lazy loading** untuk daftar komentar (load 20 komentar pertama, load more via AJAX).
+
+**Frontend:**
+*   **Vite** untuk bundling & minifikasi CSS/JS.
+*   **Lazy loading** pada thumbnail gambar (`loading="lazy"`).
+*   **Responsive images** menggunakan `srcset` untuk berbagai resolusi.
+*   **Alpine.js** untuk interaktivitas ringan (tanpa framework berat).
+
+**Infrastructure:**
+*   **CDN** untuk aset statis (thumbnail, CSS, JS).
+*   **Gzip/Brotli compression** diaktifkan di web server.
+*   **Browser caching headers** (Cache-Control, ETag) untuk aset statis.
+
+### Database Indexing
+```php
+// Indeks yang dibutuhkan di migrations
+$table->index('category');
+$table->index('subcategory');
+$table->index('is_published');
+$table->index('is_featured');
+$table->index('published_at');
+$table->index('play_count');
+$table->index('view_count');
+$table->index('average_rating');
+$table->fullText(['title', 'description']); // Full-text search
+```
+
+---
+
+## 21. Daftar Package Eksternal
+
+| Package | Versi | Kegunaan |
+|:---|:---|:---|
+| `laravel/breeze` | v2 | Autentikasi & scaffolding |
+| `spatie/laravel-medialibrary` | latest | Manajemen file & thumbnail |
+| `spatie/laravel-sitemap` | latest | Generate sitemap.xml |
+| `spatie/laravel-query-builder` | latest | Filter & sort API |
+| `barryvdh/laravel-debugbar` | latest | Debug bar (development) |
+| `predis/predis` | latest | Redis client (production) |
+| `laravel/pint` | v1 | Code formatting |
+| `pestphp/pest` | v4 | Testing framework |
+
+> **Catatan:** Semua package harus disetujui sebelum ditambahkan ke `composer.json`. Jangan mengubah dependensi tanpa approval.

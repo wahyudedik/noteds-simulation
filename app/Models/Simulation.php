@@ -2,9 +2,11 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Str;
 
 class Simulation extends Model
@@ -30,6 +32,7 @@ class Simulation extends Model
         'like_count',
         'bookmark_count',
         'share_count',
+        'comment_count',
         'average_rating',
         'rating_count',
         'published_at',
@@ -43,10 +46,24 @@ class Simulation extends Model
         'like_count' => 'integer',
         'bookmark_count' => 'integer',
         'share_count' => 'integer',
+        'comment_count' => 'integer',
         'average_rating' => 'float',
         'rating_count' => 'integer',
         'published_at' => 'datetime',
     ];
+
+    // ─── Boot ─────────────────────────────────────────────────────
+
+    protected static function booted(): void
+    {
+        static::creating(function (Simulation $simulation) {
+            if (empty($simulation->slug)) {
+                $simulation->slug = Str::slug($simulation->title);
+            }
+        });
+    }
+
+    // ─── Relationships ────────────────────────────────────────────
 
     /**
      * Get the user (creator) that owns this simulation.
@@ -57,16 +74,46 @@ class Simulation extends Model
     }
 
     /**
-     * Auto-generate slug from title if not provided.
+     * Get comments for this simulation.
      */
-    protected static function booted(): void
+    public function comments(): HasMany
     {
-        static::creating(function (Simulation $simulation) {
-            if (empty($simulation->slug)) {
-                $simulation->slug = Str::slug($simulation->title);
-            }
-        });
+        return $this->hasMany(Comment::class);
     }
+
+    /**
+     * Get ratings for this simulation.
+     */
+    public function ratings(): HasMany
+    {
+        return $this->hasMany(Rating::class);
+    }
+
+    /**
+     * Get reactions for this simulation.
+     */
+    public function reactions(): HasMany
+    {
+        return $this->hasMany(Reaction::class);
+    }
+
+    /**
+     * Get bookmarks for this simulation.
+     */
+    public function bookmarks(): HasMany
+    {
+        return $this->hasMany(Bookmark::class);
+    }
+
+    /**
+     * Get play history for this simulation.
+     */
+    public function playHistory(): HasMany
+    {
+        return $this->hasMany(PlayHistory::class);
+    }
+
+    // ─── Accessors ────────────────────────────────────────────────
 
     /**
      * Get the tags as an array.
@@ -110,6 +157,8 @@ class Simulation extends Model
         return $this->published_at?->diffForHumans() ?? $this->created_at->diffForHumans();
     }
 
+    // ─── Scopes ───────────────────────────────────────────────────
+
     /**
      * Scope: only published simulations.
      */
@@ -141,9 +190,75 @@ class Simulation extends Model
     {
         return $query->where(function ($q) use ($term) {
             $q->where('title', 'like', "%{$term}%")
-              ->orWhere('tags', 'like', "%{$term}%")
-              ->orWhere('category', 'like', "%{$term}%");
+                ->orWhere('tags', 'like', "%{$term}%")
+                ->orWhere('category', 'like', "%{$term}%");
         });
+    }
+
+    // ─── Helpers ──────────────────────────────────────────────────
+
+    /**
+     * Check if a user has bookmarked this simulation.
+     */
+    public function isBookmarkedBy(?User $user): bool
+    {
+        if (! $user) {
+            return false;
+        }
+
+        return $this->bookmarks()->where('user_id', $user->id)->exists();
+    }
+
+    /**
+     * Check if a user has favorited this simulation.
+     */
+    public function isFavoritedBy(?User $user): bool
+    {
+        if (! $user) {
+            return false;
+        }
+
+        return $this->reactions()->where('user_id', $user->id)->where('type', 'favorit')->exists();
+    }
+
+    /**
+     * Check if a user has rated this simulation.
+     */
+    public function getRatingBy(?User $user): ?Rating
+    {
+        if (! $user) {
+            return null;
+        }
+
+        return $this->ratings()->where('user_id', $user->id)->first();
+    }
+
+    /**
+     * Get the user's reactions for this simulation.
+     *
+     * @return Collection
+     */
+    public function getReactionsBy(?User $user)
+    {
+        if (! $user) {
+            return collect();
+        }
+
+        return $this->reactions()->where('user_id', $user->id)->get();
+    }
+
+    /**
+     * Get reaction counts grouped by type.
+     *
+     * @return array<string, int>
+     */
+    public function getReactionCountsAttribute(): array
+    {
+        return $this->reactions()
+            ->selectRaw('type, count(*) as count')
+            ->groupBy('type')
+            ->pluck('count', 'type')
+            ->toArray();
     }
 
     /**
@@ -152,11 +267,12 @@ class Simulation extends Model
     private function formatCount(int $count): string
     {
         if ($count >= 1_000_000) {
-            return number_format($count / 1_000_000, 1) . 'jt';
+            return number_format($count / 1_000_000, 1).'jt';
         }
         if ($count >= 1_000) {
-            return number_format($count / 1_000, 1) . 'rb';
+            return number_format($count / 1_000, 1).'rb';
         }
+
         return (string) $count;
     }
 }

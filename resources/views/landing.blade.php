@@ -20,72 +20,7 @@
 </head>
 <body class="bg-gray-50 font-sans antialiased">
 
-    {{-- Top Navigation Bar --}}
-    <nav class="bg-white shadow-sm sticky top-0 z-50 border-b border-gray-100">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex items-center justify-between h-16">
-                {{-- Logo --}}
-                <a href="{{ route('home') }}" class="flex items-center gap-2">
-                    <img src="{{ asset('logo.jpeg') }}" alt="Noteds" class="w-8 h-8 rounded-lg object-cover" />
-                    <span class="text-xl font-bold text-gray-900">Noteds</span>
-                </a>
-
-                {{-- Search Bar --}}
-                <form action="{{ route('home') }}" method="GET" class="hidden md:flex flex-1 max-w-xl mx-8">
-                    <div class="relative w-full">
-                        <input
-                            type="text"
-                            name="search"
-                            value="{{ $search ?? '' }}"
-                            placeholder="Cari simulasi..."
-                            class="w-full pl-4 pr-12 py-2.5 border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
-                        />
-                        <button type="submit" class="absolute right-1 top-1 bottom-1 px-4 bg-gray-100 hover:bg-gray-200 rounded-full transition">
-                            <svg class="w-4 h-4 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-                            </svg>
-                        </button>
-                    </div>
-                </form>
-
-                {{-- Right Side --}}
-                <div class="flex items-center gap-3">
-                    @auth
-                        @if(auth()->user()->isAdmin())
-                            <a href="{{ route('admin.dashboard') }}" class="hidden sm:inline-flex items-center gap-1.5 px-3 py-1.5 text-sm font-medium text-blue-600 hover:bg-blue-50 rounded-lg transition">
-                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.066 2.573c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.573 1.066c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.066-2.573c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                                </svg>
-                                Studio
-                            </a>
-                        @endif
-                        <a href="{{ route('dashboard') }}" class="hidden sm:inline-flex items-center gap-1.5 px-3 py-1.5 text-sm font-medium text-gray-700 hover:bg-gray-100 rounded-lg transition">
-                            {{ auth()->user()->name }}
-                        </a>
-                    @else
-                        <a href="{{ route('login') }}" class="text-sm font-medium text-gray-700 hover:text-blue-600 transition">Masuk</a>
-                        @if (Route::has('register'))
-                            <a href="{{ route('register') }}" class="px-4 py-2 text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 rounded-lg transition">Daftar</a>
-                        @endif
-                    @endauth
-                </div>
-            </div>
-        </div>
-
-        {{-- Mobile Search --}}
-        <div class="md:hidden px-4 pb-3">
-            <form action="{{ route('home') }}" method="GET">
-                <input
-                    type="text"
-                    name="search"
-                    value="{{ $search ?? '' }}"
-                    placeholder="Cari simulasi..."
-                    class="w-full pl-4 pr-10 py-2 border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
-                />
-            </form>
-        </div>
-    </nav>
+    @include('components.app-header', ['showSearch' => true, 'searchTerm' => $search ?? ''])
 
     {{-- Hero Section (only when no search) --}}
     @if(! $search)

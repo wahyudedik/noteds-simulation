@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Simulation;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
 use ZipArchive;
 
@@ -64,6 +65,24 @@ class SimulationController extends Controller
         // Increment view count
         $simulation->increment('view_count');
 
+        // Load comments (top-level only, with replies)
+        $comments = $simulation->comments()
+            ->topLevel()
+            ->with('user', 'replies.user')
+            ->pinnedFirst()
+            ->get();
+
+        // Check user interactions (if authenticated)
+        $user = Auth::user();
+        $isBookmarked = $simulation->isBookmarkedBy($user);
+        $ratingModel = $simulation->getRatingBy($user);
+        $userRating = $ratingModel ? $ratingModel->rating : 0;
+        $userReactions = $simulation->getReactionsBy($user)->pluck('type')->toArray();
+        $isFollowing = $user && $simulation->user_id !== $user->id
+            ? $user->isFollowing($simulation->user)
+            : false;
+        $reactionCounts = $simulation->reaction_counts;
+
         // Related simulations (same category)
         $related = Simulation::published()
             ->where('id', '!=', $simulation->id)
@@ -72,7 +91,16 @@ class SimulationController extends Controller
             ->take(8)
             ->get();
 
-        return view('simulations.show', compact('simulation', 'related'));
+        return view('simulations.show', compact(
+            'simulation',
+            'related',
+            'comments',
+            'isBookmarked',
+            'userRating',
+            'userReactions',
+            'isFollowing',
+            'reactionCounts',
+        ));
     }
 
     /**
