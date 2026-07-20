@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\PlayHistory;
 use App\Models\Simulation;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -122,6 +123,21 @@ class SimulationController extends Controller
             ->firstOrFail();
 
         $simulation->increment('play_count');
+
+        // Record play history for authenticated users
+        $user = Auth::user();
+        if ($user instanceof User) {
+            PlayHistory::updateOrCreate(
+                [
+                    'user_id' => $user->id,
+                    'simulation_id' => $simulation->id,
+                ],
+                [
+                    'duration_seconds' => 0,
+                    'completed' => false,
+                ]
+            );
+        }
 
         if (request()->ajax() || request()->wantsJson()) {
             return response()->json([

@@ -34,6 +34,7 @@
                     @if($user->bio)
                         <p class="text-gray-500 text-sm mt-2 max-w-lg">{{ $user->bio }}</p>
                     @endif
+                    <p class="text-xs text-gray-400 mt-2">Bergabung {{ $user->created_at->translatedFormat('d M Y') }}</p>
 
                     <div class="flex items-center gap-6 mt-4 justify-center sm:justify-start">
                         <div class="text-center">

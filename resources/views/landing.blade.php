@@ -63,8 +63,11 @@
                         {{ $searchResults->withQueryString()->links() }}
                     </div>
                 @else
-                    <div class="text-center py-12 text-gray-500">
-                        <p class="text-lg">Tidak ada simulasi ditemukan untuk "{{ $search }}"</p>
+                    <div class="text-center py-16">
+                        <svg class="w-16 h-16 text-gray-300 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+                        <h3 class="text-lg font-semibold text-gray-600 mb-1">Tidak ada hasil ditemukan</h3>
+                        <p class="text-sm text-gray-400 mb-4">Tidak ada simulasi yang cocok dengan "<span class="font-medium text-gray-500">{{ $search }}</span>"</p>
+                        <p class="text-xs text-gray-400">Coba kata kunci lain atau jelajahi kategori di bawah.</p>
                     </div>
                 @endif
             </section>

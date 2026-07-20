@@ -24,6 +24,7 @@
                         @if(auth()->user()->bio)
                             <p class="text-sm text-gray-600 mt-1">{{ auth()->user()->bio }}</p>
                         @endif
+                        <p class="text-xs text-gray-400 mt-1">Bergabung {{ auth()->user()->created_at->translatedFormat('d M Y') }}</p>
                     </div>
                     <a href="{{ route('profile.edit') }}" class="px-4 py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 text-sm font-medium rounded-lg transition">
                         Edit Profil

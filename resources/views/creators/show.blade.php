@@ -33,10 +33,28 @@
 
                 {{-- Info --}}
                 <div class="flex-1 text-center sm:text-left">
-                    <h1 class="text-2xl font-bold text-gray-900">{{ $creator->name }}</h1>
+                    <h1 class="text-2xl font-bold text-gray-900">{{ $creator->name }}
+                        @if($creator->role === 'superadmin')
+                            <span class="inline-flex items-center ml-2 px-2 py-0.5 text-xs font-medium rounded-full bg-purple-100 text-purple-700">
+                                <svg class="w-3 h-3 mr-1" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                                Superadmin
+                            </span>
+                        @elseif($creator->role === 'admin')
+                            <span class="inline-flex items-center ml-2 px-2 py-0.5 text-xs font-medium rounded-full bg-red-100 text-red-700">
+                                <svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
+                                Admin
+                            </span>
+                        @elseif($creator->role === 'creator')
+                            <span class="inline-flex items-center ml-2 px-2 py-0.5 text-xs font-medium rounded-full bg-green-100 text-green-700">
+                                <svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"/></svg>
+                                Creator
+                            </span>
+                        @endif
+                    </h1>
                     @if($creator->bio)
                         <p class="text-gray-500 text-sm mt-2 max-w-lg">{{ $creator->bio }}</p>
                     @endif
+                    <p class="text-xs text-gray-400 mt-2">Bergabung {{ $creator->created_at->translatedFormat('d M Y') }}</p>
 
                     <div class="flex items-center gap-6 mt-4 justify-center sm:justify-start">
                         <div class="text-center">
@@ -53,10 +71,10 @@
                         </div>
                     </div>
 
-                    {{-- Follow Button --}}
-                    @auth
-                        @if(auth()->id() !== $creator->id)
-                            <div class="mt-4">
+                    {{-- Follow + Share Buttons --}}
+                    <div class="mt-4 flex gap-3">
+                        @auth
+                            @if(auth()->id() !== $creator->id)
                                 <button
                                     id="follow-btn"
                                     onclick="toggleFollow({{ $creator->id }})"
@@ -64,15 +82,17 @@
                                 >
                                     <span id="follow-text">{{ $isFollowing ? 'Mengikuti' : 'Ikuti' }}</span>
                                 </button>
-                            </div>
-                        @endif
-                    @else
-                        <div class="mt-4">
+                            @endif
+                        @else
                             <a href="{{ route('login') }}" class="inline-block px-6 py-2 text-sm font-medium rounded-full bg-blue-600 text-white hover:bg-blue-700 transition">
                                 Ikuti
                             </a>
-                        </div>
-                    @endauth
+                        @endauth
+                        <button onclick="copyProfileLink()" class="px-4 py-2 text-sm font-medium rounded-full bg-gray-100 hover:bg-gray-200 text-gray-700 transition">
+                            <svg class="w-4 h-4 inline mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z"/></svg>
+                            Bagikan
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>
@@ -163,6 +183,38 @@
                 setTimeout(function() { toast.style.opacity = '0'; }, 1500);
                 setTimeout(function() { toast.remove(); }, 1800);
             });
+        }
+
+        function copyProfileLink() {
+            var url = window.location.href;
+            if (navigator.clipboard && navigator.clipboard.writeText) {
+                navigator.clipboard.writeText(url).then(function() {
+                    showToast('Link profil berhasil disalin!');
+                });
+            } else {
+                var textarea = document.createElement('textarea');
+                textarea.value = url;
+                textarea.style.position = 'fixed';
+                textarea.style.opacity = '0';
+                document.body.appendChild(textarea);
+                textarea.select();
+                try {
+                    document.execCommand('copy');
+                    showToast('Link profil berhasil disalin!');
+                } catch (err) {
+                    showToast('Gagal menyalin link');
+                }
+                document.body.removeChild(textarea);
+            }
+        }
+
+        function showToast(message) {
+            var toast = document.createElement('div');
+            toast.className = 'fixed bottom-6 left-1/2 -translate-x-1/2 bg-gray-900 text-white text-sm px-4 py-2 rounded-lg shadow-lg z-[99999] transition-opacity duration-300';
+            toast.textContent = message;
+            document.body.appendChild(toast);
+            setTimeout(function() { toast.style.opacity = '0'; }, 1500);
+            setTimeout(function() { toast.remove(); }, 1800);
         }
     </script>
 </body>
