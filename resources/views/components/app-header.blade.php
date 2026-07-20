@@ -1,7 +1,7 @@
 {{-- Unified App Header — used across ALL pages --}}
 @props(['showSearch' => false, 'searchTerm' => ''])
 
-<nav x-data="{ mobileOpen: false, userMenuOpen: false }" class="bg-white shadow-sm border-b border-gray-100 sticky top-0 z-50">
+<nav x-data="{ mobileOpen: false, userMenuOpen: false, searchQuery: '{{ $searchTerm }}', searchResults: [], searchLoading: false, searchOpen: false, searchTimeout: null }" class="bg-white shadow-sm border-b border-gray-100 sticky top-0 z-50">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex items-center justify-between h-14">
 
@@ -17,6 +17,9 @@
                     <a href="{{ route('home') }}" class="px-3 py-2 text-sm font-medium text-gray-700 hover:text-blue-600 hover:bg-gray-50 rounded-lg transition">
                         Beranda
                     </a>
+                    <a href="{{ route('simulations.explore') }}" class="px-3 py-2 text-sm font-medium text-gray-700 hover:text-blue-600 hover:bg-gray-50 rounded-lg transition">
+                        Jelajahi
+                    </a>
                     @auth
                         <a href="{{ route('collections.index') }}" class="px-3 py-2 text-sm font-medium text-gray-700 hover:text-blue-600 hover:bg-gray-50 rounded-lg transition">
                             Collection
@@ -30,25 +33,64 @@
                 </div>
             </div>
 
-            {{-- Center: Search Bar (optional) --}}
-            @if($showSearch)
-                <form action="{{ route('home') }}" method="GET" class="hidden md:flex flex-1 max-w-xl mx-8">
-                    <div class="relative w-full">
-                        <input
-                            type="text"
-                            name="search"
-                            value="{{ $searchTerm }}"
-                            placeholder="Cari simulasi..."
-                            class="w-full pl-4 pr-12 py-2.5 border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
-                        />
-                        <button type="submit" class="absolute right-1 top-1 bottom-1 px-4 bg-gray-100 hover:bg-gray-200 rounded-full transition">
-                            <svg class="w-4 h-4 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-                            </svg>
-                        </button>
+            {{-- Center: Search Bar --}}
+            <div class="hidden md:flex flex-1 max-w-xl mx-8" @click.away="searchOpen = false">
+                <form action="{{ route('home') }}" method="GET" class="relative w-full" @submit="searchOpen = false">
+                    <input
+                        type="text"
+                        name="search"
+                        x-model="searchQuery"
+                        @input.debounce.300ms="if(searchQuery.length >= 2) { searchLoading = true; searchOpen = true; fetch('/api/search?q=' + encodeURIComponent(searchQuery)).then(r => r.json()).then(data => { searchResults = data.results || []; searchLoading = false; }).catch(() => { searchLoading = false; }); } else { searchResults = []; searchOpen = false; }"
+                        @focus="if(searchQuery.length >= 2 && searchResults.length > 0) searchOpen = true"
+                        value="{{ $searchTerm }}"
+                        placeholder="Cari simulasi..."
+                        class="w-full pl-4 pr-12 py-2.5 border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
+                        autocomplete="off"
+                    />
+                    <button type="submit" class="absolute right-1 top-1 bottom-1 px-4 bg-gray-100 hover:bg-gray-200 rounded-full transition">
+                        <svg class="w-4 h-4 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                        </svg>
+                    </button>
+                    {{-- Live Search Dropdown --}}
+                    <div x-show="searchOpen" x-cloak class="absolute top-full left-0 right-0 mt-2 bg-white rounded-xl shadow-lg border border-gray-100 py-2 z-50 max-h-80 overflow-y-auto">
+                        <template x-if="searchLoading">
+                            <div class="px-4 py-3 text-sm text-gray-400 flex items-center gap-2">
+                                <svg class="w-4 h-4 animate-spin" fill="none" stroke="currentColor" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4" class="opacity-25"></circle><path fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" class="opacity-75"></path></svg>
+                                Mencari...
+                            </div>
+                        </template>
+                        <template x-if="!searchLoading && searchResults.length > 0">
+                            <div>
+                                <template x-for="result in searchResults" :key="result.id">
+                                    <a :href="'/sim/' + result.slug" class="flex items-center gap-3 px-4 py-2.5 hover:bg-gray-50 transition">
+                                        <div class="w-16 aspect-video bg-gray-200 rounded overflow-hidden flex-shrink-0">
+                                            <template x-if="result.thumbnail">
+                                                <img :src="result.thumbnail" class="w-full h-full object-cover" />
+                                            </template>
+                                            <template x-if="!result.thumbnail">
+                                                <div class="w-full h-full flex items-center justify-center bg-gradient-to-br from-blue-500 to-purple-600">
+                                                    <svg class="w-4 h-4 text-white/50" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z" /></svg>
+                                                </div>
+                                            </template>
+                                        </div>
+                                        <div class="flex-1 min-w-0">
+                                            <p class="text-sm font-medium text-gray-900 truncate" x-text="result.title"></p>
+                                            <p class="text-xs text-gray-500" x-text="result.category + ' · ' + result.formatted_play_count + ' dimainkan'"></p>
+                                        </div>
+                                    </a>
+                                </template>
+                                <div class="border-t border-gray-100 mt-1 pt-1">
+                                    <button type="submit" class="w-full text-left px-4 py-2.5 text-sm text-blue-600 hover:bg-blue-50 transition font-medium" x-text="'Lihat semua hasil untuk "' + searchQuery + '"'"></button>
+                                </div>
+                            </div>
+                        </template>
+                        <template x-if="!searchLoading && searchResults.length === 0 && searchQuery.length >= 2">
+                            <div class="px-4 py-3 text-sm text-gray-400">Tidak ada hasil ditemukan.</div>
+                        </template>
                     </div>
                 </form>
-            @endif
+            </div>
 
             {{-- Right: Bell + User --}}
             <div class="flex items-center gap-3">
@@ -115,25 +157,24 @@
         </div>
 
         {{-- Mobile Search --}}
-        @if($showSearch)
-            <div class="md:hidden pb-3">
-                <form action="{{ route('home') }}" method="GET">
-                    <input
-                        type="text"
-                        name="search"
-                        value="{{ $searchTerm }}"
-                        placeholder="Cari simulasi..."
-                        class="w-full pl-4 pr-10 py-2 border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
-                    />
-                </form>
-            </div>
-        @endif
+        <div class="md:hidden pb-3">
+            <form action="{{ route('home') }}" method="GET">
+                <input
+                    type="text"
+                    name="search"
+                    value="{{ $searchTerm }}"
+                    placeholder="Cari simulasi..."
+                    class="w-full pl-4 pr-10 py-2 border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
+                />
+            </form>
+        </div>
     </div>
 
     {{-- Mobile Menu --}}
     <div x-show="mobileOpen" x-transition:enter="transition ease-out duration-200" x-transition:enter-start="opacity-0 -translate-y-1" x-transition:enter-end="opacity-100 translate-y-0" x-transition:leave="transition ease-in duration-150" x-transition:leave-start="opacity-100 translate-y-0" x-transition:leave-end="opacity-0 -translate-y-1" class="sm:hidden border-t border-gray-100" x-cloak>
         <div class="py-2 space-y-1 px-4">
             <a href="{{ route('home') }}" class="block px-3 py-2 text-sm font-medium text-gray-700 hover:text-blue-600 hover:bg-gray-50 rounded-lg transition">Beranda</a>
+            <a href="{{ route('simulations.explore') }}" class="block px-3 py-2 text-sm font-medium text-gray-700 hover:text-blue-600 hover:bg-gray-50 rounded-lg transition">Jelajahi</a>
             @auth
                 <a href="{{ route('collections.index') }}" class="block px-3 py-2 text-sm font-medium text-gray-700 hover:text-blue-600 hover:bg-gray-50 rounded-lg transition">Collection</a>
                 @if(auth()->user()->isAdmin())

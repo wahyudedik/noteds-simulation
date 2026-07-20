@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\PlayHistory;
 use App\Models\Simulation;
 use App\Models\User;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
@@ -12,6 +13,92 @@ use ZipArchive;
 
 class SimulationController extends Controller
 {
+    /**
+     * Display the explore/discover page with categories and curated simulations.
+     */
+    public function explore(Request $request): View
+    {
+        $categories = Simulation::published()
+            ->selectRaw('category, count(*) as count')
+            ->groupBy('category')
+            ->orderBy('count', 'desc')
+            ->get();
+
+        // Filter by category if provided
+        $activeCategory = $request->input('category');
+
+        $query = Simulation::published();
+        if ($activeCategory) {
+            $query->where('category', $activeCategory);
+        }
+
+        // Featured simulations
+        $featured = Simulation::published()
+            ->when($activeCategory, fn ($q) => $q->where('category', $activeCategory))
+            ->orderByDesc('play_count')
+            ->take(6)
+            ->get();
+
+        // Trending (most played)
+        $trending = Simulation::published()
+            ->when($activeCategory, fn ($q) => $q->where('category', $activeCategory))
+            ->orderByDesc('play_count')
+            ->take(12)
+            ->get();
+
+        // Recently added
+        $recent = Simulation::published()
+            ->when($activeCategory, fn ($q) => $q->where('category', $activeCategory))
+            ->latest('published_at')
+            ->take(12)
+            ->get();
+
+        // Highest rated
+        $topRated = Simulation::published()
+            ->when($activeCategory, fn ($q) => $q->where('category', $activeCategory))
+            ->withAvg('ratings', 'rating')
+            ->orderByDesc('ratings_avg_rating')
+            ->take(12)
+            ->get();
+
+        return view('simulations.explore', compact(
+            'categories',
+            'activeCategory',
+            'featured',
+            'trending',
+            'recent',
+            'topRated',
+        ));
+    }
+
+    /**
+     * AJAX search endpoint for live search suggestions.
+     */
+    public function search(Request $request): JsonResponse
+    {
+        $query = $request->input('q', '');
+
+        if (strlen($query) < 2) {
+            return response()->json(['results' => []]);
+        }
+
+        $results = Simulation::published()
+            ->search($query)
+            ->orderByDesc('play_count')
+            ->take(8)
+            ->get()
+            ->map(fn ($sim) => [
+                'id' => $sim->id,
+                'title' => $sim->title,
+                'slug' => $sim->slug,
+                'category' => $sim->category,
+                'formatted_play_count' => $sim->formatted_play_count,
+                'thumbnail' => $sim->thumbnail ? asset('storage/'.$sim->thumbnail) : null,
+            ]);
+
+        return response()->json(['results' => $results]);
+    }
+
     /**
      * Display the landing page with simulation feed.
      */

@@ -2,9 +2,10 @@
 @php
     $replies = $comment->replies()->latest()->get();
     $maxDepth = 3;
+    $isCollapsed = $depth >= $maxDepth && $replies->count() > 0;
 @endphp
 
-<div class="comment-item" id="comment-{{ $comment->id }}" style="margin-left: {{ $depth * 24 }}px;">
+<div class="comment-item" id="comment-{{ $comment->id }}" style="margin-left: {{ $depth * 24 }}px;" x-data="{ expanded: false }">
     <div class="flex gap-3 {{ $depth > 0 ? 'mt-3' : '' }}">
         <a href="{{ route('creators.show', $comment->user->id) }}" class="flex-shrink-0">
             <div class="w-8 h-8 rounded-full bg-gray-200 flex items-center justify-center text-gray-600 text-xs font-semibold overflow-hidden">
@@ -60,15 +61,28 @@
                 </div>
             @endauth
 
-            {{-- Nested Replies (max 3 levels) --}}
-            @if($depth < $maxDepth && $replies->count() > 0)
-                @foreach($replies as $reply)
-                    @include('simulations._comment', ['comment' => $reply, 'depth' => $depth + 1])
-                @endforeach
-            @elseif($depth >= $maxDepth && $replies->count() > 0)
-                <p class="text-gray-400 text-xs mt-2 ml-1">
-                    <a href="#" class="text-blue-600 hover:text-blue-700">Lihat {{ $replies->count() }} balasan lainnya...</a>
-                </p>
+            {{-- Nested Replies --}}
+            @if($replies->count() > 0)
+                @if($isCollapsed)
+                    {{-- Collapsed replies: show toggle link --}}
+                    <button
+                        @click="expanded = !expanded"
+                        class="text-blue-600 hover:text-blue-700 text-xs font-medium mt-2 ml-1 transition flex items-center gap-1"
+                    >
+                        <svg class="w-3 h-3 transition-transform duration-200" :class="{ 'rotate-90': expanded }" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" /></svg>
+                        <span x-text="expanded ? 'Sembunyikan balasan' : 'Lihat {{ $replies->count() }} balasan lainnya...'"></span>
+                    </button>
+                    <div x-show="expanded" x-collapse x-cloak>
+                        @foreach($replies as $reply)
+                            @include('simulations._comment', ['comment' => $reply, 'depth' => $depth + 1])
+                        @endforeach
+                    </div>
+                @else
+                    {{-- Normal depth: render replies directly --}}
+                    @foreach($replies as $reply)
+                        @include('simulations._comment', ['comment' => $reply, 'depth' => $depth + 1])
+                    @endforeach
+                @endif
             @endif
         </div>
     </div>

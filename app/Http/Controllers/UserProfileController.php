@@ -16,13 +16,14 @@ class UserProfileController extends Controller
         $tab ??= 'bookmarks';
 
         $user = $request->user();
-        $validTabs = ['bookmarks', 'history', 'following'];
+        $validTabs = ['bookmarks', 'history', 'following', 'collections'];
         $activeTab = in_array($tab, $validTabs) ? $tab : 'bookmarks';
 
         $data = match ($activeTab) {
             'bookmarks' => $this->getBookmarks($user),
             'history' => $this->getHistory($user),
             'following' => $this->getFollowing($user),
+            'collections' => $this->getCollections($user),
             default => [],
         };
 
@@ -32,6 +33,7 @@ class UserProfileController extends Controller
             'following' => $user->following()->count(),
             'followers' => $user->followers()->count(),
             'comments' => $user->comments()->count(),
+            'collections' => $user->collections()->count(),
         ];
 
         return view('user-profile.index', compact('user', 'activeTab', 'data', 'stats'));
@@ -76,5 +78,18 @@ class UserProfileController extends Controller
             ->paginate(12);
 
         return ['following' => $following];
+    }
+
+    /**
+     * Get user's collections.
+     */
+    private function getCollections($user): array
+    {
+        $collections = $user->collections()
+            ->withCount('simulations')
+            ->latest()
+            ->paginate(12);
+
+        return ['collections' => $collections];
     }
 }

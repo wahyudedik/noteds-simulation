@@ -19,6 +19,12 @@ use Illuminate\Support\Facades\Route;
 // Landing page = simulation feed (like YouTube homepage)
 Route::get('/', [SimulationController::class, 'index'])->name('home');
 
+// AJAX Search API
+Route::get('/api/search', [SimulationController::class, 'search'])->name('simulations.search');
+
+// Explore / Discover page
+Route::get('/explore', [SimulationController::class, 'explore'])->name('simulations.explore');
+
 // Public simulation routes
 Route::get('/explore/{category}', [SimulationController::class, 'category'])->name('simulations.category');
 Route::get('/sim/{slug}', [SimulationController::class, 'show'])->name('simulations.show');

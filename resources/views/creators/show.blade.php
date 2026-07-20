@@ -217,5 +217,20 @@
             setTimeout(function() { toast.remove(); }, 1800);
         }
     </script>
+
+    {{-- Footer --}}
+    <footer class="bg-white border-t border-gray-200 mt-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+            <div class="flex flex-col md:flex-row items-center justify-between gap-4">
+                <div class="flex items-center gap-2">
+                    <img src="{{ asset('logo.jpeg') }}" alt="Noteds" class="w-6 h-6 rounded object-cover" />
+                    <span class="font-semibold text-gray-900">Noteds</span>
+                </div>
+                <p class="text-sm text-gray-500">
+                    Interactive Simulations &copy; {{ date('Y') }}
+                </p>
+            </div>
+        </div>
+    </footer>
 </body>
 </html>
