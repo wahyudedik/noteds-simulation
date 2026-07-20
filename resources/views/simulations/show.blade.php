@@ -60,18 +60,18 @@
             height: 8px;
         }
         ::-webkit-scrollbar-track {
-            background: #111827;
+            background: #f3f4f6;
         }
         ::-webkit-scrollbar-thumb {
-            background: #374151;
+            background: #d1d5db;
             border-radius: 4px;
         }
         ::-webkit-scrollbar-thumb:hover {
-            background: #4b5563;
+            background: #9ca3af;
         }
         * {
             scrollbar-width: thin;
-            scrollbar-color: #374151 #111827;
+            scrollbar-color: #d1d5db #f3f4f6;
         }
         .reaction-btn.active { background-color: #2563eb; color: white; }
         .bookmark-btn.active { color: #facc15; }
@@ -81,7 +81,7 @@
         .comment-reply.show { display: block; }
     </style>
 </head>
-<body class="bg-gray-900 font-sans antialiased">
+<body class="bg-gray-50 font-sans antialiased">
 
     @include('components.app-header')
 
@@ -121,18 +121,18 @@
                     </div>
 
                     {{-- Player Control Bar --}}
-                    <div id="player-controls" class="hidden bg-gray-900 border-t border-gray-800 px-3 py-2 flex items-center justify-between rounded-b-xl">
+                    <div id="player-controls" class="hidden bg-gray-800 border-t border-gray-700 px-3 py-2 flex items-center justify-between rounded-b-xl">
                         <div class="flex items-center gap-2">
-                            <button onclick="closeSimulation()" class="p-1.5 text-gray-400 hover:text-white rounded-lg hover:bg-gray-800 transition" title="Tutup simulasi">
+                            <button onclick="closeSimulation()" class="p-1.5 text-gray-300 hover:text-white rounded-lg hover:bg-gray-700 transition" title="Tutup simulasi">
                                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
                             </button>
-                            <button onclick="reloadSimulation()" class="p-1.5 text-gray-400 hover:text-white rounded-lg hover:bg-gray-800 transition" title="Muat ulang">
+                            <button onclick="reloadSimulation()" class="p-1.5 text-gray-300 hover:text-white rounded-lg hover:bg-gray-700 transition" title="Muat ulang">
                                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" /></svg>
                             </button>
                         </div>
                         <div class="flex items-center gap-1">
-                            <span class="text-xs text-gray-500 mr-2 hidden sm:inline">{{ $simulation->title }}</span>
-                            <button onclick="toggleFullscreen()" id="btn-fullscreen" class="p-1.5 text-gray-400 hover:text-white rounded-lg hover:bg-gray-800 transition" title="Layar penuh">
+                            <span class="text-xs text-gray-300 mr-2 hidden sm:inline">{{ $simulation->title }}</span>
+                            <button onclick="toggleFullscreen()" id="btn-fullscreen" class="p-1.5 text-gray-300 hover:text-white rounded-lg hover:bg-gray-700 transition" title="Layar penuh">
                                 <svg id="icon-fullscreen-enter" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4" /></svg>
                                 <svg id="icon-fullscreen-exit" class="w-5 h-5 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 9V4.5M9 9H4.5M9 9L3.75 3.75M9 15v4.5M9 15H4.5M9 15l-5.25 5.25M15 9h4.5M15 9V4.5M15 9l5.25-5.25M15 15h4.5M15 15v4.5m0-4.5l5.25 5.25" /></svg>
                             </button>
@@ -142,9 +142,9 @@
 
                 {{-- Simulation Info --}}
                 <div class="mt-4">
-                    <h1 class="text-xl font-bold text-white">{{ $simulation->title }}</h1>
+                    <h1 class="text-xl font-bold text-gray-900">{{ $simulation->title }}</h1>
 
-                    <div class="flex items-center gap-4 mt-2 text-sm text-gray-400">
+                    <div class="flex items-center gap-4 mt-2 text-sm text-gray-500">
                         <span>{{ $simulation->formatted_view_count }} dilihat</span>
                         <span>&middot;</span>
                         <span>{{ $simulation->formatted_play_count }} dimainkan</span>
@@ -158,10 +158,10 @@
                         @if($avgRating)
                             <div class="flex items-center gap-1">
                                 @for($i = 1; $i <= 5; $i++)
-                                    <svg class="w-4 h-4 {{ $i <= round($avgRating) ? 'text-yellow-400' : 'text-gray-600' }}" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                                    <svg class="w-4 h-4 {{ $i <= round($avgRating) ? 'text-yellow-400' : 'text-gray-300' }}" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
                                 @endfor
-                                <span class="text-sm text-gray-400 ml-1">{{ number_format($avgRating, 1) }}</span>
-                                <span class="text-xs text-gray-500">({{ $simulation->ratings()->count() }})</span>
+                                <span class="text-sm text-gray-500 ml-1">{{ number_format($avgRating, 1) }}</span>
+                                <span class="text-xs text-gray-400">({{ $simulation->ratings()->count() }})</span>
                             </div>
                         @endif
                     </div>
@@ -173,45 +173,113 @@
                             <button
                                 id="bookmark-btn"
                                 onclick="toggleBookmark()"
-                                class="bookmark-btn flex items-center gap-1.5 px-4 py-2 bg-gray-800 hover:bg-gray-700 text-white text-sm font-medium rounded-full transition {{ $isBookmarked ? 'active' : '' }}"
+                                class="bookmark-btn flex items-center gap-1.5 px-4 py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 text-sm font-medium rounded-full transition {{ $isBookmarked ? 'active' : '' }}"
                             >
                                 <svg class="w-4 h-4" fill="{{ $isBookmarked ? 'currentColor' : 'none' }}" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z" /></svg>
                                 <span id="bookmark-text">{{ $isBookmarked ? 'Tersimpan' : 'Bookmark' }}</span>
                             </button>
                         @else
-                            <a href="{{ route('login') }}" class="flex items-center gap-1.5 px-4 py-2 bg-gray-800 hover:bg-gray-700 text-white text-sm font-medium rounded-full transition">
+                            <a href="{{ route('login') }}" class="flex items-center gap-1.5 px-4 py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 text-sm font-medium rounded-full transition">
                                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z" /></svg>
                                 Bookmark
                             </a>
                         @endauth
 
-                        <button onclick="copyLink()" class="flex items-center gap-1.5 px-4 py-2 bg-gray-800 hover:bg-gray-700 text-white text-sm font-medium rounded-full transition">
-                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z" /></svg>
-                            Share
-                        </button>
+                        {{-- Add to Collection Dropdown --}}
+                        @auth
+                            <div class="relative" x-data="{ collectionOpen: false }" @click.away="collectionOpen = false">
+                                <button @click="collectionOpen = !collectionOpen" class="flex items-center gap-1.5 px-4 py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 text-sm font-medium rounded-full transition">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/></svg>
+                                    <span>Collection</span>
+                                </button>
+                                <div x-show="collectionOpen" x-transition:enter="transition ease-out duration-100" x-transition:enter-start="opacity-0 scale-95" x-transition:enter-end="opacity-100 scale-100" x-transition:leave="transition ease-in duration-75" x-transition:leave-start="opacity-100 scale-100" x-transition:leave-end="opacity-0 scale-95" x-cloak
+                                    class="absolute left-0 mt-2 w-64 bg-white rounded-xl shadow-lg border border-gray-100 py-1 z-50">
+                                    <div class="px-4 py-2.5 border-b border-gray-100">
+                                        <p class="text-xs font-medium text-gray-500 uppercase tracking-wide">Tambahkan ke Collection</p>
+                                    </div>
+                                    @forelse($userCollections as $collection)
+                                        <button
+                                            @click="addToCollection({{ $collection->id }}, this)"
+                                            class="flex items-center gap-3 w-full px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-50 transition text-left"
+                                        >
+                                            <svg class="w-4 h-4 text-blue-500 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/></svg>
+                                            <span class="truncate">{{ $collection->title }}</span>
+                                            <span class="text-xs text-gray-400 ml-auto shrink-0">{{ $collection->simulations_count }}</span>
+                                        </button>
+                                    @empty
+                                        <div class="px-4 py-3 text-sm text-gray-400 text-center">
+                                            Belum ada collection
+                                        </div>
+                                    @endforelse
+                                    <div class="border-t border-gray-100 my-1"></div>
+                                    <a href="{{ route('collections.create') }}" class="flex items-center gap-3 px-4 py-2.5 text-sm text-blue-600 hover:bg-blue-50 transition">
+                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
+                                        Buat Collection Baru
+                                    </a>
+                                </div>
+                            </div>
+                        @endauth
+
+                        {{-- Share Dropdown --}}
+                        <div class="relative" x-data="{ shareOpen: false }" @click.away="shareOpen = false">
+                            <button @click="shareOpen = !shareOpen" class="flex items-center gap-1.5 px-4 py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 text-sm font-medium rounded-full transition">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z" /></svg>
+                                Share
+                            </button>
+                            <div x-show="shareOpen" x-transition:enter="transition ease-out duration-100" x-transition:enter-start="opacity-0 scale-95" x-transition:enter-end="opacity-100 scale-100" x-transition:leave="transition ease-in duration-75" x-transition:leave-start="opacity-100 scale-100" x-transition:leave-end="opacity-0 scale-95" x-cloak
+                                class="absolute left-0 mt-2 w-48 bg-white rounded-xl shadow-lg border border-gray-100 py-1 z-50">
+                                <a href="https://wa.me/?text={{ urlencode($simulation->title . ' - ' . route('simulations.show', $simulation->slug)) }}" target="_blank" rel="noopener noreferrer" class="flex items-center gap-3 px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-50 transition">
+                                    <svg class="w-4 h-4 text-green-500" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+                                    WhatsApp
+                                </a>
+                                <a href="https://twitter.com/intent/tweet?text={{ urlencode($simulation->title) }}&url={{ urlencode(route('simulations.show', $simulation->slug)) }}" target="_blank" rel="noopener noreferrer" class="flex items-center gap-3 px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-50 transition">
+                                    <svg class="w-4 h-4 text-blue-400" fill="currentColor" viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+                                    Twitter / X
+                                </a>
+                                <a href="https://www.facebook.com/sharer/sharer.php?u={{ urlencode(route('simulations.show', $simulation->slug)) }}" target="_blank" rel="noopener noreferrer" class="flex items-center gap-3 px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-50 transition">
+                                    <svg class="w-4 h-4 text-blue-600" fill="currentColor" viewBox="0 0 24 24"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+                                    Facebook
+                                </a>
+                                <div class="border-t border-gray-100 my-1"></div>
+                                <button onclick="copyLink(); shareOpen = false;" class="flex items-center gap-3 w-full px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-50 transition text-left">
+                                    <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3" /></svg>
+                                    Salin Tautan
+                                </button>
+                            </div>
+                        </div>
                     </div>
 
                     {{-- Reactions Section --}}
                     @auth
-                    <div class="mt-4 p-4 bg-gray-800 rounded-xl">
-                        <h3 class="text-white font-semibold text-sm mb-3">Bagaimana simulasi ini?</h3>
+                    <div class="mt-4 p-4 bg-white rounded-xl border border-gray-100 shadow-sm">
+                        <h3 class="text-gray-900 font-semibold text-sm mb-3">Bagaimana simulasi ini?</h3>
                         <div class="flex items-center gap-2 flex-wrap" id="reactions-container">
                             @php
                                 $reactionTypes = [
-                                    'mudah_dipahami' => ['icon' => '🧠', 'label' => 'Mudah Dipahami'],
-                                    'membuka_wawasan' => ['icon' => '💡', 'label' => 'Membuka Wawasan'],
-                                    'sangat_membantu' => ['icon' => '✅', 'label' => 'Sangat Membantu'],
-                                    'interaktif' => ['icon' => '🎮', 'label' => 'Interaktif'],
-                                    'favorit' => ['icon' => '⭐', 'label' => 'Favorit'],
+                                    'mudah_dipahami' => ['label' => 'Mudah Dipahami'],
+                                    'membuka_wawasan' => ['label' => 'Membuka Wawasan'],
+                                    'sangat_membantu' => ['label' => 'Sangat Membantu'],
+                                    'interaktif' => ['label' => 'Interaktif'],
+                                    'favorit' => ['label' => 'Favorit'],
                                 ];
                             @endphp
                             @foreach($reactionTypes as $type => $info)
                                 <button
                                     onclick="toggleReaction('{{ $type }}')"
                                     id="reaction-{{ $type }}"
-                                    class="reaction-btn flex items-center gap-1.5 px-3 py-1.5 bg-gray-700 hover:bg-gray-600 text-gray-300 text-xs font-medium rounded-full transition {{ in_array($type, $userReactions) ? 'active' : '' }}"
+                                    class="reaction-btn flex items-center gap-1.5 px-3 py-1.5 bg-gray-100 hover:bg-gray-200 text-gray-600 text-xs font-medium rounded-full transition {{ in_array($type, $userReactions) ? 'active' : '' }}"
                                 >
-                                    <span>{{ $info['icon'] }}</span>
+                                    @if($type === 'mudah_dipahami')
+                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/></svg>
+                                    @elseif($type === 'membuka_wawasan')
+                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>
+                                    @elseif($type === 'sangat_membantu')
+                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                                    @elseif($type === 'interaktif')
+                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                                    @elseif($type === 'favorit')
+                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z"/></svg>
+                                    @endif
                                     <span>{{ $info['label'] }}</span>
                                     <span id="reaction-count-{{ $type }}" class="ml-1 text-gray-400">({{ $reactionCounts[$type] ?? 0 }})</span>
                                 </button>
@@ -222,18 +290,18 @@
 
                     {{-- Rating Section --}}
                     @auth
-                    <div class="mt-4 p-4 bg-gray-800 rounded-xl">
-                        <h3 class="text-white font-semibold text-sm mb-3">Beri Rating</h3>
+                    <div class="mt-4 p-4 bg-white rounded-xl border border-gray-100 shadow-sm">
+                        <h3 class="text-gray-900 font-semibold text-sm mb-3">Beri Rating</h3>
                         <div class="flex items-center gap-1" id="rating-stars">
                             @for($i = 1; $i <= 5; $i++)
                                 <svg
-                                    class="rating-star w-7 h-7 {{ $i <= $userRating ? 'active text-yellow-400' : 'text-gray-600' }}"
+                                    class="rating-star w-7 h-7 {{ $i <= $userRating ? 'active text-yellow-400' : 'text-gray-300' }}"
                                     onclick="setRating({{ $i }})"
                                     fill="currentColor"
                                     viewBox="0 0 24 24"
                                 ><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
                             @endfor
-                            <span id="rating-text" class="text-sm text-gray-400 ml-2">
+                            <span id="rating-text" class="text-sm text-gray-500 ml-2">
                                 @if($userRating)
                                     {{ $userRating }}/5
                                 @else
@@ -246,25 +314,25 @@
 
                     {{-- Category & Tags --}}
                     <div class="flex items-center gap-2 mt-4 flex-wrap">
-                        <a href="{{ route('simulations.category', $simulation->category) }}" class="px-3 py-1 bg-blue-600/20 text-blue-400 text-xs font-medium rounded-full hover:bg-blue-600/30 transition">
+                        <a href="{{ route('simulations.category', $simulation->category) }}" class="px-3 py-1 bg-blue-100 text-blue-600 text-xs font-medium rounded-full hover:bg-blue-200 transition">
                             {{ $simulation->category }}
                         </a>
                         @if($simulation->subcategory)
-                            <span class="px-3 py-1 bg-gray-700 text-gray-300 text-xs font-medium rounded-full">
+                            <span class="px-3 py-1 bg-gray-100 text-gray-600 text-xs font-medium rounded-full">
                                 {{ $simulation->subcategory }}
                             </span>
                         @endif
                         @foreach($simulation->tags_array as $tag)
-                            <span class="px-3 py-1 bg-gray-800 text-gray-400 text-xs rounded-full">
+                            <span class="px-3 py-1 bg-gray-100 text-gray-500 text-xs rounded-full">
                                 #{{ $tag }}
                             </span>
                         @endforeach
                     </div>
 
                     {{-- Creator --}}
-                    <div class="flex items-center gap-3 mt-5 p-4 bg-gray-800 rounded-xl">
+                    <div class="flex items-center gap-3 mt-5 p-4 bg-white rounded-xl border border-gray-100 shadow-sm">
                         <a href="{{ route('creators.show', $simulation->user->id) }}" class="flex items-center gap-3 flex-1">
-                            <div class="w-10 h-10 rounded-full bg-gray-700 flex items-center justify-center text-white font-semibold overflow-hidden">
+                            <div class="w-10 h-10 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center font-semibold overflow-hidden">
                                 @if($simulation->user->avatar)
                                     <img src="{{ Storage::disk('public')->url($simulation->user->avatar) }}" alt="{{ $simulation->user->name }}" class="w-full h-full object-cover" />
                                 @else
@@ -272,8 +340,8 @@
                                 @endif
                             </div>
                             <div>
-                                <p class="text-white font-medium text-sm">{{ $simulation->user->name }}</p>
-                                <p class="text-gray-400 text-xs">{{ $simulation->user->simulations()->published()->count() }} simulasi &middot; {{ $simulation->user->followers()->count() }} pengikut</p>
+                                <p class="text-gray-900 font-medium text-sm">{{ $simulation->user->name }}</p>
+                                <p class="text-gray-500 text-xs">{{ $simulation->user->simulations()->published()->count() }} simulasi &middot; {{ $simulation->user->followers()->count() }} pengikut</p>
                             </div>
                         </a>
                         @auth
@@ -281,7 +349,7 @@
                                 <button
                                     id="follow-btn"
                                     onclick="toggleFollow({{ $simulation->user->id }})"
-                                    class="px-4 py-2 text-sm font-medium rounded-full transition {{ $isFollowing ? 'bg-gray-600 text-white hover:bg-gray-500' : 'bg-blue-600 text-white hover:bg-blue-700' }}"
+                                    class="px-4 py-2 text-sm font-medium rounded-full transition {{ $isFollowing ? 'bg-gray-200 text-gray-700 hover:bg-gray-300' : 'bg-blue-600 text-white hover:bg-blue-700' }}"
                                 >
                                     <span id="follow-text">{{ $isFollowing ? 'Mengikuti' : 'Ikuti' }}</span>
                                 </button>
@@ -291,9 +359,9 @@
 
                     {{-- Description --}}
                     @if($simulation->description)
-                    <div class="mt-5 p-4 bg-gray-800 rounded-xl">
-                        <h3 class="text-white font-semibold text-sm mb-2">Deskripsi</h3>
-                        <p class="text-gray-300 text-sm whitespace-pre-line">{{ $simulation->description }}</p>
+                    <div class="mt-5 p-4 bg-white rounded-xl border border-gray-100 shadow-sm">
+                        <h3 class="text-gray-900 font-semibold text-sm mb-2">Deskripsi</h3>
+                        <p class="text-gray-600 text-sm whitespace-pre-line">{{ $simulation->description }}</p>
                     </div>
                     @endif
                 </div>
@@ -301,13 +369,13 @@
                 {{-- Comments Section --}}
                 <div class="mt-6">
                     <div class="flex items-center justify-between mb-4">
-                        <h3 class="text-white font-semibold">Komentar ({{ $comments->count() }})</h3>
+                        <h3 class="text-gray-900 font-semibold">Komentar ({{ $comments->count() }})</h3>
                     </div>
 
                     {{-- Comment Form --}}
                     @auth
                         <div class="flex gap-3 mb-6">
-                            <div class="w-8 h-8 rounded-full bg-gray-700 flex items-center justify-center text-white text-xs font-semibold flex-shrink-0 overflow-hidden">
+                            <div class="w-8 h-8 rounded-full bg-gray-200 text-gray-600 flex items-center justify-center text-xs font-semibold flex-shrink-0 overflow-hidden">
                                 @if(auth()->user()->avatar)
                                     <img src="{{ Storage::disk('public')->url(auth()->user()->avatar) }}" alt="" class="w-full h-full object-cover" />
                                 @else
@@ -317,7 +385,7 @@
                             <div class="flex-1">
                                 <textarea
                                     id="comment-input"
-                                    class="w-full bg-gray-800 border border-gray-700 rounded-lg px-3 py-2 text-white text-sm resize-none focus:outline-none focus:ring-2 focus:ring-blue-500 placeholder-gray-500"
+                                    class="w-full bg-white border border-gray-300 rounded-lg px-3 py-2 text-gray-900 text-sm resize-none focus:outline-none focus:ring-2 focus:ring-blue-500 placeholder-gray-400"
                                     rows="2"
                                     placeholder="Tulis komentar..."
                                 ></textarea>
@@ -332,9 +400,9 @@
                             </div>
                         </div>
                     @else
-                        <div class="mb-6 p-4 bg-gray-800 rounded-xl text-center">
-                            <p class="text-gray-400 text-sm">
-                                <a href="{{ route('login') }}" class="text-blue-400 hover:text-blue-300 font-medium">Masuk</a> untuk memberikan komentar.
+                        <div class="mb-6 p-4 bg-gray-50 rounded-xl text-center border border-gray-100">
+                            <p class="text-gray-500 text-sm">
+                                <a href="{{ route('login') }}" class="text-blue-600 hover:text-blue-700 font-medium">Masuk</a> untuk memberikan komentar.
                             </p>
                         </div>
                     @endauth
@@ -347,7 +415,7 @@
                             @endif
                         @empty
                             <div class="text-center py-8">
-                                <svg class="w-12 h-12 text-gray-700 mx-auto mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" /></svg>
+                                <svg class="w-12 h-12 text-gray-300 mx-auto mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" /></svg>
                                 <p class="text-gray-500 text-sm">Belum ada komentar. Jadilah yang pertama!</p>
                             </div>
                         @endforelse
@@ -357,11 +425,11 @@
 
             {{-- Right: Related Simulations --}}
             <div class="w-full lg:w-96 flex-shrink-0">
-                <h3 class="text-white font-semibold mb-4">Simulasi Terkait</h3>
+                <h3 class="text-gray-900 font-semibold mb-4">Simulasi Terkait</h3>
                 <div class="space-y-3">
                     @forelse($related as $rel)
                         <a href="{{ route('simulations.show', $rel->slug) }}" class="flex gap-3 group">
-                            <div class="w-40 aspect-video bg-gray-800 rounded-lg overflow-hidden flex-shrink-0">
+                            <div class="w-40 aspect-video bg-gray-100 rounded-lg overflow-hidden flex-shrink-0">
                                 @if($rel->thumbnail)
                                     <img src="{{ Storage::disk('public')->url($rel->thumbnail) }}" alt="{{ $rel->title }}" class="w-full h-full object-cover" />
                                 @else
@@ -371,9 +439,9 @@
                                 @endif
                             </div>
                             <div class="flex-1 min-w-0">
-                                <h4 class="text-white text-sm font-medium line-clamp-2 group-hover:text-blue-400 transition">{{ $rel->title }}</h4>
-                                <p class="text-gray-400 text-xs mt-1">{{ $rel->user->name }}</p>
-                                <p class="text-gray-500 text-xs">{{ $rel->formatted_play_count }} dimainkan</p>
+                                <h4 class="text-gray-900 text-sm font-medium line-clamp-2 group-hover:text-blue-600 transition">{{ $rel->title }}</h4>
+                                <p class="text-gray-500 text-xs mt-1">{{ $rel->user->name }}</p>
+                                <p class="text-gray-400 text-xs">{{ $rel->formatted_play_count }} dimainkan</p>
                             </div>
                         </a>
                     @empty
@@ -489,14 +557,31 @@
         });
 
         function copyLink() {
-            navigator.clipboard.writeText(window.location.href).then(function() {
-                showToast('Link berhasil disalin!');
-            });
+            var url = window.location.href;
+            if (navigator.clipboard && navigator.clipboard.writeText) {
+                navigator.clipboard.writeText(url).then(function() {
+                    showToast('Link berhasil disalin!');
+                });
+            } else {
+                var textarea = document.createElement('textarea');
+                textarea.value = url;
+                textarea.style.position = 'fixed';
+                textarea.style.opacity = '0';
+                document.body.appendChild(textarea);
+                textarea.select();
+                try {
+                    document.execCommand('copy');
+                    showToast('Link berhasil disalin!');
+                } catch (err) {
+                    showToast('Gagal menyalin link');
+                }
+                document.body.removeChild(textarea);
+            }
         }
 
         function showToast(message) {
             var toast = document.createElement('div');
-            toast.className = 'fixed bottom-6 left-1/2 -translate-x-1/2 bg-gray-800 text-white text-sm px-4 py-2 rounded-lg shadow-lg z-[99999] transition-opacity duration-300';
+            toast.className = 'fixed bottom-6 left-1/2 -translate-x-1/2 bg-gray-900 text-white text-sm px-4 py-2 rounded-lg shadow-lg z-[99999] transition-opacity duration-300';
             toast.textContent = message;
             document.body.appendChild(toast);
             setTimeout(function() { toast.style.opacity = '0'; }, 1500);
@@ -538,6 +623,36 @@
             });
         }
 
+        // ========== Add to Collection ==========
+        function addToCollection(collectionId, btnEl) {
+            if (btnEl.disabled) return;
+            btnEl.disabled = true;
+            var originalText = btnEl.querySelector('span.truncate').textContent;
+            btnEl.querySelector('span.truncate').textContent = 'Menambahkan...';
+            ajaxPost('{{ route("collections.add-simulation") }}', {
+                collection_id: collectionId,
+                simulation_id: {{ $simulation->id }}
+            }, function(result) {
+                btnEl.disabled = false;
+                if (result.success) {
+                    btnEl.querySelector('span.truncate').textContent = '✓ ' + originalText;
+                    btnEl.classList.add('text-green-600');
+                    // Update the dropdown trigger text
+                    var dropdown = btnEl.closest('[x-data]');
+                    if (dropdown) {
+                        var triggerSpan = dropdown.querySelector('button span');
+                        if (triggerSpan) {
+                            triggerSpan.textContent = 'Tersimpan!';
+                            setTimeout(function() { triggerSpan.textContent = 'Collection'; }, 2000);
+                        }
+                    }
+                } else {
+                    btnEl.querySelector('span.truncate').textContent = originalText;
+                }
+                showToast(result.message);
+            });
+        }
+
         // ========== Reactions ==========
         function toggleReaction(type) {
             ajaxPost('{{ route("reactions.toggle") }}', { simulation_id: {{ $simulation->id }}, type: type }, function(result) {
@@ -559,10 +674,10 @@
                 stars.forEach(function(star, index) {
                     if (index < value) {
                         star.classList.add('active', 'text-yellow-400');
-                        star.classList.remove('text-gray-600');
+                        star.classList.remove('text-gray-300');
                     } else {
                         star.classList.remove('active', 'text-yellow-400');
-                        star.classList.add('text-gray-600');
+                        star.classList.add('text-gray-300');
                     }
                 });
                 document.getElementById('rating-text').textContent = value + '/5';
@@ -577,10 +692,10 @@
                 var text = document.getElementById('follow-text');
                 if (result.following) {
                     btn.classList.remove('bg-blue-600', 'hover:bg-blue-700');
-                    btn.classList.add('bg-gray-600', 'hover:bg-gray-500');
+                    btn.classList.add('bg-gray-200', 'hover:bg-gray-300', 'text-gray-700');
                     text.textContent = 'Mengikuti';
                 } else {
-                    btn.classList.remove('bg-gray-600', 'hover:bg-gray-500');
+                    btn.classList.remove('bg-gray-200', 'hover:bg-gray-300', 'text-gray-700');
                     btn.classList.add('bg-blue-600', 'hover:bg-blue-700');
                     text.textContent = 'Ikuti';
                 }

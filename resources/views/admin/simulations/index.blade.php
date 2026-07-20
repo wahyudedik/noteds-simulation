@@ -1,7 +1,7 @@
 <x-app-layout>
     <x-slot name="header">
         <div class="flex items-center justify-between">
-            <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
+            <h2 class="font-semibold text-xl text-gray-800 leading-tight">
                 <svg class="inline w-5 h-5 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" /></svg>
                 Semua Simulasi
             </h2>
@@ -22,13 +22,13 @@
                 </div>
             @endif
 
-            <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
+            <div class="bg-white border border-gray-100 overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6">
                     @if($simulations->count() > 0)
                         <div class="overflow-x-auto">
                             <table class="w-full text-sm">
                                 <thead>
-                                    <tr class="border-b border-gray-200 dark:border-gray-700">
+                                    <tr class="border-b border-gray-200">
                                         <th class="text-left py-3 px-2 text-gray-500 font-medium">Judul</th>
                                         <th class="text-left py-3 px-2 text-gray-500 font-medium">Kreator</th>
                                         <th class="text-left py-3 px-2 text-gray-500 font-medium">Kategori</th>
@@ -40,8 +40,8 @@
                                 </thead>
                                 <tbody>
                                     @foreach($simulations as $sim)
-                                    <tr class="border-b border-gray-100 dark:border-gray-700/50 hover:bg-gray-50 dark:hover:bg-gray-700/50">
-                                        <td class="py-3 px-2 font-medium text-gray-900 dark:text-white">{{ Str::limit($sim->title, 35) }}</td>
+                                    <tr class="border-b border-gray-100 hover:bg-gray-50">
+                                        <td class="py-3 px-2 font-medium text-gray-900">{{ Str::limit($sim->title, 35) }}</td>
                                         <td class="py-3 px-2 text-gray-500">{{ $sim->user->name }}</td>
                                         <td class="py-3 px-2 text-gray-500">{{ $sim->category }}</td>
                                         <td class="py-3 px-2 text-center text-gray-500">{{ number_format($sim->view_count) }}</td>

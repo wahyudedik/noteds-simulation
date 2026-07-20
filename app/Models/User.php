@@ -114,6 +114,14 @@ class User extends Authenticatable
     }
 
     /**
+     * Get learning collections created by this user.
+     */
+    public function collections(): HasMany
+    {
+        return $this->hasMany(Collection::class);
+    }
+
+    /**
      * Get users that this user is following.
      */
     public function following(): HasMany

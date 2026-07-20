@@ -83,6 +83,9 @@ class SimulationController extends Controller
             : false;
         $reactionCounts = $simulation->reaction_counts;
 
+        // User's collections (for "Add to Collection" feature)
+        $userCollections = $user ? $user->collections()->withCount('simulations')->get() : collect();
+
         // Related simulations (same category)
         $related = Simulation::published()
             ->where('id', '!=', $simulation->id)
@@ -100,6 +103,7 @@ class SimulationController extends Controller
             'userReactions',
             'isFollowing',
             'reactionCounts',
+            'userCollections',
         ));
     }
 

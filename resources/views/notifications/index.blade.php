@@ -10,17 +10,17 @@
     <link href="https://fonts.bunny.net/css?family=roboto:400,500,700&display=swap" rel="stylesheet" />
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
-<body class="bg-gray-900 font-sans antialiased">
+<body class="bg-gray-50 font-sans antialiased">
 
     @include('components.app-header')
 
     <main class="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div class="flex items-center justify-between mb-6">
-            <h1 class="text-2xl font-bold text-white">Notifikasi</h1>
+            <h1 class="text-2xl font-bold text-gray-900">Notifikasi</h1>
             @if($notifications->count() > 0)
                 <button
                     onclick="markAllAsRead()"
-                    class="text-sm text-blue-400 hover:text-blue-300 font-medium transition"
+                    class="text-sm text-blue-600 hover:text-blue-700 font-medium transition"
                 >
                     Tandai semua sudah dibaca
                 </button>
@@ -31,17 +31,17 @@
             <div class="space-y-2" id="notifications-list">
                 @foreach($notifications as $notification)
                     <div
-                        class="p-4 rounded-xl transition cursor-pointer {{ $notification->read_at ? 'bg-gray-800/50 hover:bg-gray-800' : 'bg-gray-800 hover:bg-gray-750 border-l-2 border-blue-500' }}"
+                        class="p-4 rounded-xl transition cursor-pointer {{ $notification->read_at ? 'bg-white hover:bg-gray-50' : 'bg-blue-50 hover:bg-blue-100 border-l-2 border-blue-500' }}"
                         onclick="markAsRead('{{ $notification->id }}', '{{ $notification->data['url'] ?? '#' }}')"
                     >
                         <div class="flex items-start gap-3">
                             {{-- Icon based on type --}}
                             <div class="w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0
-                                @if($notification->type === 'comment') bg-blue-500/20 text-blue-400
-                                @elseif($notification->type === 'follow') bg-green-500/20 text-green-400
-                                @elseif($notification->type === 'reaction') bg-purple-500/20 text-purple-400
-                                @elseif($notification->type === 'rating') bg-yellow-500/20 text-yellow-400
-                                @else bg-gray-700 text-gray-400
+                                @if($notification->type === 'comment') bg-blue-100 text-blue-600
+                                @elseif($notification->type === 'follow') bg-green-100 text-green-600
+                                @elseif($notification->type === 'reaction') bg-purple-100 text-purple-600
+                                @elseif($notification->type === 'rating') bg-yellow-100 text-yellow-600
+                                @else bg-gray-100 text-gray-500
                                 @endif
                             ">
                                 @if($notification->type === 'comment')
@@ -58,13 +58,13 @@
                             </div>
 
                             <div class="flex-1 min-w-0">
-                                <p class="text-sm {{ $notification->read_at ? 'text-gray-400' : 'text-white font-medium' }}">
+                                <p class="text-sm {{ $notification->read_at ? 'text-gray-500' : 'text-gray-900 font-medium' }}">
                                     {{ $notification->title }}
                                 </p>
-                                <p class="text-xs {{ $notification->read_at ? 'text-gray-600' : 'text-gray-400' }} mt-1">
+                                <p class="text-xs {{ $notification->read_at ? 'text-gray-400' : 'text-gray-600' }} mt-1">
                                     {{ $notification->body }}
                                 </p>
-                                <p class="text-xs text-gray-600 mt-1">{{ $notification->created_at->diffForHumans() }}</p>
+                                <p class="text-xs text-gray-400 mt-1">{{ $notification->created_at->diffForHumans() }}</p>
                             </div>
 
                             @if(!$notification->read_at)
@@ -80,9 +80,9 @@
             </div>
         @else
             <div class="text-center py-16">
-                <svg class="w-16 h-16 text-gray-700 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" /></svg>
-                <h3 class="text-gray-400 text-lg font-medium">Belum ada notifikasi</h3>
-                <p class="text-gray-600 text-sm mt-2">Notifikasi akan muncul di sini ketika ada aktivitas terkait Anda.</p>
+                <svg class="w-16 h-16 text-gray-300 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" /></svg>
+                <h3 class="text-gray-500 text-lg font-medium">Belum ada notifikasi</h3>
+                <p class="text-gray-400 text-sm mt-2">Notifikasi akan muncul di sini ketika ada aktivitas terkait Anda.</p>
             </div>
         @endif
     </main>

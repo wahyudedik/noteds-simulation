@@ -7,6 +7,7 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\View\View;
 
 class ProfileController extends Controller
@@ -26,13 +27,36 @@ class ProfileController extends Controller
      */
     public function update(ProfileUpdateRequest $request): RedirectResponse
     {
-        $request->user()->fill($request->validated());
+        $validated = $request->validated();
 
-        if ($request->user()->isDirty('email')) {
-            $request->user()->email_verified_at = null;
+        $user = $request->user();
+
+        // Handle avatar upload
+        if ($request->hasFile('avatar')) {
+            // Hapus avatar lama jika ada
+            if ($user->avatar) {
+                Storage::disk('public')->delete($user->avatar);
+            }
+
+            $validated['avatar'] = $request->file('avatar')->store('avatars', 'public');
+        } elseif ($request->boolean('remove_avatar')) {
+            // Hapus avatar jika checkbox dicentang
+            if ($user->avatar) {
+                Storage::disk('public')->delete($user->avatar);
+            }
+            $validated['avatar'] = null;
+        } else {
+            // Jika tidak ada upload dan tidak ada permintaan hapus, jangan update avatar
+            unset($validated['avatar']);
         }
 
-        $request->user()->save();
+        $user->fill($validated);
+
+        if ($user->isDirty('email')) {
+            $user->email_verified_at = null;
+        }
+
+        $user->save();
 
         return Redirect::route('profile.edit')->with('status', 'profile-updated');
     }

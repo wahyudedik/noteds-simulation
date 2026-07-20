@@ -10,6 +10,8 @@ class PlayHistory extends Model
 {
     use HasFactory;
 
+    protected $table = 'play_history';
+
     protected $fillable = [
         'user_id',
         'simulation_id',
