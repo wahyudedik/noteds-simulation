@@ -297,14 +297,30 @@ class SimulationController extends Controller
             $this->extractSimulation($simulation, $extractPath);
         }
 
+        // Verify extraction succeeded
+        if (! is_dir($extractPath)) {
+            abort(404, 'Simulasi belum di-extract atau file tidak ditemukan.');
+        }
+
         $filePath = $extractPath.'/'.$path;
 
         // Security: prevent directory traversal
+        // Use basename comparison as fallback when realpath() fails (e.g. symlinks)
         $realExtractPath = realpath($extractPath);
         $realFilePath = realpath($filePath);
 
-        if ($realExtractPath === false || $realFilePath === false || ! str_starts_with($realFilePath, $realExtractPath)) {
-            abort(403, 'Access denied.');
+        if ($realExtractPath !== false && $realFilePath !== false) {
+            // Both paths resolved — verify containment
+            if (! str_starts_with($realFilePath, $realExtractPath.DIRECTORY_SEPARATOR) && $realFilePath !== $realExtractPath) {
+                abort(403, 'Access denied.');
+            }
+        } else {
+            // realpath() failed — fall back to string-based containment check
+            $normExtract = str_replace(['/', '\\'], DIRECTORY_SEPARATOR, $extractPath);
+            $normFile = str_replace(['/', '\\'], DIRECTORY_SEPARATOR, $filePath);
+            if (! str_starts_with($normFile, $normExtract.DIRECTORY_SEPARATOR)) {
+                abort(403, 'Access denied.');
+            }
         }
 
         if (! file_exists($filePath)) {
