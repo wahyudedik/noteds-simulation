@@ -93,13 +93,7 @@
     @include('components.app-header')
 
     <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
-        <nav class="flex items-center gap-2 text-sm text-gray-500 mb-6">
-            <a href="{{ route('home') }}" class="hover:text-blue-600 transition">Beranda</a>
-            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
-            <a href="{{ route('simulations.category', $simulation->category) }}" class="hover:text-blue-600 transition">{{ $simulation->category }}</a>
-            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
-            <span class="text-gray-900 font-medium">{{ $simulation->title }}</span>
-        </nav>
+        <x-breadcrumb :items="[['label' => $simulation->category, 'url' => route('simulations.category', $simulation->category)], ['label' => $simulation->title]]" />
         <div class="flex flex-col lg:flex-row gap-6">
 
             {{-- Left: Player & Info --}}
