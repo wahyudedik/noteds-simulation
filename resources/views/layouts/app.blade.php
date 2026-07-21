@@ -5,7 +5,26 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="csrf-token" content="{{ csrf_token() }}">
 
-        <title>{{ config('app.name', 'Noteds') }}</title>
+        {{-- SEO Meta Tags --}}
+        <title>{{ $seo['title'] }}</title>
+        <meta name="description" content="{{ $seo['description'] }}">
+        <meta name="robots" content="index, follow">
+        <link rel="canonical" href="{{ $seo['url'] }}">
+
+        {{-- Open Graph / Facebook --}}
+        <meta property="og:type" content="{{ $seo['type'] }}">
+        <meta property="og:url" content="{{ $seo['url'] }}">
+        <meta property="og:title" content="{{ $seo['title'] }}">
+        <meta property="og:description" content="{{ $seo['description'] }}">
+        <meta property="og:image" content="{{ $seo['image'] }}">
+        <meta property="og:site_name" content="{{ $seo['site_name'] }}">
+
+        {{-- Twitter Card --}}
+        <meta name="twitter:card" content="summary_large_image">
+        <meta name="twitter:title" content="{{ $seo['title'] }}">
+        <meta name="twitter:description" content="{{ $seo['description'] }}">
+        <meta name="twitter:image" content="{{ $seo['image'] }}">
+
         <link rel="icon" type="image/jpeg" href="{{ asset('favicon.jpeg') }}">
 
         <!-- Fonts -->

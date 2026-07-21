@@ -2,7 +2,11 @@
 
 namespace App\Providers;
 
+use App\Models\Simulation;
+use App\Observers\SimulationObserver;
 use App\Services\GamificationService;
+use App\View\Composers\SeoComposer;
+use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -20,6 +24,8 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        //
+        View::composer('*', SeoComposer::class);
+
+        Simulation::observe(SimulationObserver::class);
     }
 }
