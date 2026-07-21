@@ -742,7 +742,6 @@
                     svg.setAttribute('fill', 'none');
                 }
                 countEl.textContent = '(' + (result.favorite_count || 0) + ')';
-                showToast(result.message);
             });
         }
 
@@ -750,9 +749,6 @@
         function trackShare(platform) {
             ajaxPost('{{ route("simulations.share", $simulation->id) }}', { platform: platform }, function(result) {
                 if (!result) return;
-                if (result.success) {
-                    showToast(result.message);
-                }
             });
         }
 
@@ -771,7 +767,6 @@
                     btn.querySelector('svg').setAttribute('fill', 'none');
                     text.textContent = 'Bookmark';
                 }
-                showToast(result.message);
             });
         }
 
@@ -782,7 +777,6 @@
                 simulation_id: {{ $simulation->id }}
             }, function(result) {
                 if (!result) return;
-                showToast(result.message);
                 if (result.success) {
                     setTimeout(function() { window.location.reload(); }, 500);
                 }
@@ -819,7 +813,6 @@
                     }
                 });
                 document.getElementById('rating-text').textContent = value + '/5';
-                showToast('Rating berhasil dikirim!');
             });
         }
 
@@ -838,7 +831,6 @@
                     btn.classList.add('bg-blue-600', 'hover:bg-blue-700');
                     text.textContent = 'Ikuti';
                 }
-                showToast(result.message);
             });
         }
 
@@ -857,7 +849,6 @@
                     btn.classList.add('bg-blue-600', 'hover:bg-blue-700', 'text-white');
                     text.textContent = 'Ikuti Simulasi';
                 }
-                showToast(result.message);
             });
         }
 
@@ -877,8 +868,6 @@
                     input.value = '';
                     // Reload page to show new comment (simple approach)
                     window.location.reload();
-                } else {
-                    showToast(result.message || 'Gagal mengirim komentar');
                 }
             });
         }
@@ -889,10 +878,7 @@
                 ajaxPost('{{ route("comments.destroy", ":id") }}'.replace(':id', commentId), { _method: 'DELETE' }, function(result) {
                     if (!result) return;
                     if (result.success) {
-                        showToast('Komentar berhasil dihapus');
                         window.location.reload();
-                    } else {
-                        showToast(result.message || 'Gagal menghapus komentar');
                     }
                 });
             });

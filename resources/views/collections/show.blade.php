@@ -141,7 +141,6 @@
                     icon.setAttribute('fill', 'none');
                     text.textContent = 'Simpan Collection';
                 }
-                showToast(result.message);
             });
         }
     </script>

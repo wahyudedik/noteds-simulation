@@ -80,17 +80,17 @@ window.ajaxPost = async function (url, options = {}, callback) {
 
     // If caller passed data as the options object (e.g. { simulation_id: 123 }),
     // serialize it as the request body. Exclude fetch-config keys.
-    if (!options.body) {
-        var fetchData = {};
-        var fetchConfigKeys = ['method', 'headers', 'body', 'mode', 'credentials', 'cache', 'redirect', 'referrer', 'referrerPolicy', 'integrity', 'keepalive', 'signal'];
-        for (var key in options) {
-            if (options.hasOwnProperty(key) && fetchConfigKeys.indexOf(key) === -1) {
-                fetchData[key] = options[key];
-            }
+    // NOTE: 'body' is NOT excluded here — callers may pass { body: 'text' }
+    // as data (e.g. comments), which must be serialized into JSON.
+    var fetchData = {};
+    var fetchConfigKeys = ['method', 'headers', 'mode', 'credentials', 'cache', 'redirect', 'referrer', 'referrerPolicy', 'integrity', 'keepalive', 'signal'];
+    for (var key in options) {
+        if (options.hasOwnProperty(key) && fetchConfigKeys.indexOf(key) === -1) {
+            fetchData[key] = options[key];
         }
-        if (Object.keys(fetchData).length > 0) {
-            config.body = JSON.stringify(fetchData);
-        }
+    }
+    if (Object.keys(fetchData).length > 0) {
+        config.body = JSON.stringify(fetchData);
     }
 
     try {
