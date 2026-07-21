@@ -166,7 +166,7 @@ class SecurityService
 
         return CodeScanLog::create([
             'simulation_id' => $simulation->id,
-            'version' => $simulation->current_version,
+            'version' => $simulation->version ?? '1.0.0',
             'scan_type' => $scanType,
             'result' => $result,
             'findings' => $findings ?: null,
@@ -193,7 +193,7 @@ class SecurityService
 
         return CodeScanLog::create([
             'simulation_id' => $simulation->id,
-            'version' => $simulation->current_version,
+            'version' => $simulation->version ?? '1.0.0',
             'scan_type' => 'manual_review',
             'result' => $result,
             'findings' => $findings ?: null,
