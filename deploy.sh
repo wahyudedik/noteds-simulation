@@ -54,6 +54,41 @@ success() {
 # Allow composer to run as root (common on VPS)
 export COMPOSER_ALLOW_SUPERUSER=1
 
+# ============================================================
+# Auto-detect PHP binary (aaPanel / custom PHP builds)
+# ============================================================
+# Detect custom PHP binary paths (aaPanel, custom builds, etc.)
+PHP_BIN=""
+for candidate in \
+    /www/server/php/84/bin/php \
+    /www/server/php/83/bin/php \
+    /www/server/php/82/bin/php \
+    /usr/local/bin/php \
+    /usr/bin/php; do
+    if [ -x "$candidate" ] 2>/dev/null; then
+        PHP_BIN="$candidate"
+        break
+    fi
+done
+
+if [ -z "$PHP_BIN" ]; then
+    PHP_BIN="php"
+fi
+
+# Override php() function supaya semua `php` calls di script ini
+# otomatis pakai binary PHP yang benar (aaPanel/custom build)
+php() {
+    command "$PHP_BIN" "$@"
+}
+
+# Also override composer to use the same PHP
+composer() {
+    command composer "$@"
+}
+
+echo -e "${YELLOW}PHP binary: ${PHP_BIN} ($($PHP_BIN -r 'echo PHP_VERSION;' 2>/dev/null || echo 'unknown'))${NC}"
+echo ""
+
 # Project directory (edit this to match your VPS path)
 PROJECT_DIR="${DEPLOY_PATH:-$(pwd)}"
 
@@ -105,7 +140,7 @@ for ext in "${REQUIRED_EXTENSIONS[@]}"; do
 done
 
 if [ ${#MISSING_EXTENSIONS[@]} -gt 0 ]; then
-    error_exit "PHP extension yang WAJIB tidak terinstall: ${MISSING_EXTENSIONS[*]}\n\nCara install:\n  Ubuntu/Debian: sudo apt install php$(php -r 'echo PHP_MAJOR_VERSION.".".PHP_MINOR_VERSION;')-${MISSING_EXTENSIONS[*]// /-} \n  Atau: sudo apt install php-mysql php-mbstring php-xml php-gd php-zip php-bcmath\n  lalu restart web server."
+    error_exit "PHP extension yang WAJIB tidak terinstall: ${MISSING_EXTENSIONS[*]}\n\nPHP binary: ${PHP_BIN}\n\nCara install:\n  Ubuntu/Debian: sudo apt install php$($PHP_BIN -r 'echo PHP_MAJOR_VERSION.".".PHP_MINOR_VERSION;')-${MISSING_EXTENSIONS[*]// /-} \n  Atau: sudo apt install php-mysql php-mbstring php-xml php-gd php-zip php-bcmath\n  lalu restart web server."
 fi
 
 # Check optional but recommended extensions
