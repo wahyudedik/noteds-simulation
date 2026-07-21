@@ -199,8 +199,13 @@ class StudioController extends Controller
                 if (empty($tagName)) {
                     continue;
                 }
+
+                // Truncate tag name to fit DB column (max 255 chars)
+                $tagName = Str::limit($tagName, 255, '');
+                $tagSlug = Str::limit(Str::slug($tagName), 255, '');
+
                 $tag = Tag::firstOrCreate(
-                    ['slug' => Str::slug($tagName)],
+                    ['slug' => $tagSlug],
                     ['name' => $tagName]
                 );
                 $simulation->tagModels()->attach($tag->id);
@@ -326,8 +331,13 @@ class StudioController extends Controller
                 if (empty($tagName)) {
                     continue;
                 }
+
+                // Truncate tag name to fit DB column (max 255 chars)
+                $tagName = Str::limit($tagName, 255, '');
+                $tagSlug = Str::limit(Str::slug($tagName), 255, '');
+
                 $tag = Tag::firstOrCreate(
-                    ['slug' => Str::slug($tagName)],
+                    ['slug' => $tagSlug],
                     ['name' => $tagName]
                 );
                 $tagIds[] = $tag->id;
