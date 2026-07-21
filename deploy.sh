@@ -81,9 +81,16 @@ php() {
     command "$PHP_BIN" "$@"
 }
 
-# Also override composer to use the same PHP
+# Force composer to run under the correct PHP binary.
+# 'composer' command on aaPanel uses system PHP 8.3 by default,
+# but we need PHP 8.4 for Laravel 13 / Symfony 8.x compatibility.
+COMPOSER_BIN=$(command -v composer 2>/dev/null || command -v /usr/local/bin/composer 2>/dev/null || echo "")
 composer() {
-    command composer "$@"
+    if [ -n "$COMPOSER_BIN" ] && [ -x "$PHP_BIN" ]; then
+        "$PHP_BIN" "$COMPOSER_BIN" "$@"
+    else
+        command composer "$@"
+    fi
 }
 
 echo -e "${YELLOW}PHP binary: ${PHP_BIN} ($($PHP_BIN -r 'echo PHP_VERSION;' 2>/dev/null || echo 'unknown'))${NC}"
@@ -251,11 +258,16 @@ fi
 echo ""
 
 # Step 3: Install PHP dependencies
+# Use --no-scripts to avoid post-update-cmd errors (e.g. laravel/boost not installed in production)
 info "Step 3: Installing composer dependencies..."
-composer install --no-dev --optimize-autoloader --no-interaction 2>&1 || {
+composer install --no-dev --optimize-autoloader --no-interaction --no-scripts 2>&1 || {
     warn "Composer install had issues, trying update..."
-    composer update --no-dev --optimize-autoloader --no-interaction 2>&1 || warn "Composer update juga bermasalah."
+    composer update --no-dev --optimize-autoloader --no-interaction --no-scripts 2>&1 || warn "Composer update juga bermasalah."
 }
+# Run post-install/update scripts manually (package:discover, vendor:publish, etc.)
+# Skip boost:update as it's only available in dev environment
+$PHP_BIN artisan package:discover --ansi 2>/dev/null || true
+$PHP_BIN artisan vendor:publish --tag=laravel-assets --ansi --force 2>/dev/null || true
 success "Composer done."
 echo ""
 
