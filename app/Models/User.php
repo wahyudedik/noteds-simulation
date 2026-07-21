@@ -3,9 +3,11 @@
 namespace App\Models;
 
 use Database\Factories\UserFactory;
+use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Attributes\Hidden;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -13,7 +15,7 @@ use Illuminate\Notifications\Notifiable;
 
 #[Fillable(['name', 'email', 'password', 'role', 'avatar', 'bio', 'google_id'])]
 #[Hidden(['password', 'remember_token'])]
-class User extends Authenticatable
+class User extends Authenticatable implements MustVerifyEmail
 {
     /** @use HasFactory<UserFactory> */
     use HasFactory, Notifiable;
@@ -122,7 +124,7 @@ class User extends Authenticatable
     }
 
     /**
-     * Get users that this user is following.
+     * Get follows that this user has made.
      */
     public function following(): HasMany
     {
@@ -130,11 +132,21 @@ class User extends Authenticatable
     }
 
     /**
-     * Get users that follow this user.
+     * Get user follow records where this user is being followed.
      */
     public function followers(): HasMany
     {
-        return $this->hasMany(Follow::class, 'followable_id');
+        return $this->hasMany(Follow::class, 'followable_id')
+            ->where('followable_type', User::class);
+    }
+
+    /**
+     * Get simulation follow records for this user's simulations.
+     */
+    public function simulationFollowers(): HasMany
+    {
+        return $this->hasManyThrough(Follow::class, Simulation::class, 'user_id', 'followable_id')
+            ->where('followable_type', Simulation::class);
     }
 
     /**
@@ -142,7 +154,21 @@ class User extends Authenticatable
      */
     public function isFollowing(User $user): bool
     {
-        return $this->following()->where('followable_id', $user->id)->exists();
+        return $this->following()
+            ->where('followable_id', $user->id)
+            ->where('followable_type', User::class)
+            ->exists();
+    }
+
+    /**
+     * Check if this user follows a simulation.
+     */
+    public function isFollowingSimulation(Simulation $simulation): bool
+    {
+        return $this->following()
+            ->where('followable_id', $simulation->id)
+            ->where('followable_type', Simulation::class)
+            ->exists();
     }
 
     /**
@@ -151,6 +177,77 @@ class User extends Authenticatable
     public function bookmarkedSimulations(): HasManyThrough
     {
         return $this->hasManyThrough(Simulation::class, Bookmark::class);
+    }
+
+    /**
+     * Get favorited simulations.
+     */
+    public function favorites(): HasMany
+    {
+        return $this->hasMany(Favorite::class);
+    }
+
+    /**
+     * Get saved collections.
+     */
+    public function savedCollections(): HasMany
+    {
+        return $this->hasMany(SavedCollection::class);
+    }
+
+    /**
+     * Get badges earned by this user.
+     */
+    public function badges(): BelongsToMany
+    {
+        return $this->belongsToMany(Badge::class, 'user_badges')
+            ->withPivot('earned_at')
+            ->withTimestamps();
+    }
+
+    /**
+     * Get points log for this user.
+     */
+    public function pointsLog(): HasMany
+    {
+        return $this->hasMany(UserPointsLog::class);
+    }
+
+    /**
+     * Get total points earned by this user.
+     */
+    public function getTotalPointsAttribute(): int
+    {
+        return (int) $this->pointsLog()->sum('points');
+    }
+
+    /**
+     * Get current level based on points.
+     */
+    public function getCurrentLevelAttribute(): int
+    {
+        $points = $this->total_points;
+
+        return match (true) {
+            $points >= 10000 => 10,
+            $points >= 5000 => 9,
+            $points >= 3000 => 8,
+            $points >= 2000 => 7,
+            $points >= 1500 => 6,
+            $points >= 1000 => 5,
+            $points >= 500 => 4,
+            $points >= 200 => 3,
+            $points >= 50 => 2,
+            default => 1,
+        };
+    }
+
+    /**
+     * Get the user's share count for a simulation.
+     */
+    public function getShareCountAttribute(): int
+    {
+        return $this->hasMany(Share::class)->count();
     }
 
     /**

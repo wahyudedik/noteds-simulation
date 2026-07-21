@@ -2,11 +2,16 @@
 
 namespace App\Http\Controllers;
 
+use App\Services\GamificationService;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 
 class DashboardController extends Controller
 {
+    public function __construct(
+        private GamificationService $gamification,
+    ) {}
+
     public function index(Request $request): View
     {
         $user = $request->user();
@@ -34,10 +39,13 @@ class DashboardController extends Controller
             ->get()
             ->pluck('simulation');
 
+        $levelProgress = $this->gamification->getLevelProgress($user);
+
         return view('dashboard', [
             'stats' => $stats,
             'recent_bookmarks' => $recent_bookmarks,
             'recent_history' => $recent_history,
+            'levelProgress' => $levelProgress,
         ]);
     }
 }

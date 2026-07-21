@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\PlayHistory;
 use App\Models\Simulation;
 use App\Models\User;
+use App\Services\GamificationService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -110,8 +111,19 @@ class SimulationController extends Controller
             ->orderBy('count', 'desc')
             ->get();
 
-        // Trending simulations (most played in last 7 days)
-        $trending = Simulation::published()
+        // Trending simulations — filter by period (day, week, month, year)
+        $trendingPeriod = $request->input('period', 'week');
+        $trendingQuery = Simulation::published();
+
+        $trendingQuery->where('published_at', '>=', match ($trendingPeriod) {
+            'day' => now()->subDay(),
+            'week' => now()->subWeek(),
+            'month' => now()->subMonth(),
+            'year' => now()->subYear(),
+            default => now()->subWeek(),
+        });
+
+        $trending = $trendingQuery
             ->orderByDesc('play_count')
             ->take(12)
             ->get();
@@ -151,8 +163,12 @@ class SimulationController extends Controller
             ->with('user')
             ->firstOrFail();
 
-        // Increment view count
-        $simulation->increment('view_count');
+        // Increment view count only once per session per simulation
+        $viewedKey = 'sim_viewed_'.$simulation->id;
+        if (! session()->has($viewedKey)) {
+            $simulation->increment('view_count');
+            session()->put($viewedKey, true);
+        }
 
         // Load comments (top-level only, with replies)
         $comments = $simulation->comments()
@@ -164,25 +180,42 @@ class SimulationController extends Controller
         // Check user interactions (if authenticated)
         $user = Auth::user();
         $isBookmarked = $simulation->isBookmarkedBy($user);
+        $isFavorited = $simulation->isFavoritedBy($user);
+        $favoriteCount = $simulation->favorites()->count();
         $ratingModel = $simulation->getRatingBy($user);
         $userRating = $ratingModel ? $ratingModel->rating : 0;
         $userReactions = $simulation->getReactionsBy($user)->pluck('type')->toArray();
         $isFollowing = false;
+        $isFollowingSimulation = false;
         $userCollections = collect();
 
         if ($user instanceof User) {
             $isFollowing = $simulation->user_id !== $user->id
                 ? $user->isFollowing($simulation->user)
                 : false;
+            $isFollowingSimulation = $user->isFollowingSimulation($simulation);
             $userCollections = $user->collections()->withCount('simulations')->get();
         }
 
         $reactionCounts = $simulation->reaction_counts;
 
-        // Related simulations (same category)
+        // Related simulations: same category + matching tags, ordered by rating then play_count
+        $simTags = $simulation->tags_array;
         $related = Simulation::published()
             ->where('id', '!=', $simulation->id)
-            ->where('category', $simulation->category)
+            ->where(function ($q) use ($simulation, $simTags) {
+                // Priority 1: same category
+                $q->where('category', $simulation->category);
+                // Priority 2: matching tags
+                if (! empty($simTags)) {
+                    $q->orWhere(function ($q2) use ($simTags) {
+                        foreach ($simTags as $tag) {
+                            $q2->orWhere('tags', 'like', "%{$tag}%");
+                        }
+                    });
+                }
+            })
+            ->orderByDesc('average_rating')
             ->orderByDesc('play_count')
             ->take(8)
             ->get();
@@ -192,9 +225,12 @@ class SimulationController extends Controller
             'related',
             'comments',
             'isBookmarked',
+            'isFavorited',
+            'favoriteCount',
             'userRating',
             'userReactions',
             'isFollowing',
+            'isFollowingSimulation',
             'reactionCounts',
             'userCollections',
         ));
@@ -224,6 +260,11 @@ class SimulationController extends Controller
                     'completed' => false,
                 ]
             );
+
+            // Gamification: award play points + check badges
+            $gamification = app(GamificationService::class);
+            $gamification->awardPoints($user, 'play', 'Memainkan: '.$simulation->title);
+            $gamification->checkBadges($user);
         }
 
         if (request()->ajax() || request()->wantsJson()) {

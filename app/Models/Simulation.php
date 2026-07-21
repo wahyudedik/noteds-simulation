@@ -6,7 +6,9 @@ use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Support\Str;
 
 class Simulation extends Model
@@ -111,6 +113,54 @@ class Simulation extends Model
     public function playHistory(): HasMany
     {
         return $this->hasMany(PlayHistory::class);
+    }
+
+    /**
+     * Get users who follow this simulation.
+     */
+    public function followers(): MorphMany
+    {
+        return $this->morphMany(Follow::class, 'followable');
+    }
+
+    /**
+     * Get users who favorited this simulation.
+     */
+    public function favorites(): HasMany
+    {
+        return $this->hasMany(Favorite::class);
+    }
+
+    /**
+     * Get shares for this simulation.
+     */
+    public function shares(): HasMany
+    {
+        return $this->hasMany(Share::class);
+    }
+
+    /**
+     * Get tags for this simulation.
+     */
+    public function tagModels(): BelongsToMany
+    {
+        return $this->belongsToMany(Tag::class, 'simulation_tags');
+    }
+
+    /**
+     * Get versions of this simulation.
+     */
+    public function versions(): HasMany
+    {
+        return $this->hasMany(SimulationVersion::class);
+    }
+
+    /**
+     * Get daily analytics for this simulation.
+     */
+    public function analytics(): HasMany
+    {
+        return $this->hasMany(SimulationAnalytic::class);
     }
 
     // ─── Accessors ────────────────────────────────────────────────
@@ -218,7 +268,7 @@ class Simulation extends Model
             return false;
         }
 
-        return $this->reactions()->where('user_id', $user->id)->where('type', 'favorit')->exists();
+        return $this->favorites()->where('user_id', $user->id)->exists();
     }
 
     /**

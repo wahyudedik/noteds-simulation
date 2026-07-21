@@ -1,23 +1,35 @@
 <?php
 
 use App\Http\Controllers\Admin\DashboardController as AdminDashboardController;
+use App\Http\Controllers\Admin\ReportController as AdminReportController;
+use App\Http\Controllers\Admin\ScanController as AdminScanController;
 use App\Http\Controllers\Admin\SimulationController as AdminSimulationController;
 use App\Http\Controllers\BookmarkController;
 use App\Http\Controllers\CollectionController;
 use App\Http\Controllers\CommentController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\EmbedController;
+use App\Http\Controllers\FavoriteController;
 use App\Http\Controllers\FollowController;
+use App\Http\Controllers\LeaderboardController;
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\RatingController;
 use App\Http\Controllers\ReactionController;
+use App\Http\Controllers\SavedCollectionController;
+use App\Http\Controllers\ShareController;
 use App\Http\Controllers\SimulationController;
+use App\Http\Controllers\StudioController;
 use App\Http\Controllers\UserProfileController;
+use App\Http\Controllers\UserReportController;
 use App\Http\Middleware\CheckRole;
 use Illuminate\Support\Facades\Route;
 
 // Landing page = simulation feed (like YouTube homepage)
 Route::get('/', [SimulationController::class, 'index'])->name('home');
+
+// Leaderboard (public)
+Route::get('/leaderboard', [LeaderboardController::class, 'index'])->name('leaderboard.index');
 
 // AJAX Search API
 Route::get('/api/search', [SimulationController::class, 'search'])->name('simulations.search');
@@ -30,6 +42,10 @@ Route::get('/explore/{category}', [SimulationController::class, 'category'])->na
 Route::get('/sim/{slug}', [SimulationController::class, 'show'])->name('simulations.show');
 Route::get('/sim/{slug}/play', [SimulationController::class, 'play'])->name('simulations.play');
 Route::get('/sim/serve/{slug}/{path?}', [SimulationController::class, 'serve'])->name('simulations.serve')->where('path', '.*');
+
+// Simulation Embed (public)
+Route::get('/embed/{slug}', [EmbedController::class, 'show'])->name('embed.show');
+Route::get('/embed/{slug}/code', [EmbedController::class, 'code'])->name('embed.code');
 
 // Public creator profile (uses ID for reliability)
 Route::get('/creator/{id}', [FollowController::class, 'profile'])->name('creators.show');
@@ -54,6 +70,12 @@ Route::middleware('auth')->group(function () {
 
     // Bookmarks (AJAX-friendly)
     Route::post('/bookmarks/toggle', [BookmarkController::class, 'toggle'])->name('bookmarks.toggle');
+
+    // Favorites (AJAX-friendly)
+    Route::post('/favorites/{simulationId}/toggle', [FavoriteController::class, 'toggle'])->name('favorites.toggle');
+
+    // Share tracking (AJAX-friendly)
+    Route::post('/sim/{simulationId}/share', [ShareController::class, 'track'])->name('simulations.share');
 
     // Reactions (AJAX-friendly)
     Route::post('/reactions/toggle', [ReactionController::class, 'toggle'])->name('reactions.toggle');
@@ -80,6 +102,46 @@ Route::middleware('auth')->group(function () {
     Route::post('/collections/add-simulation', [CollectionController::class, 'addSimulation'])->name('collections.add-simulation');
     Route::post('/collections/remove-simulation', [CollectionController::class, 'removeSimulation'])->name('collections.remove-simulation');
     Route::get('/collections/search-simulations', [CollectionController::class, 'searchSimulations'])->name('collections.search-simulations');
+
+    // Saved Collections (save/unsave other users' collections)
+    Route::post('/saved-collections/{collectionId}/toggle', [SavedCollectionController::class, 'toggle'])->name('saved-collections.toggle');
+    Route::get('/my-saved-collections', [SavedCollectionController::class, 'index'])->name('saved-collections.index');
+
+    // User Reports
+    Route::post('/sim/{slug}/report', [UserReportController::class, 'store'])->name('reports.store');
+});
+
+// Public collection view
+
+// ========== Simulation Studio (Creator Side) ==========
+Route::middleware(['auth', 'verified'])->prefix('studio')->name('studio.')->group(function () {
+    // Dashboard
+    Route::get('/', [StudioController::class, 'dashboard'])->name('dashboard');
+
+    // Simulation CRUD
+    Route::get('/simulations', [StudioController::class, 'simulations'])->name('simulations');
+    Route::get('/simulations/create', [StudioController::class, 'create'])->name('simulations.create');
+    Route::post('/simulations', [StudioController::class, 'store'])->name('simulations.store');
+    Route::get('/simulations/{slug}/edit', [StudioController::class, 'edit'])->name('simulations.edit');
+    Route::put('/simulations/{slug}', [StudioController::class, 'update'])->name('simulations.update');
+    Route::delete('/simulations/{slug}', [StudioController::class, 'destroy'])->name('simulations.destroy');
+
+    // Versioning & Analytics
+    Route::get('/simulations/{slug}/versions', [StudioController::class, 'versions'])->name('simulations.versions');
+    Route::get('/simulations/{slug}/analytics', [StudioController::class, 'analytics'])->name('simulations.analytics');
+
+    // Comments Moderation
+    Route::get('/comments', [StudioController::class, 'comments'])->name('comments');
+    Route::post('/comments/{commentId}/reply', [StudioController::class, 'replyComment'])->name('comments.reply');
+    Route::post('/comments/{commentId}/pin', [StudioController::class, 'togglePinComment'])->name('comments.pin');
+    Route::delete('/comments/{commentId}', [StudioController::class, 'destroyComment'])->name('comments.destroy');
+
+    // Followers
+    Route::get('/followers', [StudioController::class, 'followers'])->name('followers');
+
+    // Settings
+    Route::get('/settings', [StudioController::class, 'settings'])->name('settings');
+    Route::put('/settings', [StudioController::class, 'updateSettings'])->name('settings.update');
 });
 
 // Public collection view
@@ -90,6 +152,18 @@ Route::middleware(['auth', CheckRole::class.':superadmin,admin'])->prefix('admin
     Route::get('/dashboard', [AdminDashboardController::class, 'index'])->name('dashboard');
     Route::resource('simulations', AdminSimulationController::class);
     Route::post('/simulations/{simulation}/toggle-publish', [AdminSimulationController::class, 'togglePublish'])->name('simulations.toggle-publish');
+
+    // Reports
+    Route::get('/reports', [AdminReportController::class, 'index'])->name('reports.index');
+    Route::get('/reports/{report}', [AdminReportController::class, 'show'])->name('reports.show');
+    Route::patch('/reports/{report}/review', [AdminReportController::class, 'review'])->name('reports.review');
+    Route::post('/reports/bulk-action', [AdminReportController::class, 'bulkAction'])->name('reports.bulk-action');
+
+    // Security Scans
+    Route::get('/scans', [AdminScanController::class, 'index'])->name('scans.index');
+    Route::get('/scans/{log}', [AdminScanController::class, 'show'])->name('scans.show');
+    Route::post('/scans/{simulation}/auto-scan', [AdminScanController::class, 'autoScan'])->name('scans.auto-scan');
+    Route::post('/scans/{simulation}/manual-review', [AdminScanController::class, 'manualReview'])->name('scans.manual-review');
 });
 
 require __DIR__.'/auth.php';

@@ -3,8 +3,9 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Comment;
 use App\Models\Simulation;
-use Illuminate\Http\Request;
+use App\Models\User;
 use Illuminate\View\View;
 
 class DashboardController extends Controller
@@ -16,18 +17,21 @@ class DashboardController extends Controller
     {
         $user = auth()->user();
 
+        // Platform-wide stats for admin/superadmin
         $stats = [
-            'total_simulations' => $user->simulations()->count(),
-            'published' => $user->simulations()->where('is_published', true)->count(),
-            'draft' => $user->simulations()->where('is_published', false)->count(),
-            'total_views' => (int) $user->simulations()->sum('view_count'),
-            'total_plays' => (int) $user->simulations()->sum('play_count'),
-            'total_likes' => (int) $user->simulations()->sum('like_count'),
-            'total_bookmarks' => (int) $user->simulations()->sum('bookmark_count'),
-            'total_shares' => (int) $user->simulations()->sum('share_count'),
+            'total_users' => User::count(),
+            'total_simulations' => Simulation::count(),
+            'published' => Simulation::where('is_published', true)->count(),
+            'draft' => Simulation::where('is_published', false)->count(),
+            'total_views' => (int) Simulation::sum('view_count'),
+            'total_plays' => (int) Simulation::sum('play_count'),
+            'total_likes' => (int) Simulation::sum('like_count'),
+            'total_bookmarks' => (int) Simulation::sum('bookmark_count'),
+            'total_shares' => (int) Simulation::sum('share_count'),
+            'total_comments' => Comment::count(),
         ];
 
-        $recentSimulations = $user->simulations()
+        $recentSimulations = Simulation::with('user')
             ->latest()
             ->take(10)
             ->get();

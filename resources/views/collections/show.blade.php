@@ -55,8 +55,24 @@
                         <span>&middot;</span>
                         <span>{{ $collection->formatted_view_count }} dilihat</span>
                         <span>&middot;</span>
+                        <span>{{ $saveCount }} tersimpan</span>
+                        <span>&middot;</span>
                         <span>{{ $collection->time_ago }}</span>
                     </div>
+
+                    {{-- Save Button (for non-owners) --}}
+                    @auth
+                        @if(auth()->id() !== $collection->user_id)
+                            <button
+                                id="save-collection-btn"
+                                onclick="toggleSaveCollection()"
+                                class="mt-3 inline-flex items-center gap-1.5 px-4 py-2 text-sm font-medium rounded-full transition {{ $isSaved ? 'bg-blue-100 text-blue-700 hover:bg-blue-200' : 'bg-gray-100 text-gray-700 hover:bg-gray-200' }}"
+                            >
+                                <svg id="save-collection-icon" class="w-4 h-4" fill="{{ $isSaved ? 'currentColor' : 'none' }}" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z" /></svg>
+                                <span id="save-collection-text">{{ $isSaved ? 'Tersimpan' : 'Simpan Collection' }}</span>
+                            </button>
+                        @endif
+                    @endauth
                 </div>
             </div>
         </div>
@@ -98,6 +114,53 @@
             @endif
         </div>
     </main>
+
+    <script>
+        function ajaxPost(url, data, callback) {
+            fetch(url, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+                    'X-Requested-With': 'XMLHttpRequest',
+                    'Accept': 'application/json'
+                },
+                body: JSON.stringify(data)
+            })
+            .then(function(response) { return response.json(); })
+            .then(function(result) { if (callback) callback(result); })
+            .catch(function(err) { console.error('AJAX Error:', err); });
+        }
+
+        function showToast(message) {
+            var toast = document.createElement('div');
+            toast.className = 'fixed bottom-6 left-1/2 -translate-x-1/2 bg-gray-900 text-white text-sm px-4 py-2 rounded-lg shadow-lg z-[99999] transition-opacity duration-300';
+            toast.textContent = message;
+            document.body.appendChild(toast);
+            setTimeout(function() { toast.style.opacity = '0'; }, 1500);
+            setTimeout(function() { toast.remove(); }, 1800);
+        }
+
+        function toggleSaveCollection() {
+            ajaxPost('{{ route("saved-collections.toggle", $collection->id) }}', {}, function(result) {
+                var btn = document.getElementById('save-collection-btn');
+                var icon = document.getElementById('save-collection-icon');
+                var text = document.getElementById('save-collection-text');
+                if (result.saved) {
+                    btn.classList.remove('bg-gray-100', 'text-gray-700', 'hover:bg-gray-200');
+                    btn.classList.add('bg-blue-100', 'text-blue-700', 'hover:bg-blue-200');
+                    icon.setAttribute('fill', 'currentColor');
+                    text.textContent = 'Tersimpan';
+                } else {
+                    btn.classList.remove('bg-blue-100', 'text-blue-700', 'hover:bg-blue-200');
+                    btn.classList.add('bg-gray-100', 'text-gray-700', 'hover:bg-gray-200');
+                    icon.setAttribute('fill', 'none');
+                    text.textContent = 'Simpan Collection';
+                }
+                showToast(result.message);
+            });
+        }
+    </script>
 
     <footer class="bg-white border-t border-gray-200 mt-12">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">

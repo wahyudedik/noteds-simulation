@@ -60,6 +60,39 @@
                 </div>
             </div>
 
+            {{-- Level & Points Card --}}
+            <div class="bg-gradient-to-r from-blue-600 to-purple-600 rounded-xl p-5 text-white shadow-sm">
+                <div class="flex items-center justify-between">
+                    <div class="flex items-center gap-4">
+                        <div class="w-14 h-14 rounded-full bg-white/20 flex items-center justify-center text-2xl font-bold">
+                            {{ $levelProgress['level'] }}
+                        </div>
+                        <div>
+                            <h3 class="text-lg font-semibold">{{ $levelProgress['level_title'] }}</h3>
+                            <p class="text-sm text-blue-100">{{ number_format($levelProgress['total_points']) }} poin total</p>
+                        </div>
+                    </div>
+                    <a href="{{ route('leaderboard.index') }}" class="px-4 py-2 bg-white/20 hover:bg-white/30 text-white text-sm font-medium rounded-lg transition">
+                        #1 Leaderboard
+                    </a>
+                </div>
+                {{-- Progress Bar --}}
+                <div class="mt-4">
+                    <div class="flex items-center justify-between text-xs text-blue-100 mb-1">
+                        <span>Level {{ $levelProgress['level'] }}</span>
+                        <span>{{ number_format($levelProgress['current_points']) }} / {{ number_format($levelProgress['points_to_next']) }} poin ke Level {{ $levelProgress['level'] + 1 }}</span>
+                    </div>
+                    <div class="w-full bg-white/20 rounded-full h-2">
+                        <div class="bg-white rounded-full h-2 transition-all duration-500" style="width: {{ $levelProgress['progress_percent'] }}%"></div>
+                    </div>
+                </div>
+                @if($levelProgress['streak'] > 0)
+                    <div class="mt-2 text-xs text-blue-100">
+                        (fire) Streak: {{ $levelProgress['streak'] }} hari berturut-turut
+                    </div>
+                @endif
+            </div>
+
             {{-- Quick Actions --}}
             <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
                 <a href="{{ route('profile.edit') }}" class="flex items-center gap-3 bg-white border border-gray-100 shadow-sm rounded-xl p-4 hover:shadow-md transition">

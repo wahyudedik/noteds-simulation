@@ -73,21 +73,32 @@
             </section>
         @else
             {{-- Trending --}}
-            @if($trending->count() > 0)
             <section class="mb-10">
                 <div class="flex items-center justify-between mb-4">
                     <h2 class="text-xl font-bold text-gray-900">
                         <svg class="inline w-5 h-5 text-orange-500 mr-1" fill="currentColor" viewBox="0 0 24 24"><path d="M13 7.83l3.59 3.59L18 10l-6-6-6 6 1.41 1.41L11 7.83V20h2V7.83z"/></svg>
                         Trending Simulations
                     </h2>
+                    <div class="flex items-center gap-1 bg-gray-100 rounded-lg p-1">
+                        @php $currentPeriod = request('period', 'week'); @endphp
+                        <a href="?period=day" class="px-3 py-1 text-xs font-medium rounded-md transition {{ $currentPeriod === 'day' ? 'bg-white text-gray-900 shadow-sm' : 'text-gray-500 hover:text-gray-700' }}">Hari Ini</a>
+                        <a href="?period=week" class="px-3 py-1 text-xs font-medium rounded-md transition {{ $currentPeriod === 'week' ? 'bg-white text-gray-900 shadow-sm' : 'text-gray-500 hover:text-gray-700' }}">Minggu Ini</a>
+                        <a href="?period=month" class="px-3 py-1 text-xs font-medium rounded-md transition {{ $currentPeriod === 'month' ? 'bg-white text-gray-900 shadow-sm' : 'text-gray-500 hover:text-gray-700' }}">Bulan Ini</a>
+                        <a href="?period=year" class="px-3 py-1 text-xs font-medium rounded-md transition {{ $currentPeriod === 'year' ? 'bg-white text-gray-900 shadow-sm' : 'text-gray-500 hover:text-gray-700' }}">Tahun Ini</a>
+                    </div>
                 </div>
+                @if($trending->count() > 0)
                 <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
                     @foreach($trending as $sim)
                         @include('components.simulation-card', ['simulation' => $sim])
                     @endforeach
                 </div>
+                @else
+                <div class="text-center py-8">
+                    <p class="text-gray-400 text-sm">Tidak ada simulasi trending untuk periode ini.</p>
+                </div>
+                @endif
             </section>
-            @endif
 
             {{-- Latest --}}
             @if($latest->count() > 0)

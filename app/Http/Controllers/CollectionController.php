@@ -38,7 +38,10 @@ class CollectionController extends Controller
 
         $collection->increment('view_count');
 
-        return view('collections.show', compact('collection'));
+        $isSaved = auth()->check() ? $collection->isSavedByUser(auth()->user()) : false;
+        $saveCount = $collection->savedByUsers()->count();
+
+        return view('collections.show', compact('collection', 'isSaved', 'saveCount'));
     }
 
     /**

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Reaction;
 use App\Models\Simulation;
+use App\Services\GamificationService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -38,6 +39,11 @@ class ReactionController extends Controller
                 'type' => $validated['type'],
             ]);
             $active = true;
+
+            // Gamification: award reaction points
+            $user = Auth::user();
+            $gamification = app(GamificationService::class);
+            $gamification->awardPoints($user, 'reaction', 'Reaksi di: '.$simulation->title);
         }
 
         // Get updated count for this specific reaction type

@@ -20,12 +20,20 @@
                     <a href="{{ route('simulations.explore') }}" class="px-3 py-2 text-sm font-medium text-gray-700 hover:text-blue-600 hover:bg-gray-50 rounded-lg transition">
                         Jelajahi
                     </a>
+                    <a href="{{ route('leaderboard.index') }}" class="px-3 py-2 text-sm font-medium text-gray-700 hover:text-blue-600 hover:bg-gray-50 rounded-lg transition">
+                        #1
+                    </a>
                     @auth
                         <a href="{{ route('collections.index') }}" class="px-3 py-2 text-sm font-medium text-gray-700 hover:text-blue-600 hover:bg-gray-50 rounded-lg transition">
                             Collection
                         </a>
                         @if(auth()->user()->isAdmin())
                             <a href="{{ route('admin.dashboard') }}" class="px-3 py-2 text-sm font-medium text-gray-700 hover:text-blue-600 hover:bg-gray-50 rounded-lg transition">
+                                Admin
+                            </a>
+                        @endif
+                        @if(auth()->user()->isCreator() || auth()->user()->isAdmin() || auth()->user()->isSuperAdmin())
+                            <a href="{{ route('studio.dashboard') }}" class="px-3 py-2 text-sm font-medium text-gray-700 hover:text-blue-600 hover:bg-gray-50 rounded-lg transition">
                                 Studio
                             </a>
                         @endif
@@ -175,10 +183,14 @@
         <div class="py-2 space-y-1 px-4">
             <a href="{{ route('home') }}" class="block px-3 py-2 text-sm font-medium text-gray-700 hover:text-blue-600 hover:bg-gray-50 rounded-lg transition">Beranda</a>
             <a href="{{ route('simulations.explore') }}" class="block px-3 py-2 text-sm font-medium text-gray-700 hover:text-blue-600 hover:bg-gray-50 rounded-lg transition">Jelajahi</a>
+            <a href="{{ route('leaderboard.index') }}" class="block px-3 py-2 text-sm font-medium text-gray-700 hover:text-blue-600 hover:bg-gray-50 rounded-lg transition">#1 Leaderboard</a>
             @auth
                 <a href="{{ route('collections.index') }}" class="block px-3 py-2 text-sm font-medium text-gray-700 hover:text-blue-600 hover:bg-gray-50 rounded-lg transition">Collection</a>
                 @if(auth()->user()->isAdmin())
-                    <a href="{{ route('admin.dashboard') }}" class="block px-3 py-2 text-sm font-medium text-gray-700 hover:text-blue-600 hover:bg-gray-50 rounded-lg transition">Studio</a>
+                    <a href="{{ route('admin.dashboard') }}" class="block px-3 py-2 text-sm font-medium text-gray-700 hover:text-blue-600 hover:bg-gray-50 rounded-lg transition">Admin Panel</a>
+                @endif
+                @if(auth()->user()->isCreator() || auth()->user()->isAdmin() || auth()->user()->isSuperAdmin())
+                    <a href="{{ route('studio.dashboard') }}" class="block px-3 py-2 text-sm font-medium text-gray-700 hover:text-blue-600 hover:bg-gray-50 rounded-lg transition">Studio</a>
                 @endif
                 <a href="{{ route('notifications.index') }}" class="block px-3 py-2 text-sm font-medium text-gray-700 hover:text-blue-600 hover:bg-gray-50 rounded-lg transition">Notifikasi</a>
                 <a href="{{ route('dashboard') }}" class="block px-3 py-2 text-sm font-medium text-gray-700 hover:text-blue-600 hover:bg-gray-50 rounded-lg transition">Dashboard</a>

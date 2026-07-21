@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Str;
 
 class Collection extends Model
@@ -52,6 +53,26 @@ class Collection extends Model
         return $this->belongsToMany(Simulation::class, 'collection_simulations')
             ->withPivot('position')
             ->orderByPivot('position');
+    }
+
+    /**
+     * Get users who saved this collection.
+     */
+    public function savedByUsers(): HasMany
+    {
+        return $this->hasMany(SavedCollection::class);
+    }
+
+    /**
+     * Check if a user has saved this collection.
+     */
+    public function isSavedByUser(?User $user): bool
+    {
+        if (! $user) {
+            return false;
+        }
+
+        return $this->savedByUsers()->where('user_id', $user->id)->exists();
     }
 
     /**

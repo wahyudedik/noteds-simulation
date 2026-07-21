@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Follow;
 use App\Models\Notification;
 use App\Models\User;
+use App\Services\GamificationService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -30,6 +31,7 @@ class FollowController extends Controller
 
         $existing = Follow::where('follower_id', Auth::id())
             ->where('followable_id', $creator->id)
+            ->where('followable_type', User::class)
             ->first();
 
         if ($existing) {
@@ -40,9 +42,16 @@ class FollowController extends Controller
             Follow::create([
                 'follower_id' => Auth::id(),
                 'followable_id' => $creator->id,
+                'followable_type' => User::class,
             ]);
             $following = true;
             $message = 'Mengikuti '.$creator->name.'.';
+
+            // Gamification: award follow points
+            $user = Auth::user();
+            $gamification = app(GamificationService::class);
+            $gamification->awardPoints($user, 'follow_creator', 'Follow: '.$creator->name);
+            $gamification->checkBadges($user);
 
             // Notify the creator
             Notification::create([

@@ -6,6 +6,7 @@ use App\Models\Comment;
 use App\Models\Notification;
 use App\Models\Simulation;
 use App\Models\User;
+use App\Services\GamificationService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -54,7 +55,7 @@ class CommentController extends Controller
         if ($comment->parent_id && $comment->parent && $comment->parent->user_id !== $user->id) {
             Notification::create([
                 'user_id' => $comment->parent->user_id,
-                'type' => 'comment',
+                'type' => 'comment_reply',
                 'title' => 'Balasan Komentar',
                 'body' => $user->name.' membalas komentar Anda di '.$simulation->title,
                 'data' => [
@@ -64,6 +65,34 @@ class CommentController extends Controller
                 ],
             ]);
         }
+
+        // Notify mentioned users (@username)
+        $mentionedNames = $this->extractMentions($comment->body);
+        if (! empty($mentionedNames)) {
+            $mentionedUsers = User::whereIn('name', $mentionedNames)
+                ->where('id', '!=', $user->id)
+                ->where('id', '!=', $simulation->user_id)
+                ->get();
+
+            foreach ($mentionedUsers as $mentionedUser) {
+                Notification::create([
+                    'user_id' => $mentionedUser->id,
+                    'type' => 'mention',
+                    'title' => 'Anda Disebut',
+                    'body' => $user->name.' menyebut Anda dalam komentar di '.$simulation->title,
+                    'data' => [
+                        'simulation_slug' => $simulation->slug,
+                        'comment_id' => $comment->id,
+                        'url' => route('simulations.show', $simulation->slug).'#comment-'.$comment->id,
+                    ],
+                ]);
+            }
+        }
+
+        // Gamification: award comment points + check badges
+        $gamification = app(GamificationService::class);
+        $gamification->awardPoints($user, 'comment', 'Komentar di: '.$simulation->title);
+        $gamification->checkBadges($user);
 
         if ($request->ajax() || $request->wantsJson()) {
             return response()->json([
@@ -99,5 +128,17 @@ class CommentController extends Controller
         }
 
         return redirect()->route('simulations.show', $slug);
+    }
+
+    /**
+     * Extract @mentions from comment body.
+     *
+     * @return array<int, string>
+     */
+    private function extractMentions(string $body): array
+    {
+        preg_match_all('/@(\w+)/', $body, $matches);
+
+        return array_unique($matches[1] ?? []);
     }
 }

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Bookmark;
 use App\Models\Simulation;
+use App\Services\GamificationService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -35,6 +36,11 @@ class BookmarkController extends Controller
                 'simulation_id' => $simulation->id,
             ]);
             $bookmarked = true;
+
+            // Gamification: award bookmark points
+            $user = Auth::user();
+            $gamification = app(GamificationService::class);
+            $gamification->awardPoints($user, 'bookmark', 'Bookmark: '.$simulation->title);
         }
 
         if ($request->ajax() || $request->wantsJson()) {
