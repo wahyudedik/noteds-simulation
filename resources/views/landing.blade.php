@@ -19,6 +19,9 @@
     </style>
 </head>
 <body class="bg-gray-50 font-sans antialiased">
+    <a href="#main-content" class="sr-only focus:not-sr-only focus:absolute focus:z-50 focus:top-2 focus:left-2 focus:bg-blue-600 focus:text-white focus:px-4 focus:py-2 focus:rounded-lg focus:font-medium focus:shadow-lg">
+        Lewati ke konten utama
+    </a>
 
     @include('components.app-header', ['showSearch' => true, 'searchTerm' => $search ?? ''])
 
@@ -45,7 +48,7 @@
     @endif
 
     {{-- Main Content --}}
-    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <main id="main-content" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
 
         {{-- Search Results --}}
         @if($search && $searchResults)

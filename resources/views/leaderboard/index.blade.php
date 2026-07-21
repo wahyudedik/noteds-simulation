@@ -93,7 +93,8 @@
                                         <td class="py-3 px-3 sm:px-4 text-center">
                                             @if($entry['streak'] > 0)
                                                 <span class="inline-flex items-center gap-1 text-sm">
-                                                    (fire) <span class="font-medium text-orange-600">{{ $entry['streak'] }}</span>
+                                                    <svg class="w-4 h-4 text-orange-500" fill="currentColor" viewBox="0 0 24 24"><path d="M12 23c-3.6 0-8-3.127-8-8.5C4 10.5 12 1 12 1s8 9.5 8 13.5c0 5.373-4.4 8.5-8 8.5zm0-18.5C8.6 7.2 6 12.1 6 14.5 6 18.649 9.134 21 12 21s6-2.351 6-6.5c0-2.4-2.6-7.3-6-10z"/><path d="M12 21c-1.657 0-4-1.343-4-4.5 0-2 2.5-6 4-8 1.5 2 4 6 4 8 0 3.157-2.343 4.5-4 4.5z" opacity="0.6"/></svg>
+                                                    <span class="font-medium text-orange-600">{{ $entry['streak'] }}</span>
                                                 </span>
                                             @else
                                                 <span class="text-gray-400">—</span>

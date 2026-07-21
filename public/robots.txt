@@ -1,2 +1,12 @@
 User-agent: *
-Disallow:
+Allow: /
+Disallow: /admin/
+Disallow: /studio/
+Disallow: /api/
+Disallow: /profile/
+Disallow: /my-profile/
+Disallow: /my-collections/
+Disallow: /notifications/
+Disallow: /saved-collections/
+
+Sitemap: https://noteds.test/sitemap.xml

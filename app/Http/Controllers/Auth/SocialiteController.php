@@ -8,6 +8,7 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 use Laravel\Socialite\Facades\Socialite;
+use Laravel\Socialite\Two\InvalidStateException;
 
 class SocialiteController extends Controller
 {
@@ -57,7 +58,7 @@ class SocialiteController extends Controller
 
         try {
             $googleUser = Socialite::driver('google')->user();
-        } catch (\Laravel\Socialite\Two\InvalidStateException $e) {
+        } catch (InvalidStateException $e) {
             Log::error('Google OAuth InvalidStateException caught', [
                 'session_id' => session()->getId(),
                 'session_driver' => config('session.driver'),

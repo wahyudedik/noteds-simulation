@@ -11,6 +11,7 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\EmbedController;
 use App\Http\Controllers\FavoriteController;
 use App\Http\Controllers\FollowController;
+use App\Http\Controllers\HealthController;
 use App\Http\Controllers\LeaderboardController;
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\ProfileController;
@@ -24,6 +25,9 @@ use App\Http\Controllers\UserProfileController;
 use App\Http\Controllers\UserReportController;
 use App\Http\Middleware\CheckRole;
 use Illuminate\Support\Facades\Route;
+
+// Health Check endpoint
+Route::get('/health', HealthController::class)->name('health');
 
 // Landing page = simulation feed (like YouTube homepage)
 Route::get('/', [SimulationController::class, 'index'])->name('home');
