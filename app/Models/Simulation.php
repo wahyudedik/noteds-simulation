@@ -163,6 +163,14 @@ class Simulation extends Model
         return $this->hasMany(SimulationAnalytic::class);
     }
 
+    /**
+     * Get traffic sources for this simulation.
+     */
+    public function trafficSources(): HasMany
+    {
+        return $this->hasMany(TrafficSource::class);
+    }
+
     // ─── Accessors ────────────────────────────────────────────────
 
     /**

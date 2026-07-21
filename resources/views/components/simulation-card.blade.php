@@ -63,7 +63,7 @@
                         @endif
                         <span>{{ $simulation->category }}</span>
                         <span>&middot;</span>
-                        <span>{{ $simulation->formatted_play_count }} dimainkan</span>
+                        <span>{{ $simulation->formatted_play_count }} dimainkan · {{ $simulation->formatted_view_count }} dilihat</span>
                     </div>
                 </div>
             </div>

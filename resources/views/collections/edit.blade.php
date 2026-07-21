@@ -196,11 +196,18 @@
                             'Accept': 'application/json'
                         }
                     })
-                    .then(function(r) { return r.json(); })
+                    .then(function(r) {
+                        if (!r.ok || !(r.headers.get('content-type') || '').includes('application/json')) {
+                            self.loading = false;
+                            return null;
+                        }
+                        return r.json();
+                    })
                     .then(function(data) {
-                        self.results = data.simulations || [];
+                        self.results = (data && data.simulations) || [];
                         self.loading = false;
-                    });
+                    })
+                    .catch(function() { self.loading = false; });
                 },
                 addToCollection: function(simulationId, btnEl) {
                     var self = this;
@@ -218,15 +225,24 @@
                             simulation_id: simulationId
                         })
                     })
-                    .then(function(r) { return r.json(); })
+                    .then(function(r) {
+                        if (!r.ok || !(r.headers.get('content-type') || '').includes('application/json')) {
+                            self.adding = null;
+                            window.showToast('Sesi Anda telah berakhir. Silakan login kembali.', 'error');
+                            return null;
+                        }
+                        return r.json();
+                    })
                     .then(function(result) {
                         self.adding = null;
+                        if (!result) return;
                         if (result.success) {
                             window.location.reload();
                         } else {
                             window.showToast(result.message || 'Gagal menambahkan simulasi', 'error');
                         }
-                    });
+                    })
+                    .catch(function() { self.adding = null; });
                 }
             };
         }
@@ -248,14 +264,22 @@
                         simulation_id: simulationId
                     })
                 })
-                .then(function(r) { return r.json(); })
+                .then(function(r) {
+                    if (!r.ok || !(r.headers.get('content-type') || '').includes('application/json')) {
+                        window.showToast('Sesi Anda telah berakhir. Silakan login kembali.', 'error');
+                        return null;
+                    }
+                    return r.json();
+                })
                 .then(function(result) {
+                    if (!result) return;
                     if (result.success) {
                         window.location.reload();
                     } else {
                         window.showToast(result.message || 'Gagal menghapus simulasi', 'error');
                     }
-                });
+                })
+                .catch(function() {});
             });
         }
     </script>

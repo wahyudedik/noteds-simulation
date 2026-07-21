@@ -27,8 +27,9 @@
                                 <label for="category" class="block text-sm font-medium text-gray-700 mb-1">Kategori *</label>
                                 <select name="category" id="category" required
                                     class="w-full rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm">
-                                    @foreach(['Fisika', 'Kimia', 'Biologi', 'Matematika', 'Geografi', 'Sejarah', 'Umum'] as $cat)
-                                        <option value="{{ $cat }}" {{ old('category', $simulation->category) === $cat ? 'selected' : '' }}>{{ $cat }}</option>
+                                    <option value="">Pilih Kategori</option>
+                                    @foreach($categories as $cat)
+                                        <option value="{{ $cat->slug }}" {{ old('category', $simulation->category) === $cat->slug ? 'selected' : '' }}>{{ $cat->name }}</option>
                                     @endforeach
                                 </select>
                             </div>

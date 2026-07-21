@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Category;
 use App\Models\Simulation;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -30,7 +31,9 @@ class SimulationController extends Controller
      */
     public function create(): View
     {
-        return view('admin.simulations.create');
+        $categories = Category::where('is_active', true)->orderBy('sort_order')->orderBy('name')->get();
+
+        return view('admin.simulations.create', compact('categories'));
     }
 
     /**
@@ -136,7 +139,9 @@ class SimulationController extends Controller
      */
     public function edit(Simulation $simulation): View
     {
-        return view('admin.simulations.edit', compact('simulation'));
+        $categories = Category::where('is_active', true)->orderBy('sort_order')->orderBy('name')->get();
+
+        return view('admin.simulations.edit', compact('simulation', 'categories'));
     }
 
     /**
@@ -217,6 +222,20 @@ class SimulationController extends Controller
         ]);
 
         $status = $simulation->is_published ? 'published' : 'unpublished';
+
+        return redirect()->back()->with('success', "Simulation {$status} successfully!");
+    }
+
+    /**
+     * Toggle featured status.
+     */
+    public function toggleFeatured(Simulation $simulation): RedirectResponse
+    {
+        $simulation->update([
+            'is_featured' => ! $simulation->is_featured,
+        ]);
+
+        $status = $simulation->is_featured ? 'featured' : 'unfeatured';
 
         return redirect()->back()->with('success', "Simulation {$status} successfully!");
     }

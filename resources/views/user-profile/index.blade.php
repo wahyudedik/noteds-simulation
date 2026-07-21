@@ -8,7 +8,7 @@
     {{-- SEO Meta Tags --}}
     <title>{{ $seo['title'] }}</title>
     <meta name="description" content="{{ $seo['description'] }}">
-    <meta name="robots" content="index, follow">
+    <meta name="robots" content="noindex, nofollow">
     <link rel="canonical" href="{{ $seo['url'] }}">
 
     {{-- Open Graph / Facebook --}}

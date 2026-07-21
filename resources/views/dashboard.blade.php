@@ -32,6 +32,29 @@
                 </div>
             </div>
 
+            {{-- Creator Onboarding --}}
+            @if(!$isCreator)
+            <div class="bg-gradient-to-r from-emerald-500 to-teal-600 rounded-xl p-6 text-white shadow-sm">
+                <div class="flex items-center gap-4">
+                    <div class="w-12 h-12 bg-white/20 rounded-full flex items-center justify-center">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"/>
+                        </svg>
+                    </div>
+                    <div class="flex-1">
+                        <h3 class="font-semibold text-lg">Mulai Kreasi!</h3>
+                        <p class="text-emerald-100 text-sm mt-1">Upload simulasi interaktif pertamamu dan jangkau ribuan pelajar di seluruh Indonesia.</p>
+                    </div>
+                    <form action="{{ route('become-creator') }}" method="POST" class="shrink-0">
+                        @csrf
+                        <button type="submit" class="px-5 py-2.5 bg-white text-emerald-700 font-semibold text-sm rounded-lg hover:bg-emerald-50 transition shadow-sm">
+                            Jadikan Kreator
+                        </button>
+                    </form>
+                </div>
+            </div>
+            @endif
+
             {{-- Stats Cards --}}
             <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
                 <div class="bg-white border border-gray-100 shadow-sm rounded-xl p-4 text-center">

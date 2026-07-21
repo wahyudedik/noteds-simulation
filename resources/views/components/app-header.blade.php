@@ -48,7 +48,7 @@
                         type="text"
                         name="search"
                         x-model="searchQuery"
-                        @input.debounce.300ms="if(searchQuery.length >= 2) { searchLoading = true; searchOpen = true; fetch('/api/search?q=' + encodeURIComponent(searchQuery)).then(r => r.json()).then(data => { searchResults = data.results || []; searchLoading = false; }).catch(() => { searchLoading = false; }); } else { searchResults = []; searchOpen = false; }"
+                        @input.debounce.300ms="if(searchQuery.length >= 2) { searchLoading = true; searchOpen = true; fetch('/api/search?q=' + encodeURIComponent(searchQuery), { headers: { 'Accept': 'application/json', 'X-Requested-With': 'XMLHttpRequest' } }).then(r => { if (!r.ok || !(r.headers.get('content-type') || '').includes('application/json')) { searchLoading = false; return null; } return r.json(); }).then(data => { if (data) { searchResults = data.results || []; } searchLoading = false; }).catch(() => { searchLoading = false; }); } else { searchResults = []; searchOpen = false; }"
                         @focus="if(searchQuery.length >= 2 && searchResults.length > 0) searchOpen = true"
                         value="{{ $searchTerm }}"
                         placeholder="Cari simulasi..."

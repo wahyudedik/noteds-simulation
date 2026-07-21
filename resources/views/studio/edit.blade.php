@@ -34,8 +34,8 @@
                         <select name="category" id="category" required
                                 class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm @error('category') border-red-500 @enderror">
                             <option value="">Pilih Kategori</option>
-                            @foreach(['Fisika', 'Kimia', 'Biologi', 'Matematika', 'Ekonomi', 'Sejarah', 'Geografi', 'Informatika', 'Teknik', 'Seni', 'Bahasa', 'Lainnya'] as $cat)
-                                <option value="{{ $cat }}" {{ old('category', $simulation->category) === $cat ? 'selected' : '' }}>{{ $cat }}</option>
+                            @foreach($categories as $cat)
+                                <option value="{{ $cat->slug }}" {{ old('category', $simulation->category) === $cat->slug ? 'selected' : '' }}>{{ $cat->name }}</option>
                             @endforeach
                         </select>
                         @error('category')
@@ -104,15 +104,23 @@
                     @enderror
                 </div>
 
+                {{-- Changelog --}}
+                <div class="mt-4">
+                    <x-input-label for="changelog" :value="'Changelog (opsional)'" />
+                    <textarea id="changelog" name="changelog" rows="3"
+                              class="mt-1 block w-full border-gray-300 focus:border-blue-500 focus:ring-blue-500 rounded-lg shadow-sm"
+                              placeholder="Jelaskan perubahan pada versi ini...">{{ old('changelog') }}</textarea>
+                </div>
+
                 {{-- Thumbnail --}}
                 <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-1">Thumbnail Baru (opsional)</label>
                     @if($simulation->thumbnail)
-                        <div class="flex items-center gap-3 mb-2">
-                            <img src="{{ Storage::url($simulation->thumbnail) }}" class="w-24 h-16 object-cover rounded-lg" />
-                            <span class="text-xs text-gray-500">Thumbnail saat ini</span>
+                        <div class="mb-4">
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Thumbnail Saat Ini</label>
+                            <img src="{{ Storage::disk('public')->url($simulation->thumbnail) }}" alt="Current thumbnail" class="w-48 h-auto rounded-lg border border-gray-200 shadow-sm">
                         </div>
                     @endif
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Thumbnail Baru (opsional)</label>
                     <div class="border-2 border-dashed border-gray-300 rounded-lg p-4 text-center hover:border-blue-400 transition cursor-pointer"
                          @click="$refs.thumbInput.click()">
                         <template x-if="!thumbPreview">

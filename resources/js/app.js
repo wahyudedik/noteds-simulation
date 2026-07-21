@@ -59,9 +59,10 @@ window.showToast = function (message, type = 'success') {
  * Perform an AJAX POST request with automatic toast feedback.
  * @param {string} url - The endpoint URL.
  * @param {object} options - Optional fetch options (body, headers, etc.).
- * @returns {Promise<object>} The parsed JSON response.
+ * @param {function} [callback] - Optional callback receiving the parsed JSON data (or null on error).
+ * @returns {Promise<object|null>} The parsed JSON response, or null on error.
  */
-window.ajaxPost = async function (url, options = {}) {
+window.ajaxPost = async function (url, options = {}, callback) {
     var defaults = {
         method: 'POST',
         headers: {
@@ -77,18 +78,64 @@ window.ajaxPost = async function (url, options = {}) {
         config.headers = Object.assign({}, defaults.headers, options.headers);
     }
 
+    // If caller passed data as the options object (e.g. { simulation_id: 123 }),
+    // serialize it as the request body. Exclude fetch-config keys.
+    if (!options.body) {
+        var fetchData = {};
+        var fetchConfigKeys = ['method', 'headers', 'body', 'mode', 'credentials', 'cache', 'redirect', 'referrer', 'referrerPolicy', 'integrity', 'keepalive', 'signal'];
+        for (var key in options) {
+            if (options.hasOwnProperty(key) && fetchConfigKeys.indexOf(key) === -1) {
+                fetchData[key] = options[key];
+            }
+        }
+        if (Object.keys(fetchData).length > 0) {
+            config.body = JSON.stringify(fetchData);
+        }
+    }
+
     try {
         var response = await fetch(url, config);
+
+        // Handle HTTP error status (401, 403, 404, 419, 500, etc.)
+        if (!response.ok) {
+            if (response.status === 401 || response.status === 419) {
+                window.showToast('Sesi Anda telah berakhir. Silakan login kembali.', 'error');
+                setTimeout(function () { window.location.href = '/login'; }, 1500);
+            } else {
+                window.showToast('Terjadi kesalahan (' + response.status + '). Silakan coba lagi.', 'error');
+            }
+            if (typeof callback === 'function') {
+                callback(null);
+            }
+            return null;
+        }
+
+        // Guard against non-JSON responses (e.g. HTML error/redirect pages)
+        var contentType = response.headers.get('content-type') || '';
+        if (!contentType.includes('application/json')) {
+            window.showToast('Terjadi kesalahan. Respons server tidak valid.', 'error');
+            if (typeof callback === 'function') {
+                callback(null);
+            }
+            return null;
+        }
+
         var data = await response.json();
 
         if (data.message) {
             window.showToast(data.message, data.success !== false ? 'success' : 'error');
         }
 
+        if (typeof callback === 'function') {
+            callback(data);
+        }
         return data;
     } catch (error) {
         window.showToast('Terjadi kesalahan. Silakan coba lagi.', 'error');
-        throw error;
+        if (typeof callback === 'function') {
+            callback(null);
+        }
+        return null;
     }
 };
 

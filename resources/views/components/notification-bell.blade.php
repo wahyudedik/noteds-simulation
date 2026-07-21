@@ -13,10 +13,19 @@
     (function() {
         @auth
         fetch('{{ route("notifications.unread-count") }}', {
-            headers: { 'X-Requested-With': 'XMLHttpRequest' }
+            headers: {
+                'X-Requested-With': 'XMLHttpRequest',
+                'Accept': 'application/json'
+            }
         })
-        .then(function(r) { return r.json(); })
+        .then(function(r) {
+            if (!r.ok || !(r.headers.get('content-type') || '').includes('application/json')) {
+                return null;
+            }
+            return r.json();
+        })
         .then(function(data) {
+            if (!data) return;
             var badges = document.querySelectorAll('.notification-badge');
             badges.forEach(function(badge) {
                 if (data.count > 0) {

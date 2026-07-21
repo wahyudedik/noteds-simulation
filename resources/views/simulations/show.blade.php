@@ -93,6 +93,13 @@
     @include('components.app-header')
 
     <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+        <nav class="flex items-center gap-2 text-sm text-gray-500 mb-6">
+            <a href="{{ route('home') }}" class="hover:text-blue-600 transition">Beranda</a>
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+            <a href="{{ route('simulations.category', $simulation->category) }}" class="hover:text-blue-600 transition">{{ $simulation->category }}</a>
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+            <span class="text-gray-900 font-medium">{{ $simulation->title }}</span>
+        </nav>
         <div class="flex flex-col lg:flex-row gap-6">
 
             {{-- Left: Player & Info --}}
@@ -375,6 +382,49 @@
                                 </button>
                             @endforeach
                         </div>
+
+                        {{-- Reactions Distribution Pie Chart --}}
+                        @php
+                            $totalReactions = array_sum($reactionCounts);
+                        @endphp
+                        @if($totalReactions > 0)
+                            @php
+                                $reactionColors = [
+                                    'mudah_dipahami' => '#3b82f6',
+                                    'membuka_wawasan' => '#8b5cf6',
+                                    'sangat_membantu' => '#10b981',
+                                    'interaktif' => '#f59e0b',
+                                    'favorit' => '#ef4444',
+                                ];
+                                $cumulativePercent = 0;
+                                $gradientParts = [];
+                                foreach ($reactionCounts as $type => $count) {
+                                    $percent = ($count / $totalReactions) * 100;
+                                    $color = $reactionColors[$type] ?? '#6b7280';
+                                    $endPercent = $cumulativePercent + $percent;
+                                    $gradientParts[] = "{$color} {$cumulativePercent}% {$endPercent}%";
+                                    $cumulativePercent += $percent;
+                                }
+                                $gradientString = implode(', ', $gradientParts);
+                            @endphp
+                            <div class="flex items-center gap-4 mt-4 pt-4 border-t border-gray-100">
+                                <div class="w-20 h-20 rounded-full flex-shrink-0" style="background: conic-gradient({{ $gradientString }});" title="Distribusi Reaksi"></div>
+                                <div class="flex-1 space-y-1.5">
+                                    @foreach($reactionCounts as $type => $count)
+                                        @php
+                                            $percent = $totalReactions > 0 ? round(($count / $totalReactions) * 100, 1) : 0;
+                                        @endphp
+                                        <div class="flex items-center justify-between text-xs">
+                                            <span class="flex items-center gap-1.5 text-gray-600">
+                                                <span class="w-2 h-2 rounded-full flex-shrink-0" style="background: {{ $reactionColors[$type] ?? '#6b7280' }}"></span>
+                                                {{ str_replace('_', ' ', ucfirst($type)) }}
+                                            </span>
+                                            <span class="text-gray-500">{{ $percent }}%</span>
+                                        </div>
+                                    @endforeach
+                                </div>
+                            </div>
+                        @endif
                     </div>
                     @endauth
 
@@ -564,7 +614,15 @@
             updateStickyThreshold();
             fetch('{{ route("simulations.play", $simulation->slug) }}', {
                 method: 'GET',
-                headers: { 'X-Requested-With': 'XMLHttpRequest' }
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest',
+                    'Accept': 'application/json'
+                }
+            }).then(function(r) {
+                if (!r.ok || !(r.headers.get('content-type') || '').includes('application/json')) {
+                    return null;
+                }
+                return r.json();
             }).catch(function() {});
         }
 
@@ -672,6 +730,7 @@
         // ========== Favorite ==========
         function toggleFavorite() {
             ajaxPost('{{ route("favorites.toggle", $simulation->id) }}', {}, function(result) {
+                if (!result) return;
                 var btn = document.getElementById('favorite-btn');
                 var countEl = document.getElementById('favorite-count');
                 var svg = btn.querySelector('svg');
@@ -690,6 +749,7 @@
         // ========== Share Tracking ==========
         function trackShare(platform) {
             ajaxPost('{{ route("simulations.share", $simulation->id) }}', { platform: platform }, function(result) {
+                if (!result) return;
                 if (result.success) {
                     showToast(result.message);
                 }
@@ -699,6 +759,7 @@
         // ========== Bookmark ==========
         function toggleBookmark() {
             ajaxPost('{{ route("bookmarks.toggle") }}', { simulation_id: {{ $simulation->id }} }, function(result) {
+                if (!result) return;
                 var btn = document.getElementById('bookmark-btn');
                 var text = document.getElementById('bookmark-text');
                 if (result.bookmarked) {
@@ -720,6 +781,7 @@
                 collection_id: collectionId,
                 simulation_id: {{ $simulation->id }}
             }, function(result) {
+                if (!result) return;
                 showToast(result.message);
                 if (result.success) {
                     setTimeout(function() { window.location.reload(); }, 500);
@@ -730,6 +792,7 @@
         // ========== Reactions ==========
         function toggleReaction(type) {
             ajaxPost('{{ route("reactions.toggle") }}', { simulation_id: {{ $simulation->id }}, type: type }, function(result) {
+                if (!result) return;
                 var btn = document.getElementById('reaction-' + type);
                 var countEl = document.getElementById('reaction-count-' + type);
                 if (result.active) {
@@ -744,6 +807,7 @@
         // ========== Rating ==========
         function setRating(value) {
             ajaxPost('{{ route("ratings.store") }}', { simulation_id: {{ $simulation->id }}, rating: value }, function(result) {
+                if (!result) return;
                 var stars = document.querySelectorAll('#rating-stars .rating-star');
                 stars.forEach(function(star, index) {
                     if (index < value) {
@@ -762,6 +826,7 @@
         // ========== Follow ==========
         function toggleFollow(userId) {
             ajaxPost('/follows/' + userId + '/toggle', {}, function(result) {
+                if (!result) return;
                 var btn = document.getElementById('follow-btn');
                 var text = document.getElementById('follow-text');
                 if (result.following) {
@@ -780,6 +845,7 @@
         // ========== Follow Simulation ==========
         function toggleFollowSimulation() {
             ajaxPost('/follows/{{ $simulation->user->id }}/toggle', { followable_type: 'simulation', followable_id: {{ $simulation->id }} }, function(result) {
+                if (!result) return;
                 var btn = document.getElementById('sim-follow-btn');
                 var text = document.getElementById('sim-follow-text');
                 if (result.following) {
@@ -806,6 +872,7 @@
             if (parentId) { data.parent_id = parentId; }
 
             ajaxPost('{{ route("comments.store", $simulation->slug) }}', data, function(result) {
+                if (!result) return;
                 if (result.success) {
                     input.value = '';
                     // Reload page to show new comment (simple approach)
@@ -820,6 +887,7 @@
             showConfirm('Hapus komentar ini?').then(function(confirmed) {
                 if (!confirmed) return;
                 ajaxPost('{{ route("comments.destroy", ":id") }}'.replace(':id', commentId), { _method: 'DELETE' }, function(result) {
+                    if (!result) return;
                     if (result.success) {
                         showToast('Komentar berhasil dihapus');
                         window.location.reload();
@@ -853,5 +921,15 @@
     </footer>
 
     <x-toast />
+
+    {{-- Back to Top Button --}}
+    <div x-data="{ show: false }" x-init="window.addEventListener('scroll', () => { show = window.scrollY > 300 })"
+         x-show="show" x-transition
+         class="fixed bottom-6 right-6 z-50">
+        <button @click="window.scrollTo({ top: 0, behavior: 'smooth' })"
+                class="w-10 h-10 bg-blue-600 hover:bg-blue-700 text-white rounded-full shadow-lg flex items-center justify-center transition">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7"/></svg>
+        </button>
+    </div>
 </body>
 </html>

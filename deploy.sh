@@ -353,6 +353,8 @@ mkdir -p storage/framework/sessions
 mkdir -p bootstrap/cache
 chown -R "${WEB_USER}:${WEB_USER}" storage bootstrap/cache || true
 chmod -R 775 storage bootstrap/cache || true
+# Ensure public directory is writable for sitemap.xml and build artifacts
+chown -R "${WEB_USER}:${WEB_USER}" public/ || true
 success "Ownership set."
 echo ""
 
@@ -365,19 +367,31 @@ php artisan event:cache --no-interaction 2>/dev/null || true
 success "Cache optimized."
 echo ""
 
-# Step 12: Fix ownership AFTER cache (files created by root need web user ownership)
-info "Step 12: Fixing ownership after cache..."
+# Step 12: Generate sitemap.xml (after cache is warm, before ownership fix)
+info "Step 12: Generating sitemap..."
+php artisan sitemap:generate --no-interaction 2>/dev/null || warn "Sitemap generation failed (non-critical)."
+# Ensure sitemap.xml is writable by web server on future observer-triggered regenerations
+if [ -f "public/sitemap.xml" ]; then
+    chown "${WEB_USER}:${WEB_USER}" public/sitemap.xml 2>/dev/null || true
+    chmod 664 public/sitemap.xml 2>/dev/null || true
+fi
+success "Sitemap generated."
+echo ""
+
+# Step 13: Fix ownership AFTER cache (files created by root need web user ownership)
+info "Step 13: Fixing ownership after cache..."
 chown -R "${WEB_USER}:${WEB_USER}" storage/framework/views || true
 chown -R "${WEB_USER}:${WEB_USER}" storage/framework/cache || true
 chown -R "${WEB_USER}:${WEB_USER}" storage/framework/sessions || true
 chown -R "${WEB_USER}:${WEB_USER}" storage/logs || true
 chown -R "${WEB_USER}:${WEB_USER}" bootstrap/cache || true
+chown -R "${WEB_USER}:${WEB_USER}" public/ || true
 chmod -R 775 storage bootstrap/cache || true
 success "Ownership fixed."
 echo ""
 
-# Step 13: Restart queue worker
-info "Step 13: Restarting queue worker..."
+# Step 14: Restart queue worker
+info "Step 14: Restarting queue worker..."
 QUEUE_OUTPUT=$(php artisan queue:restart 2>&1)
 if echo "$QUEUE_OUTPUT" | grep -qi "Redis\|Class.*not found"; then
     warn "Queue restart: Redis extension tidak tersedia. Queue berjalan dengan database driver."

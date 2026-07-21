@@ -14,9 +14,14 @@
     @include('components.app-header')
 
     <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <nav class="flex items-center gap-2 text-sm text-gray-500 mb-6">
+            <a href="{{ route('home') }}" class="hover:text-blue-600 transition">Beranda</a>
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+            <a href="{{ route('simulations.explore') }}" class="hover:text-blue-600 transition">Explore</a>
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+            <span class="text-gray-900 font-medium">{{ $category }}</span>
+        </nav>
         <div class="flex items-center gap-3 mb-6">
-            <a href="{{ route('home') }}" class="text-blue-600 hover:text-blue-700 text-sm">← Kembali</a>
-            <span class="text-gray-400">/</span>
             <h1 class="text-2xl font-bold text-gray-900">{{ $category }}</h1>
             <span class="text-sm text-gray-500">({{ $simulations->total() }} simulasi)</span>
         </div>

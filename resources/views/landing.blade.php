@@ -95,33 +95,58 @@
                 @endif
             </section>
         @else
-            {{-- Trending --}}
-            <section class="mb-10">
-                <div class="flex items-center justify-between mb-4">
-                    <h2 class="text-xl font-bold text-gray-900">
-                        <svg class="inline w-5 h-5 text-orange-500 mr-1" fill="currentColor" viewBox="0 0 24 24"><path d="M13 7.83l3.59 3.59L18 10l-6-6-6 6 1.41 1.41L11 7.83V20h2V7.83z"/></svg>
-                        Trending Simulations
-                    </h2>
-                    <div class="flex items-center gap-1 bg-gray-100 rounded-lg p-1">
-                        @php $currentPeriod = request('period', 'week'); @endphp
-                        <a href="?period=day" class="px-3 py-1 text-xs font-medium rounded-md transition {{ $currentPeriod === 'day' ? 'bg-white text-gray-900 shadow-sm' : 'text-gray-500 hover:text-gray-700' }}">Hari Ini</a>
-                        <a href="?period=week" class="px-3 py-1 text-xs font-medium rounded-md transition {{ $currentPeriod === 'week' ? 'bg-white text-gray-900 shadow-sm' : 'text-gray-500 hover:text-gray-700' }}">Minggu Ini</a>
-                        <a href="?period=month" class="px-3 py-1 text-xs font-medium rounded-md transition {{ $currentPeriod === 'month' ? 'bg-white text-gray-900 shadow-sm' : 'text-gray-500 hover:text-gray-700' }}">Bulan Ini</a>
-                        <a href="?period=year" class="px-3 py-1 text-xs font-medium rounded-md transition {{ $currentPeriod === 'year' ? 'bg-white text-gray-900 shadow-sm' : 'text-gray-500 hover:text-gray-700' }}">Tahun Ini</a>
+            <div x-data="{ loading: true }" x-init="setTimeout(() => loading = false, 500)">
+                {{-- Skeleton Loading --}}
+                <template x-if="loading">
+                    <div>
+                        <div class="flex items-center justify-between mb-4">
+                            <div class="h-6 bg-gray-200 rounded w-48 animate-pulse"></div>
+                            <div class="h-8 bg-gray-200 rounded w-64 animate-pulse"></div>
+                        </div>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
+                            @for($i = 0; $i < 8; $i++)
+                                <div class="bg-white rounded-xl overflow-hidden shadow-sm animate-pulse">
+                                    <div class="aspect-video bg-gray-200"></div>
+                                    <div class="p-3 space-y-2">
+                                        <div class="h-4 bg-gray-200 rounded w-3/4"></div>
+                                        <div class="h-3 bg-gray-200 rounded w-1/2"></div>
+                                    </div>
+                                </div>
+                            @endfor
+                        </div>
                     </div>
-                </div>
-                @if($trending->count() > 0)
-                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
-                    @foreach($trending as $sim)
-                        @include('components.simulation-card', ['simulation' => $sim])
-                    @endforeach
-                </div>
-                @else
-                <div class="text-center py-8">
-                    <p class="text-gray-400 text-sm">Tidak ada simulasi trending untuk periode ini.</p>
-                </div>
-                @endif
-            </section>
+                </template>
+
+                {{-- Actual Content --}}
+                <template x-if="!loading">
+                    <div>
+                        {{-- Trending --}}
+                        <section class="mb-10">
+                            <div class="flex items-center justify-between mb-4">
+                                <h2 class="text-xl font-bold text-gray-900">
+                                    <svg class="inline w-5 h-5 text-orange-500 mr-1" fill="currentColor" viewBox="0 0 24 24"><path d="M13 7.83l3.59 3.59L18 10l-6-6-6 6 1.41 1.41L11 7.83V20h2V7.83z"/></svg>
+                                    Trending Simulations
+                                </h2>
+                                <div class="flex items-center gap-1 bg-gray-100 rounded-lg p-1">
+                                    @php $currentPeriod = request('period', 'week'); @endphp
+                                    <a href="?period=day" class="px-3 py-1 text-xs font-medium rounded-md transition {{ $currentPeriod === 'day' ? 'bg-white text-gray-900 shadow-sm' : 'text-gray-500 hover:text-gray-700' }}">Hari Ini</a>
+                                    <a href="?period=week" class="px-3 py-1 text-xs font-medium rounded-md transition {{ $currentPeriod === 'week' ? 'bg-white text-gray-900 shadow-sm' : 'text-gray-500 hover:text-gray-700' }}">Minggu Ini</a>
+                                    <a href="?period=month" class="px-3 py-1 text-xs font-medium rounded-md transition {{ $currentPeriod === 'month' ? 'bg-white text-gray-900 shadow-sm' : 'text-gray-500 hover:text-gray-700' }}">Bulan Ini</a>
+                                    <a href="?period=year" class="px-3 py-1 text-xs font-medium rounded-md transition {{ $currentPeriod === 'year' ? 'bg-white text-gray-900 shadow-sm' : 'text-gray-500 hover:text-gray-700' }}">Tahun Ini</a>
+                                </div>
+                            </div>
+                            @if($trending->count() > 0)
+                            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
+                                @foreach($trending as $sim)
+                                    @include('components.simulation-card', ['simulation' => $sim])
+                                @endforeach
+                            </div>
+                            @else
+                            <div class="text-center py-8">
+                                <p class="text-gray-400 text-sm">Tidak ada simulasi trending untuk periode ini.</p>
+                            </div>
+                            @endif
+                        </section>
 
             {{-- Latest --}}
             @if($latest->count() > 0)
@@ -134,6 +159,23 @@
                 </div>
                 <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
                     @foreach($latest as $sim)
+                        @include('components.simulation-card', ['simulation' => $sim])
+                    @endforeach
+                </div>
+            </section>
+            @endif
+
+            {{-- Discovered for You --}}
+            @if($discovered->count() > 0)
+            <section class="mb-10">
+                <div class="flex items-center justify-between mb-4">
+                    <h2 class="text-xl font-bold text-gray-900">
+                        <svg class="inline w-5 h-5 text-purple-500 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/></svg>
+                        Discovered for You
+                    </h2>
+                </div>
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
+                    @foreach($discovered as $sim)
                         @include('components.simulation-card', ['simulation' => $sim])
                     @endforeach
                 </div>
@@ -167,6 +209,9 @@
                 <p class="text-gray-500">Simulasi interaktif akan segera tersedia. Sabar ya!</p>
             </div>
             @endif
+                    </div>
+                </template>
+            </div>
         @endif
     </main>
 
@@ -184,5 +229,15 @@
             </div>
         </div>
     </footer>
+
+    {{-- Back to Top Button --}}
+    <div x-data="{ show: false }" x-init="window.addEventListener('scroll', () => { show = window.scrollY > 300 })"
+         x-show="show" x-transition
+         class="fixed bottom-6 right-6 z-50">
+        <button @click="window.scrollTo({ top: 0, behavior: 'smooth' })"
+                class="w-10 h-10 bg-blue-600 hover:bg-blue-700 text-white rounded-full shadow-lg flex items-center justify-center transition">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7"/></svg>
+        </button>
+    </div>
 </body>
 </html>

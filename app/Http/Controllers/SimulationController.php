@@ -4,11 +4,13 @@ namespace App\Http\Controllers;
 
 use App\Models\PlayHistory;
 use App\Models\Simulation;
+use App\Models\TrafficSource;
 use App\Models\User;
 use App\Services\GamificationService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\View\View;
 use ZipArchive;
@@ -141,6 +143,41 @@ class SimulationController extends Controller
             ->take(12)
             ->get();
 
+        // Discovered for You — based on play history
+        $discovered = collect();
+        $user = $request->user();
+        if ($user) {
+            $topCategories = PlayHistory::where('user_id', $user->id)
+                ->with('simulation')
+                ->get()
+                ->pluck('simulation.category')
+                ->filter()
+                ->countBy()
+                ->sortDesc()
+                ->keys()
+                ->take(3);
+
+            if ($topCategories->isNotEmpty()) {
+                $playedSimulationIds = $user->playHistory()->pluck('simulation_id');
+                $discovered = Simulation::published()
+                    ->whereIn('category', $topCategories)
+                    ->whereNotIn('id', $playedSimulationIds)
+                    ->with('user')
+                    ->orderByDesc('average_rating')
+                    ->take(12)
+                    ->get();
+            }
+        }
+
+        // Fallback: if no history or no results, show highest rated
+        if ($discovered->isEmpty()) {
+            $discovered = Simulation::published()
+                ->with('user')
+                ->orderByDesc('average_rating')
+                ->take(12)
+                ->get();
+        }
+
         // Search
         $search = $request->input('search');
         $searchResults = null;
@@ -151,13 +188,13 @@ class SimulationController extends Controller
                 ->paginate(20);
         }
 
-        return view('landing', compact('categories', 'trending', 'latest', 'popular', 'search', 'searchResults'));
+        return view('landing', compact('categories', 'trending', 'latest', 'popular', 'discovered', 'search', 'searchResults'));
     }
 
     /**
      * Display a single simulation.
      */
-    public function show(string $slug): View
+    public function show(Request $request, string $slug): View
     {
         $simulation = Simulation::published()
             ->where('slug', $slug)
@@ -169,6 +206,10 @@ class SimulationController extends Controller
         if (! session()->has($viewedKey)) {
             $simulation->increment('view_count');
             session()->put($viewedKey, true);
+
+            // Track traffic source
+            $source = $this->detectTrafficSource($request);
+            $this->trackTrafficSource($simulation->id, $source, 'view');
         }
 
         // Load comments (top-level only, with replies)
@@ -240,13 +281,17 @@ class SimulationController extends Controller
     /**
      * Increment play count (called via AJAX when user plays simulation).
      */
-    public function play(string $slug)
+    public function play(Request $request, string $slug)
     {
         $simulation = Simulation::published()
             ->where('slug', $slug)
             ->firstOrFail();
 
         $simulation->increment('play_count');
+
+        // Track traffic source for play
+        $source = $this->detectTrafficSource($request);
+        $this->trackTrafficSource($simulation->id, $source, 'play');
 
         // Record play history for authenticated users
         $user = Auth::user();
@@ -300,6 +345,12 @@ class SimulationController extends Controller
         // Verify extraction succeeded
         if (! is_dir($extractPath)) {
             abort(404, 'Simulasi belum di-extract atau file tidak ditemukan.');
+        }
+
+        // Default to index.html when no specific path is requested
+        // (prevents serving a directory path which causes FileNotFoundException)
+        if ($path === '') {
+            $path = 'index.html';
         }
 
         $filePath = $extractPath.'/'.$path;
@@ -454,5 +505,54 @@ class SimulationController extends Controller
             ->paginate(20);
 
         return view('simulations.category', compact('simulations', 'category'));
+    }
+
+    /**
+     * Detect traffic source from request headers.
+     */
+    private function detectTrafficSource(Request $request): string
+    {
+        $referer = $request->header('referer', '');
+        $path = $request->path();
+
+        // Check if accessed via embed
+        if (str_contains($path, 'embed')) {
+            return 'embed';
+        }
+
+        // Check referer for search engines
+        if (preg_match('/google\.|bing\.|yahoo\.|duckduckgo\./i', $referer)) {
+            return 'search';
+        }
+
+        // Check referer for social media
+        if (preg_match('/facebook\.|twitter\.|x\.com|instagram\.|linkedin\.|reddit\.|t\.me|wa\.me|web\.whatsapp/i', $referer)) {
+            return 'social';
+        }
+
+        // Check if there's a referer (referral from another site)
+        if (! empty($referer) && ! str_contains($referer, $request->getHost())) {
+            return 'referral';
+        }
+
+        return 'direct';
+    }
+
+    /**
+     * Track a traffic source event.
+     */
+    private function trackTrafficSource(int $simulationId, string $source, string $metricType): void
+    {
+        TrafficSource::updateOrCreate(
+            [
+                'simulation_id' => $simulationId,
+                'source' => $source,
+                'metric_type' => $metricType,
+                'date' => now()->toDateString(),
+            ],
+            [
+                'count' => DB::raw('count + 1'),
+            ]
+        );
     }
 }

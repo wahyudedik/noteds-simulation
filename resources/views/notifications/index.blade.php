@@ -93,12 +93,18 @@
                 method: 'POST',
                 headers: {
                     'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
-                    'X-Requested-With': 'XMLHttpRequest'
+                    'X-Requested-With': 'XMLHttpRequest',
+                    'Accept': 'application/json'
                 }
             })
-            .then(function(response) { return response.json(); })
+            .then(function(response) {
+                if (!response.ok || !(response.headers.get('content-type') || '').includes('application/json')) {
+                    return null;
+                }
+                return response.json();
+            })
             .then(function(data) {
-                if (data.message) {
+                if (data && data.message) {
                     window.showToast(data.message, 'success');
                 }
                 if (url && url !== '#') {
@@ -119,14 +125,23 @@
                 method: 'POST',
                 headers: {
                     'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
-                    'X-Requested-With': 'XMLHttpRequest'
+                    'X-Requested-With': 'XMLHttpRequest',
+                    'Accept': 'application/json'
                 }
             })
-            .then(function(response) { return response.json(); })
+            .then(function(response) {
+                if (!response.ok || !(response.headers.get('content-type') || '').includes('application/json')) {
+                    return null;
+                }
+                return response.json();
+            })
             .then(function(data) {
-                if (data.message) {
+                if (data && data.message) {
                     window.showToast(data.message, 'success');
                 }
+                window.location.reload();
+            })
+            .catch(function() {
                 window.location.reload();
             });
         }

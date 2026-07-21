@@ -1,5 +1,40 @@
 <x-studio-layout :pageTitle="'Upload Simulasi Baru'">
     <div class="max-w-3xl mx-auto">
+        {{-- Quick Start Guide --}}
+        <div x-data="{ open: false }" class="bg-blue-50 border border-blue-200 rounded-xl mb-6">
+            <button @click="open = !open" class="w-full flex items-center justify-between px-6 py-4 text-left">
+                <div class="flex items-center gap-3">
+                    <svg class="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                    <span class="font-semibold text-blue-900">Panduan Upload Simulasi</span>
+                </div>
+                <svg class="w-5 h-5 text-blue-600 transition-transform" :class="{ 'rotate-180': open }" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+            </button>
+            <div x-show="open" x-collapse class="px-6 pb-4">
+                <div class="text-sm text-blue-800 space-y-3">
+                    <p><strong>Struktur ZIP Package:</strong></p>
+                    <pre class="bg-blue-100 rounded-lg p-3 text-xs font-mono">simulation.zip
+├── manifest.json      # Metadata simulasi
+├── index.html         # File entry point
+├── assets/
+│   ├── css/
+│   ├── js/
+│   └── images/
+└── README.md          # Dokumentasi (opsional)</pre>
+                    <p><strong>Format manifest.json:</strong></p>
+                    <pre class="bg-blue-100 rounded-lg p-3 text-xs font-mono">{
+    "name": "Hukum Newton",
+    "version": "1.0.0",
+    "category": "Fisika",
+    "description": "Simulasi interaktif...",
+    "entryPoint": "index.html"
+}</pre>
+                    <p class="text-blue-700">✓ Pastikan <code>index.html</code> ada di root ZIP<br>
+                    ✓ Ukuran maksimal: 50MB<br>
+                    ✓ Format yang didukung: .html, .js, .css, .json</p>
+                </div>
+            </div>
+        </div>
+
         <form method="POST" action="{{ route('studio.simulations.store') }}" enctype="multipart/form-data" x-data="studioUpload()">
             @csrf
 
@@ -36,8 +71,8 @@
                         <select name="category" id="category" required
                                 class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm @error('category') border-red-500 @enderror">
                             <option value="">Pilih Kategori</option>
-                            @foreach(['Fisika', 'Kimia', 'Biologi', 'Matematika', 'Ekonomi', 'Sejarah', 'Geografi', 'Informatika', 'Teknik', 'Seni', 'Bahasa', 'Lainnya'] as $cat)
-                                <option value="{{ $cat }}" {{ old('category') === $cat ? 'selected' : '' }}>{{ $cat }}</option>
+                            @foreach($categories as $cat)
+                                <option value="{{ $cat->slug }}" {{ old('category') === $cat->slug ? 'selected' : '' }}>{{ $cat->name }}</option>
                             @endforeach
                         </select>
                         @error('category')

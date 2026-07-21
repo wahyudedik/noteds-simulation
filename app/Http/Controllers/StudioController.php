@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Bookmark;
+use App\Models\Category;
 use App\Models\Comment;
 use App\Models\CreatorReputation;
 use App\Models\Follow;
@@ -14,6 +15,7 @@ use App\Models\Simulation;
 use App\Models\SimulationAnalytic;
 use App\Models\SimulationVersion;
 use App\Models\Tag;
+use App\Models\TrafficSource;
 use App\Models\User;
 use App\Services\SecurityService;
 use Illuminate\Http\RedirectResponse;
@@ -124,7 +126,9 @@ class StudioController extends Controller
      */
     public function create(): View
     {
-        return view('studio.create');
+        $categories = Category::where('is_active', true)->orderBy('sort_order')->orderBy('name')->get();
+
+        return view('studio.create', compact('categories'));
     }
 
     /**
@@ -141,6 +145,7 @@ class StudioController extends Controller
             'thumbnail' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:2048',
             'tags' => 'nullable|string|max:500',
             'is_published' => 'nullable|boolean',
+            'changelog' => 'nullable|string|max:1000',
         ]);
 
         /** @var User $user */
@@ -241,8 +246,9 @@ class StudioController extends Controller
             ->where('slug', $slug)
             ->with('tagModels')
             ->firstOrFail();
+        $categories = Category::where('is_active', true)->orderBy('sort_order')->orderBy('name')->get();
 
-        return view('studio.edit', compact('simulation'));
+        return view('studio.edit', compact('simulation', 'categories'));
     }
 
     /**
@@ -265,6 +271,7 @@ class StudioController extends Controller
             'thumbnail' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:2048',
             'tags' => 'nullable|string|max:500',
             'is_published' => 'nullable|boolean',
+            'changelog' => 'nullable|string|max:1000',
         ]);
 
         $data = [
@@ -302,7 +309,7 @@ class StudioController extends Controller
                 'simulation_id' => $simulation->id,
                 'version' => $simulation->version ?? '1.0.0',
                 'zip_path' => $simulation->zip_path,
-                'changelog' => 'Versi sebelum update',
+                'changelog' => $validated['changelog'] ?? 'Versi sebelum update',
             ]);
 
             $data['zip_path'] = 'simulations/'.$user->id.'/'.$newSlug.'.zip';
@@ -419,13 +426,47 @@ class StudioController extends Controller
             ->get();
 
         // Rating distribution
-        $ratingDistribution = Rating::where('simulation_id', $simulation->id)
-            ->select('rating', DB::raw('count(*) as count'))
+        $ratingDistribution = Rating::whereIn('simulation_id', [$simulation->id])
+            ->selectRaw('rating, count(*) as count')
             ->groupBy('rating')
-            ->orderBy('rating')
+            ->pluck('count', 'rating')
+            ->toArray();
+        // Pastikan semua level ada (1-5)
+        for ($i = 1; $i <= 5; $i++) {
+            if (! isset($ratingDistribution[$i])) {
+                $ratingDistribution[$i] = 0;
+            }
+        }
+        $ratingTotal = array_sum($ratingDistribution);
+
+        // Completion Rate & Session Duration
+        $totalPlays = $dailyAnalytics->sum('plays');
+        $totalCompletions = $dailyAnalytics->sum('completions');
+        $completionRate = $totalPlays > 0 ? round(($totalCompletions / $totalPlays) * 100, 1) : 0;
+        $avgSessionDuration = $totalPlays > 0
+            ? round($dailyAnalytics->sum('avg_duration_seconds') / max($dailyAnalytics->where('avg_duration_seconds', '>', 0)->count(), 1))
+            : 0;
+
+        // Traffic sources (last 30 days)
+        $trafficSources = TrafficSource::where('simulation_id', $simulation->id)
+            ->where('date', '>=', now()->subDays(30))
+            ->select('source', DB::raw('sum(count) as total'))
+            ->groupBy('source')
+            ->orderByDesc('total')
             ->get();
 
-        return view('studio.analytics', compact('simulation', 'dailyAnalytics', 'reactions', 'ratingDistribution'));
+        return view('studio.analytics', compact(
+            'simulation',
+            'dailyAnalytics',
+            'reactions',
+            'ratingDistribution',
+            'ratingTotal',
+            'completionRate',
+            'avgSessionDuration',
+            'trafficSources',
+            'totalPlays',
+            'totalCompletions',
+        ));
     }
 
     // ========== Comments Moderation ==========

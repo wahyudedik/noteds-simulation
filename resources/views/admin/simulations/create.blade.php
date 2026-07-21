@@ -31,13 +31,9 @@
                                 <select name="category" id="category" required
                                     class="w-full rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm">
                                     <option value="">Pilih Kategori</option>
-                                    <option value="Fisika" {{ old('category') === 'Fisika' ? 'selected' : '' }}>Fisika</option>
-                                    <option value="Kimia" {{ old('category') === 'Kimia' ? 'selected' : '' }}>Kimia</option>
-                                    <option value="Biologi" {{ old('category') === 'Biologi' ? 'selected' : '' }}>Biologi</option>
-                                    <option value="Matematika" {{ old('category') === 'Matematika' ? 'selected' : '' }}>Matematika</option>
-                                    <option value="Geografi" {{ old('category') === 'Geografi' ? 'selected' : '' }}>Geografi</option>
-                                    <option value="Sejarah" {{ old('category') === 'Sejarah' ? 'selected' : '' }}>Sejarah</option>
-                                    <option value="Umum" {{ old('category') === 'Umum' ? 'selected' : '' }}>Umum</option>
+                                    @foreach($categories as $cat)
+                                        <option value="{{ $cat->slug }}" {{ old('category') === $cat->slug ? 'selected' : '' }}>{{ $cat->name }}</option>
+                                    @endforeach
                                 </select>
                                 @error('category')
                                     <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
