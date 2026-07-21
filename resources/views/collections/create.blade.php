@@ -89,5 +89,7 @@
             </div>
         </div>
     </footer>
+
+    <x-toast />
 </body>
 </html>

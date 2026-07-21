@@ -127,7 +127,7 @@ class CommentController extends Controller
             return response()->json(['success' => true, 'message' => 'Komentar berhasil dihapus.']);
         }
 
-        return redirect()->route('simulations.show', $slug);
+        return redirect()->route('simulations.show', $slug)->with('success', 'Komentar berhasil dihapus.');
     }
 
     /**

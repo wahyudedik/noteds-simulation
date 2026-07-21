@@ -96,7 +96,11 @@
                     'X-Requested-With': 'XMLHttpRequest'
                 }
             })
-            .then(function() {
+            .then(function(response) { return response.json(); })
+            .then(function(data) {
+                if (data.message) {
+                    window.showToast(data.message, 'success');
+                }
                 if (url && url !== '#') {
                     window.location.href = url;
                 } else {
@@ -118,7 +122,11 @@
                     'X-Requested-With': 'XMLHttpRequest'
                 }
             })
-            .then(function() {
+            .then(function(response) { return response.json(); })
+            .then(function(data) {
+                if (data.message) {
+                    window.showToast(data.message, 'success');
+                }
                 window.location.reload();
             });
         }
@@ -138,5 +146,7 @@
             </div>
         </div>
     </footer>
+
+    <x-toast />
 </body>
 </html>

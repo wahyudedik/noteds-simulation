@@ -16,12 +16,6 @@
 
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            @if(session('success'))
-                <div class="mb-4 px-4 py-3 bg-green-100 text-green-700 rounded-lg text-sm">
-                    {{ session('success') }}
-                </div>
-            @endif
-
             <div class="bg-white border border-gray-100 overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6">
                     @if($simulations->count() > 0)
@@ -56,10 +50,10 @@
                                         <td class="py-3 px-2 text-right space-x-2">
                                             <a href="{{ route('admin.simulations.show', $sim) }}" class="text-blue-600 hover:text-blue-700 text-xs font-medium">Lihat</a>
                                             <a href="{{ route('admin.simulations.edit', $sim) }}" class="text-green-600 hover:text-green-700 text-xs font-medium">Edit</a>
-                                            <form action="{{ route('admin.simulations.destroy', $sim) }}" method="POST" class="inline" onsubmit="return confirm('Yakin hapus simulasi ini?')">
+                                            <form action="{{ route('admin.simulations.destroy', $sim) }}" method="POST" class="inline">
                                                 @csrf
                                                 @method('DELETE')
-                                                <button type="submit" class="text-red-600 hover:text-red-700 text-xs font-medium">Hapus</button>
+                                                <button type="button" onclick="confirmSubmit(this.closest('form'), 'Yakin hapus simulasi ini?')" class="text-red-600 hover:text-red-700 text-xs font-medium">Hapus</button>
                                             </form>
                                         </td>
                                     </tr>

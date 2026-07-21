@@ -76,10 +76,10 @@
                                 <a href="{{ route('collections.edit', $collection) }}" class="flex-1 text-center px-3 py-1.5 bg-gray-100 hover:bg-gray-200 text-gray-700 text-xs font-medium rounded-lg transition">
                                     Edit
                                 </a>
-                                <form action="{{ route('collections.destroy', $collection) }}" method="POST" onsubmit="return confirm('Hapus collection ini?')">
+                                <form action="{{ route('collections.destroy', $collection) }}" method="POST">
                                     @csrf
                                     @method('DELETE')
-                                    <button type="submit" class="px-3 py-1.5 bg-red-50 hover:bg-red-100 text-red-600 text-xs font-medium rounded-lg transition">
+                                    <button type="button" onclick="confirmSubmit(this.closest('form'), 'Hapus collection ini?')" class="px-3 py-1.5 bg-red-50 hover:bg-red-100 text-red-600 text-xs font-medium rounded-lg transition">
                                         Hapus
                                     </button>
                                 </form>
@@ -117,5 +117,7 @@
             </div>
         </div>
     </footer>
+
+    <x-toast />
 </body>
 </html>

@@ -83,11 +83,10 @@
                                 </form>
 
                                 {{-- Delete --}}
-                                <form method="POST" action="{{ route('studio.comments.destroy', $comment->id) }}"
-                                      onsubmit="return confirm('Hapus komentar ini?')">
+                                <form method="POST" action="{{ route('studio.comments.destroy', $comment->id) }}">
                                     @csrf
                                     @method('DELETE')
-                                    <button type="submit" class="text-xs text-gray-400 hover:text-red-500 font-medium">Hapus</button>
+                                    <button type="button" onclick="confirmSubmit(this.closest('form'), 'Hapus komentar ini?')" class="text-xs text-gray-400 hover:text-red-500 font-medium">Hapus</button>
                                 </form>
                             </div>
                         </div>

@@ -51,15 +51,15 @@ class NotificationController extends Controller
         $notification->markAsRead();
 
         if (request()->ajax() || request()->wantsJson()) {
-            return response()->json(['success' => true]);
+            return response()->json(['success' => true, 'message' => 'Notifikasi ditandai sudah dibaca.']);
         }
 
         // Redirect to the deep link if available
         if ($notification->data && isset($notification->data['simulation_slug'])) {
-            return redirect()->route('simulations.show', $notification->data['simulation_slug']);
+            return redirect()->route('simulations.show', $notification->data['simulation_slug'])->with('success', 'Notifikasi ditandai sudah dibaca.');
         }
 
-        return redirect()->route('notifications.index');
+        return redirect()->route('notifications.index')->with('success', 'Notifikasi ditandai sudah dibaca.');
     }
 
     /**
@@ -72,9 +72,9 @@ class NotificationController extends Controller
             ->update(['read_at' => now()]);
 
         if (request()->ajax() || request()->wantsJson()) {
-            return response()->json(['success' => true]);
+            return response()->json(['success' => true, 'message' => 'Semua notifikasi ditandai sudah dibaca.']);
         }
 
-        return redirect()->back();
+        return redirect()->back()->with('success', 'Semua notifikasi ditandai sudah dibaca.');
     }
 }

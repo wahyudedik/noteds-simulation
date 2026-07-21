@@ -1,6 +1,6 @@
 <x-studio-layout :pageTitle="'Pengaturan Studio'">
     <div class="max-w-3xl mx-auto">
-        <form method="POST" action="{{ route('studio.settings.update') }}" enctype="multipart/form-data" x-data="{ saving: false }">
+        <form method="POST" action="{{ route('studio.settings.update') }}" enctype="multipart/form-data" x-data="{ saving: false }" @submit="saving = true">
             @csrf
             @method('PUT')
 
@@ -85,7 +85,7 @@
                     Batal
                 </a>
                 <button type="submit" class="px-6 py-2.5 text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 rounded-lg transition"
-                        :disabled="saving" @click="saving = true">
+                        :disabled="saving">
                     <span x-show="!saving">Simpan Perubahan</span>
                     <span x-show="saving" class="flex items-center gap-2">
                         <svg class="w-4 h-4 animate-spin" fill="none" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4" class="opacity-25"></circle><path fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" class="opacity-75"></path></svg>

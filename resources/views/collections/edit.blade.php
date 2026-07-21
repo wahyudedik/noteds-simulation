@@ -224,7 +224,7 @@
                         if (result.success) {
                             window.location.reload();
                         } else {
-                            alert(result.message || 'Gagal menambahkan simulasi');
+                            window.showToast(result.message || 'Gagal menambahkan simulasi', 'error');
                         }
                     });
                 }
@@ -232,30 +232,34 @@
         }
 
         function removeFromCollection(collectionId, simulationId) {
-            if (!confirm('Hapus simulasi dari collection ini?')) return;
+            showConfirm('Hapus simulasi dari collection ini?').then(function(confirmed) {
+                if (!confirmed) return;
 
-            fetch('{{ route("collections.remove-simulation") }}', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
-                    'X-Requested-With': 'XMLHttpRequest',
-                    'Accept': 'application/json'
-                },
-                body: JSON.stringify({
-                    collection_id: collectionId,
-                    simulation_id: simulationId
+                fetch('{{ route("collections.remove-simulation") }}', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+                        'X-Requested-With': 'XMLHttpRequest',
+                        'Accept': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        collection_id: collectionId,
+                        simulation_id: simulationId
+                    })
                 })
-            })
-            .then(function(r) { return r.json(); })
-            .then(function(result) {
-                if (result.success) {
-                    window.location.reload();
-                } else {
-                    alert(result.message || 'Gagal menghapus simulasi');
-                }
+                .then(function(r) { return r.json(); })
+                .then(function(result) {
+                    if (result.success) {
+                        window.location.reload();
+                    } else {
+                        window.showToast(result.message || 'Gagal menghapus simulasi', 'error');
+                    }
+                });
             });
         }
     </script>
+
+    <x-toast />
 </body>
 </html>

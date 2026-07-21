@@ -52,11 +52,22 @@ class ReactionController extends Controller
             ->count();
 
         if ($request->ajax() || $request->wantsJson()) {
+            $typeLabels = [
+                'mudah_dipahami' => 'Mudah Dipahami',
+                'membuka_wawasan' => 'Membuka Wawasan',
+                'sangat_membantu' => 'Sangat Membantu',
+                'interaktif' => 'Interaktif',
+                'favorit' => 'Favorit',
+            ];
+            $label = $typeLabels[$validated['type']] ?? $validated['type'];
+            $message = $active ? 'Reaksi '.$label.' ditambahkan.' : 'Reaksi '.$label.' dihapus.';
+
             return response()->json([
                 'success' => true,
                 'active' => $active,
                 'type' => $validated['type'],
                 'count' => $count,
+                'message' => $message,
             ]);
         }
 

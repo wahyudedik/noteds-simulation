@@ -696,32 +696,6 @@
             });
         }
 
-        function showToast(message) {
-            var toast = document.createElement('div');
-            toast.className = 'fixed bottom-6 left-1/2 -translate-x-1/2 bg-gray-900 text-white text-sm px-4 py-2 rounded-lg shadow-lg z-[99999] transition-opacity duration-300';
-            toast.textContent = message;
-            document.body.appendChild(toast);
-            setTimeout(function() { toast.style.opacity = '0'; }, 1500);
-            setTimeout(function() { toast.remove(); }, 1800);
-        }
-
-        // ========== AJAX Helpers ==========
-        function ajaxPost(url, data, callback) {
-            fetch(url, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
-                    'X-Requested-With': 'XMLHttpRequest',
-                    'Accept': 'application/json'
-                },
-                body: JSON.stringify(data)
-            })
-            .then(function(response) { return response.json(); })
-            .then(function(result) { if (callback) callback(result); })
-            .catch(function(err) { console.error('AJAX Error:', err); });
-        }
-
         // ========== Bookmark ==========
         function toggleBookmark() {
             ajaxPost('{{ route("bookmarks.toggle") }}', { simulation_id: {{ $simulation->id }} }, function(result) {
@@ -843,14 +817,16 @@
         }
 
         function deleteComment(commentId) {
-            if (!confirm('Hapus komentar ini?')) return;
-            ajaxPost('{{ route("comments.destroy", ":id") }}'.replace(':id', commentId), { _method: 'DELETE' }, function(result) {
-                if (result.success) {
-                    showToast('Komentar berhasil dihapus');
-                    window.location.reload();
-                } else {
-                    showToast(result.message || 'Gagal menghapus komentar');
-                }
+            showConfirm('Hapus komentar ini?').then(function(confirmed) {
+                if (!confirmed) return;
+                ajaxPost('{{ route("comments.destroy", ":id") }}'.replace(':id', commentId), { _method: 'DELETE' }, function(result) {
+                    if (result.success) {
+                        showToast('Komentar berhasil dihapus');
+                        window.location.reload();
+                    } else {
+                        showToast(result.message || 'Gagal menghapus komentar');
+                    }
+                });
             });
         }
 
@@ -875,5 +851,7 @@
             </div>
         </div>
     </footer>
+
+    <x-toast />
 </body>
 </html>
