@@ -304,6 +304,19 @@ class SimulationController extends Controller
 
         $filePath = $extractPath.'/'.$path;
 
+        // If file not found at expected path, search one level deep in subdirectories
+        // This handles ZIPs that contain a subdirectory (e.g. "simulation/index.html")
+        if ($path !== '' && ! file_exists($filePath) && is_dir($extractPath)) {
+            $subdirs = glob($extractPath.'/*', GLOB_ONLYDIR);
+            foreach ($subdirs as $subdir) {
+                $candidate = $subdir.'/'.$path;
+                if (file_exists($candidate)) {
+                    $filePath = $candidate;
+                    break;
+                }
+            }
+        }
+
         // Security: prevent directory traversal
         // Use basename comparison as fallback when realpath() fails (e.g. symlinks)
         $realExtractPath = realpath($extractPath);
