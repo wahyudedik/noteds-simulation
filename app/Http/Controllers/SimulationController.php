@@ -9,6 +9,7 @@ use App\Services\GamificationService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\View\View;
 use ZipArchive;
 
@@ -288,11 +289,12 @@ class SimulationController extends Controller
             ->where('slug', $slug)
             ->firstOrFail();
 
-        $extractPath = storage_path('app/simulations/'.$slug.'/extracted');
+        // Derive extract path from zip_path (e.g. "simulations/1/slug.zip" → "simulations/1/slug")
+        $extractPath = $this->getExtractPath($simulation);
 
         // Auto-extract if not yet extracted
         if (! is_dir($extractPath)) {
-            $this->extractSimulation($slug, $extractPath);
+            $this->extractSimulation($simulation, $extractPath);
         }
 
         $filePath = $extractPath.'/'.$path;
@@ -333,16 +335,49 @@ class SimulationController extends Controller
     }
 
     /**
-     * Extract simulation ZIP to the target directory.
-     * Checks both new path (simulations disk) and legacy path (private/simulations).
+     * Get the extract directory path for a simulation.
+     * Derives from zip_path: "simulations/1/slug.zip" → storage/app/public/simulations/1/slug
      */
-    private function extractSimulation(string $slug, string $extractPath): void
+    private function getExtractPath(Simulation $simulation): string
     {
-        // Try new path: storage/app/simulations/{slug}/*.zip
-        $simDir = storage_path('app/simulations/'.$slug);
-        $zipFile = $this->findZipInDirectory($simDir);
+        // Primary: derive from zip_path on public disk
+        if ($simulation->zip_path) {
+            $publicExtract = Storage::disk('public')->path(rtrim(dirname($simulation->zip_path), '/\\').'/'.$simulation->slug);
+            if (is_dir($publicExtract)) {
+                return $publicExtract;
+            }
 
-        // Fallback: legacy path storage/app/private/simulations/{slug}/*.zip
+            return $publicExtract;
+        }
+
+        // Fallback: legacy path
+        return storage_path('app/simulations/'.$simulation->slug.'/extracted');
+    }
+
+    /**
+     * Extract simulation ZIP to the target directory.
+     * Checks model zip_path first, then legacy paths.
+     */
+    private function extractSimulation(Simulation $simulation, string $extractPath): void
+    {
+        $slug = $simulation->slug;
+        $zipFile = null;
+
+        // Primary: use zip_path from model (public disk)
+        if ($simulation->zip_path) {
+            $zipFile = Storage::disk('public')->path($simulation->zip_path);
+            if (! file_exists($zipFile)) {
+                $zipFile = null;
+            }
+        }
+
+        // Fallback 1: new path structure (simulations disk)
+        if ($zipFile === null) {
+            $simDir = storage_path('app/simulations/'.$slug);
+            $zipFile = $this->findZipInDirectory($simDir);
+        }
+
+        // Fallback 2: legacy path (private/simulations)
         if ($zipFile === null) {
             $legacyDir = storage_path('app/private/simulations/'.$slug);
             $zipFile = $this->findZipInDirectory($legacyDir);
