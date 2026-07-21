@@ -65,11 +65,11 @@
                 <div class="flex items-center justify-between">
                     <div class="flex items-center gap-4">
                         <div class="w-14 h-14 rounded-full bg-white/20 flex items-center justify-center text-2xl font-bold">
-                            {{ $levelProgress['level'] }}
+                            {{ $levelProgress['current_level'] }}
                         </div>
                         <div>
-                            <h3 class="text-lg font-semibold">{{ $levelProgress['level_title'] }}</h3>
-                            <p class="text-sm text-blue-100">{{ number_format($levelProgress['total_points']) }} poin total</p>
+                            <h3 class="text-lg font-semibold">{{ $levelProgress['title'] }}</h3>
+                            <p class="text-sm text-blue-100">{{ number_format($levelProgress['current_points']) }} poin total</p>
                         </div>
                     </div>
                     <a href="{{ route('leaderboard.index') }}" class="px-4 py-2 bg-white/20 hover:bg-white/30 text-white text-sm font-medium rounded-lg transition">
@@ -79,16 +79,16 @@
                 {{-- Progress Bar --}}
                 <div class="mt-4">
                     <div class="flex items-center justify-between text-xs text-blue-100 mb-1">
-                        <span>Level {{ $levelProgress['level'] }}</span>
-                        <span>{{ number_format($levelProgress['current_points']) }} / {{ number_format($levelProgress['points_to_next']) }} poin ke Level {{ $levelProgress['level'] + 1 }}</span>
+                        <span>Level {{ $levelProgress['current_level'] }}</span>
+                        <span>{{ number_format($levelProgress['current_points']) }} / {{ number_format($levelProgress['required_points']) }} poin ke Level {{ $levelProgress['next_level'] }}</span>
                     </div>
                     <div class="w-full bg-white/20 rounded-full h-2">
-                        <div class="bg-white rounded-full h-2 transition-all duration-500" style="width: {{ $levelProgress['progress_percent'] }}%"></div>
+                        <div class="bg-white rounded-full h-2 transition-all duration-500" style="width: {{ $levelProgress['progress'] }}%"></div>
                     </div>
                 </div>
-                @if($levelProgress['streak'] > 0)
+                @if(($levelProgress['streak'] ?? 0) > 0)
                     <div class="mt-2 text-xs text-blue-100">
-                        (fire) Streak: {{ $levelProgress['streak'] }} hari berturut-turut
+                        (fire) Streak: {{ $levelProgress['streak'] ?? 0 }} hari berturut-turut
                     </div>
                 @endif
             </div>

@@ -27,18 +27,18 @@
             <p class="text-gray-600 text-sm mt-1 whitespace-pre-line">{{ $comment->body }}</p>
 
             {{-- Comment Actions --}}
+            @auth
             <div class="flex items-center gap-3 mt-2">
-                @auth
                     <button onclick="toggleReplyForm({{ $comment->id }})" class="text-gray-400 hover:text-blue-600 text-xs font-medium transition">
                         Balas
                     </button>
-                @endauth
                 @if(auth()->id() === $comment->user_id || auth()->user()->isAdmin())
                     <button onclick="deleteComment({{ $comment->id }})" class="text-gray-400 hover:text-red-600 text-xs font-medium transition">
                         Hapus
                     </button>
                 @endif
             </div>
+            @endauth
 
             {{-- Reply Form --}}
             @auth

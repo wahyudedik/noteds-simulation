@@ -40,6 +40,7 @@ class DashboardController extends Controller
             ->pluck('simulation');
 
         $levelProgress = $this->gamification->getLevelProgress($user);
+        $levelProgress['streak'] = $user->streak_count ?? 0;
 
         return view('dashboard', [
             'stats' => $stats,
