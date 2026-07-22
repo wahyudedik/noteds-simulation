@@ -1,6 +1,6 @@
 <x-studio-layout :pageTitle="'Pengaturan Studio'">
     <div class="max-w-3xl mx-auto">
-        <form method="POST" action="{{ route('studio.settings.update') }}" enctype="multipart/form-data" x-data="{ saving: false }" @submit="saving = true">
+        <form method="POST" action="{{ route('studio.settings.update') }}" enctype="multipart/form-data" x-data="{ saving: false, avatarSrc: '{{ $user->avatar ? Storage::url($user->avatar) : '' }}' }" @submit="saving = true">
             @csrf
             @method('PUT')
 
@@ -13,15 +13,14 @@
                     <label class="block text-sm font-medium text-gray-700 mb-2">Foto Profil</label>
                     <div class="flex items-center gap-4">
                         <div class="shrink-0">
-                            @if($user->avatar)
-                                <img src="{{ Storage::url($user->avatar) }}" alt="{{ $user->name }}" class="w-20 h-20 rounded-full object-cover" x-ref="avatarPreview" />
-                            @else
-                                <img src="https://ui-avatars.com/api/?name={{ urlencode($user->name) }}&background=0D8ABC&color=fff&size=80" alt="{{ $user->name }}" class="w-20 h-20 rounded-full object-cover" x-ref="avatarPreview" />
-                            @endif
+                            <div class="w-20 h-20 rounded-full overflow-hidden bg-blue-100 text-blue-600 flex items-center justify-center text-2xl font-bold">
+                                <span x-show="!avatarSrc">{{ strtoupper(substr($user->name, 0, 1)) }}</span>
+                                <img x-show="avatarSrc" x-cloak :src="avatarSrc" alt="{{ $user->name }}" class="w-20 h-20 rounded-full object-cover" />
+                            </div>
                         </div>
                         <div>
                             <input type="file" name="avatar" accept="image/jpeg,image/png,image/webp" class="hidden" x-ref="avatarInput"
-                                   @change="const file = $refs.avatarInput.files[0]; if(file) { const reader = new FileReader(); reader.onload = e => $refs.avatarPreview.src = e.target.result; reader.readAsDataURL(file); }" />
+                                   @change="const file = $refs.avatarInput.files[0]; if(file) { const reader = new FileReader(); reader.onload = e => avatarSrc = e.target.result; reader.readAsDataURL(file); }" />
                             <button type="button" @click="$refs.avatarInput.click()" class="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 hover:bg-gray-200 rounded-lg transition">
                                 Ubah Foto
                             </button>
@@ -44,12 +43,12 @@
                 </div>
 
                 {{-- Bio --}}
-                <div>
+                <div x-data="{ bioText: '{{ Str::replace("'", "\\'", old('bio', $user->bio ?? '')) }}' }">
                     <label for="bio" class="block text-sm font-medium text-gray-700 mb-1">Bio</label>
-                    <textarea name="bio" id="bio" rows="4" maxlength="1000"
+                    <textarea name="bio" id="bio" rows="4" maxlength="1000" x-model="bioText"
                               class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm @error('bio') border-red-500 @enderror"
                               placeholder="Ceritakan tentang diri Anda sebagai kreator...">{{ old('bio', $user->bio) }}</textarea>
-                    <p class="text-xs text-gray-400 mt-1">Maksimal 1000 karakter</p>
+                    <p class="text-xs text-gray-400 mt-1 text-right"><span x-text="bioText.length"></span>/1000 karakter</p>
                     @error('bio')
                         <p class="text-xs text-red-500 mt-1">{{ $message }}</p>
                     @enderror

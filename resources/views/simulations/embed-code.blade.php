@@ -51,7 +51,7 @@
             <ol class="text-sm text-blue-800 space-y-1.5 list-decimal list-inside">
                 <li>Salin kode embed di atas</li>
                 <li>Tempelkan ke HTML halaman website Anda</li>
-                <li>S simulasi akan ditampilkan dalam iframe yang aman (sandboxed)</li>
+                <li>Simulasi akan ditampilkan dalam iframe yang aman (sandboxed)</li>
                 <li>Ukuran default: 800×600px, dapat diatur dengan atribut <code class="bg-blue-100 px-1 rounded">width</code> dan <code class="bg-blue-100 px-1 rounded">height</code></li>
             </ol>
         </div>

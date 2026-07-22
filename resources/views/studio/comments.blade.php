@@ -24,9 +24,11 @@
             @foreach($comments as $comment)
                 <div class="bg-white border border-gray-100 rounded-xl shadow-sm p-5 {{ $comment->is_pinned ? 'ring-2 ring-yellow-200 bg-yellow-50/30' : '' }} {{ $comment->is_reported ? 'ring-2 ring-red-200 bg-red-50/30' : '' }}">
                     <div class="flex items-start gap-3">
-                        <img src="{{ $comment->user->avatar ? Storage::url($comment->user->avatar) : 'https://ui-avatars.com/api/?name=' . urlencode($comment->user->name) . '&background=E5E7EB&color=374151&size=32' }}"
-                             alt="{{ $comment->user->name }}"
-                             class="w-10 h-10 rounded-full object-cover shrink-0" />
+                        @if($comment->user->avatar)
+                            <img src="{{ Storage::url($comment->user->avatar) }}" alt="{{ $comment->user->name }}" class="w-10 h-10 rounded-full object-cover shrink-0" />
+                        @else
+                            <div class="w-10 h-10 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center text-sm font-semibold shrink-0">{{ strtoupper(substr($comment->user->name, 0, 1)) }}</div>
+                        @endif
                         <div class="flex-1 min-w-0">
                             <div class="flex items-center gap-2 flex-wrap">
                                 <span class="text-sm font-semibold text-gray-900">{{ $comment->user->name }}</span>

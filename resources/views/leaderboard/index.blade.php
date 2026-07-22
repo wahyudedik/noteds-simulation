@@ -30,9 +30,15 @@
                         @php $entry = $leaderboard[$rank - 1] ?? null; @endphp
                         @if($entry)
                             <div class="flex flex-col items-center text-center">
-                                <img src="{{ $entry['user']->avatar ? Storage::url($entry['user']->avatar) : 'https://ui-avatars.com/api/?name=' . urlencode($entry['user']->name) . '&background=0D8ABC&color=fff&size=64' }}"
-                                     alt="{{ $entry['user']->name }}"
-                                     class="w-16 h-16 rounded-full object-cover border-2 {{ $rank === 1 ? 'border-yellow-400' : 'border-gray-300' }} shadow-lg mb-2" />
+                                @if($entry['user']->avatar)
+                                    <img src="{{ Storage::url($entry['user']->avatar) }}"
+                                         alt="{{ $entry['user']->name }}"
+                                         class="w-16 h-16 rounded-full object-cover border-2 {{ $rank === 1 ? 'border-yellow-400' : 'border-gray-300' }} shadow-lg mb-2" />
+                                @else
+                                    <div class="w-16 h-16 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center text-2xl font-bold border-2 {{ $rank === 1 ? 'border-yellow-400' : 'border-gray-300' }} shadow-lg mb-2">
+                                        {{ strtoupper(substr($entry['user']->name, 0, 1)) }}
+                                    </div>
+                                @endif
                                 <p class="text-sm font-semibold text-gray-900 max-w-[100px] truncate">{{ $entry['user']->name }}</p>
                                 <p class="text-xs text-gray-500">{{ number_format($entry['points']) }} pts</p>
                                 <div class="mt-2 w-20 bg-gray-100 rounded-t-lg overflow-hidden {{ $podiumHeights[$rank] }}">
@@ -76,9 +82,15 @@
                                         </td>
                                         <td class="py-3 px-3 sm:px-4">
                                             <a href="{{ route('creators.show', $entry['user']->id) }}" class="flex items-center gap-3 hover:opacity-80 transition">
-                                                <img src="{{ $entry['user']->avatar ? Storage::url($entry['user']->avatar) : 'https://ui-avatars.com/api/?name=' . urlencode($entry['user']->name) . '&background=E5E7EB&color=374151&size=32' }}"
-                                                     alt="{{ $entry['user']->name }}"
-                                                     class="w-8 h-8 rounded-full object-cover" />
+                                                @if($entry['user']->avatar)
+                                                    <img src="{{ Storage::url($entry['user']->avatar) }}"
+                                                         alt="{{ $entry['user']->name }}"
+                                                         class="w-8 h-8 rounded-full object-cover" />
+                                                @else
+                                                    <div class="w-8 h-8 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center text-xs font-semibold">
+                                                        {{ strtoupper(substr($entry['user']->name, 0, 1)) }}
+                                                    </div>
+                                                @endif
                                                 <div class="min-w-0">
                                                     <span class="font-medium text-gray-900 hover:text-blue-600 transition block truncate">{{ $entry['user']->name }}</span>
                                                     <span class="hidden sm:block text-xs text-gray-400">Lv.{{ $entry['level'] }} {{ $entry['level_title'] }}</span>

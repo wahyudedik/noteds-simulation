@@ -23,9 +23,11 @@
                         $followerUser = $follow->follower;
                     @endphp
                     <a href="{{ route('creators.show', $followerUser->id) }}" class="bg-white border border-gray-100 rounded-xl shadow-sm p-4 hover:shadow-md transition flex items-center gap-4">
-                        <img src="{{ $followerUser->avatar ? Storage::url($followerUser->avatar) : 'https://ui-avatars.com/api/?name=' . urlencode($followerUser->name) . '&background=0D8ABC&color=fff&size=48' }}"
-                             alt="{{ $followerUser->name }}"
-                             class="w-12 h-12 rounded-full object-cover shrink-0" />
+                        @if($followerUser->avatar)
+                            <img src="{{ Storage::url($followerUser->avatar) }}" alt="{{ $followerUser->name }}" class="w-12 h-12 rounded-full object-cover shrink-0" />
+                        @else
+                            <div class="w-12 h-12 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center text-sm font-semibold shrink-0">{{ strtoupper(substr($followerUser->name, 0, 1)) }}</div>
+                        @endif
                         <div class="flex-1 min-w-0">
                             <p class="text-sm font-semibold text-gray-900 truncate">{{ $followerUser->name }}</p>
                             <p class="text-xs text-gray-500 truncate">{{ $followerUser->bio ?? 'Tidak ada bio' }}</p>

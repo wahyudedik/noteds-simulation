@@ -149,9 +149,11 @@
                 @foreach($recentComments as $comment)
                     <div class="px-6 py-4 hover:bg-gray-50 transition">
                         <div class="flex items-start gap-3">
-                            <img src="{{ $comment->user->avatar ? Storage::url($comment->user->avatar) : 'https://ui-avatars.com/api/?name=' . urlencode($comment->user->name) . '&background=E5E7EB&color=374151&size=32' }}"
-                                 alt="{{ $comment->user->name }}"
-                                 class="w-8 h-8 rounded-full object-cover shrink-0 mt-0.5" />
+                            @if($comment->user->avatar)
+                                <img src="{{ Storage::url($comment->user->avatar) }}" alt="{{ $comment->user->name }}" class="w-8 h-8 rounded-full object-cover shrink-0 mt-0.5" />
+                            @else
+                                <div class="w-8 h-8 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center text-xs font-semibold shrink-0 mt-0.5">{{ strtoupper(substr($comment->user->name, 0, 1)) }}</div>
+                            @endif
                             <div class="flex-1 min-w-0">
                                 <p class="text-sm">
                                     <span class="font-medium text-gray-900">{{ $comment->user->name }}</span>
