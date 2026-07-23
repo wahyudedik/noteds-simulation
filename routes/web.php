@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Admin\CategoryController as AdminCategoryController;
 use App\Http\Controllers\Admin\DashboardController as AdminDashboardController;
+use App\Http\Controllers\Admin\ErrorLogController as AdminErrorLogController;
 use App\Http\Controllers\Admin\ReportController as AdminReportController;
 use App\Http\Controllers\Admin\ScanController as AdminScanController;
 use App\Http\Controllers\Admin\SimulationController as AdminSimulationController;
@@ -188,6 +189,12 @@ Route::middleware(['auth', CheckRole::class.':superadmin,admin'])->prefix('admin
     Route::get('/scans/{log}', [AdminScanController::class, 'show'])->name('scans.show');
     Route::post('/scans/{simulation}/auto-scan', [AdminScanController::class, 'autoScan'])->name('scans.auto-scan');
     Route::post('/scans/{simulation}/manual-review', [AdminScanController::class, 'manualReview'])->name('scans.manual-review');
+
+    // Error Logs
+    Route::get('/logs', [AdminErrorLogController::class, 'index'])->name('logs.index');
+    Route::post('/logs/clear', [AdminErrorLogController::class, 'clear'])->name('logs.clear');
+    Route::get('/logs/download', [AdminErrorLogController::class, 'download'])->name('logs.download');
+    Route::get('/logs/{id}', [AdminErrorLogController::class, 'show'])->name('logs.show')->where('id', '[0-9]+');
 });
 
 require __DIR__.'/auth.php';

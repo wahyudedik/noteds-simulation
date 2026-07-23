@@ -73,16 +73,24 @@ class SimulationObserver
         $today = Carbon::today()->toDateString();
 
         // Update simulation_analytics (daily aggregate)
-        SimulationAnalytic::updateOrCreate(
-            [
-                'simulation_id' => $simulation->id,
-                'date' => $today,
-            ],
-            [
+        // Use query builder to avoid PHP 8.4 Query\Expression → int conversion error
+        $existing = SimulationAnalytic::where('simulation_id', $simulation->id)
+            ->where('date', $today)
+            ->first();
+
+        if ($existing) {
+            $existing->update([
                 'views' => DB::raw("views + {$viewDelta}"),
                 'plays' => DB::raw("plays + {$playDelta}"),
-            ]
-        );
+            ]);
+        } else {
+            SimulationAnalytic::create([
+                'simulation_id' => $simulation->id,
+                'date' => $today,
+                'views' => max(0, $viewDelta),
+                'plays' => max(0, $playDelta),
+            ]);
+        }
 
         // Create simulation_daily_metrics records
         if ($viewDelta > 0) {
