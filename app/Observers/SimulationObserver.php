@@ -3,7 +3,6 @@
 namespace App\Observers;
 
 use App\Models\Simulation;
-use App\Models\SimulationDailyMetric;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\DB;
@@ -87,23 +86,33 @@ class SimulationObserver
             ]
         );
 
-        // Create simulation_daily_metrics records
+        // Upsert simulation_daily_metrics records (unique on simulation_id + date + metric_type)
         if ($viewDelta > 0) {
-            SimulationDailyMetric::create([
-                'simulation_id' => $simulation->id,
-                'date' => $today,
-                'metric_type' => 'view',
-                'count' => $viewDelta,
-            ]);
+            DB::table('simulation_daily_metrics')->updateOrInsert(
+                [
+                    'simulation_id' => $simulation->id,
+                    'date' => $today,
+                    'metric_type' => 'view',
+                ],
+                [
+                    'count' => DB::raw("COALESCE(`count`, 0) + {$viewDelta}"),
+                    'updated_at' => now(),
+                ]
+            );
         }
 
         if ($playDelta > 0) {
-            SimulationDailyMetric::create([
-                'simulation_id' => $simulation->id,
-                'date' => $today,
-                'metric_type' => 'play',
-                'count' => $playDelta,
-            ]);
+            DB::table('simulation_daily_metrics')->updateOrInsert(
+                [
+                    'simulation_id' => $simulation->id,
+                    'date' => $today,
+                    'metric_type' => 'play',
+                ],
+                [
+                    'count' => DB::raw("COALESCE(`count`, 0) + {$playDelta}"),
+                    'updated_at' => now(),
+                ]
+            );
         }
     }
 
