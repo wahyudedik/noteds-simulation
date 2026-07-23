@@ -3,7 +3,6 @@
 namespace App\Observers;
 
 use App\Models\Simulation;
-use App\Models\SimulationAnalytic;
 use App\Models\SimulationDailyMetric;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Artisan;
@@ -73,24 +72,20 @@ class SimulationObserver
         $today = Carbon::today()->toDateString();
 
         // Update simulation_analytics (daily aggregate)
-        // Use query builder to avoid PHP 8.4 Query\Expression → int conversion error
-        $existing = SimulationAnalytic::where('simulation_id', $simulation->id)
-            ->where('date', $today)
-            ->first();
-
-        if ($existing) {
-            $existing->update([
-                'views' => DB::raw("views + {$viewDelta}"),
-                'plays' => DB::raw("plays + {$playDelta}"),
-            ]);
-        } else {
-            SimulationAnalytic::create([
+        // Use raw query builder to avoid PHP 8.4 Query\Expression → int conversion error
+        // (Eloquent model methods cast DB::raw() values to int, which fails in PHP 8.4)
+        DB::table('simulation_analytics')->updateOrInsert(
+            [
                 'simulation_id' => $simulation->id,
                 'date' => $today,
-                'views' => max(0, $viewDelta),
-                'plays' => max(0, $playDelta),
-            ]);
-        }
+            ],
+            [
+                'views' => DB::raw("COALESCE(views, 0) + {$viewDelta}"),
+                'plays' => DB::raw("COALESCE(plays, 0) + {$playDelta}"),
+                'created_at' => now(),
+                'updated_at' => now(),
+            ]
+        );
 
         // Create simulation_daily_metrics records
         if ($viewDelta > 0) {
