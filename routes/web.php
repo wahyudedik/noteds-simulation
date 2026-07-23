@@ -1,12 +1,24 @@
 <?php
 
+use App\Http\Controllers\Admin\AdAnalyticsController as AdminAdAnalyticsController;
+use App\Http\Controllers\Admin\AdController as AdminAdController;
+use App\Http\Controllers\Admin\AnalyticsController as AdminAnalyticsController;
 use App\Http\Controllers\Admin\CategoryController as AdminCategoryController;
+use App\Http\Controllers\Admin\CertificationController as AdminCertificationController;
+use App\Http\Controllers\Admin\ChallengeController as AdminChallengeController;
+use App\Http\Controllers\Admin\CreatorAdController as AdminCreatorAdController;
+use App\Http\Controllers\Admin\CreatorController as AdminCreatorController;
 use App\Http\Controllers\Admin\DashboardController as AdminDashboardController;
+use App\Http\Controllers\Admin\EmbedAdminController as AdminEmbedController;
 use App\Http\Controllers\Admin\ErrorLogController as AdminErrorLogController;
+use App\Http\Controllers\Admin\MarketplaceController as AdminMarketplaceController;
+use App\Http\Controllers\Admin\PayoutController as AdminPayoutController;
 use App\Http\Controllers\Admin\ReportController as AdminReportController;
 use App\Http\Controllers\Admin\ScanController as AdminScanController;
+use App\Http\Controllers\Admin\SeoController as AdminSeoController;
 use App\Http\Controllers\Admin\SimulationController as AdminSimulationController;
 use App\Http\Controllers\Admin\UserController as AdminUserController;
+use App\Http\Controllers\AdTrackingController;
 use App\Http\Controllers\BookmarkController;
 use App\Http\Controllers\CollectionController;
 use App\Http\Controllers\CommentController;
@@ -17,6 +29,7 @@ use App\Http\Controllers\FollowController;
 use App\Http\Controllers\HealthController;
 use App\Http\Controllers\LeaderboardController;
 use App\Http\Controllers\NotificationController;
+use App\Http\Controllers\PayoutController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\RatingController;
 use App\Http\Controllers\ReactionController;
@@ -152,6 +165,18 @@ Route::middleware(['auth', 'verified'])->prefix('studio')->name('studio.')->grou
     // Settings
     Route::get('/settings', [StudioController::class, 'settings'])->name('settings');
     Route::put('/settings', [StudioController::class, 'updateSettings'])->name('settings.update');
+
+    // Creator Ads (Monetisasi)
+    Route::get('/simulations/{slug}/ads', [StudioController::class, 'showAdSettings'])->name('simulations.ads');
+    Route::post('/simulations/{slug}/ads', [StudioController::class, 'storeAd'])->name('simulations.ads.store');
+    Route::delete('/simulations/{slug}/ads/{creatorAd}', [StudioController::class, 'destroyAd'])->name('simulations.ads.destroy');
+    Route::get('/ads/revenue', [StudioController::class, 'adRevenue'])->name('ads-revenue');
+
+    // Payouts
+    Route::get('/payouts', [PayoutController::class, 'index'])->name('payouts');
+    Route::post('/payouts/request', [PayoutController::class, 'requestPayout'])->name('payouts.request');
+    Route::get('/payment-settings', [PayoutController::class, 'paymentSettings'])->name('payment-settings');
+    Route::put('/payment-settings', [PayoutController::class, 'updatePaymentSettings'])->name('payment-settings.update');
 });
 
 // Public collection view
@@ -195,6 +220,76 @@ Route::middleware(['auth', CheckRole::class.':superadmin,admin'])->prefix('admin
     Route::post('/logs/clear', [AdminErrorLogController::class, 'clear'])->name('logs.clear');
     Route::get('/logs/download', [AdminErrorLogController::class, 'download'])->name('logs.download');
     Route::get('/logs/{id}', [AdminErrorLogController::class, 'show'])->name('logs.show')->where('id', '[0-9]+');
+
+    // Platform Ads Management
+    Route::get('/ads', [AdminAdController::class, 'index'])->name('ads.index');
+    Route::get('/ads/create', [AdminAdController::class, 'create'])->name('ads.create');
+    Route::post('/ads', [AdminAdController::class, 'store'])->name('ads.store');
+    Route::get('/ads/{ad}/edit', [AdminAdController::class, 'edit'])->name('ads.edit');
+    Route::put('/ads/{ad}', [AdminAdController::class, 'update'])->name('ads.update');
+    Route::delete('/ads/{ad}', [AdminAdController::class, 'destroy'])->name('ads.destroy');
+    Route::post('/ads/{ad}/toggle', [AdminAdController::class, 'toggle'])->name('ads.toggle');
+
+    // Creator Ads Review
+    Route::get('/creator-ads', [AdminCreatorAdController::class, 'index'])->name('creator-ads.index');
+    Route::get('/creator-ads/{creatorAd}', [AdminCreatorAdController::class, 'show'])->name('creator-ads.show');
+    Route::post('/creator-ads/{creatorAd}/approve', [AdminCreatorAdController::class, 'approve'])->name('creator-ads.approve');
+    Route::post('/creator-ads/{creatorAd}/reject', [AdminCreatorAdController::class, 'reject'])->name('creator-ads.reject');
+    Route::post('/creator-ads/{creatorAd}/flag', [AdminCreatorAdController::class, 'flag'])->name('creator-ads.flag');
+
+    // Creator Management
+    Route::get('/creators', [AdminCreatorController::class, 'index'])->name('creators.index');
+    Route::get('/creators/{creator}', [AdminCreatorController::class, 'show'])->name('creators.show');
+    Route::put('/creators/{creator}/reputation', [AdminCreatorController::class, 'updateReputation'])->name('creators.update-reputation');
+    Route::post('/creators/{creator}/toggle-suspend', [AdminCreatorController::class, 'toggleSuspend'])->name('creators.toggle-suspend');
+
+    // Payout Management
+    Route::get('/payouts', [AdminPayoutController::class, 'index'])->name('payouts.index');
+    Route::get('/payouts/{payout}', [AdminPayoutController::class, 'show'])->name('payouts.show');
+    Route::post('/payouts/{payout}/approve', [AdminPayoutController::class, 'approve'])->name('payouts.approve');
+    Route::post('/payouts/{payout}/mark-paid', [AdminPayoutController::class, 'markPaid'])->name('payouts.mark-paid');
+    Route::post('/payouts/{payout}/reject', [AdminPayoutController::class, 'reject'])->name('payouts.reject');
+
+    // SEO Management
+    Route::get('/seo', [AdminSeoController::class, 'index'])->name('seo.index');
+    Route::get('/seo/create', [AdminSeoController::class, 'create'])->name('seo.create');
+    Route::post('/seo', [AdminSeoController::class, 'store'])->name('seo.store');
+    Route::get('/seo/{seo}/edit', [AdminSeoController::class, 'edit'])->name('seo.edit');
+    Route::put('/seo/{seo}', [AdminSeoController::class, 'update'])->name('seo.update');
+    Route::delete('/seo/{seo}', [AdminSeoController::class, 'destroy'])->name('seo.destroy');
+
+    // Platform Analytics
+    Route::get('/analytics', [AdminAnalyticsController::class, 'index'])->name('analytics.index');
+
+    // Ad Analytics
+    Route::get('/ad-analytics', [AdminAdAnalyticsController::class, 'index'])->name('ad-analytics.index');
+
+    // Embed Management
+    Route::get('/embeds', [AdminEmbedController::class, 'index'])->name('embeds.index');
+
+    // Marketplace Management
+    Route::get('/marketplace', [AdminMarketplaceController::class, 'index'])->name('marketplace.index');
+    Route::get('/marketplace/{listing}', [AdminMarketplaceController::class, 'show'])->name('marketplace.show');
+    Route::post('/marketplace/{listing}/toggle', [AdminMarketplaceController::class, 'toggle'])->name('marketplace.toggle');
+
+    // Challenge Management
+    Route::get('/challenges', [AdminChallengeController::class, 'index'])->name('challenges.index');
+    Route::get('/challenges/create', [AdminChallengeController::class, 'create'])->name('challenges.create');
+    Route::post('/challenges', [AdminChallengeController::class, 'store'])->name('challenges.store');
+    Route::get('/challenges/{challenge}', [AdminChallengeController::class, 'show'])->name('challenges.show');
+    Route::get('/challenges/{challenge}/edit', [AdminChallengeController::class, 'edit'])->name('challenges.edit');
+    Route::put('/challenges/{challenge}', [AdminChallengeController::class, 'update'])->name('challenges.update');
+    Route::delete('/challenges/{challenge}', [AdminChallengeController::class, 'destroy'])->name('challenges.destroy');
+    Route::post('/challenges/{challenge}/entries/{entry}/score', [AdminChallengeController::class, 'scoreEntry'])->name('challenges.score-entry');
+
+    // Certification Management
+    Route::get('/certifications', [AdminCertificationController::class, 'index'])->name('certifications.index');
+    Route::post('/certifications/award', [AdminCertificationController::class, 'award'])->name('certifications.award');
+    Route::patch('/certifications/{certification}/revoke', [AdminCertificationController::class, 'revoke'])->name('certifications.revoke');
 });
+
+// ========== Ad Tracking API (AJAX) ==========
+Route::post('/api/ads/impression', [AdTrackingController::class, 'recordImpression'])->middleware('auth')->name('api.ads.impression');
+Route::post('/api/ads/click', [AdTrackingController::class, 'recordClick'])->middleware('auth')->name('api.ads.click');
 
 require __DIR__.'/auth.php';

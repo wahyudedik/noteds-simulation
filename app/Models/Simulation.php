@@ -171,6 +171,14 @@ class Simulation extends Model
         return $this->hasMany(TrafficSource::class);
     }
 
+    /**
+     * Get embed tracks for this simulation.
+     */
+    public function embedTracks(): HasMany
+    {
+        return $this->hasMany(EmbedTrack::class);
+    }
+
     // ─── Accessors ────────────────────────────────────────────────
 
     /**

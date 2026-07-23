@@ -31,7 +31,7 @@
                         @if($entry)
                             <div class="flex flex-col items-center text-center">
                                 @if($entry['user']->avatar)
-                                    <img src="{{ Storage::url($entry['user']->avatar) }}"
+                                    <img src="{{ Storage::disk('public')->url($entry['user']->avatar) }}"
                                          alt="{{ $entry['user']->name }}"
                                          class="w-16 h-16 rounded-full object-cover border-2 {{ $rank === 1 ? 'border-yellow-400' : 'border-gray-300' }} shadow-lg mb-2" />
                                 @else
@@ -83,7 +83,7 @@
                                         <td class="py-3 px-3 sm:px-4">
                                             <a href="{{ route('creators.show', $entry['user']->id) }}" class="flex items-center gap-3 hover:opacity-80 transition">
                                                 @if($entry['user']->avatar)
-                                                    <img src="{{ Storage::url($entry['user']->avatar) }}"
+                                                    <img src="{{ Storage::disk('public')->url($entry['user']->avatar) }}"
                                                          alt="{{ $entry['user']->name }}"
                                                          class="w-8 h-8 rounded-full object-cover" />
                                                 @else

@@ -2,11 +2,14 @@
 
 namespace App\Observers;
 
+use App\Models\SeoSetting;
 use App\Models\Simulation;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 
 class SimulationObserver
 {
@@ -16,6 +19,10 @@ class SimulationObserver
     public function created(Simulation $simulation): void
     {
         $this->regenerateSitemap();
+
+        if ($simulation->is_published) {
+            $this->generateSeoSettings($simulation);
+        }
     }
 
     /**
@@ -27,6 +34,10 @@ class SimulationObserver
     {
         $this->regenerateSitemap();
         $this->logAnalyticsChanges($simulation);
+
+        if ($simulation->is_published) {
+            $this->generateSeoSettings($simulation);
+        }
     }
 
     /**
@@ -35,6 +46,7 @@ class SimulationObserver
     public function deleted(Simulation $simulation): void
     {
         $this->regenerateSitemap();
+        $this->deleteSeoSettings($simulation);
     }
 
     /**
@@ -43,6 +55,10 @@ class SimulationObserver
     public function restored(Simulation $simulation): void
     {
         $this->regenerateSitemap();
+
+        if ($simulation->is_published) {
+            $this->generateSeoSettings($simulation);
+        }
     }
 
     /**
@@ -113,6 +129,74 @@ class SimulationObserver
                     'updated_at' => now(),
                 ]
             );
+        }
+    }
+
+    /**
+     * Auto-generate SEO settings for a published simulation.
+     *
+     * Creates or updates an seo_settings entry with page_key "simulation:{slug}"
+     * containing meta tags, Open Graph data, and Schema.org structured data.
+     */
+    private function generateSeoSettings(Simulation $simulation): void
+    {
+        try {
+            $appName = config('app.name', 'Noteds');
+            $pageKey = 'simulation:'.$simulation->slug;
+            $description = Str::limit(strip_tags($simulation->description ?? $simulation->title), 160);
+            $ogDescription = Str::limit(strip_tags($simulation->description ?? $simulation->title), 200);
+
+            $thumbnailUrl = $simulation->thumbnail
+                ? Storage::disk('public')->url($simulation->thumbnail)
+                : asset('logo.jpeg');
+
+            $structuredData = [
+                '@context' => 'https://schema.org',
+                '@type' => 'CreativeWork',
+                'name' => $simulation->title,
+                'description' => $description,
+                'url' => route('simulations.show', $simulation->slug),
+                'image' => $thumbnailUrl,
+                'author' => [
+                    '@type' => 'Person',
+                    'name' => $simulation->user?->name ?? 'Unknown',
+                ],
+                'datePublished' => $simulation->published_at?->toIso8601String(),
+                'interactionStatistic' => [
+                    '@type' => 'InteractionCounter',
+                    'interactionType' => 'https://schema.org/PlayAction',
+                    'userInteractionCount' => $simulation->play_count,
+                ],
+            ];
+
+            SeoSetting::updateOrCreate(
+                ['page_key' => $pageKey],
+                [
+                    'meta_title' => $simulation->title.' — '.$appName,
+                    'meta_description' => $description,
+                    'meta_keywords' => $simulation->tags,
+                    'og_title' => $simulation->title,
+                    'og_description' => $ogDescription,
+                    'og_image' => $thumbnailUrl,
+                    'canonical_url' => route('simulations.show', $simulation->slug),
+                    'structured_data' => $structuredData,
+                    'updated_by' => $simulation->user_id,
+                ]
+            );
+        } catch (\Throwable $e) {
+            Log::warning('SEO settings generation failed for simulation '.$simulation->id.': '.$e->getMessage());
+        }
+    }
+
+    /**
+     * Delete SEO settings when a simulation is deleted.
+     */
+    private function deleteSeoSettings(Simulation $simulation): void
+    {
+        try {
+            SeoSetting::where('page_key', 'simulation:'.$simulation->slug)->delete();
+        } catch (\Throwable $e) {
+            Log::warning('SEO settings deletion failed for simulation '.$simulation->id.': '.$e->getMessage());
         }
     }
 

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Bookmark;
 use App\Models\Category;
 use App\Models\Comment;
+use App\Models\CreatorAd;
 use App\Models\CreatorReputation;
 use App\Models\Follow;
 use App\Models\Notification;
@@ -17,6 +18,8 @@ use App\Models\SimulationVersion;
 use App\Models\Tag;
 use App\Models\TrafficSource;
 use App\Models\User;
+use App\Services\AdRevenueService;
+use App\Services\CreatorReputationService;
 use App\Services\SecurityService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -641,6 +644,134 @@ class StudioController extends Controller
 
         return redirect()->route('studio.settings')
             ->with('success', 'Pengaturan berhasil diupdate.');
+    }
+
+    // ========== Creator Ads (Monetisasi) ==========
+
+    /**
+     * Show ad settings for a simulation.
+     */
+    public function showAdSettings(string $slug): View
+    {
+        $simulation = Simulation::where('slug', $slug)
+            ->where('user_id', Auth::id())
+            ->firstOrFail();
+
+        $creatorAds = CreatorAd::where('simulation_id', $simulation->id)
+            ->with('reviewer')
+            ->latest()
+            ->get();
+
+        /** @var User $user */
+        $user = Auth::user();
+        $reputation = CreatorReputation::where('user_id', $user->id)->first();
+        $revenueService = app(AdRevenueService::class);
+        $revenueTiers = $revenueService->getTiers();
+
+        return view('studio.ads', compact('simulation', 'creatorAds', 'reputation', 'revenueTiers'));
+    }
+
+    /**
+     * Store a new creator ad for a simulation.
+     */
+    public function storeAd(Request $request, string $slug): RedirectResponse
+    {
+        $simulation = Simulation::where('slug', $slug)
+            ->where('user_id', Auth::id())
+            ->firstOrFail();
+
+        /** @var User $user */
+        $user = Auth::user();
+
+        // Check if creator is suspended
+        $reputation = CreatorReputation::where('user_id', $user->id)->first();
+        if ($reputation && app(CreatorReputationService::class)->isSuspended($user)) {
+            return back()->withErrors(['error' => 'Akun Anda ditangguhkan karena reputasi rendah.']);
+        }
+
+        // Check reputation threshold for manual review
+        $requiresManualReview = $reputation && app(CreatorReputationService::class)->requiresManualReview($user);
+
+        $validated = $request->validate([
+            'provider' => 'required|in:adsense,mediavine,adthrive,custom',
+            'publisher_id' => 'required|string|max:100',
+            'ad_type' => 'required|in:banner,native,code_snippet',
+            'title' => 'nullable|string|max:255',
+            'description' => 'nullable|string|max:500',
+            'image_url' => 'nullable|url|max:500',
+            'target_url' => 'nullable|url|max:500',
+            'code_snippet' => 'nullable|string|max:5000',
+        ]);
+
+        $adConfig = [
+            'type' => $validated['ad_type'],
+            'title' => $validated['title'] ?? null,
+            'description' => $validated['description'] ?? null,
+            'image_url' => $validated['image_url'] ?? null,
+            'target_url' => $validated['target_url'] ?? null,
+        ];
+
+        // Determine review status based on reputation
+        $reviewStatus = $requiresManualReview ? 'pending_review' : 'auto_approved';
+
+        CreatorAd::create([
+            'simulation_id' => $simulation->id,
+            'user_id' => Auth::id(),
+            'provider' => $validated['provider'],
+            'publisher_id' => $validated['publisher_id'],
+            'ad_config' => $adConfig,
+            'code_snippet' => $validated['code_snippet'] ?? null,
+            'review_status' => $reviewStatus,
+        ]);
+
+        return redirect()->route('studio.simulations.ads', $slug)
+            ->with('success', 'Iklan berhasil diajukan. '.($requiresManualReview ? 'Menunggu review admin.' : 'Iklan telah disetujui otomatis.'));
+    }
+
+    /**
+     * Remove a creator ad.
+     */
+    public function destroyAd(string $slug, int $creatorAd): RedirectResponse
+    {
+        $simulation = Simulation::where('slug', $slug)
+            ->where('user_id', Auth::id())
+            ->firstOrFail();
+
+        CreatorAd::where('id', $creatorAd)
+            ->where('simulation_id', $simulation->id)
+            ->where('user_id', Auth::id())
+            ->delete();
+
+        return redirect()->route('studio.simulations.ads', $slug)
+            ->with('success', 'Iklan berhasil dihapus.');
+    }
+
+    /**
+     * Show ad revenue overview for the creator.
+     */
+    public function adRevenue(): View
+    {
+        /** @var User $user */
+        $user = Auth::user();
+
+        $reputation = CreatorReputation::where('user_id', $user->id)->first();
+        $revenueService = app(AdRevenueService::class);
+
+        $tierKey = $reputation?->revenue_tier ?? 'basic';
+        $tier = $revenueService->getRevenueShare($tierKey);
+
+        // Total earnings estimate (simplified)
+        $totalImpressions = CreatorAd::where('user_id', $user->id)
+            ->where('review_status', 'approved')
+            ->sum('impressions');
+
+        $totalEarnings = $reputation
+            ? $revenueService->calculateEstimatedRevenue($reputation, (int) $totalImpressions)
+            : 0;
+
+        $tiers = $revenueService->getTiers();
+
+        return view('studio.revenue', compact('reputation', 'tier', 'totalImpressions', 'totalEarnings', 'tiers'));
     }
 
     // ========== Helper Methods ==========

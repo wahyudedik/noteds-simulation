@@ -10,6 +10,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasManyThrough;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
@@ -147,6 +148,30 @@ class User extends Authenticatable implements MustVerifyEmail
     {
         return $this->hasManyThrough(Follow::class, Simulation::class, 'user_id', 'followable_id')
             ->where('followable_type', Simulation::class);
+    }
+
+    /**
+     * Get creator reputation record.
+     */
+    public function reputation(): HasOne
+    {
+        return $this->hasOne(CreatorReputation::class);
+    }
+
+    /**
+     * Get payout records.
+     */
+    public function payouts(): HasMany
+    {
+        return $this->hasMany(Payout::class);
+    }
+
+    /**
+     * Get payment settings.
+     */
+    public function paymentSettings(): HasOne
+    {
+        return $this->hasOne(CreatorPaymentSetting::class);
     }
 
     /**

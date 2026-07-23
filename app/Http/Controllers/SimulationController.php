@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\PlayHistory;
+use App\Models\SeoSetting;
 use App\Models\Simulation;
 use App\Models\User;
 use App\Services\GamificationService;
@@ -261,6 +262,9 @@ class SimulationController extends Controller
             ->take(8)
             ->get();
 
+        // Load SEO settings for this simulation
+        $seoSetting = SeoSetting::findByKey('simulation:'.$simulation->slug);
+
         return view('simulations.show', compact(
             'simulation',
             'related',
@@ -274,6 +278,7 @@ class SimulationController extends Controller
             'isFollowingSimulation',
             'reactionCounts',
             'userCollections',
+            'seoSetting',
         ));
     }
 

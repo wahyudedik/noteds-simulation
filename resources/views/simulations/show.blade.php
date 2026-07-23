@@ -4,14 +4,35 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <meta name="description" content="{{ Str::limit(strip_tags($simulation->description ?? $simulation->title), 160) }}">
-    <meta property="og:title" content="{{ $simulation->title }}">
-    <meta property="og:description" content="{{ Str::limit(strip_tags($simulation->description ?? $simulation->title), 200) }}">
-    <meta property="og:type" content="website">
-    @if($simulation->thumbnail)
-        <meta property="og:image" content="{{ Storage::disk('public')->url($simulation->thumbnail) }}">
+
+    {{-- SEO: use database settings if available, fallback to simulation attributes --}}
+    @php
+        $seoTitle = $seoSetting?->meta_title ?? ($simulation->title.' — '.config('app.name', 'Noteds'));
+        $seoDescription = $seoSetting?->meta_description ?? Str::limit(strip_tags($simulation->description ?? $simulation->title), 160);
+        $seoOgTitle = $seoSetting?->og_title ?? $simulation->title;
+        $seoOgDescription = $seoSetting?->og_description ?? Str::limit(strip_tags($simulation->description ?? $simulation->title), 200);
+        $seoOgImage = $seoSetting?->og_image ?? ($simulation->thumbnail ? Storage::disk('public')->url($simulation->thumbnail) : null);
+        $seoCanonical = $seoSetting?->canonical_url ?? route('simulations.show', $simulation->slug);
+    @endphp
+
+    <meta name="description" content="{{ $seoDescription }}">
+    @if($seoSetting?->meta_keywords)
+        <meta name="keywords" content="{{ $seoSetting->meta_keywords }}">
     @endif
-    <title>{{ $simulation->title }} - {{ config('app.name') }}</title>
+    <meta property="og:title" content="{{ $seoOgTitle }}">
+    <meta property="og:description" content="{{ $seoOgDescription }}">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="{{ $seoCanonical }}">
+    @if($seoOgImage)
+        <meta property="og:image" content="{{ $seoOgImage }}">
+    @endif
+    <link rel="canonical" href="{{ $seoCanonical }}">
+    <title>{{ $seoTitle }}</title>
+
+    {{-- Structured Data (Schema.org JSON-LD) --}}
+    @if($seoSetting?->structured_data)
+        <script type="application/ld+json">{!! json_encode($seoSetting->structured_data, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) !!}</script>
+    @endif
     <link rel="icon" type="image/jpeg" href="{{ asset('favicon.jpeg') }}">
     <link rel="preconnect" href="https://fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=roboto:400,500,700&display=swap" rel="stylesheet" />
@@ -503,7 +524,7 @@
                 {{-- Comments Section --}}
                 <div class="mt-6">
                     <div class="flex items-center justify-between mb-4">
-                        <h3 class="text-gray-900 font-semibold">Komentar ({{ $comments->count() }})</h3>
+                        <h3 class="text-gray-900 font-semibold">Komentar ({{ $comments->sum(fn ($c) => 1 + $c->replies->count()) }})</h3>
                     </div>
 
                     {{-- Comment Form --}}
@@ -900,8 +921,6 @@
         </div>
     </footer>
 
-    <x-toast />
-
     {{-- Back to Top Button --}}
     <div x-data="{ show: false }" x-init="window.addEventListener('scroll', () => { show = window.scrollY > 300 })"
          x-show="show" x-transition
@@ -911,5 +930,7 @@
             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7"/></svg>
         </button>
     </div>
+
+    <x-toast />
 </body>
 </html>

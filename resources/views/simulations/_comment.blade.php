@@ -1,6 +1,8 @@
 {{-- Single Comment Component --}}
 @php
-    $replies = $comment->replies()->latest()->get();
+    // Use eager-loaded replies from controller (with('replies.user'))
+    // Sort by latest in PHP to avoid N+1 re-query
+    $replies = $comment->replies->sortByDesc('created_at')->values();
     $maxDepth = 3;
     $isCollapsed = $depth >= $maxDepth && $replies->count() > 0;
 @endphp
