@@ -52,8 +52,19 @@ class SimulationObserver
      */
     private function logAnalyticsChanges(Simulation $simulation): void
     {
-        $viewDelta = $simulation->view_count - ($simulation->getOriginal('view_count') ?? 0);
-        $playDelta = $simulation->play_count - ($simulation->getOriginal('play_count') ?? 0);
+        // After increment()/decrement(), Eloquent may store a Query\Expression
+        // in the attribute instead of the actual integer value (PHP 8.4 cannot
+        // convert Query\Expression to int). We capture the originals first, then
+        // fetch fresh values from the database to compute accurate deltas.
+        $originalViewCount = (int) ($simulation->getOriginal('view_count') ?? 0);
+        $originalPlayCount = (int) ($simulation->getOriginal('play_count') ?? 0);
+
+        $fresh = $simulation->fresh();
+        $currentViewCount = $fresh ? (int) $fresh->view_count : $originalViewCount;
+        $currentPlayCount = $fresh ? (int) $fresh->play_count : $originalPlayCount;
+
+        $viewDelta = $currentViewCount - $originalViewCount;
+        $playDelta = $currentPlayCount - $originalPlayCount;
 
         if ($viewDelta <= 0 && $playDelta <= 0) {
             return;
