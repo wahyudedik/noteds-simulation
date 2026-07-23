@@ -57,19 +57,25 @@ class SeoComposer
      */
     private function resolvePageKey(): ?string
     {
-        if (! Route::getCurrentRoute()) {
+        $currentRoute = Route::getCurrentRoute();
+
+        if (! $currentRoute) {
             return null;
         }
 
-        $routeName = Route::getCurrentRoute()->getName();
+        $routeName = $currentRoute->getName();
+
+        if (! $routeName) {
+            return null;
+        }
 
         return match (true) {
             // Simulation detail page: simulation:{slug}
-            $routeName === 'simulations.show' => 'simulation:'.Route::current('slug'),
+            $routeName === 'simulations.show' => 'simulation:'.$currentRoute->parameter('slug'),
             // Category page: category:{name}
-            $routeName === 'simulations.category' => 'category:'.Route::current('category'),
+            $routeName === 'simulations.category' => 'category:'.$currentRoute->parameter('category'),
             // Creator profile page: creator:{id}
-            $routeName === 'creators.show' => 'creator:'.Route::current('creator'),
+            $routeName === 'creators.show' => 'creator:'.$currentRoute->parameter('creator'),
             // Static pages by route name
             in_array($routeName, ['home', 'simulations.index']) => 'home',
             $routeName === 'simulations.explore' => 'explore',
