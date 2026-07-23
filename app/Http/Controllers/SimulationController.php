@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Models\PlayHistory;
 use App\Models\Simulation;
-use App\Models\TrafficSource;
 use App\Models\User;
 use App\Services\GamificationService;
 use Illuminate\Http\JsonResponse;
@@ -543,7 +542,7 @@ class SimulationController extends Controller
      */
     private function trackTrafficSource(int $simulationId, string $source, string $metricType): void
     {
-        TrafficSource::updateOrCreate(
+        DB::table('traffic_sources')->updateOrInsert(
             [
                 'simulation_id' => $simulationId,
                 'source' => $source,
@@ -551,7 +550,7 @@ class SimulationController extends Controller
                 'date' => now()->toDateString(),
             ],
             [
-                'count' => DB::raw('count + 1'),
+                'count' => DB::raw('COALESCE(`count`, 0) + 1'),
             ]
         );
     }
