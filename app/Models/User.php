@@ -213,6 +213,30 @@ class User extends Authenticatable implements MustVerifyEmail
     }
 
     /**
+     * Get forum threads created by this user.
+     */
+    public function forumThreads(): HasMany
+    {
+        return $this->hasMany(ForumThread::class);
+    }
+
+    /**
+     * Get forum replies written by this user.
+     */
+    public function forumReplies(): HasMany
+    {
+        return $this->hasMany(ForumReply::class);
+    }
+
+    /**
+     * Get forum votes given by this user.
+     */
+    public function forumVotes(): HasMany
+    {
+        return $this->hasMany(ForumVote::class);
+    }
+
+    /**
      * Get saved collections.
      */
     public function savedCollections(): HasMany

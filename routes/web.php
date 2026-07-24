@@ -17,6 +17,8 @@ use App\Http\Controllers\Admin\ReportController as AdminReportController;
 use App\Http\Controllers\Admin\ScanController as AdminScanController;
 use App\Http\Controllers\Admin\SeoController as AdminSeoController;
 use App\Http\Controllers\Admin\SimulationController as AdminSimulationController;
+use App\Http\Controllers\Admin\SponsorController as AdminSponsorController;
+use App\Http\Controllers\Admin\SponsorshipController as AdminSponsorshipController;
 use App\Http\Controllers\Admin\UserController as AdminUserController;
 use App\Http\Controllers\AdTrackingController;
 use App\Http\Controllers\BookmarkController;
@@ -26,6 +28,10 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\EmbedController;
 use App\Http\Controllers\FavoriteController;
 use App\Http\Controllers\FollowController;
+use App\Http\Controllers\ForumController;
+use App\Http\Controllers\ForumReplyController;
+use App\Http\Controllers\ForumThreadController;
+use App\Http\Controllers\ForumVoteController;
 use App\Http\Controllers\HealthController;
 use App\Http\Controllers\LeaderboardController;
 use App\Http\Controllers\NotificationController;
@@ -135,7 +141,25 @@ Route::middleware('auth')->group(function () {
 
     // User Reports
     Route::post('/sim/{slug}/report', [UserReportController::class, 'store'])->name('reports.store');
+
+    // Forum - Auth required routes
+    Route::get('/forum/create', [ForumThreadController::class, 'create'])->name('forum.create');
+    Route::post('/forum', [ForumThreadController::class, 'store'])->name('forum.store');
+    Route::get('/forum/thread/{slug}/edit', [ForumThreadController::class, 'edit'])->name('forum.edit');
+    Route::put('/forum/thread/{slug}', [ForumThreadController::class, 'update'])->name('forum.update');
+    Route::delete('/forum/thread/{slug}', [ForumThreadController::class, 'destroy'])->name('forum.destroy');
+    Route::post('/forum/thread/{slug}/reply', [ForumReplyController::class, 'store'])->name('forum.reply');
+    Route::delete('/forum/replies/{reply}', [ForumReplyController::class, 'destroy'])->name('forum.reply.destroy');
+    Route::post('/forum/replies/{reply}/accept', [ForumReplyController::class, 'accept'])->name('forum.reply.accept');
+    Route::post('/forum/vote', [ForumVoteController::class, 'toggle'])->name('forum.vote');
+    Route::post('/forum/thread/{slug}/lock', [ForumThreadController::class, 'lock'])->name('forum.lock');
+    Route::post('/forum/thread/{slug}/pin', [ForumThreadController::class, 'pin'])->name('forum.pin');
 });
+
+// Forum - Public routes
+Route::get('/forum', [ForumController::class, 'index'])->name('forum.index');
+Route::get('/forum/{category}', [ForumController::class, 'category'])->name('forum.category');
+Route::get('/forum/thread/{slug}', [ForumThreadController::class, 'show'])->name('forum.show');
 
 // Public collection view
 
@@ -293,6 +317,33 @@ Route::middleware(['auth', CheckRole::class.':superadmin,admin'])->prefix('admin
     Route::get('/certifications', [AdminCertificationController::class, 'index'])->name('certifications.index');
     Route::post('/certifications/award', [AdminCertificationController::class, 'award'])->name('certifications.award');
     Route::patch('/certifications/{certification}/revoke', [AdminCertificationController::class, 'revoke'])->name('certifications.revoke');
+
+    // Sponsor Management
+    Route::get('/sponsors', [AdminSponsorController::class, 'index'])->name('sponsors.index');
+    Route::get('/sponsors/create', [AdminSponsorController::class, 'create'])->name('sponsors.create');
+    Route::post('/sponsors', [AdminSponsorController::class, 'store'])->name('sponsors.store');
+    Route::get('/sponsors/{sponsor}', [AdminSponsorController::class, 'show'])->name('sponsors.show');
+    Route::get('/sponsors/{sponsor}/edit', [AdminSponsorController::class, 'edit'])->name('sponsors.edit');
+    Route::put('/sponsors/{sponsor}', [AdminSponsorController::class, 'update'])->name('sponsors.update');
+    Route::get('/sponsors/{sponsor}/report', [AdminSponsorController::class, 'report'])->name('sponsors.report');
+
+    // Sponsorship Management
+    Route::get('/sponsorships', [AdminSponsorshipController::class, 'index'])->name('sponsorships.index');
+    Route::get('/sponsorships/create', [AdminSponsorshipController::class, 'create'])->name('sponsorships.create');
+    Route::post('/sponsorships', [AdminSponsorshipController::class, 'store'])->name('sponsorships.store');
+    Route::get('/sponsorships/{sponsorship}', [AdminSponsorshipController::class, 'show'])->name('sponsorships.show');
+    Route::get('/sponsorships/{sponsorship}/edit', [AdminSponsorshipController::class, 'edit'])->name('sponsorships.edit');
+    Route::put('/sponsorships/{sponsorship}', [AdminSponsorshipController::class, 'update'])->name('sponsorships.update');
+    Route::post('/sponsorships/{sponsorship}/approve', [AdminSponsorshipController::class, 'approve'])->name('sponsorships.approve');
+    Route::post('/sponsorships/{sponsorship}/pause', [AdminSponsorshipController::class, 'pause'])->name('sponsorships.pause');
+    Route::post('/sponsorships/{sponsorship}/resume', [AdminSponsorshipController::class, 'resume'])->name('sponsorships.resume');
+    Route::post('/sponsorships/{sponsorship}/complete', [AdminSponsorshipController::class, 'complete'])->name('sponsorships.complete');
+
+    // Sponsorship Invoices
+    Route::get('/sponsorships/{sponsorship}/invoices', [AdminSponsorshipController::class, 'invoices'])->name('sponsorships.invoices');
+    Route::post('/sponsorships/{sponsorship}/invoices', [AdminSponsorshipController::class, 'createInvoice'])->name('sponsorships.invoices.create');
+    Route::patch('/invoices/{invoice}/send', [AdminSponsorshipController::class, 'sendInvoice'])->name('invoices.send');
+    Route::patch('/invoices/{invoice}/mark-paid', [AdminSponsorshipController::class, 'markInvoicePaid'])->name('invoices.mark-paid');
 });
 
 // ========== Public REST API ==========

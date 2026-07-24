@@ -125,7 +125,7 @@
                 </button>
             </div>
             <div class="bg-orange-50 border border-orange-200 rounded-xl p-4">
-                <p class="text-sm text-orange-700 mb-2">📋 Copy raw entry ini dan paste ke AI (ChatGPT, Claude, dll) untuk debugging:</p>
+                <p class="text-sm text-orange-700 mb-2">Copy raw entry ini dan paste ke AI (ChatGPT, Claude, dll) untuk debugging:</p>
                 <pre class="font-mono text-xs text-gray-800 whitespace-pre-wrap max-h-64 overflow-y-auto">{{ $rawFormatted }}</pre>
             </div>
         </div>
@@ -160,13 +160,13 @@
 
         function copyEntry() {
             const text = formatEntryForAI(entry);
-            copyToClipboard(text, 'Error berhasil di-copy ke clipboard! 📋');
+            copyToClipboard(text, 'Error berhasil di-copy ke clipboard!');
         }
 
         function copySection(sectionId) {
             const el = document.getElementById(sectionId);
             if (el) {
-                copyToClipboard(el.textContent.trim(), `${sectionId} berhasil di-copy! 📋`);
+                copyToClipboard(el.textContent.trim(), `${sectionId} berhasil di-copy!`);
             }
         }
 

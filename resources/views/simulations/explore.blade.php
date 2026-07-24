@@ -36,6 +36,19 @@
                         </a>
                     @endforeach
                 </div>
+
+                {{-- Tag Chips --}}
+                @if($tags->count() > 0)
+                <div class="mt-4 flex flex-wrap gap-2">
+                    <span class="text-xs font-medium text-gray-400 self-center mr-1">Tag:</span>
+                    @foreach($tags as $tag)
+                        <a href="{{ route('simulations.explore', array_merge(request()->query(), ['tag' => $tag->slug])) }}"
+                            class="px-3 py-1 rounded-full text-xs font-medium transition duration-200 border {{ ($activeTag ?? '') === $tag->slug ? 'bg-purple-600 text-white border-purple-600' : 'bg-white text-gray-500 border-gray-200 hover:border-purple-400 hover:text-purple-600' }}">
+                            #{{ $tag->name }}
+                        </a>
+                    @endforeach
+                </div>
+                @endif
             </div>
 
             {{-- Featured Section --}}
@@ -95,6 +108,23 @@
                 </div>
                 <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
                     @foreach($topRated as $sim)
+                        @include('components.simulation-card', ['simulation' => $sim])
+                    @endforeach
+                </div>
+            </section>
+            @endif
+
+            {{-- For You Section --}}
+            @if($forYou->count() > 0)
+            <section class="mb-10">
+                <div class="flex items-center justify-between mb-4">
+                    <h2 class="text-xl font-bold text-gray-900">
+                        <svg class="inline w-5 h-5 text-purple-500 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" /></svg>
+                        Untuk Anda
+                    </h2>
+                </div>
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
+                    @foreach($forYou as $sim)
                         @include('components.simulation-card', ['simulation' => $sim])
                     @endforeach
                 </div>

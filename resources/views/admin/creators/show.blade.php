@@ -23,7 +23,7 @@
             <div class="bg-white border border-gray-100 rounded-xl p-6 shadow-sm">
                 <div class="flex items-start gap-4">
                     @if($creator->avatar)
-                        <img src="{{ Storage::url($creator->avatar) }}" alt="" class="w-16 h-16 rounded-full object-cover" />
+                        <img src="{{ Storage::disk('public')->url($creator->avatar) }}" alt="" class="w-16 h-16 rounded-full object-cover" />
                     @else
                         <div class="w-16 h-16 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center text-2xl font-bold">{{ strtoupper(substr($creator->name, 0, 1)) }}</div>
                     @endif

@@ -104,7 +104,7 @@
                             @endif
                             <div class="flex items-center gap-2">
                                 @if(Auth::user()->avatar)
-                                    <img src="{{ Storage::url(Auth::user()->avatar) }}" alt="{{ Auth::user()->name }}" class="w-8 h-8 rounded-full object-cover" />
+                                    <img src="{{ Storage::disk('public')->url(Auth::user()->avatar) }}" alt="{{ Auth::user()->name }}" class="w-8 h-8 rounded-full object-cover" />
                                 @else
                                     <div class="w-8 h-8 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center text-xs font-semibold">{{ strtoupper(substr(Auth::user()->name, 0, 1)) }}</div>
                                 @endif

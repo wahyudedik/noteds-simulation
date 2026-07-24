@@ -201,7 +201,7 @@
                         @if($currentLevel || $search)
                             <a href="{{ route('admin.logs.index') }}" class="text-orange-600 hover:underline">Hapus filter</a> untuk melihat semua log.
                         @else
-                            Aplikasi berjalan tanpa error saat ini. 🎉
+                            Aplikasi berjalan tanpa error saat ini.
                         @endif
                     </p>
                 </div>
@@ -274,7 +274,7 @@
 
         function copySingleEntry(entry) {
             const text = formatEntryForAI(entry);
-            copyToClipboard(text, 'Error berhasil di-copy ke clipboard! 📋');
+            copyToClipboard(text, 'Error berhasil di-copy ke clipboard!');
         }
 
         function copyAllVisible() {
@@ -296,7 +296,7 @@
                 }
             });
 
-            copyToClipboard(text, `${allEntries.length} error berhasil di-copy! 📋`);
+            copyToClipboard(text, `${allEntries.length} error berhasil di-copy!`);
         }
 
         function showToast(message) {

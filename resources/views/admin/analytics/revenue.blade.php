@@ -59,7 +59,7 @@
                             @php
                                 $tierColors = ['basic' => 'bg-gray-400', 'verified' => 'bg-blue-500', 'expert' => 'bg-purple-500', 'platinum' => 'bg-yellow-500'];
                                 $tierLabels = ['basic' => 'Basic', 'verified' => 'Verified', 'expert' => 'Expert', 'platinum' => 'Platinum'];
-                                $maxTierRevenue = $revenueByTier->max('total') ?: 1;
+                                $maxTierRevenue = max(1, (int) $revenueByTier->max('total'));
                             @endphp
                             @foreach($revenueByTier as $tier)
                                 @php $percentage = $totalRevenue > 0 ? round(($tier->total / $totalRevenue) * 100, 1) : 0; @endphp
@@ -69,7 +69,7 @@
                                         <span class="text-sm text-gray-500">{{ number_format($tier->creators) }} creator · Rp {{ number_format($tier->total, 0, ',', '.') }}</span>
                                     </div>
                                     <div class="w-full bg-gray-100 rounded-full h-3 overflow-hidden">
-                                        <div class="{{ $tierColors[$tier->revenue_tier] ?? 'bg-gray-500' }} h-full rounded-full transition-all" style="width: {{ ($tier->total / $maxTierRevenue) * 100 }}%"></div>
+                                        <div class="{{ $tierColors[$tier->revenue_tier] ?? 'bg-gray-500' }} h-full rounded-full transition-all" style="width: {{ $maxTierRevenue > 0 ? ($tier->total / $maxTierRevenue) * 100 : 0 }}%"></div>
                                     </div>
                                 </div>
                             @endforeach

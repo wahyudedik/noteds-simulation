@@ -45,6 +45,10 @@ class GamificationService
         'follow_creator' => 3,
         'bookmark' => 2,
         'share' => 3,
+        'forum_thread' => 10,
+        'forum_reply' => 5,
+        'forum_vote_given' => 1,
+        'forum_best_answer' => 15,
     ];
 
     /**

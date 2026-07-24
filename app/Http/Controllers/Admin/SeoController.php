@@ -7,6 +7,7 @@ use App\Models\SeoSetting;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Facades\Log;
 use Illuminate\View\View;
 
 class SeoController extends Controller
@@ -132,11 +133,21 @@ class SeoController extends Controller
      */
     public function regenerateSitemap(): RedirectResponse
     {
-        Artisan::call('sitemap:generate');
+        try {
+            Artisan::call('sitemap:generate');
 
-        $output = Artisan::output();
+            $output = Artisan::output();
 
-        return redirect()->route('admin.seo.index')
-            ->with('success', 'Sitemap berhasil diregenerasi. '.$output);
+            return redirect()->route('admin.seo.index')
+                ->with('success', 'Sitemap berhasil diregenerasi. '.$output);
+        } catch (\Throwable $e) {
+            Log::warning('Sitemap regeneration failed from admin panel: '.$e->getMessage(), [
+                'file' => $e->getFile(),
+                'line' => $e->getLine(),
+            ]);
+
+            return redirect()->route('admin.seo.index')
+                ->with('error', 'Gagal meregenerasi sitemap: '.$e->getMessage());
+        }
     }
 }

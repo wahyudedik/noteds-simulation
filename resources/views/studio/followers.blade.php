@@ -24,7 +24,7 @@
                     @endphp
                     <a href="{{ route('creators.show', $followerUser->id) }}" class="bg-white border border-gray-100 rounded-xl shadow-sm p-4 hover:shadow-md transition flex items-center gap-4">
                         @if($followerUser->avatar)
-                            <img src="{{ Storage::url($followerUser->avatar) }}" alt="{{ $followerUser->name }}" class="w-12 h-12 rounded-full object-cover shrink-0" />
+                            <img src="{{ Storage::disk('public')->url($followerUser->avatar) }}" alt="{{ $followerUser->name }}" class="w-12 h-12 rounded-full object-cover shrink-0" />
                         @else
                             <div class="w-12 h-12 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center text-sm font-semibold shrink-0">{{ strtoupper(substr($followerUser->name, 0, 1)) }}</div>
                         @endif

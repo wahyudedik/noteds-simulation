@@ -36,7 +36,12 @@ class CollectionController extends Controller
             ->with(['user', 'simulations.user'])
             ->firstOrFail();
 
-        $collection->increment('view_count');
+        // Increment view count — deduplicate per session
+        $viewedKey = 'collection_viewed_'.$collection->id;
+        if (! session()->has($viewedKey)) {
+            $collection->increment('view_count');
+            session()->put($viewedKey, true);
+        }
 
         $isSaved = auth()->check() ? $collection->isSavedByUser(auth()->user()) : false;
         $saveCount = $collection->savedByUsers()->count();

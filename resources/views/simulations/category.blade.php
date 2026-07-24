@@ -10,9 +10,26 @@
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <x-breadcrumb :items="[['label' => 'Explore', 'url' => route('simulations.explore')], ['label' => $category]]" />
 
-            <div class="flex items-center gap-3 mb-6">
-                <h1 class="text-2xl font-bold text-gray-900">{{ $category }}</h1>
-                <span class="text-sm text-gray-500">({{ $simulations->total() }} simulasi)</span>
+            <div class="flex items-center justify-between mb-6 flex-wrap gap-3">
+                <div class="flex items-center gap-3">
+                    <h1 class="text-2xl font-bold text-gray-900">{{ $category }}</h1>
+                    <span class="text-sm text-gray-500">({{ $simulations->total() }} simulasi)</span>
+                </div>
+                <div class="flex items-center gap-1">
+                    @php
+                        $sortOptions = [
+                            'popular' => 'Paling Dimainkan',
+                            'newest' => 'Terbaru',
+                            'rating' => 'Rating Tertinggi',
+                        ];
+                    @endphp
+                    @foreach($sortOptions as $key => $label)
+                        <a href="{{ route('simulations.category', ['category' => $category, 'sort' => $key]) }}"
+                            class="px-3 py-1.5 text-xs font-medium rounded-lg transition {{ ($sort ?? 'popular') === $key ? 'bg-blue-600 text-white' : 'bg-gray-100 text-gray-600 hover:bg-gray-200' }}">
+                            {{ $label }}
+                        </a>
+                    @endforeach
+                </div>
             </div>
 
             @if($simulations->count() > 0)

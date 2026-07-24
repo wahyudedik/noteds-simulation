@@ -98,7 +98,7 @@
                             </div>
                             <div class="flex justify-between">
                                 <span class="text-sm text-gray-500">Streak</span>
-                                <span class="text-sm font-semibold text-orange-600">{{ $user->streak ?? 0 }} hari 🔥</span>
+                                <span class="text-sm font-semibold text-orange-600">{{ $user->streak ?? 0 }} hari</span>
                             </div>
                         </div>
                         @if($user->badges->count() > 0)
@@ -146,8 +146,9 @@
                         <form action="{{ route('admin.users.approve-creator', $user) }}" method="POST">
                             @csrf
                             @method('POST')
-                            <button type="submit" class="px-4 py-2 bg-green-600 hover:bg-green-700 text-white text-sm font-medium rounded-lg transition">
-                                ✅ Setujui sebagai Creator
+                            <button type="submit" class="px-4 py-2 bg-green-600 hover:bg-green-700 text-white text-sm font-medium rounded-lg transition inline-flex items-center gap-1.5">
+                                <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z"/></svg>
+                                Setujui sebagai Creator
                             </button>
                         </form>
                     </div>

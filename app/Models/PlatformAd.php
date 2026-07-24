@@ -29,11 +29,16 @@ class PlatformAd extends Model
         'clicks',
         'revenue',
         'created_by',
+        'sponsor_id',
+        'sponsorship_id',
+        'is_sponsored',
+        'sponsored_label',
     ];
 
     protected $casts = [
         'category_filter' => 'array',
         'is_active' => 'boolean',
+        'is_sponsored' => 'boolean',
         'start_date' => 'datetime',
         'end_date' => 'datetime',
         'impressions' => 'integer',
@@ -46,6 +51,16 @@ class PlatformAd extends Model
     public function creator(): BelongsTo
     {
         return $this->belongsTo(User::class, 'created_by');
+    }
+
+    public function sponsor(): BelongsTo
+    {
+        return $this->belongsTo(Sponsor::class);
+    }
+
+    public function sponsorship(): BelongsTo
+    {
+        return $this->belongsTo(Sponsorship::class);
     }
 
     public function impressionsLog()

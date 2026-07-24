@@ -4,6 +4,9 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Comment;
+use App\Models\ForumCategory;
+use App\Models\ForumReply;
+use App\Models\ForumThread;
 use App\Models\Simulation;
 use App\Models\User;
 use Illuminate\View\View;
@@ -29,6 +32,10 @@ class DashboardController extends Controller
             'total_bookmarks' => (int) Simulation::sum('bookmark_count'),
             'total_shares' => (int) Simulation::sum('share_count'),
             'total_comments' => Comment::count(),
+            'total_forum_threads' => ForumThread::count(),
+            'total_forum_replies' => ForumReply::count(),
+            'total_forum_categories' => ForumCategory::count(),
+            'unsolved_threads' => ForumThread::where('is_solved', false)->count(),
         ];
 
         $recentSimulations = Simulation::with('user')

@@ -38,6 +38,48 @@
                 </div>
             </div>
 
+            {{-- Forum Stats --}}
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+                <div class="bg-white border border-gray-100 rounded-xl p-5 shadow-sm">
+                    <div class="flex items-center gap-2 mb-2">
+                        <div class="w-8 h-8 rounded-lg bg-indigo-100 flex items-center justify-center">
+                            <svg class="w-4 h-4 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8h2a2 2 0 012 2v6a2 2 0 01-2 2h-2v4l-4-4H9a2 2 0 01-2-2v-1m0-4V6a2 2 0 012-2h6a2 2 0 012 2v6a2 2 0 01-2 2h-2v4l-4-4z" /></svg>
+                        </div>
+                        <p class="text-sm text-gray-500">Forum Threads</p>
+                    </div>
+                    <p class="text-2xl font-bold text-gray-900">{{ number_format($stats['total_forum_threads']) }}</p>
+                    <p class="text-xs text-gray-400 mt-1">{{ $stats['unsolved_threads'] }} belum terjawab</p>
+                </div>
+                <div class="bg-white border border-gray-100 rounded-xl p-5 shadow-sm">
+                    <div class="flex items-center gap-2 mb-2">
+                        <div class="w-8 h-8 rounded-lg bg-green-100 flex items-center justify-center">
+                            <svg class="w-4 h-4 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" /></svg>
+                        </div>
+                        <p class="text-sm text-gray-500">Forum Replies</p>
+                    </div>
+                    <p class="text-2xl font-bold text-gray-900">{{ number_format($stats['total_forum_replies']) }}</p>
+                </div>
+                <div class="bg-white border border-gray-100 rounded-xl p-5 shadow-sm">
+                    <div class="flex items-center gap-2 mb-2">
+                        <div class="w-8 h-8 rounded-lg bg-yellow-100 flex items-center justify-center">
+                            <svg class="w-4 h-4 text-yellow-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z" /></svg>
+                        </div>
+                        <p class="text-sm text-gray-500">Kategori Forum</p>
+                    </div>
+                    <p class="text-2xl font-bold text-gray-900">{{ $stats['total_forum_categories'] }}</p>
+                </div>
+                <div class="bg-white border border-gray-100 rounded-xl p-5 shadow-sm">
+                    <div class="flex items-center gap-2 mb-2">
+                        <div class="w-8 h-8 rounded-lg bg-red-100 flex items-center justify-center">
+                            <svg class="w-4 h-4 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                        </div>
+                        <p class="text-sm text-gray-500">Belum Terjawab</p>
+                    </div>
+                    <p class="text-2xl font-bold text-red-600">{{ $stats['unsolved_threads'] }}</p>
+                    <p class="text-xs text-gray-400 mt-1">butuh perhatian</p>
+                </div>
+            </div>
+
             {{-- Quick Actions --}}
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-8">
                 <a href="{{ route('admin.users.index') }}" class="flex items-center gap-3 bg-white border border-gray-100 rounded-xl p-5 shadow-sm hover:shadow-md transition">
@@ -184,13 +226,40 @@
                         <div class="text-xs text-gray-500">Kompetisi & penilaian kreator</div>
                     </div>
                 </a>
-                <a href="{{ route('admin.certifications.index') }}" class="flex items-center gap-3 bg-white border border-gray-100 rounded-xl p-5 shadow-sm hover:shadow-md transition">
+                <a href="{{ route('forum.index') }}" class="flex items-center gap-3 bg-white border border-gray-100 rounded-xl p-5 shadow-sm hover:shadow-md transition">
                     <div class="w-10 h-10 rounded-lg bg-indigo-100 flex items-center justify-center">
-                        <svg class="w-5 h-5 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z"/></svg>
+                        <svg class="w-5 h-5 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8h2a2 2 0 012 2v6a2 2 0 01-2 2h-2v4l-4-4H9a2 2 0 01-2-2v-1m0-4V6a2 2 0 012-2h6a2 2 0 012 2v6a2 2 0 01-2 2h-2v4l-4-4z" /></svg>
+                    </div>
+                    <div>
+                        <div class="font-semibold text-gray-900 text-sm">Forum / Komunitas</div>
+                        <div class="text-xs text-gray-500">Threads, replies, moderasi</div>
+                    </div>
+                </a>
+                <a href="{{ route('admin.certifications.index') }}" class="flex items-center gap-3 bg-white border border-gray-100 rounded-xl p-5 shadow-sm hover:shadow-md transition">
+                    <div class="w-10 h-10 rounded-lg bg-violet-100 flex items-center justify-center">
+                        <svg class="w-5 h-5 text-violet-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z"/></svg>
                     </div>
                     <div>
                         <div class="font-semibold text-gray-900 text-sm">Certification</div>
                         <div class="text-xs text-gray-500">Sertifikasi Verified, Expert, Platinum</div>
+                    </div>
+                </a>
+                <a href="{{ route('admin.sponsors.index') }}" class="flex items-center gap-3 bg-white border border-gray-100 rounded-xl p-5 shadow-sm hover:shadow-md transition">
+                    <div class="w-10 h-10 rounded-lg bg-purple-100 flex items-center justify-center">
+                        <svg class="w-5 h-5 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" /></svg>
+                    </div>
+                    <div>
+                        <div class="font-semibold text-gray-900 text-sm">Sponsor</div>
+                        <div class="text-xs text-gray-500">Data brand & kontak sponsor</div>
+                    </div>
+                </a>
+                <a href="{{ route('admin.sponsorships.index') }}" class="flex items-center gap-3 bg-white border border-gray-100 rounded-xl p-5 shadow-sm hover:shadow-md transition">
+                    <div class="w-10 h-10 rounded-lg bg-teal-100 flex items-center justify-center">
+                        <svg class="w-5 h-5 text-teal-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" /></svg>
+                    </div>
+                    <div>
+                        <div class="font-semibold text-gray-900 text-sm">Sponsorship</div>
+                        <div class="text-xs text-gray-500">Perjanjian sponsorship & invoice</div>
                     </div>
                 </a>
             </div>

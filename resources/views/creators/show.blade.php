@@ -14,12 +14,7 @@
     <div class="py-12">
         <div class="max-w-5xl mx-auto sm:px-6 lg:px-8">
 
-            {{-- Breadcrumb --}}
-            <nav class="flex items-center gap-2 text-sm text-gray-500 mb-6" aria-label="Breadcrumb">
-                <a href="{{ route('simulations.explore') }}" class="hover:text-blue-600 transition">Explore</a>
-                <span>/</span>
-                <span class="text-gray-900 font-medium">{{ $creator->name }}</span>
-            </nav>
+            <x-breadcrumb :items="[['label' => 'Explore', 'url' => route('simulations.explore')], ['label' => $creator->name]]" />
 
             {{-- Creator Profile Header --}}
             <div class="bg-white rounded-2xl p-6 sm:p-8 shadow-sm border border-gray-100">

@@ -45,7 +45,7 @@
                                 </div>
                                 <div class="flex items-center gap-3">
                                     <span class="px-2 py-1 text-xs font-medium rounded-full bg-amber-100 text-amber-700">
-                                        Eligible: {{ match($item['level']) { 'verified' => '✅ Verified', 'expert' => '👑 Expert', 'platinum' => '⭐ Platinum', default => $item['level'] } }}
+                                        Eligible: {{ $item['level'] }}
                                     </span>
                                     <form method="POST" action="{{ route('admin.certifications.award') }}">
                                         @csrf

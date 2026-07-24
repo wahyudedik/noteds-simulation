@@ -118,6 +118,11 @@
                         <svg class="inline w-4 h-4 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/></svg>
                         Collection
                     </a>
+                    <a href="{{ route('user-profile.tab', 'forum') }}"
+                        class="px-5 py-3 text-sm font-medium border-b-2 transition {{ $activeTab === 'forum' ? 'border-blue-600 text-blue-600' : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300' }}">
+                        <svg class="inline w-4 h-4 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8h2a2 2 0 012 2v6a2 2 0 01-2 2h-2v4l-4-4H9a2 2 0 01-2-2v-1m0-4V6a2 2 0 012-2h6a2 2 0 012 2v6a2 2 0 01-2 2h-2v4l-4-4z" /></svg>
+                        Forum
+                    </a>
                 </nav>
             </div>
 
@@ -245,6 +250,126 @@
                             </a>
                         </div>
                     @endif
+                @endif
+
+                {{-- Forum Tab --}}
+                @if($activeTab === 'forum')
+                    {{-- Sub-tabs: Threads & Replies --}}
+                    <div class="mb-6" x-data="{ forumTab: 'threads' }">
+                        <div class="flex gap-1 border-b border-gray-200 mb-4">
+                            <button @click="forumTab = 'threads'"
+                                class="px-4 py-2 text-sm font-medium border-b-2 transition"
+                                :class="forumTab === 'threads' ? 'border-blue-600 text-blue-600' : 'border-transparent text-gray-500 hover:text-gray-700'">
+                                Thread Saya ({{ $stats['forum_threads'] }})
+                            </button>
+                            <button @click="forumTab = 'replies'"
+                                class="px-4 py-2 text-sm font-medium border-b-2 transition"
+                                :class="forumTab === 'replies' ? 'border-blue-600 text-blue-600' : 'border-transparent text-gray-500 hover:text-gray-700'">
+                                Balasan Saya ({{ $stats['forum_replies'] }})
+                            </button>
+                        </div>
+
+                        {{-- Threads --}}
+                        <div x-show="forumTab === 'threads'">
+                            @if(isset($data['forum_threads']) && $data['forum_threads']->count() > 0)
+                                <div class="space-y-3">
+                                    @foreach($data['forum_threads'] as $thread)
+                                        <a href="{{ route('forum.show', $thread->slug) }}"
+                                            class="block bg-white rounded-xl p-4 shadow-sm border border-gray-100 hover:shadow-md transition">
+                                            <div class="flex items-start gap-3">
+                                                <div class="flex flex-col items-center gap-1 text-center min-w-[48px]">
+                                                    <span class="text-sm font-bold text-gray-900">{{ $thread->votes_count }}</span>
+                                                    <span class="text-[10px] text-gray-400 uppercase">vote</span>
+                                                </div>
+                                                <div class="flex-1 min-w-0">
+                                                    <div class="flex items-center gap-2 flex-wrap mb-1">
+                                                        @if($thread->category)
+                                                            <span class="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-medium" style="background-color: {{ $thread->category->color }}20; color: {{ $thread->category->color }};">
+                                                                {{ $thread->category->name }}
+                                                            </span>
+                                                        @endif
+                                                        @if($thread->is_pinned)
+                                                            <span class="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-medium bg-purple-100 text-purple-700">Pinned</span>
+                                                        @endif
+                                                        @if($thread->is_solved)
+                                                            <span class="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-medium bg-green-100 text-green-700">Solved</span>
+                                                        @endif
+                                                        @if($thread->is_locked)
+                                                            <span class="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-medium bg-red-100 text-red-700">Locked</span>
+                                                        @endif
+                                                    </div>
+                                                    <h4 class="text-sm font-semibold text-gray-900 truncate">{{ $thread->title }}</h4>
+                                                    <div class="flex items-center gap-4 mt-2 text-xs text-gray-500">
+                                                        <span>{{ $thread->replies_count }} balasan</span>
+                                                        <span>{{ $thread->views_count }} dilihat</span>
+                                                        <span>{{ $thread->created_at->diffForHumans() }}</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </a>
+                                    @endforeach
+                                </div>
+                                <div class="mt-4">
+                                    {{ $data['forum_threads']->withQueryString()->links() }}
+                                </div>
+                            @else
+                                <div class="text-center py-12">
+                                    <svg class="w-14 h-14 text-gray-300 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M17 8h2a2 2 0 012 2v6a2 2 0 01-2 2h-2v4l-4-4H9a2 2 0 01-2-2v-1m0-4V6a2 2 0 012-2h6a2 2 0 012 2v6a2 2 0 01-2 2h-2v4l-4-4z" /></svg>
+                                    <h3 class="text-gray-500 text-lg font-medium">Belum ada thread</h3>
+                                    <p class="text-gray-400 text-sm mt-2">Mulai diskusi dengan membuat thread baru.</p>
+                                    <a href="{{ route('forum.thread.create') }}" class="inline-flex items-center gap-2 mt-4 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium rounded-lg transition">
+                                        Buat Thread
+                                    </a>
+                                </div>
+                            @endif
+                        </div>
+
+                        {{-- Replies --}}
+                        <div x-show="forumTab === 'replies'">
+                            @if(isset($data['forum_replies']) && $data['forum_replies']->count() > 0)
+                                <div class="space-y-3">
+                                    @foreach($data['forum_replies'] as $reply)
+                                        <a href="{{ route('forum.show', $reply->thread->slug) }}#reply-{{ $reply->id }}"
+                                            class="block bg-white rounded-xl p-4 shadow-sm border border-gray-100 hover:shadow-md transition">
+                                            <div class="flex items-start gap-3">
+                                                <div class="flex-1 min-w-0">
+                                                    <p class="text-xs text-gray-500 mb-1">
+                                                        Membalas di
+                                                        <span class="font-medium text-gray-700">{{ $reply->thread->title }}</span>
+                                                        @if($reply->thread->category)
+                                                            <span class="inline-flex items-center px-1.5 py-0.5 rounded-full text-[10px] font-medium ml-1" style="background-color: {{ $reply->thread->category->color }}20; color: {{ $reply->thread->category->color }};">
+                                                                {{ $reply->thread->category->name }}
+                                                            </span>
+                                                        @endif
+                                                    </p>
+                                                    <p class="text-sm text-gray-700 line-clamp-2">{!! Str::limit(strip_tags($reply->body), 200) !!}</p>
+                                                    <div class="flex items-center gap-4 mt-2 text-xs text-gray-500">
+                                                        <span>{{ $reply->votes_count }} vote</span>
+                                                        @if($reply->is_accepted)
+                                                            <span class="text-green-600 font-medium">✓ Jawaban Diterima</span>
+                                                        @endif
+                                                        <span>{{ $reply->created_at->diffForHumans() }}</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </a>
+                                    @endforeach
+                                </div>
+                                <div class="mt-4">
+                                    {{ $data['forum_replies']->withQueryString()->links() }}
+                                </div>
+                            @else
+                                <div class="text-center py-12">
+                                    <svg class="w-14 h-14 text-gray-300 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" /></svg>
+                                    <h3 class="text-gray-500 text-lg font-medium">Belum ada balasan</h3>
+                                    <p class="text-gray-400 text-sm mt-2">Bantu komunitas dengan menjawab pertanyaan di forum.</p>
+                                    <a href="{{ route('forum.index') }}" class="inline-flex items-center gap-2 mt-4 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium rounded-lg transition">
+                                        Jelajahi Forum
+                                    </a>
+                                </div>
+                            @endif
+                        </div>
+                    </div>
                 @endif
 
             </div>

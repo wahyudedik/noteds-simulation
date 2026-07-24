@@ -173,12 +173,16 @@
                 <div class="mt-4">
                     <h1 class="text-xl font-bold text-gray-900">{{ $simulation->title }}</h1>
 
-                    <div class="flex items-center gap-4 mt-2 text-sm text-gray-500">
+                    <div class="flex items-center gap-4 mt-2 text-sm text-gray-500 flex-wrap">
                         <span>{{ $simulation->formatted_view_count }} dilihat</span>
                         <span>&middot;</span>
                         <span>{{ $simulation->formatted_play_count }} dimainkan</span>
                         <span>&middot;</span>
                         <span>{{ $simulation->time_ago }}</span>
+                        @if($simulation->published_at)
+                            <span>&middot;</span>
+                            <span title="{{ $simulation->published_at->format('d M Y H:i') }}">Diterbitkan {{ $simulation->published_at->format('d M Y') }}</span>
+                        @endif
                     </div>
 
                     {{-- Rating Display --}}
@@ -546,10 +550,12 @@
                                 ></textarea>
                                 <div class="flex justify-end mt-2">
                                     <button
+                                        id="comment-submit-btn"
                                         onclick="postComment()"
-                                        class="px-4 py-1.5 bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium rounded-lg transition"
+                                        class="px-4 py-1.5 bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium rounded-lg transition inline-flex items-center gap-2"
                                     >
-                                        Kirim
+                                        <span id="comment-submit-text">Kirim</span>
+                                        <svg id="comment-submit-spinner" class="hidden animate-spin h-4 w-4 text-white" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
                                     </button>
                                 </div>
                             </div>
@@ -603,6 +609,11 @@
                         <p class="text-gray-500 text-sm">Belum ada simulasi terkait.</p>
                     @endforelse
                 </div>
+                @if($related->hasPages())
+                    <div class="mt-4">
+                        {{ $related->links() }}
+                    </div>
+                @endif
             </div>
         </div>
     </main>
@@ -620,6 +631,7 @@
         var stickyThreshold = 0;
 
         function playSimulation() {
+            if (isPlaying) return;
             isPlaying = true;
             poster.classList.add('hidden');
             container.classList.remove('hidden');
@@ -874,10 +886,31 @@
             var content = input.value.trim();
             if (!content) return;
 
+            // Show loading state for main comment form
+            var isMainComment = !parentId;
+            if (isMainComment) {
+                var submitBtn = document.getElementById('comment-submit-btn');
+                var submitText = document.getElementById('comment-submit-text');
+                var submitSpinner = document.getElementById('comment-submit-spinner');
+                submitBtn.disabled = true;
+                submitBtn.classList.add('opacity-70', 'cursor-not-allowed');
+                submitText.textContent = 'Mengirim...';
+                submitSpinner.classList.remove('hidden');
+            }
+
             var data = { simulation_id: {{ $simulation->id }}, body: content };
             if (parentId) { data.parent_id = parentId; }
 
             ajaxPost('{{ route("comments.store", $simulation->slug) }}', data, function(result) {
+                if (isMainComment) {
+                    var submitBtn = document.getElementById('comment-submit-btn');
+                    var submitText = document.getElementById('comment-submit-text');
+                    var submitSpinner = document.getElementById('comment-submit-spinner');
+                    submitBtn.disabled = false;
+                    submitBtn.classList.remove('opacity-70', 'cursor-not-allowed');
+                    submitText.textContent = 'Kirim';
+                    submitSpinner.classList.add('hidden');
+                }
                 if (!result) return;
                 if (result.success) {
                     input.value = '';

@@ -150,7 +150,7 @@
                     <div class="px-6 py-4 hover:bg-gray-50 transition">
                         <div class="flex items-start gap-3">
                             @if($comment->user->avatar)
-                                <img src="{{ Storage::url($comment->user->avatar) }}" alt="{{ $comment->user->name }}" class="w-8 h-8 rounded-full object-cover shrink-0 mt-0.5" />
+                                <img src="{{ Storage::disk('public')->url($comment->user->avatar) }}" alt="{{ $comment->user->name }}" class="w-8 h-8 rounded-full object-cover shrink-0 mt-0.5" />
                             @else
                                 <div class="w-8 h-8 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center text-xs font-semibold shrink-0 mt-0.5">{{ strtoupper(substr($comment->user->name, 0, 1)) }}</div>
                             @endif

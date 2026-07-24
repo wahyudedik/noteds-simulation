@@ -31,7 +31,7 @@
                     {{-- Thumbnail --}}
                     <div class="aspect-video bg-gray-100 relative">
                         @if($sim->thumbnail)
-                            <img src="{{ Storage::url($sim->thumbnail) }}" alt="{{ $sim->title }}" class="w-full h-full object-cover" />
+                            <img src="{{ Storage::disk('public')->url($sim->thumbnail) }}" alt="{{ $sim->title }}" class="w-full h-full object-cover" />
                         @else
                             <div class="w-full h-full flex items-center justify-center bg-gradient-to-br from-blue-500 to-purple-600">
                                 <svg class="w-12 h-12 text-white/30" fill="none" stroke="currentColor" viewBox="0 0 24 24">

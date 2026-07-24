@@ -16,7 +16,7 @@ class UserProfileController extends Controller
         $tab ??= 'bookmarks';
 
         $user = $request->user();
-        $validTabs = ['bookmarks', 'history', 'following', 'collections'];
+        $validTabs = ['bookmarks', 'history', 'following', 'collections', 'forum'];
         $activeTab = in_array($tab, $validTabs) ? $tab : 'bookmarks';
 
         $data = match ($activeTab) {
@@ -24,6 +24,7 @@ class UserProfileController extends Controller
             'history' => $this->getHistory($user),
             'following' => $this->getFollowing($user),
             'collections' => $this->getCollections($user),
+            'forum' => $this->getForumThreads($user),
             default => [],
         };
 
@@ -34,6 +35,8 @@ class UserProfileController extends Controller
             'followers' => $user->followers()->count(),
             'comments' => $user->comments()->count(),
             'collections' => $user->collections()->count(),
+            'forum_threads' => $user->forumThreads()->count(),
+            'forum_replies' => $user->forumReplies()->count(),
         ];
 
         return view('user-profile.index', compact('user', 'activeTab', 'data', 'stats'));
@@ -91,5 +94,26 @@ class UserProfileController extends Controller
             ->paginate(12);
 
         return ['collections' => $collections];
+    }
+
+    /**
+     * Get user's forum threads and replies.
+     */
+    private function getForumThreads($user): array
+    {
+        $threads = $user->forumThreads()
+            ->with('category')
+            ->latest()
+            ->paginate(10);
+
+        $replies = $user->forumReplies()
+            ->with('thread.category')
+            ->latest()
+            ->paginate(10);
+
+        return [
+            'forum_threads' => $threads,
+            'forum_replies' => $replies,
+        ];
     }
 }

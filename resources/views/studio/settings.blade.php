@@ -1,6 +1,6 @@
 <x-studio-layout :pageTitle="'Pengaturan Studio'">
     <div class="max-w-3xl mx-auto">
-        <form method="POST" action="{{ route('studio.settings.update') }}" enctype="multipart/form-data" x-data="{ saving: false, avatarSrc: '{{ $user->avatar ? Storage::url($user->avatar) : '' }}' }" @submit="saving = true">
+        <form method="POST" action="{{ route('studio.settings.update') }}" enctype="multipart/form-data" x-data="{ saving: false, avatarSrc: '{{ $user->avatar ? Storage::disk('public')->url($user->avatar) : '' }}' }" @submit="saving = true">
             @csrf
             @method('PUT')
 

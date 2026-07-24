@@ -56,7 +56,7 @@
                                         <td class="py-3 px-4">
                                             <div class="flex items-center gap-3">
                                                 @if($creator->avatar)
-                                                    <img src="{{ Storage::url($creator->avatar) }}" alt="" class="w-8 h-8 rounded-full object-cover" />
+                                                    <img src="{{ Storage::disk('public')->url($creator->avatar) }}" alt="" class="w-8 h-8 rounded-full object-cover" />
                                                 @else
                                                     <div class="w-8 h-8 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center text-xs font-semibold">{{ strtoupper(substr($creator->name, 0, 1)) }}</div>
                                                 @endif

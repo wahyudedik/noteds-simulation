@@ -2,6 +2,10 @@
 
 @php
     $ad = app(\App\Services\AdService::class)->getAdForPosition($position, auth()->id());
+    // Eager-load sponsor relationship if not already loaded
+    if ($ad && $ad->sponsor_id && ! $ad->relationLoaded('sponsor')) {
+        $ad->load('sponsor');
+    }
 @endphp
 
 @if($ad)
@@ -38,7 +42,7 @@
                         aria-label="Advertisement: {{ $ad->title }}"
                     ></a>
                 @endif
-                <span class="absolute top-1 right-1 text-[10px] text-gray-400 bg-black/50 px-1 rounded">Ad</span>
+                <span class="absolute top-1 right-1 text-[10px] text-gray-400 bg-black/50 px-1 rounded">{{ $ad->sponsor ? 'Sponsored by ' . $ad->sponsor->company_name : 'Ad' }}</span>
             </div>
         @elseif($ad->image_path)
             {{-- Image/Banner Ad --}}
@@ -67,7 +71,7 @@
                         loading="lazy"
                     />
                 @endif
-                <span class="absolute top-1 right-1 text-[10px] text-gray-400 bg-black/50 px-1 rounded">Ad</span>
+                <span class="absolute top-1 right-1 text-[10px] text-gray-400 bg-black/50 px-1 rounded">{{ $ad->sponsor ? 'Sponsored by ' . $ad->sponsor->company_name : 'Ad' }}</span>
             </div>
         @elseif($ad->content)
             {{-- Native/HTML Ad --}}
@@ -86,7 +90,7 @@
                 @else
                     <div class="prose prose-sm max-w-none">{!! $ad->content !!}</div>
                 @endif
-                <span class="text-[10px] text-gray-400 mt-1 block">Ad</span>
+                <span class="text-[10px] text-gray-400 mt-1 block">{{ $ad->sponsor ? 'Sponsored by ' . $ad->sponsor->company_name : 'Ad' }}</span>
             </div>
         @endif
     </div>

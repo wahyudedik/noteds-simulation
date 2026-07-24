@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\PlayHistory;
 use App\Models\SeoSetting;
 use App\Models\Simulation;
+use App\Models\Tag;
 use App\Models\User;
 use App\Services\GamificationService;
 use Illuminate\Http\JsonResponse;
@@ -31,6 +32,19 @@ class SimulationController extends Controller
         // Filter by category if provided
         $activeCategory = $request->input('category');
 
+        // Filter by tag if provided
+        $activeTag = $request->input('tag');
+        $tags = Tag::has('simulations', '>', 0)
+            ->withCount('simulations')
+            ->orderByDesc('simulations_count')
+            ->take(20)
+            ->get();
+
+        // Shared scope: apply category + tag filters
+        $applyFilters = fn ($q) => $q
+            ->when($activeCategory, fn ($q2) => $q2->where('category', $activeCategory))
+            ->when($activeTag, fn ($q2) => $q2->whereHas('tagModels', fn ($q3) => $q3->where('tags.slug', $activeTag)));
+
         // Trending time period filter
         $trendingPeriod = $request->input('trending', 'all');
         $trendingPeriods = [
@@ -41,8 +55,7 @@ class SimulationController extends Controller
             'all' => 'Semua',
         ];
 
-        $trendingQuery = Simulation::published()
-            ->when($activeCategory, fn ($q) => $q->where('category', $activeCategory));
+        $trendingQuery = Simulation::published()->tap($applyFilters);
 
         // Apply trending time filter
         $trendingQuery->where('published_at', '>=', match ($trendingPeriod) {
@@ -60,33 +73,80 @@ class SimulationController extends Controller
 
         // Featured simulations (always all-time)
         $featured = Simulation::published()
-            ->when($activeCategory, fn ($q) => $q->where('category', $activeCategory))
+            ->tap($applyFilters)
             ->orderByDesc('play_count')
             ->take(6)
             ->get();
 
         // Recently added
         $recent = Simulation::published()
-            ->when($activeCategory, fn ($q) => $q->where('category', $activeCategory))
+            ->tap($applyFilters)
             ->latest('published_at')
             ->take(12)
             ->get();
 
         // Highest rated
         $topRated = Simulation::published()
-            ->when($activeCategory, fn ($q) => $q->where('category', $activeCategory))
+            ->tap($applyFilters)
             ->withAvg('ratings', 'rating')
             ->orderByDesc('ratings_avg_rating')
             ->take(12)
             ->get();
 
+        // "For You" — personalized recommendations based on play history
+        $forYou = collect();
+        $user = $request->user();
+        if ($user) {
+            $topCategories = PlayHistory::where('user_id', $user->id)
+                ->with('simulation')
+                ->get()
+                ->pluck('simulation.category')
+                ->filter()
+                ->countBy()
+                ->sortDesc()
+                ->keys()
+                ->take(3);
+
+            if ($topCategories->isNotEmpty()) {
+                $playedIds = $user->playHistory()->pluck('simulation_id');
+                $forYou = Simulation::published()
+                    ->whereIn('category', $topCategories)
+                    ->whereNotIn('id', $playedIds)
+                    ->with('user')
+                    ->orderByDesc('average_rating')
+                    ->take(12)
+                    ->get();
+            }
+        }
+
+        // Fallback: if no personalized results, show highest rated not yet in other sections
+        if ($forYou->isEmpty()) {
+            $excludeIds = $featured->pluck('id')
+                ->merge($trending->pluck('id'))
+                ->merge($topRated->pluck('id'))
+                ->unique()
+                ->toArray();
+
+            $forYou = Simulation::published()
+                ->tap($applyFilters)
+                ->whereNotIn('id', $excludeIds)
+                ->with('user')
+                ->withAvg('ratings', 'rating')
+                ->orderByDesc('ratings_avg_rating')
+                ->take(12)
+                ->get();
+        }
+
         return view('simulations.explore', compact(
             'categories',
             'activeCategory',
+            'tags',
+            'activeTag',
             'featured',
             'trending',
             'recent',
             'topRated',
+            'forYou',
             'trendingPeriod',
             'trendingPeriods',
         ));
@@ -223,11 +283,21 @@ class SimulationController extends Controller
             }])
             ->firstOrFail();
 
-        // Increment view count only once per session per simulation
-        $viewedKey = 'sim_viewed_'.$simulation->id;
-        if (! session()->has($viewedKey)) {
+        // Increment view count with deduplication:
+        // - Logged-in users: keyed by user ID (survives session expiry)
+        // - Guests: keyed by IP hash
+        // Cooldown: 5 minutes between duplicate views
+        $cooldownMinutes = 5;
+        if (Auth::check()) {
+            $viewedKey = 'sim_viewed_user_'.Auth::id().'_'.$simulation->id;
+        } else {
+            $viewedKey = 'sim_viewed_ip_'.md5($request->ip()).'_'.$simulation->id;
+        }
+
+        $lastViewed = session($viewedKey);
+        if (! $lastViewed || now()->diffInMinutes($lastViewed) > $cooldownMinutes) {
             $simulation->increment('view_count');
-            session()->put($viewedKey, true);
+            session()->put($viewedKey, now());
 
             // Track traffic source
             $source = $this->detectTrafficSource($request);
@@ -281,8 +351,7 @@ class SimulationController extends Controller
             })
             ->orderByDesc('average_rating')
             ->orderByDesc('play_count')
-            ->take(8)
-            ->get();
+            ->paginate(8);
 
         // Load SEO settings for this simulation
         $seoSetting = SeoSetting::findByKey('simulation:'.$simulation->slug);
@@ -313,11 +382,19 @@ class SimulationController extends Controller
             ->where('slug', $slug)
             ->firstOrFail();
 
-        $simulation->increment('play_count');
+        // Deduplication: only count 1 play per 30 seconds per session
+        $playKey = 'sim_played_'.$simulation->id;
+        $lastPlayed = session($playKey);
+        $cooldownSeconds = 30;
 
-        // Track traffic source for play
-        $source = $this->detectTrafficSource($request);
-        $this->trackTrafficSource($simulation->id, $source, 'play');
+        if (! $lastPlayed || now()->diffInSeconds($lastPlayed) > $cooldownSeconds) {
+            $simulation->increment('play_count');
+            session()->put($playKey, now());
+
+            // Track traffic source for play
+            $source = $this->detectTrafficSource($request);
+            $this->trackTrafficSource($simulation->id, $source, 'play');
+        }
 
         // Record play history for authenticated users
         $user = Auth::user();
@@ -523,14 +600,19 @@ class SimulationController extends Controller
     /**
      * Display simulations by category.
      */
-    public function category(string $category): View
+    public function category(Request $request, string $category): View
     {
+        $sort = $request->input('sort', 'popular');
+
         $simulations = Simulation::published()
             ->where('category', $category)
-            ->orderByDesc('play_count')
-            ->paginate(20);
+            ->when($sort === 'newest', fn ($q) => $q->latest('published_at'))
+            ->when($sort === 'rating', fn ($q) => $q->withAvg('ratings', 'rating')->orderByDesc('ratings_avg_rating'))
+            ->when($sort === 'popular', fn ($q) => $q->orderByDesc('play_count'))
+            ->paginate(20)
+            ->appends(['sort' => $sort]);
 
-        return view('simulations.category', compact('simulations', 'category'));
+        return view('simulations.category', compact('simulations', 'category', 'sort'));
     }
 
     /**
