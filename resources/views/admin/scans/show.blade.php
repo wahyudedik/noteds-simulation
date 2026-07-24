@@ -16,7 +16,7 @@
                     <h3 class="font-semibold text-gray-900 mb-4">Detail Scan</h3>
                     <dl class="grid grid-cols-2 gap-4 text-sm">
                         <div>
-                            <dt class="text-gray-500">Simulasi</dt>
+                            <dt class="text-gray-500">Experience</dt>
                             <dd class="font-medium text-gray-900">{{ $log->simulation->title ?? 'N/A' }}</dd>
                         </div>
                         <div>
@@ -82,7 +82,7 @@
                             <svg class="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
                             <div>
                                 <div class="font-medium text-green-800">Tidak ada temuan</div>
-                                <div class="text-sm text-green-600">Simulasi ini lolos dari deteksi pola berbahaya.</div>
+                                <div class="text-sm text-green-600">Experience ini lolos dari deteksi pola berbahaya.</div>
                             </div>
                         </div>
                     </div>
@@ -97,7 +97,7 @@
                             <div class="space-y-3 mb-4">
                                 <label class="flex items-center gap-2 text-sm">
                                     <input type="radio" name="result" value="pass" class="text-green-500">
-                                    <span class="text-green-700">(ok) Pass — Simulasi aman</span>
+                                    <span class="text-green-700">(ok) Pass — Experience aman</span>
                                 </label>
                                 <label class="flex items-center gap-2 text-sm">
                                     <input type="radio" name="result" value="flag" class="text-yellow-500">
@@ -136,7 +136,7 @@
 
                 @if($log->simulation)
                 <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
-                    <h3 class="font-semibold text-gray-900 mb-3">Simulasi</h3>
+                    <h3 class="font-semibold text-gray-900 mb-3">Experience</h3>
                     <a href="{{ route('simulations.show', $log->simulation->slug) }}" class="text-sm text-blue-600 hover:underline">{{ $log->simulation->title }}</a>
                     <div class="text-xs text-gray-400 mt-1">oleh {{ $log->simulation->user->name ?? 'N/A' }}</div>
                 </div>

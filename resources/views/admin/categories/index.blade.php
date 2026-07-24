@@ -48,7 +48,7 @@
                                         <th class="text-left py-3 px-2 text-gray-500 font-medium">Urutan</th>
                                         <th class="text-left py-3 px-2 text-gray-500 font-medium">Nama</th>
                                         <th class="text-left py-3 px-2 text-gray-500 font-medium">Slug</th>
-                                        <th class="text-center py-3 px-2 text-gray-500 font-medium">Simulasi</th>
+                                        <th class="text-center py-3 px-2 text-gray-500 font-medium">Experience</th>
                                         <th class="text-center py-3 px-2 text-gray-500 font-medium">Status</th>
                                         <th class="text-right py-3 px-2 text-gray-500 font-medium">Aksi</th>
                                     </tr>

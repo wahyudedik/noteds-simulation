@@ -40,7 +40,7 @@
                             <thead>
                                 <tr class="border-b border-gray-200 bg-gray-50">
                                     <th class="text-left py-3 px-4 text-gray-500 font-medium">Creator</th>
-                                    <th class="text-center py-3 px-4 text-gray-500 font-medium">Simulasi</th>
+                                    <th class="text-center py-3 px-4 text-gray-500 font-medium">Experience</th>
                                     <th class="text-center py-3 px-4 text-gray-500 font-medium">Reputasi</th>
                                     <th class="text-center py-3 px-4 text-gray-500 font-medium">Tier</th>
                                     <th class="text-center py-3 px-4 text-gray-500 font-medium">Status</th>

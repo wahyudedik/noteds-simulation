@@ -152,7 +152,7 @@
                     {{-- Player Control Bar --}}
                     <div id="player-controls" class="hidden bg-gray-800 border-t border-gray-700 px-3 py-2 flex items-center justify-between rounded-b-xl">
                         <div class="flex items-center gap-2">
-                            <button onclick="closeSimulation()" class="p-1.5 text-gray-300 hover:text-white rounded-lg hover:bg-gray-700 transition" title="Tutup simulasi">
+                            <button onclick="closeSimulation()" class="p-1.5 text-gray-300 hover:text-white rounded-lg hover:bg-gray-700 transition" title="Tutup experience">
                                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
                             </button>
                             <button onclick="reloadSimulation()" class="p-1.5 text-gray-300 hover:text-white rounded-lg hover:bg-gray-700 transition" title="Muat ulang">
@@ -187,14 +187,13 @@
 
                     {{-- Rating Display --}}
                     <div class="flex items-center gap-2 mt-2">
-                        @php $avgRating = $simulation->ratings()->avg('rating'); @endphp
-                        @if($avgRating)
+                        @if($simulation->average_rating)
                             <div class="flex items-center gap-1">
                                 @for($i = 1; $i <= 5; $i++)
-                                    <svg class="w-4 h-4 {{ $i <= round($avgRating) ? 'text-yellow-400' : 'text-gray-300' }}" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                                    <svg class="w-4 h-4 {{ $i <= round($simulation->average_rating) ? 'text-yellow-400' : 'text-gray-300' }}" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
                                 @endfor
-                                <span class="text-sm text-gray-500 ml-1">{{ number_format($avgRating, 1) }}</span>
-                                <span class="text-xs text-gray-400">({{ $simulation->ratings()->count() }})</span>
+                                <span class="text-sm text-gray-500 ml-1">{{ number_format($simulation->average_rating, 1) }}</span>
+                                <span class="text-xs text-gray-400">({{ $simulation->rating_count }})</span>
                             </div>
                         @endif
                     </div>
@@ -320,8 +319,8 @@
                         </button>
                         <div x-show="reportOpen" x-transition x-cloak class="fixed inset-0 z-50 flex items-center justify-center bg-black/50" @click.self="reportOpen = false">
                             <div class="bg-white rounded-2xl shadow-xl max-w-md w-full mx-4 p-6">
-                                <h3 class="text-lg font-bold text-gray-900 mb-1">Laporkan Simulasi</h3>
-                                <p class="text-sm text-gray-500 mb-4">Pilih alasan pelaporan untuk simulasi ini.</p>
+                                <h3 class="text-lg font-bold text-gray-900 mb-1">Laporkan Experience</h3>
+                                <p class="text-sm text-gray-500 mb-4">Pilih alasan pelaporan untuk experience ini.</p>
                                 <form method="POST" action="{{ route('reports.store', $simulation->slug) }}" id="report-form">
                                     @csrf
                                     <div class="space-y-2 mb-4">
@@ -368,7 +367,7 @@
                     {{-- Reactions Section --}}
                     @auth
                     <div class="mt-4 p-4 bg-white rounded-xl border border-gray-100 shadow-sm">
-                        <h3 class="text-gray-900 font-semibold text-sm mb-3">Bagaimana simulasi ini?</h3>
+                        <h3 class="text-gray-900 font-semibold text-sm mb-3">Bagaimana experience ini?</h3>
                         <div class="flex items-center gap-2 flex-wrap" id="reactions-container">
                             @php
                                 $reactionTypes = [
@@ -500,7 +499,7 @@
                             </div>
                             <div>
                                 <p class="text-gray-900 font-medium text-sm">{{ $simulation->user->name }}</p>
-                                <p class="text-gray-500 text-xs">{{ $simulation->user->published_simulations_count }} simulasi &middot; {{ $simulation->user->followers_count }} pengikut</p>
+                                <p class="text-gray-500 text-xs">{{ $simulation->user->published_simulations_count }} experience &middot; {{ $simulation->user->followers_count }} pengikut</p>
                             </div>
                         </a>
                         @auth
@@ -586,7 +585,7 @@
 
             {{-- Right: Related Simulations --}}
             <div class="w-full lg:w-96 flex-shrink-0">
-                <h3 class="text-gray-900 font-semibold mb-4">Simulasi Terkait</h3>
+                <h3 class="text-gray-900 font-semibold mb-4">Experience Terkait</h3>
                 <div class="space-y-3">
                     @forelse($related as $rel)
                         <a href="{{ route('simulations.show', $rel->slug) }}" class="flex gap-3 group">
@@ -606,7 +605,7 @@
                             </div>
                         </a>
                     @empty
-                        <p class="text-gray-500 text-sm">Belum ada simulasi terkait.</p>
+                        <p class="text-gray-500 text-sm">Belum ada experience terkait.</p>
                     @endforelse
                 </div>
                 @if($related->hasPages())
@@ -861,24 +860,6 @@
             });
         }
 
-        // ========== Follow Simulation ==========
-        function toggleFollowSimulation() {
-            ajaxPost('/follows/{{ $simulation->user->id }}/toggle', { followable_type: 'simulation', followable_id: {{ $simulation->id }} }, function(result) {
-                if (!result) return;
-                var btn = document.getElementById('sim-follow-btn');
-                var text = document.getElementById('sim-follow-text');
-                if (result.following) {
-                    btn.classList.remove('bg-blue-600', 'hover:bg-blue-700', 'text-white');
-                    btn.classList.add('bg-gray-200', 'hover:bg-gray-300', 'text-gray-700');
-                    text.textContent = 'Mengikuti Simulasi';
-                } else {
-                    btn.classList.remove('bg-gray-200', 'hover:bg-gray-300', 'text-gray-700');
-                    btn.classList.add('bg-blue-600', 'hover:bg-blue-700', 'text-white');
-                    text.textContent = 'Ikuti Simulasi';
-                }
-            });
-        }
-
         // ========== Comments ==========
         function postComment(parentId) {
             var inputId = parentId ? 'reply-input-' + parentId : 'comment-input';
@@ -948,7 +929,7 @@
                     <span class="font-semibold text-gray-900">Noteds</span>
                 </div>
                 <p class="text-sm text-gray-500">
-                    Interactive Simulations &copy; {{ date('Y') }}
+                    Interactive Experience &copy; {{ date('Y') }}
                 </p>
             </div>
         </div>

@@ -51,7 +51,7 @@
             {{-- Stats Grid --}}
             <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
                 <div class="bg-white border border-gray-100 rounded-xl p-4 shadow-sm">
-                    <p class="text-xs text-gray-500">Simulasi</p>
+                    <p class="text-xs text-gray-500">Experience</p>
                     <p class="text-xl font-bold text-gray-900 mt-1">{{ $stats['simulations'] }}</p>
                     <p class="text-[10px] text-gray-400">{{ $stats['published'] }} published</p>
                 </div>
@@ -140,7 +140,7 @@
             {{-- Recent Simulations --}}
             <div class="bg-white border border-gray-100 rounded-xl overflow-hidden shadow-sm">
                 <div class="p-6 border-b border-gray-100">
-                    <h4 class="font-semibold text-gray-900">Simulasi Terbaru</h4>
+                    <h4 class="font-semibold text-gray-900">Experience Terbaru</h4>
                 </div>
                 @if($recentSimulations->count() > 0)
                     <div class="overflow-x-auto">
@@ -174,7 +174,7 @@
                         </table>
                     </div>
                 @else
-                    <div class="text-center py-8 text-gray-500 text-sm">Belum ada simulasi.</div>
+                    <div class="text-center py-8 text-gray-500 text-sm">Belum ada experience.</div>
                 @endif
             </div>
         </div>

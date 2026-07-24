@@ -51,10 +51,10 @@
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
             <h1 class="text-3xl md:text-4xl font-bold mb-3">
                 <svg class="inline w-8 h-8 text-blue-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z" /></svg>
-                <span class="text-blue-300">Simulasi Interaktif</span> untuk Semua
+                <span class="text-blue-300">Interactive Experience</span> untuk Semua
             </h1>
             <p class="text-gray-300 text-lg max-w-2xl mx-auto mb-6">
-                Jelajahi ratusan simulasi sains interaktif. Belajar jadi lebih menyenangkan.
+                Jelajahi ratusan experience sains interaktif. Belajar jadi lebih menyenangkan.
             </p>
             <div class="flex flex-wrap justify-center gap-2">
                 @foreach($categories as $cat)
@@ -89,7 +89,7 @@
                     <div class="text-center py-16">
                         <svg class="w-16 h-16 text-gray-300 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
                         <h3 class="text-lg font-semibold text-gray-600 mb-1">Tidak ada hasil ditemukan</h3>
-                        <p class="text-sm text-gray-400 mb-4">Tidak ada simulasi yang cocok dengan "<span class="font-medium text-gray-500">{{ $search }}</span>"</p>
+                        <p class="text-sm text-gray-400 mb-4">Tidak ada experience yang cocok dengan "<span class="font-medium text-gray-500">{{ $search }}</span>"</p>
                         <p class="text-xs text-gray-400">Coba kata kunci lain atau jelajahi kategori di bawah.</p>
                     </div>
                 @endif
@@ -143,7 +143,7 @@
                             </div>
                             @else
                             <div class="text-center py-8">
-                                <p class="text-gray-400 text-sm">Tidak ada simulasi trending untuk periode ini.</p>
+                                <p class="text-gray-400 text-sm">Belum ada experience trending untuk periode ini.</p>
                             </div>
                             @endif
                         </section>
@@ -154,7 +154,7 @@
                 <div class="flex items-center justify-between mb-4">
                     <h2 class="text-xl font-bold text-gray-900">
                         <svg class="inline w-5 h-5 text-green-500 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6" /></svg>
-                        Simulasi Terbaru
+                        Experience Terbaru
                     </h2>
                 </div>
                 <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
@@ -205,8 +205,8 @@
                 <div class="mb-4">
                     <svg class="w-16 h-16 mx-auto text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z" /></svg>
                 </div>
-                <h3 class="text-xl font-semibold text-gray-700 mb-2">Belum ada simulasi</h3>
-                <p class="text-gray-500">Simulasi interaktif akan segera tersedia. Sabar ya!</p>
+                <h3 class="text-xl font-semibold text-gray-700 mb-2">Belum ada experience</h3>
+                <p class="text-gray-500">Experience interaktif akan segera tersedia. Sabar ya!</p>
             </div>
             @endif
                     </div>
@@ -223,7 +223,7 @@
                 Jadi Kreator di Noteds
             </h2>
             <p class="text-purple-100 text-lg max-w-xl mx-auto mb-6">
-                Buat simulasi interaktif, bagikan ilmu, dan berpeluang memperoleh penghasilan. Siapa pun bisa menjadi kreator!
+                Buat experience interaktif, bagikan ilmu, dan berpeluang memperoleh penghasilan. Siapa pun bisa menjadi kreator!
             </p>
             <a href="{{ route('become-creator-page') }}" class="inline-block px-8 py-3 bg-white text-purple-700 hover:bg-purple-50 rounded-xl font-semibold transition shadow-lg">
                 Pelajari Program Kreator →
@@ -240,7 +240,7 @@
                     <span class="font-semibold text-gray-900">Noteds</span>
                 </div>
                 <p class="text-sm text-gray-500">
-                    Interactive Simulations &copy; {{ date('Y') }}
+                    Interactive Experience &copy; {{ date('Y') }}
                 </p>
             </div>
         </div>

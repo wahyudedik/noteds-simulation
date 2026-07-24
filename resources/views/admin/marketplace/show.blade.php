@@ -16,7 +16,7 @@
                     <div>
                         <h3 class="text-lg font-semibold text-gray-900 mb-4">Informasi Listing</h3>
                         <dl class="space-y-2 text-sm">
-                            <div class="flex justify-between"><dt class="text-gray-500">Simulasi</dt><dd class="font-medium text-gray-900">{{ $listing->simulation->title ?? '-' }}</dd></div>
+                            <div class="flex justify-between"><dt class="text-gray-500">Experience</dt><dd class="font-medium text-gray-900">{{ $listing->simulation->title ?? '-' }}</dd></div>
                             <div class="flex justify-between"><dt class="text-gray-500">Kreator</dt><dd class="font-medium text-gray-900">{{ $listing->creator->name ?? '-' }}</dd></div>
                             <div class="flex justify-between"><dt class="text-gray-500">Harga</dt><dd class="font-medium text-gray-900">{{ $listing->formatted_price }}</dd></div>
                             <div class="flex justify-between"><dt class="text-gray-500">Lisensi</dt><dd class="font-medium text-gray-900">{{ $listing->license_type }}</dd></div>

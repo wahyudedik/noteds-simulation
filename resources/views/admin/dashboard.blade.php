@@ -9,7 +9,7 @@
                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
                 </svg>
-                Upload Simulasi
+                Upload Experience
             </a>
         </div>
     </x-slot>
@@ -20,7 +20,7 @@
             {{-- Stats Grid --}}
             <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
                 <div class="bg-white border border-gray-100 rounded-xl p-5 shadow-sm">
-                    <p class="text-sm text-gray-500">Total Simulasi</p>
+                    <p class="text-sm text-gray-500">Total Experience</p>
                     <p class="text-2xl font-bold text-gray-900 mt-1">{{ $stats['total_simulations'] }}</p>
                     <p class="text-xs text-gray-400 mt-1">{{ $stats['published'] }} published &middot; {{ $stats['draft'] }} draft</p>
                 </div>
@@ -97,7 +97,7 @@
                     </div>
                     <div>
                         <div class="font-semibold text-gray-900 text-sm">Kelola Kategori</div>
-                        <div class="text-xs text-gray-500">CRUD kategori simulasi</div>
+                        <div class="text-xs text-gray-500">CRUD kategori experience</div>
                     </div>
                 </a>
                 <a href="{{ route('admin.reports.index') }}" class="flex items-center gap-3 bg-white border border-gray-100 rounded-xl p-5 shadow-sm hover:shadow-md transition">
@@ -132,7 +132,7 @@
                         <svg class="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/></svg>
                     </div>
                     <div>
-                        <div class="font-semibold text-gray-900 text-sm">Kelola Simulasi</div>
+                        <div class="font-semibold text-gray-900 text-sm">Kelola Experience</div>
                         <div class="text-xs text-gray-500">CRUD & publish</div>
                     </div>
                 </a>
@@ -267,7 +267,7 @@
             {{-- Recent Simulations --}}
             <div class="bg-white border border-gray-100 overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6">
-                    <h3 class="text-lg font-semibold text-gray-900 mb-4">Simulasi Terbaru</h3>
+                    <h3 class="text-lg font-semibold text-gray-900 mb-4">Experience Terbaru</h3>
 
                     @if($recentSimulations->count() > 0)
                         <div class="overflow-x-auto">
@@ -310,7 +310,7 @@
                         </div>
                     @else
                         <div class="text-center py-8 text-gray-500">
-                            <p>Belum ada simulasi. <a href="{{ route('admin.simulations.create') }}" class="text-blue-600 hover:underline">Upload yang pertama!</a></p>
+                            <p>Belum ada experience. <a href="{{ route('admin.simulations.create') }}" class="text-blue-600 hover:underline">Upload yang pertama!</a></p>
                         </div>
                     @endif
                 </div>

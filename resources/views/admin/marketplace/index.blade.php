@@ -33,7 +33,7 @@
             {{-- Filters --}}
             <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-4">
                 <form method="GET" class="flex flex-wrap gap-3">
-                    <input type="text" name="search" value="{{ request('search') }}" placeholder="Cari simulasi..."
+                    <input type="text" name="search" value="{{ request('search') }}" placeholder="Cari experience..."
                         class="flex-1 min-w-[200px] rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm" />
                     <select name="status" class="rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm">
                         <option value="">Semua Status</option>
@@ -50,7 +50,7 @@
                     <table class="min-w-full divide-y divide-gray-200">
                         <thead class="bg-gray-50">
                             <tr>
-                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Simulasi</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Experience</th>
                                 <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Kreator</th>
                                 <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Harga</th>
                                 <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Lisensi</th>

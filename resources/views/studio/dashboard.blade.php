@@ -2,7 +2,7 @@
     {{-- Stats Grid --}}
     <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-4 mb-8">
         <div class="bg-white border border-gray-100 rounded-xl p-5 shadow-sm">
-            <p class="text-sm text-gray-500">Total Simulasi</p>
+            <p class="text-sm text-gray-500">Total Experience</p>
             <p class="text-2xl font-bold text-gray-900 mt-1">{{ $totalSimulations }}</p>
             <p class="text-xs text-gray-400 mt-1">{{ $publishedCount }} published · {{ $draftCount }} draft</p>
         </div>
@@ -62,7 +62,7 @@
         {{-- Top Simulations --}}
         <div class="bg-white border border-gray-100 rounded-xl shadow-sm">
             <div class="px-6 py-4 border-b border-gray-100">
-                <h3 class="font-semibold text-gray-900">Simulasi Teratas</h3>
+                <h3 class="font-semibold text-gray-900">Experience Teratas</h3>
             </div>
             <div class="p-4">
                 @if($topSimulations->count() > 0)
@@ -82,7 +82,7 @@
                     </div>
                 @else
                     <div class="text-center py-8 text-gray-400 text-sm">
-                        <p>Belum ada simulasi.</p>
+                        <p>Belum ada experience.</p>
                         <a href="{{ route('studio.simulations.create') }}" class="text-blue-600 hover:underline mt-1 inline-block">Upload yang pertama!</a>
                     </div>
                 @endif

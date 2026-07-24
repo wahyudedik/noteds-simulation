@@ -68,7 +68,7 @@
                         <span class="px-2 py-0.5 text-xs font-medium bg-blue-100 text-blue-700 rounded-full capitalize">{{ $user->role }}</span>
                     </div>
                     <div class="flex items-center justify-between py-2 border-b border-gray-50">
-                        <span class="text-sm text-gray-500">Total Simulasi</span>
+                        <span class="text-sm text-gray-500">Total Experience</span>
                         <span class="text-sm font-medium text-gray-900">{{ $user->simulations_count }}</span>
                     </div>
                     <div class="flex items-center justify-between py-2">

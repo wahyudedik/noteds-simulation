@@ -58,7 +58,7 @@
                         <h4 class="text-sm font-medium text-gray-500 mb-3">Statistik</h4>
                         <div class="space-y-3">
                             <div class="flex justify-between">
-                                <span class="text-sm text-gray-500">Simulasi</span>
+                                <span class="text-sm text-gray-500">Experience</span>
                                 <span class="text-sm font-semibold text-gray-900">{{ $stats['simulations'] }}</span>
                             </div>
                             <div class="flex justify-between">
@@ -156,7 +156,7 @@
 
                     {{-- Recent Simulations --}}
                     <div class="bg-white border border-gray-100 rounded-xl p-6 shadow-sm">
-                        <h4 class="text-sm font-medium text-gray-900 mb-4">Simulasi Terbaru</h4>
+                        <h4 class="text-sm font-medium text-gray-900 mb-4">Experience Terbaru</h4>
                         @if($user->simulations->count() > 0)
                             <div class="space-y-3">
                                 @foreach($user->simulations as $sim)
@@ -180,7 +180,7 @@
                                 @endforeach
                             </div>
                         @else
-                            <p class="text-sm text-gray-400 italic">Belum ada simulasi.</p>
+                            <p class="text-sm text-gray-400 italic">Belum ada experience.</p>
                         @endif
                     </div>
 

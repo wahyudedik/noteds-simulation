@@ -2,7 +2,7 @@
     {{-- Header --}}
     <div class="mb-8">
         <h2 class="text-2xl font-bold text-gray-900">Buat Akun Baru</h2>
-        <p class="mt-1 text-sm text-gray-600">Gabung dan mulai belajar dengan simulasi interaktif</p>
+        <p class="mt-1 text-sm text-gray-600">Gabung dan mulai belajar dengan interactive experience</p>
     </div>
 
     {{-- Google Register Button --}}

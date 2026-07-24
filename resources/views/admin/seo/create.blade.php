@@ -33,7 +33,7 @@
                             <input type="text" name="page_key" value="{{ old('page_key') }}" required
                                 placeholder="contoh: home, simulation:{slug}, category:{name}"
                                 class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm">
-                            <p class="text-xs text-gray-400 mt-1">Identifier unik halaman. Gunakan <code class="bg-gray-100 px-1 rounded">simulation:slug</code> untuk simulasi spesifik.</p>
+                            <p class="text-xs text-gray-400 mt-1">Identifier unik halaman. Gunakan <code class="bg-gray-100 px-1 rounded">simulation:slug</code> untuk experience spesifik.</p>
                         </div>
 
                         {{-- Meta Title --}}

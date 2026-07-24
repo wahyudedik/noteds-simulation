@@ -3,7 +3,7 @@
         <div class="flex items-center justify-between">
             <h2 class="font-semibold text-xl text-gray-800 leading-tight">
                 <svg class="inline w-5 h-5 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" /></svg>
-                Semua Simulasi
+                Semua Experience
             </h2>
             <a href="{{ route('admin.simulations.create') }}" class="inline-flex items-center gap-2 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium rounded-lg transition">
                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -53,7 +53,7 @@
                                             <form action="{{ route('admin.simulations.destroy', $sim) }}" method="POST" class="inline">
                                                 @csrf
                                                 @method('DELETE')
-                                                <button type="button" onclick="confirmSubmit(this.closest('form'), 'Yakin hapus simulasi ini?')" class="text-red-600 hover:text-red-700 text-xs font-medium">Hapus</button>
+                                                <button type="button" onclick="confirmSubmit(this.closest('form'), 'Yakin hapus experience ini?')" class="text-red-600 hover:text-red-700 text-xs font-medium">Hapus</button>
                                             </form>
                                         </td>
                                     </tr>
@@ -66,7 +66,7 @@
                         </div>
                     @else
                         <div class="text-center py-8 text-gray-500">
-                            <p>Belum ada simulasi.</p>
+                            <p>Belum ada experience.</p>
                         </div>
                     @endif
                 </div>

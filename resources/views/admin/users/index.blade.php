@@ -50,7 +50,7 @@
                                     <tr class="border-b border-gray-200">
                                         <th class="text-left py-3 px-2 text-gray-500 font-medium">Pengguna</th>
                                         <th class="text-left py-3 px-2 text-gray-500 font-medium">Role</th>
-                                        <th class="text-center py-3 px-2 text-gray-500 font-medium">Simulasi</th>
+                                        <th class="text-center py-3 px-2 text-gray-500 font-medium">Experience</th>
                                         <th class="text-center py-3 px-2 text-gray-500 font-medium">Poin</th>
                                         <th class="text-center py-3 px-2 text-gray-500 font-medium">Level</th>
                                         <th class="text-center py-3 px-2 text-gray-500 font-medium">Bergabung</th>

@@ -54,7 +54,7 @@
     <div class="bg-white border border-gray-100 rounded-xl overflow-hidden shadow-sm">
         <div class="p-6 border-b border-gray-100">
             <h3 class="font-semibold text-gray-900">Semua Revenue Tiers</h3>
-            <p class="text-xs text-gray-500 mt-1">Peningkatan tier berdasarkan jumlah simulasi dan rating rata-rata</p>
+            <p class="text-xs text-gray-500 mt-1">Peningkatan tier berdasarkan jumlah experience dan rating rata-rata</p>
         </div>
         <div class="overflow-x-auto">
             <table class="w-full text-sm">

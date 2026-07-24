@@ -1,6 +1,6 @@
 # Konsep & Fitur Platform Simulasi Interaktif
 
-> **"YouTube for Interactive Simulations"**
+> **"Interactive Experience Platform"**
 >
 > Platform ini bukan sekadar Learning Management System (LMS) atau perpustakaan digital konvensional. Ia adalah **produk kategori baru** — sebuah ekosistem distribusi simulasi interaktif dengan pola interaksi sefamiliar YouTube.
 

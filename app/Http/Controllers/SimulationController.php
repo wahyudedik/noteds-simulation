@@ -45,25 +45,24 @@ class SimulationController extends Controller
             ->when($activeCategory, fn ($q2) => $q2->where('category', $activeCategory))
             ->when($activeTag, fn ($q2) => $q2->whereHas('tagModels', fn ($q3) => $q3->where('tags.slug', $activeTag)));
 
-        // Trending time period filter
-        $trendingPeriod = $request->input('trending', 'all');
+        // Trending time period filter (unified with landing page)
+        $trendingPeriod = $request->input('period', 'week');
         $trendingPeriods = [
-            'today' => 'Hari Ini',
+            'day' => 'Hari Ini',
             'week' => 'Minggu Ini',
             'month' => 'Bulan Ini',
             'year' => 'Tahun Ini',
-            'all' => 'Semua',
         ];
 
         $trendingQuery = Simulation::published()->tap($applyFilters);
 
         // Apply trending time filter
         $trendingQuery->where('published_at', '>=', match ($trendingPeriod) {
-            'today' => now()->startOfDay(),
-            'week' => now()->startOfWeek(),
-            'month' => now()->startOfMonth(),
-            'year' => now()->startOfYear(),
-            default => now()->subYears(100),
+            'day' => now()->subDay(),
+            'week' => now()->subWeek(),
+            'month' => now()->subMonth(),
+            'year' => now()->subYear(),
+            default => now()->subWeek(),
         });
 
         $trending = $trendingQuery
@@ -333,22 +332,16 @@ class SimulationController extends Controller
 
         $reactionCounts = $simulation->reaction_counts;
 
-        // Related simulations: same category + matching tags, ordered by rating then play_count
-        $simTags = $simulation->tags_array;
+        // Related simulations: prioritize same category, then matching tags
         $related = Simulation::published()
             ->where('id', '!=', $simulation->id)
-            ->where(function ($q) use ($simulation, $simTags) {
-                // Priority 1: same category
-                $q->where('category', $simulation->category);
-                // Priority 2: matching tags
-                if (! empty($simTags)) {
-                    $q->orWhere(function ($q2) use ($simTags) {
-                        foreach ($simTags as $tag) {
-                            $q2->orWhere('tags', 'like', "%{$tag}%");
-                        }
+            ->where(function ($q) use ($simulation) {
+                $q->where('category', $simulation->category)
+                    ->orWhereHas('tagModels', function ($q2) use ($simulation) {
+                        $q2->whereIn('tags.id', $simulation->tagModels()->pluck('tags.id'));
                     });
-                }
             })
+            ->orderByRaw('CASE WHEN category = ? THEN 0 ELSE 1 END', [$simulation->category])
             ->orderByDesc('average_rating')
             ->orderByDesc('play_count')
             ->paginate(8);

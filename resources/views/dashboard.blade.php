@@ -43,7 +43,7 @@
                     </div>
                     <div class="flex-1">
                         <h3 class="font-semibold text-lg">Mulai Kreasi!</h3>
-                        <p class="text-emerald-100 text-sm mt-1">Upload simulasi interaktif pertamamu dan jangkau ribuan pelajar di seluruh Indonesia.</p>
+                        <p class="text-emerald-100 text-sm mt-1">Upload interactive experience pertamamu dan jangkau ribuan pelajar di seluruh Indonesia.</p>
                     </div>
                     <form action="{{ route('become-creator') }}" method="POST" class="shrink-0">
                         @csrf
@@ -209,10 +209,10 @@
             <div class="bg-white border border-gray-100 shadow-sm rounded-xl p-8 text-center">
                 <svg class="w-12 h-12 mx-auto text-gray-300 mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z"/></svg>
                 <h3 class="text-base font-semibold text-gray-700 mb-1">Mulai Menjelajahi</h3>
-                <p class="text-sm text-gray-500 mb-4">Jelajahi simulasi interaktif dan mulai belajar!</p>
+                <p class="text-sm text-gray-500 mb-4">Jelajahi interactive experience dan mulai belajar!</p>
                 <a href="{{ route('home') }}" class="inline-flex items-center gap-2 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium rounded-lg transition">
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
-                    Cari Simulasi
+                    Cari Experience
                 </a>
             </div>
             @endif

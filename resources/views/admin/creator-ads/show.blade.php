@@ -45,7 +45,7 @@
                         <span class="ml-1 font-medium text-gray-900 font-mono">{{ $creatorAd->publisher_id ?? '-' }}</span>
                     </div>
                     <div>
-                        <span class="text-gray-500">Simulasi ID:</span>
+                        <span class="text-gray-500">Experience ID:</span>
                         <span class="ml-1 font-medium text-gray-900">#{{ $creatorAd->simulation_id }}</span>
                     </div>
                     <div>

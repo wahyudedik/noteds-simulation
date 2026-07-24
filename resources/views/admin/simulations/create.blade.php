@@ -2,7 +2,7 @@
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
             <svg class="inline w-5 h-5 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" /></svg>
-            Upload Simulasi Baru
+            Upload Experience Baru
         </h2>
     </x-slot>
 
@@ -15,7 +15,7 @@
 
                         {{-- Title --}}
                         <div>
-                            <label for="title" class="block text-sm font-medium text-gray-700 mb-1">Judul Simulasi *</label>
+                            <label for="title" class="block text-sm font-medium text-gray-700 mb-1">Judul Experience *</label>
                             <input type="text" name="title" id="title" value="{{ old('title') }}" required
                                 class="w-full rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm"
                                 placeholder="Contoh: Hukum Newton Gerak" />
@@ -61,12 +61,12 @@
                             <label for="description" class="block text-sm font-medium text-gray-700 mb-1">Deskripsi</label>
                             <textarea name="description" id="description" rows="4"
                                 class="w-full rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm"
-                                placeholder="Deskripsi singkat tentang simulasi ini...">{{ old('description') }}</textarea>
+                                placeholder="Deskripsi singkat tentang experience ini...">{{ old('description') }}</textarea>
                         </div>
 
                         {{-- Simulation File --}}
                         <div>
-                            <label for="simulation_file" class="block text-sm font-medium text-gray-700 mb-1">File Simulasi (.zip) *</label>
+                            <label for="simulation_file" class="block text-sm font-medium text-gray-700 mb-1">File Experience (.zip) *</label>
                             <input type="file" name="simulation_file" id="simulation_file" required accept=".zip"
                                 class="w-full rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm
                                 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100" />
@@ -89,11 +89,11 @@
                                     class="mt-3 p-4 bg-gray-50 border border-gray-200 rounded-lg text-xs">
                                     <p class="font-semibold text-gray-700 mb-2">
                                         <svg class="inline w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z" /></svg>
-                                        Struktur Simulation Package:
+                                        Struktur Experience Package:
                                     </p>
                                     <pre class="font-mono text-gray-600 leading-relaxed overflow-x-auto"><code>simulation.zip
-├── manifest.json          <span class="text-gray-400"># Metadata simulasi (judul, kategori, versi, dll.)</span>
-├── index.html             <span class="text-gray-400"># File entry point simulasi</span>
+├── manifest.json          <span class="text-gray-400"># Metadata experience (judul, kategori, versi, dll.)</span>
+├── index.html             <span class="text-gray-400"># File entry point experience</span>
 ├── assets/
 │   ├── css/
 │   ├── js/
@@ -107,7 +107,7 @@
                                         </p>
                                         <pre class="font-mono text-gray-600 leading-relaxed overflow-x-auto"><code>{
   "title": "Hukum Newton",
-  "description": "Simulasi interaktif Hukum Newton",
+  "description": "Interactive experience Hukum Newton",
   "category": "Fisika",
   "version": "1.0.0",
   "author": "Nama Creator",
@@ -152,7 +152,7 @@
                         <div class="flex items-center gap-3 pt-4 border-t border-gray-200">
                             <button type="submit" class="px-6 py-2.5 bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium rounded-lg transition">
                                 <svg class="inline w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" /></svg>
-                                Upload Simulasi
+                                Upload Experience
                             </button>
                             <a href="{{ route('admin.simulations.index') }}" class="px-6 py-2.5 bg-gray-100 hover:bg-gray-200 text-gray-700 text-sm font-medium rounded-lg transition">
                                 Batal

@@ -1,11 +1,11 @@
-<x-studio-layout :pageTitle="'Upload Simulasi Baru'">
+<x-studio-layout :pageTitle="'Upload Experience Baru'">
     <div class="max-w-3xl mx-auto">
         {{-- Quick Start Guide --}}
         <div x-data="{ open: false }" class="bg-blue-50 border border-blue-200 rounded-xl mb-6">
             <button @click="open = !open" class="w-full flex items-center justify-between px-6 py-4 text-left">
                 <div class="flex items-center gap-3">
                     <svg class="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-                    <span class="font-semibold text-blue-900">Panduan Upload Simulasi</span>
+                    <span class="font-semibold text-blue-900">Panduan Upload Experience</span>
                 </div>
                 <svg class="w-5 h-5 text-blue-600 transition-transform" :class="{ 'rotate-180': open }" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
             </button>
@@ -13,7 +13,7 @@
                 <div class="text-sm text-blue-800 space-y-3">
                     <p><strong>Struktur ZIP Package:</strong></p>
                     <pre class="bg-blue-100 rounded-lg p-3 text-xs font-mono">simulation.zip
-├── manifest.json      # Metadata simulasi
+├── manifest.json      # Metadata experience
 ├── index.html         # File entry point
 ├── assets/
 │   ├── css/
@@ -25,7 +25,7 @@
     "name": "Hukum Newton",
     "version": "1.0.0",
     "category": "Fisika",
-    "description": "Simulasi interaktif...",
+    "description": "Interactive experience...",
     "entryPoint": "index.html"
 }</pre>
                     <p class="text-blue-700">✓ Pastikan <code>index.html</code> ada di root ZIP<br>
@@ -43,10 +43,10 @@
 
                 {{-- Title --}}
                 <div class="mb-4">
-                    <label for="title" class="block text-sm font-medium text-gray-700 mb-1">Judul Simulasi <span class="text-red-500">*</span></label>
+                    <label for="title" class="block text-sm font-medium text-gray-700 mb-1">Judul Experience <span class="text-red-500">*</span></label>
                     <input type="text" name="title" id="title" value="{{ old('title') }}" required maxlength="255"
                            class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm @error('title') border-red-500 @enderror"
-                           placeholder="Contoh: Simulasi Hukum Newton" />
+                           placeholder="Contoh: Hukum Newton" />
                     @error('title')
                         <p class="text-xs text-red-500 mt-1">{{ $message }}</p>
                     @enderror
@@ -57,7 +57,7 @@
                     <label for="description" class="block text-sm font-medium text-gray-700 mb-1">Deskripsi</label>
                     <textarea name="description" id="description" rows="4" maxlength="5000" x-model="descText"
                               class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm @error('description') border-red-500 @enderror"
-                              placeholder="Jelaskan simulasi Anda...">{{ old('description') }}</textarea>
+                              placeholder="Jelaskan experience Anda...">{{ old('description') }}</textarea>
                     <p class="text-xs text-gray-400 mt-1 text-right"><span x-text="descText.length"></span>/5000 karakter</p>
                     @error('description')
                         <p class="text-xs text-red-500 mt-1">{{ $message }}</p>
@@ -99,7 +99,7 @@
 
             {{-- Simulation Package --}}
             <div class="bg-white border border-gray-100 rounded-xl shadow-sm p-6 mb-6">
-                <h3 class="text-lg font-semibold text-gray-900 mb-4">Package Simulasi</h3>
+                <h3 class="text-lg font-semibold text-gray-900 mb-4">Package Experience</h3>
 
                 {{-- ZIP Upload --}}
                 <div class="mb-4">
@@ -169,7 +169,7 @@
                            class="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500" />
                     <div>
                         <span class="text-sm font-medium text-gray-900">Publikasikan sekarang</span>
-                        <p class="text-xs text-gray-500">Jika tidak dicentang, simulasi akan disimpan sebagai draft</p>
+                        <p class="text-xs text-gray-500">Jika tidak dicentang, experience akan disimpan sebagai draft</p>
                     </div>
                 </label>
             </div>
@@ -181,7 +181,7 @@
                 </a>
                 <button type="submit" class="px-6 py-2.5 text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 rounded-lg transition"
                         :disabled="uploading">
-                    <span x-show="!uploading">Upload Simulasi</span>
+                    <span x-show="!uploading">Upload Experience</span>
                     <span x-show="uploading" class="flex items-center gap-2">
                         <svg class="w-4 h-4 animate-spin" fill="none" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4" class="opacity-25"></circle><path fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" class="opacity-75"></path></svg>
                         Mengupload...

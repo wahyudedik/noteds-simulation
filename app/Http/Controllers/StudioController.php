@@ -168,6 +168,11 @@ class StudioController extends Controller
         if ($zip->open(Storage::disk('public')->path('simulations/'.$user->id.'/'.$slug.'.zip')) === true) {
             $zip->extractTo($fullExtractPath);
             $zip->close();
+        } else {
+            // Hapus file ZIP yang gagal diekstrak
+            Storage::disk('public')->delete('simulations/'.$user->id.'/'.$slug.'.zip');
+
+            return back()->withErrors(['simulation_file' => 'File ZIP tidak valid atau rusak. Pastikan file merupakan paket simulasi yang benar.'])->withInput();
         }
 
         // Read manifest if exists

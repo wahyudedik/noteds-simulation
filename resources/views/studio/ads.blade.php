@@ -1,9 +1,9 @@
-<x-studio-layout :pageTitle="'Iklan Simulasi'">
+<x-studio-layout :pageTitle="'Iklan Experience'">
     {{-- Header --}}
     <div class="flex items-center justify-between mb-6">
         <div>
             <h2 class="text-lg font-semibold text-gray-900">Iklan: {{ $simulation->title }}</h2>
-            <p class="text-sm text-gray-500 mt-1">Kelola iklan yang ditampilkan dalam simulasi ini</p>
+            <p class="text-sm text-gray-500 mt-1">Kelola iklan yang ditampilkan dalam experience ini</p>
         </div>
         <div class="flex items-center gap-3">
             <a href="{{ route('studio.ads-revenue') }}" class="text-sm text-blue-600 hover:underline">Lihat Revenue →</a>
@@ -185,7 +185,7 @@
                 <svg class="w-12 h-12 mx-auto text-gray-300 mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/>
                 </svg>
-                <p>Belum ada iklan untuk simulasi ini.</p>
+                <p>Belum ada iklan untuk experience ini.</p>
             </div>
         @endif
     </div>

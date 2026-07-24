@@ -59,7 +59,7 @@
                         <thead class="bg-gray-50">
                             <tr>
                                 <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Rank</th>
-                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Simulasi</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Experience</th>
                                 <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Kreator</th>
                                 <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Skor</th>
                                 <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Status</th>
@@ -98,7 +98,7 @@
     @foreach ($entries as $entry)
         <div id="score-modal-{{ $entry->id }}" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-black/50">
             <div class="bg-white rounded-xl shadow-xl max-w-md w-full mx-4 p-6">
-                <h4 class="text-lg font-semibold text-gray-900 mb-4">Skor: {{ $entry->simulation->title ?? 'Simulasi' }}</h4>
+                <h4 class="text-lg font-semibold text-gray-900 mb-4">Skor: {{ $entry->simulation->title ?? 'Experience' }}</h4>
                 <form method="POST" action="{{ route('admin.challenges.score-entry', ['challenge' => $challenge, 'entry' => $entry]) }}">
                     @csrf
                     <div class="space-y-3">

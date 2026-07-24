@@ -34,7 +34,7 @@
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
                 {{-- Top Embedded Simulations --}}
                 <div class="bg-white border border-gray-100 rounded-xl p-6 shadow-sm">
-                    <h3 class="text-lg font-semibold text-gray-900 mb-4">Simulasi Ter-embed</h3>
+                    <h3 class="text-lg font-semibold text-gray-900 mb-4">Experience Ter-embed</h3>
                     @if($topSimulations->count() > 0)
                         <div class="space-y-3">
                             @foreach($topSimulations as $sim)
@@ -88,7 +88,7 @@
                             <table class="w-full text-sm">
                                 <thead>
                                     <tr class="border-b border-gray-200">
-                                        <th class="text-left py-3 px-2 text-gray-500 font-medium">Simulasi</th>
+                                        <th class="text-left py-3 px-2 text-gray-500 font-medium">Experience</th>
                                         <th class="text-left py-3 px-2 text-gray-500 font-medium">Referrer</th>
                                         <th class="text-left py-3 px-2 text-gray-500 font-medium">IP</th>
                                         <th class="text-left py-3 px-2 text-gray-500 font-medium">Waktu</th>

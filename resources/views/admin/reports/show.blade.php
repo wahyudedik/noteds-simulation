@@ -50,7 +50,7 @@
 
                 {{-- Simulation Info --}}
                 <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
-                    <h3 class="font-semibold text-gray-900 mb-4">Simulasi yang Dilaporkan</h3>
+                    <h3 class="font-semibold text-gray-900 mb-4">Experience yang Dilaporkan</h3>
                     <div class="flex items-start gap-4">
                         @if($report->simulation->thumbnail)
                             <img src="{{ Storage::disk('public')->url($report->simulation->thumbnail) }}" class="w-20 h-14 object-cover rounded-lg" alt="">
@@ -65,7 +65,7 @@
                             <div class="flex gap-2 mt-2">
                                 <a href="{{ route('admin.simulations.show', $report->simulation) }}" class="text-xs text-blue-600 hover:underline">Lihat Detail</a>
                                 <span class="text-gray-300">·</span>
-                                <a href="{{ route('simulations.show', $report->simulation->slug) }}" target="_blank" class="text-xs text-blue-600 hover:underline">Buka Simulasi</a>
+                                <a href="{{ route('simulations.show', $report->simulation->slug) }}" target="_blank" class="text-xs text-blue-600 hover:underline">Buka Experience</a>
                             </div>
                         </div>
                     </div>
@@ -138,10 +138,10 @@
                     <h3 class="font-semibold text-gray-900 mb-3">Aksi Cepat</h3>
                     <div class="space-y-2">
                         <a href="{{ route('admin.simulations.show', $report->simulation) }}" class="block w-full text-center px-4 py-2.5 bg-gray-100 hover:bg-gray-200 text-gray-700 text-sm font-medium rounded-xl transition">
-                            Lihat Simulasi
+                            Lihat Experience
                         </a>
                         <a href="{{ route('admin.simulations.edit', $report->simulation) }}" class="block w-full text-center px-4 py-2.5 bg-gray-100 hover:bg-gray-200 text-gray-700 text-sm font-medium rounded-xl transition">
-                            Edit Simulasi
+                            Edit Experience
                         </a>
                     </div>
                 </div>

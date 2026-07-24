@@ -98,7 +98,7 @@
             <div class="bg-white border border-gray-100 rounded-xl overflow-hidden shadow-sm">
                 <div class="p-6 border-b border-gray-100">
                     <h3 class="text-lg font-semibold text-gray-900">Top Creators</h3>
-                    <p class="text-xs text-gray-500 mt-1">Berdasarkan jumlah simulasi yang diunggah</p>
+                    <p class="text-xs text-gray-500 mt-1">Berdasarkan jumlah experience yang diunggah</p>
                 </div>
                 @if($topCreators->count() > 0)
                     <div class="overflow-x-auto">
@@ -108,7 +108,7 @@
                                     <th class="text-left py-3 px-4 text-gray-500 font-medium w-10">#</th>
                                     <th class="text-left py-3 px-4 text-gray-500 font-medium">Nama</th>
                                     <th class="text-left py-3 px-4 text-gray-500 font-medium">Email</th>
-                                    <th class="text-center py-3 px-4 text-gray-500 font-medium">Simulasi</th>
+                                    <th class="text-center py-3 px-4 text-gray-500 font-medium">Experience</th>
                                     <th class="text-left py-3 px-4 text-gray-500 font-medium">Bergabung</th>
                                 </tr>
                             </thead>

@@ -2,7 +2,7 @@
     <x-slot name="header">
         <div class="flex items-center gap-2">
             <svg class="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>
-            <h2 class="font-semibold text-xl text-gray-800 leading-tight">Jelajahi Simulasi</h2>
+            <h2 class="font-semibold text-xl text-gray-800 leading-tight">Jelajahi Experience</h2>
         </div>
     </x-slot>
 
@@ -20,7 +20,7 @@
 
             {{-- Page Header --}}
             <div class="bg-white border-b border-gray-200 -mx-4 sm:-mx-6 lg:-mx-8 px-4 sm:px-6 lg:px-8 py-8 mb-8 rounded-xl shadow-sm border border-gray-100">
-                <p class="text-gray-500 text-sm mt-2">Temukan simulasi interaktif sesuai minat Anda.</p>
+                <p class="text-gray-500 text-sm mt-2">Temukan experience interaktif sesuai minat Anda.</p>
 
                 {{-- Category Chips --}}
                 <div class="mt-6 flex flex-wrap gap-2">
@@ -77,7 +77,7 @@
                     </h2>
                     <div class="flex items-center gap-1">
                         @foreach($trendingPeriods as $key => $label)
-                            <a href="{{ route('simulations.explore', array_merge(request()->query(), ['trending' => $key])) }}"
+                            <a href="{{ route('simulations.explore', array_merge(request()->query(), ['period' => $key])) }}"
                                 class="px-3 py-1.5 text-xs font-medium rounded-lg transition {{ $trendingPeriod === $key ? 'bg-orange-500 text-white' : 'bg-gray-100 text-gray-600 hover:bg-gray-200' }}">
                                 {{ $label }}
                             </a>
@@ -92,7 +92,7 @@
                     </div>
                 @else
                     <div class="text-center py-8 bg-gray-50 rounded-xl border border-gray-100">
-                        <p class="text-sm text-gray-500">Belum ada simulasi trending untuk periode ini.</p>
+                        <p class="text-sm text-gray-500">Belum ada experience trending untuk periode ini.</p>
                     </div>
                 @endif
             </section>
@@ -152,12 +152,12 @@
             @if($featured->count() === 0 && $trending->count() === 0)
             <div class="text-center py-20">
                 <svg class="w-16 h-16 mx-auto text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>
-                <h3 class="text-xl font-semibold text-gray-700 mt-4 mb-2">Tidak ada simulasi ditemukan</h3>
+                <h3 class="text-xl font-semibold text-gray-700 mt-4 mb-2">Tidak ada experience ditemukan</h3>
                 <p class="text-gray-500 mb-4">
                     @if($activeCategory)
-                        Belum ada simulasi di kategori "{{ $activeCategory }}". Coba kategori lain.
+                        Belum ada experience di kategori "{{ $activeCategory }}". Coba kategori lain.
                     @else
-                        Belum ada simulasi yang tersedia. Sabar ya!
+                        Belum ada experience yang tersedia. Sabar ya!
                     @endif
                 </p>
                 <a href="{{ route('home') }}" class="inline-flex items-center gap-2 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium rounded-lg transition">

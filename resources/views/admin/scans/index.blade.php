@@ -52,7 +52,7 @@
             <table class="w-full">
                 <thead>
                     <tr class="border-b border-gray-100">
-                        <th class="text-left px-5 py-3 text-xs font-semibold text-gray-500 uppercase">Simulasi</th>
+                        <th class="text-left px-5 py-3 text-xs font-semibold text-gray-500 uppercase">Experience</th>
                         <th class="text-left px-5 py-3 text-xs font-semibold text-gray-500 uppercase">Tipe</th>
                         <th class="text-left px-5 py-3 text-xs font-semibold text-gray-500 uppercase">Hasil</th>
                         <th class="text-left px-5 py-3 text-xs font-semibold text-gray-500 uppercase">Durasi</th>

@@ -16,7 +16,7 @@
 
                         {{-- Title --}}
                         <div>
-                            <label for="title" class="block text-sm font-medium text-gray-700 mb-1">Judul Simulasi *</label>
+                            <label for="title" class="block text-sm font-medium text-gray-700 mb-1">Judul Experience *</label>
                             <input type="text" name="title" id="title" value="{{ old('title', $simulation->title) }}" required
                                 class="w-full rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm" />
                         </div>

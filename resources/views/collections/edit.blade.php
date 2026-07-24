@@ -64,13 +64,13 @@
 
             {{-- Add Simulation Search --}}
             <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6 mb-6" x-data="collectionSearch()">
-                <h2 class="text-lg font-semibold text-gray-900 mb-4">Tambah Simulasi</h2>
+                <h2 class="text-lg font-semibold text-gray-900 mb-4">Tambah Experience</h2>
                 <div class="relative">
                     <input
                         type="text"
                         x-model="searchQuery"
                         @input.debounce.300ms="searchSimulations()"
-                        placeholder="Cari simulasi berjudul..."
+                        placeholder="Cari experience berjudul..."
                         class="w-full pl-4 pr-10 py-2.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
                     />
                     <svg class="absolute right-3 top-2.5 w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>
@@ -107,13 +107,13 @@
                 </div>
 
                 <p x-show="searchQuery.length >= 2 && results.length === 0 && !loading" class="mt-3 text-sm text-gray-400 text-center">
-                    Tidak ada simulasi ditemukan
+                    Tidak ada experience ditemukan
                 </p>
             </div>
 
             {{-- Simulations in Collection --}}
             <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6" x-data="{ removing: null }">
-                <h2 class="text-lg font-semibold text-gray-900 mb-4">Simulasi dalam Collection ({{ $collection->simulations->count() }})</h2>
+                <h2 class="text-lg font-semibold text-gray-900 mb-4">Experience dalam Collection ({{ $collection->simulations->count() }})</h2>
 
                 @if($collection->simulations->count() > 0)
                     <div class="space-y-3">
@@ -146,8 +146,8 @@
                 @else
                     <div class="text-center py-8">
                         <svg class="w-12 h-12 mx-auto text-gray-300 mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z"/></svg>
-                        <p class="text-gray-500 text-sm">Belum ada simulasi dalam collection ini.</p>
-                        <p class="text-gray-400 text-xs mt-1">Gunakan kolom pencarian di atas untuk menambahkan simulasi.</p>
+                        <p class="text-gray-500 text-sm">Belum ada experience dalam collection ini.</p>
+                        <p class="text-gray-400 text-xs mt-1">Gunakan kolom pencarian di atas untuk menambahkan experience.</p>
                     </div>
                 @endif
             </div>
@@ -217,7 +217,7 @@
                         if (result.success) {
                             window.location.reload();
                         } else {
-                            window.showToast(result.message || 'Gagal menambahkan simulasi', 'error');
+                            window.showToast(result.message || 'Gagal menambahkan experience', 'error');
                         }
                     })
                     .catch(function() { self.adding = null; });
@@ -226,7 +226,7 @@
         }
 
         function removeFromCollection(collectionId, simulationId) {
-            showConfirm('Hapus simulasi dari collection ini?').then(function(confirmed) {
+            showConfirm('Hapus experience dari collection ini?').then(function(confirmed) {
                 if (!confirmed) return;
 
                 fetch('{{ route("collections.remove-simulation") }}', {
@@ -254,7 +254,7 @@
                     if (result.success) {
                         window.location.reload();
                     } else {
-                        window.showToast(result.message || 'Gagal menghapus simulasi', 'error');
+                        window.showToast(result.message || 'Gagal menghapus experience', 'error');
                     }
                 })
                 .catch(function() {});

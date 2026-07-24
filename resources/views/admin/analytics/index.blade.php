@@ -47,7 +47,7 @@
                     @endif
                 </div>
                 <div class="bg-white border border-gray-100 rounded-xl p-5 shadow-sm">
-                    <p class="text-sm text-gray-500">Total Simulasi</p>
+                    <p class="text-sm text-gray-500">Total Experience</p>
                     <p class="text-2xl font-bold text-gray-900 mt-1">{{ number_format($currentStats['total_simulations']) }}</p>
                     <p class="text-xs text-gray-400 mt-1">{{ $currentStats['published_simulations'] }} published</p>
                 </div>
@@ -135,7 +135,7 @@
                                 <div class="flex-1 bg-gray-100 rounded-full h-5 overflow-hidden">
                                     <div class="bg-blue-500 h-full rounded-full transition-all" style="width: {{ $percentage }}%"></div>
                                 </div>
-                                <div class="w-20 text-right text-sm text-gray-500">{{ number_format($cat->count) }} simulasi</div>
+                                <div class="w-20 text-right text-sm text-gray-500">{{ number_format($cat->count) }} experience</div>
                                 <div class="w-24 text-right text-xs text-gray-400">{{ number_format($cat->total_views) }} views</div>
                             </div>
                         @endforeach

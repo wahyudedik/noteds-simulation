@@ -112,9 +112,9 @@
                         <div class="text-center py-16">
                             <svg class="w-16 h-16 text-gray-300 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z" /></svg>
                             <h3 class="text-gray-500 text-lg font-medium">Belum ada bookmark</h3>
-                            <p class="text-gray-400 text-sm mt-2">Simulasi yang Anda bookmark akan muncul di sini.</p>
+                            <p class="text-gray-400 text-sm mt-2">Experience yang Anda bookmark akan muncul di sini.</p>
                             <a href="{{ route('home') }}" class="inline-flex items-center gap-2 mt-4 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium rounded-lg transition">
-                                Jelajahi Simulasi
+                                Jelajahi Experience
                             </a>
                         </div>
                     @endif
@@ -137,7 +137,7 @@
                         <div class="text-center py-16">
                             <svg class="w-16 h-16 text-gray-300 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
                             <h3 class="text-gray-500 text-lg font-medium">Belum ada riwayat</h3>
-                            <p class="text-gray-400 text-sm mt-2">Riwayat bermain simulasi Anda akan muncul di sini.</p>
+                            <p class="text-gray-400 text-sm mt-2">Riwayat bermain experience Anda akan muncul di sini.</p>
                             <a href="{{ route('home') }}" class="inline-flex items-center gap-2 mt-4 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium rounded-lg transition">
                                 Mulai Bermain
                             </a>
@@ -161,7 +161,7 @@
                                         </div>
                                         <div class="flex-1 min-w-0">
                                             <h4 class="text-gray-900 font-medium text-sm truncate">{{ $creator->name }}</h4>
-                                            <p class="text-gray-500 text-xs">{{ $creator->simulations_count }} simulasi</p>
+                                            <p class="text-gray-500 text-xs">{{ $creator->simulations_count }} experience</p>
                                         </div>
                                     </div>
                                 </a>
@@ -174,7 +174,7 @@
                         <div class="text-center py-16">
                             <svg class="w-16 h-16 text-gray-300 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z" /></svg>
                             <h3 class="text-gray-500 text-lg font-medium">Belum mengikuti siapapun</h3>
-                            <p class="text-gray-400 text-sm mt-2">Ikuti kreator untuk melihat simulasi terbaru mereka di sini.</p>
+                            <p class="text-gray-400 text-sm mt-2">Ikuti kreator untuk melihat experience terbaru mereka di sini.</p>
                             <a href="{{ route('home') }}" class="inline-flex items-center gap-2 mt-4 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium rounded-lg transition">
                                 Temukan Kreator
                             </a>
@@ -194,7 +194,7 @@
                                         </div>
                                         <div class="flex-1 min-w-0">
                                             <h4 class="text-gray-900 font-medium text-sm truncate">{{ $collection->title }}</h4>
-                                            <p class="text-gray-500 text-xs mt-1">{{ $collection->simulations_count }} simulasi</p>
+                                            <p class="text-gray-500 text-xs mt-1">{{ $collection->simulations_count }} experience</p>
                                             @if($collection->description)
                                                 <p class="text-gray-400 text-xs mt-1 line-clamp-2">{{ Str::limit($collection->description, 80) }}</p>
                                             @endif
@@ -210,7 +210,7 @@
                         <div class="text-center py-16">
                             <svg class="w-16 h-16 text-gray-300 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/></svg>
                             <h3 class="text-gray-500 text-lg font-medium">Belum ada collection</h3>
-                            <p class="text-gray-400 text-sm mt-2">Buat collection untuk mengelola simulasi favorit Anda.</p>
+                            <p class="text-gray-400 text-sm mt-2">Buat collection untuk mengelola experience favorit Anda.</p>
                             <a href="{{ route('collections.create') }}" class="inline-flex items-center gap-2 mt-4 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium rounded-lg transition">
                                 Buat Collection
                             </a>

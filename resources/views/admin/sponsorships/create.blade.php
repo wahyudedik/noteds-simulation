@@ -76,7 +76,7 @@
                                         'sidebar' => 'Sidebar',
                                         'pre_roll' => 'Pre-Roll',
                                         'mid_roll' => 'Mid-Roll',
-                                        'post_simulation' => 'Post Simulasi',
+                                        'post_simulation' => 'Post Experience',
                                         'feed_sponsored' => 'Feed Sponsored',
                                         'search_sponsored' => 'Search Sponsored',
                                     ];

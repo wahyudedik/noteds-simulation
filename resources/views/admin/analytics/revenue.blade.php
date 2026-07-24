@@ -129,7 +129,7 @@
             {{-- Top Earning Simulations --}}
             <div class="bg-white border border-gray-100 rounded-xl overflow-hidden shadow-sm">
                 <div class="p-6 border-b border-gray-100">
-                    <h3 class="text-lg font-semibold text-gray-900">Top Simulasi Berdasarkan Revenue</h3>
+                    <h3 class="text-lg font-semibold text-gray-900">Top Experience Berdasarkan Revenue</h3>
                 </div>
                 @if($topEarningSimulations->count() > 0)
                     <div class="overflow-x-auto">
@@ -161,7 +161,7 @@
                         </table>
                     </div>
                 @else
-                    <div class="p-6 text-center text-gray-500 text-sm">Belum ada simulasi yang menghasilkan revenue.</div>
+                    <div class="p-6 text-center text-gray-500 text-sm">Belum ada experience yang menghasilkan revenue.</div>
                 @endif
             </div>
         </div>

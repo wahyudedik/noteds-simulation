@@ -57,7 +57,7 @@
                         @input.debounce.300ms="if(searchQuery.length >= 2) { searchLoading = true; searchOpen = true; fetch('/api/search?q=' + encodeURIComponent(searchQuery), { headers: { 'Accept': 'application/json', 'X-Requested-With': 'XMLHttpRequest' } }).then(r => { if (!r.ok || !(r.headers.get('content-type') || '').includes('application/json')) { searchLoading = false; return null; } return r.json(); }).then(data => { if (data) { searchResults = data.results || []; } searchLoading = false; }).catch(() => { searchLoading = false; }); } else { searchResults = []; searchOpen = false; }"
                         @focus="if(searchQuery.length >= 2 && searchResults.length > 0) searchOpen = true"
                         value="{{ $searchTerm }}"
-                        placeholder="Cari simulasi..."
+                        placeholder="Cari experience..."
                         class="w-full pl-4 pr-12 py-2.5 border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
                         autocomplete="off"
                     />
@@ -205,7 +205,7 @@
                     type="text"
                     name="search"
                     value="{{ $searchTerm }}"
-                    placeholder="Cari simulasi..."
+                    placeholder="Cari experience..."
                     class="w-full pl-4 pr-10 py-2 border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
                 />
             </form>

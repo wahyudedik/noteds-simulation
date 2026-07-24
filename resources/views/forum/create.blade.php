@@ -56,8 +56,8 @@
 
                 {{-- Optional Simulation Link --}}
                 <div class="border-t border-gray-100 pt-5">
-                    <p class="text-xs text-gray-400 mb-2">Opsional: Lampirkan simulasi terkait</p>
-                    <p class="text-xs text-gray-400">Kamu bisa menambahkan link simulasi nanti di isi thread.</p>
+                    <p class="text-xs text-gray-400 mb-2">Opsional: Lampirkan experience terkait</p>
+                    <p class="text-xs text-gray-400">Kamu bisa menambahkan link experience nanti di isi thread.</p>
                 </div>
             </div>
 
