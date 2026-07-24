@@ -496,7 +496,7 @@
                             </div>
                             <div>
                                 <p class="text-gray-900 font-medium text-sm">{{ $simulation->user->name }}</p>
-                                <p class="text-gray-500 text-xs">{{ $simulation->user->simulations()->published()->count() }} simulasi &middot; {{ $simulation->user->followers()->count() }} pengikut</p>
+                                <p class="text-gray-500 text-xs">{{ $simulation->user->published_simulations_count }} simulasi &middot; {{ $simulation->user->followers_count }} pengikut</p>
                             </div>
                         </a>
                         @auth

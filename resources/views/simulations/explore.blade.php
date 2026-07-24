@@ -56,21 +56,33 @@
             @endif
 
             {{-- Trending Section --}}
-            @if($trending->count() > 0)
             <section class="mb-10">
                 <div class="flex items-center justify-between mb-4">
                     <h2 class="text-xl font-bold text-gray-900">
                         <svg class="inline w-5 h-5 text-orange-500 mr-1" fill="currentColor" viewBox="0 0 24 24"><path d="M13 7.83l3.59 3.59L18 10l-6-6-6 6 1.41 1.41L11 7.83V20h2V7.83z"/></svg>
                         Trending
                     </h2>
+                    <div class="flex items-center gap-1">
+                        @foreach($trendingPeriods as $key => $label)
+                            <a href="{{ route('simulations.explore', array_merge(request()->query(), ['trending' => $key])) }}"
+                                class="px-3 py-1.5 text-xs font-medium rounded-lg transition {{ $trendingPeriod === $key ? 'bg-orange-500 text-white' : 'bg-gray-100 text-gray-600 hover:bg-gray-200' }}">
+                                {{ $label }}
+                            </a>
+                        @endforeach
+                    </div>
                 </div>
-                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
-                    @foreach($trending as $sim)
-                        @include('components.simulation-card', ['simulation' => $sim])
-                    @endforeach
-                </div>
+                @if($trending->count() > 0)
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
+                        @foreach($trending as $sim)
+                            @include('components.simulation-card', ['simulation' => $sim])
+                        @endforeach
+                    </div>
+                @else
+                    <div class="text-center py-8 bg-gray-50 rounded-xl border border-gray-100">
+                        <p class="text-sm text-gray-500">Belum ada simulasi trending untuk periode ini.</p>
+                    </div>
+                @endif
             </section>
-            @endif
 
             {{-- Top Rated Section --}}
             @if($topRated->count() > 0)

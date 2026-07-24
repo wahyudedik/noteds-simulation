@@ -31,23 +31,38 @@ class SimulationController extends Controller
         // Filter by category if provided
         $activeCategory = $request->input('category');
 
-        $query = Simulation::published();
-        if ($activeCategory) {
-            $query->where('category', $activeCategory);
-        }
+        // Trending time period filter
+        $trendingPeriod = $request->input('trending', 'all');
+        $trendingPeriods = [
+            'today' => 'Hari Ini',
+            'week' => 'Minggu Ini',
+            'month' => 'Bulan Ini',
+            'year' => 'Tahun Ini',
+            'all' => 'Semua',
+        ];
 
-        // Featured simulations
+        $trendingQuery = Simulation::published()
+            ->when($activeCategory, fn ($q) => $q->where('category', $activeCategory));
+
+        // Apply trending time filter
+        $trendingQuery->where('published_at', '>=', match ($trendingPeriod) {
+            'today' => now()->startOfDay(),
+            'week' => now()->startOfWeek(),
+            'month' => now()->startOfMonth(),
+            'year' => now()->startOfYear(),
+            default => now()->subYears(100),
+        });
+
+        $trending = $trendingQuery
+            ->orderByDesc('play_count')
+            ->take(12)
+            ->get();
+
+        // Featured simulations (always all-time)
         $featured = Simulation::published()
             ->when($activeCategory, fn ($q) => $q->where('category', $activeCategory))
             ->orderByDesc('play_count')
             ->take(6)
-            ->get();
-
-        // Trending (most played)
-        $trending = Simulation::published()
-            ->when($activeCategory, fn ($q) => $q->where('category', $activeCategory))
-            ->orderByDesc('play_count')
-            ->take(12)
             ->get();
 
         // Recently added
@@ -72,6 +87,8 @@ class SimulationController extends Controller
             'trending',
             'recent',
             'topRated',
+            'trendingPeriod',
+            'trendingPeriods',
         ));
     }
 
@@ -198,7 +215,12 @@ class SimulationController extends Controller
     {
         $simulation = Simulation::published()
             ->where('slug', $slug)
-            ->with('user')
+            ->with(['user' => function ($q) {
+                $q->withCount([
+                    'simulations as published_simulations_count' => fn ($sq) => $sq->published(),
+                    'followers',
+                ]);
+            }])
             ->firstOrFail();
 
         // Increment view count only once per session per simulation

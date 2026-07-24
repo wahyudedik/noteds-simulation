@@ -66,24 +66,12 @@ class AnalyticsController extends Controller
             ->limit(10)
             ->get();
 
-        // Chart data
-        $chartLabels = $analytics->pluck('date->format("d M")')->values();
-        $chartUsers = $analytics->pluck('new_registrations')->values();
-        $chartViews = $analytics->pluck('total_views')->values();
-        $chartPlays = $analytics->pluck('total_plays')->values();
-        $chartRevenue = $analytics->pluck('total_revenue')->values();
-
         return view('admin.analytics.index', compact(
             'analytics',
             'currentStats',
             'growth',
             'topCategories',
-            'chartLabels',
-            'chartUsers',
-            'chartViews',
-            'chartPlays',
-            'chartRevenue',
-            'period'
+            'period',
         ));
     }
 

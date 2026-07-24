@@ -60,15 +60,15 @@
 
                         <div class="flex items-center gap-6 mt-4 justify-center sm:justify-start">
                             <div class="text-center">
-                                <p class="text-gray-900 font-bold text-lg">{{ $creator->simulations()->published()->count() }}</p>
+                                <p class="text-gray-900 font-bold text-lg">{{ $creator->published_simulations_count }}</p>
                                 <p class="text-gray-500 text-xs">Simulasi</p>
                             </div>
                             <div class="text-center">
-                                <p class="text-gray-900 font-bold text-lg">{{ $creator->followers()->count() }}</p>
+                                <p class="text-gray-900 font-bold text-lg">{{ $creator->followers_count }}</p>
                                 <p class="text-gray-500 text-xs">Pengikut</p>
                             </div>
                             <div class="text-center">
-                                <p class="text-gray-900 font-bold text-lg">{{ $creator->following()->count() }}</p>
+                                <p class="text-gray-900 font-bold text-lg">{{ $creator->following_count }}</p>
                                 <p class="text-gray-500 text-xs">Mengikuti</p>
                             </div>
                         </div>

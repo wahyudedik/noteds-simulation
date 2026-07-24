@@ -678,6 +678,7 @@ class StudioController extends Controller
     {
         /** @var User $user */
         $user = Auth::user();
+        $user->loadCount('simulations');
 
         return view('studio.settings', compact('user'));
     }

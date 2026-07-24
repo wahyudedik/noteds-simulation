@@ -179,6 +179,14 @@ class Simulation extends Model
         return $this->hasMany(EmbedTrack::class);
     }
 
+    /**
+     * Get creator ads for this simulation.
+     */
+    public function creatorAds(): HasMany
+    {
+        return $this->hasMany(CreatorAd::class);
+    }
+
     // ─── Accessors ────────────────────────────────────────────────
 
     /**

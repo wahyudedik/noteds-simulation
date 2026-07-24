@@ -163,6 +163,13 @@ class FollowController extends Controller
     {
         $creator = User::findOrFail($id);
 
+        // Eager-load counts to avoid N+1 in the view
+        $creator->loadCount([
+            'simulations as published_simulations_count' => fn ($q) => $q->published(),
+            'followers',
+            'following',
+        ]);
+
         $simulations = $creator->simulations()
             ->published()
             ->latest()

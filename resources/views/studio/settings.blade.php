@@ -69,7 +69,7 @@
                     </div>
                     <div class="flex items-center justify-between py-2 border-b border-gray-50">
                         <span class="text-sm text-gray-500">Total Simulasi</span>
-                        <span class="text-sm font-medium text-gray-900">{{ $user->simulations()->count() }}</span>
+                        <span class="text-sm font-medium text-gray-900">{{ $user->simulations_count }}</span>
                     </div>
                     <div class="flex items-center justify-between py-2">
                         <span class="text-sm text-gray-500">Bergabung</span>
