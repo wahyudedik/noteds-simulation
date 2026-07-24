@@ -14,12 +14,6 @@
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
 
-            @if(session('success'))
-                <div class="mb-4 bg-green-50 border border-green-200 text-green-700 px-4 py-3 rounded-lg text-sm">
-                    {{ session('success') }}
-                </div>
-            @endif
-
             {{-- Filters --}}
             <div class="mb-6 bg-white border border-gray-100 rounded-xl p-4 shadow-sm">
                 <form action="{{ route('admin.sponsors.index') }}" method="GET" class="flex flex-wrap gap-3 items-end">

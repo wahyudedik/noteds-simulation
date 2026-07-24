@@ -1,42 +1,8 @@
-<!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="csrf-token" content="{{ csrf_token() }}">
+@php
+    $robots = 'noindex, nofollow';
+@endphp
 
-    {{-- SEO Meta Tags --}}
-    <title>{{ $seo['title'] }}</title>
-    <meta name="description" content="{{ $seo['description'] }}">
-    <meta name="robots" content="noindex, nofollow">
-    <link rel="canonical" href="{{ $seo['url'] }}">
-
-    {{-- Open Graph / Facebook --}}
-    <meta property="og:type" content="{{ $seo['type'] }}">
-    <meta property="og:url" content="{{ $seo['url'] }}">
-    <meta property="og:title" content="{{ $seo['title'] }}">
-    <meta property="og:description" content="{{ $seo['description'] }}">
-    <meta property="og:image" content="{{ $seo['image'] }}">
-    <meta property="og:site_name" content="{{ $seo['site_name'] }}">
-
-    {{-- Twitter Card --}}
-    <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="{{ $seo['title'] }}">
-    <meta name="twitter:description" content="{{ $seo['description'] }}">
-    <meta name="twitter:image" content="{{ $seo['image'] }}">
-
-    <link rel="icon" type="image/jpeg" href="{{ asset('favicon.jpeg') }}">
-    <link rel="preconnect" href="https://fonts.bunny.net">
-    <link href="https://fonts.bunny.net/css?family=roboto:400,500,700&display=swap" rel="stylesheet" />
-    @vite(['resources/css/app.css', 'resources/js/app.js'])
-</head>
-<body class="bg-gray-50 font-sans antialiased">
-    <a href="#main-content" class="sr-only focus:not-sr-only focus:absolute focus:z-50 focus:top-2 focus:left-2 focus:bg-blue-600 focus:text-white focus:px-4 focus:py-2 focus:rounded-lg focus:font-medium focus:shadow-lg">
-        Lewati ke konten utama
-    </a>
-
-    @include('components.app-header')
-
+<x-app-layout>
     <main id="main-content" class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
 
         {{-- Profile Header --}}
@@ -97,29 +63,29 @@
         {{-- Tabs --}}
         <div class="mt-8">
             <div class="border-b border-gray-200">
-                <nav class="flex gap-1 -mb-px">
+                <nav class="flex gap-1 -mb-px overflow-x-auto">
                     <a href="{{ route('user-profile.index') }}"
-                        class="px-5 py-3 text-sm font-medium border-b-2 transition {{ $activeTab === 'bookmarks' ? 'border-blue-600 text-blue-600' : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300' }}">
+                        class="px-5 py-3 text-sm font-medium border-b-2 transition whitespace-nowrap {{ $activeTab === 'bookmarks' ? 'border-blue-600 text-blue-600' : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300' }}">
                         <svg class="inline w-4 h-4 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z" /></svg>
                         Bookmark
                     </a>
                     <a href="{{ route('user-profile.tab', 'history') }}"
-                        class="px-5 py-3 text-sm font-medium border-b-2 transition {{ $activeTab === 'history' ? 'border-blue-600 text-blue-600' : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300' }}">
+                        class="px-5 py-3 text-sm font-medium border-b-2 transition whitespace-nowrap {{ $activeTab === 'history' ? 'border-blue-600 text-blue-600' : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300' }}">
                         <svg class="inline w-4 h-4 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
                         Riwayat
                     </a>
                     <a href="{{ route('user-profile.tab', 'following') }}"
-                        class="px-5 py-3 text-sm font-medium border-b-2 transition {{ $activeTab === 'following' ? 'border-blue-600 text-blue-600' : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300' }}">
+                        class="px-5 py-3 text-sm font-medium border-b-2 transition whitespace-nowrap {{ $activeTab === 'following' ? 'border-blue-600 text-blue-600' : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300' }}">
                         <svg class="inline w-4 h-4 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z" /></svg>
                         Mengikuti
                     </a>
                     <a href="{{ route('user-profile.tab', 'collections') }}"
-                        class="px-5 py-3 text-sm font-medium border-b-2 transition {{ $activeTab === 'collections' ? 'border-blue-600 text-blue-600' : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300' }}">
+                        class="px-5 py-3 text-sm font-medium border-b-2 transition whitespace-nowrap {{ $activeTab === 'collections' ? 'border-blue-600 text-blue-600' : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300' }}">
                         <svg class="inline w-4 h-4 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/></svg>
                         Collection
                     </a>
                     <a href="{{ route('user-profile.tab', 'forum') }}"
-                        class="px-5 py-3 text-sm font-medium border-b-2 transition {{ $activeTab === 'forum' ? 'border-blue-600 text-blue-600' : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300' }}">
+                        class="px-5 py-3 text-sm font-medium border-b-2 transition whitespace-nowrap {{ $activeTab === 'forum' ? 'border-blue-600 text-blue-600' : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300' }}">
                         <svg class="inline w-4 h-4 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8h2a2 2 0 012 2v6a2 2 0 01-2 2h-2v4l-4-4H9a2 2 0 01-2-2v-1m0-4V6a2 2 0 012-2h6a2 2 0 012 2v6a2 2 0 01-2 2h-2v4l-4-4z" /></svg>
                         Forum
                     </a>
@@ -375,20 +341,4 @@
             </div>
         </div>
     </main>
-
-    {{-- Footer --}}
-    <footer class="bg-white border-t border-gray-200 mt-12">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-            <div class="flex flex-col md:flex-row items-center justify-between gap-4">
-                <div class="flex items-center gap-2">
-                    <img src="{{ asset('logo.jpeg') }}" alt="Noteds" class="w-6 h-6 rounded object-cover" />
-                    <span class="font-semibold text-gray-900">Noteds</span>
-                </div>
-                <p class="text-sm text-gray-500">
-                    Interactive Simulations &copy; {{ date('Y') }}
-                </p>
-            </div>
-        </div>
-    </footer>
-</body>
-</html>
+</x-app-layout>

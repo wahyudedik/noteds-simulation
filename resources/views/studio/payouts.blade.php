@@ -1,18 +1,6 @@
 <x-studio-layout title="Payout">
     <div class="max-w-4xl mx-auto space-y-6">
 
-        {{-- Success / Error Messages --}}
-        @if(session('success'))
-            <div class="p-4 bg-green-50 border border-green-200 text-green-700 rounded-lg text-sm">
-                {{ session('success') }}
-            </div>
-        @endif
-        @if(session('error'))
-            <div class="p-4 bg-red-50 border border-red-200 text-red-700 rounded-lg text-sm">
-                {{ session('error') }}
-            </div>
-        @endif
-
         {{-- Balance Cards --}}
         <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div class="bg-white border border-gray-100 rounded-xl p-5 shadow-sm">

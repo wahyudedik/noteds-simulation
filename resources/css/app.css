@@ -94,13 +94,4 @@
         transition-duration: 0.01ms !important;
         scroll-behavior: auto !important;
     }
-
-    /* Comment Reply Form (hidden by default, toggled via JS) */
-    .comment-reply {
-        display: none;
-    }
-
-    .comment-reply.show {
-        display: block;
-    }
 }

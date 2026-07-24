@@ -153,13 +153,5 @@
         </div>
     </div>
 
-    @push('scripts')
-    <script>
-        function confirmSubmit(form, message) {
-            if (confirm(message)) {
-                form.submit();
-            }
-        }
-    </script>
-    @endpush
+    {{-- confirmSubmit() is globally available via app.js --}}
 </x-app-layout>

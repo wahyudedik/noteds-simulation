@@ -12,13 +12,6 @@
     <div class="py-12">
         <div class="max-w-4xl mx-auto sm:px-6 lg:px-8">
 
-            {{-- Success Message --}}
-            @if(session('success'))
-                <div class="mb-6 p-4 bg-green-50 border border-green-200 text-green-700 rounded-lg text-sm">
-                    {{ session('success') }}
-                </div>
-            @endif
-
             <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
 
                 {{-- Payout Info --}}

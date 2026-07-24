@@ -1,7 +1,7 @@
 @props(['simulation'])
 
 <div class="simulation-card block group">
-    <div class="bg-white rounded-xl overflow-hidden shadow-sm hover:shadow-md transition duration-200">
+    <div class="bg-white dark:bg-gray-800 rounded-xl overflow-hidden shadow-sm dark:shadow-gray-900/50 hover:shadow-md transition duration-200">
         {{-- Thumbnail --}}
         <a href="{{ route('simulations.show', $simulation->slug) }}" class="block">
             <div class="relative aspect-video bg-gray-200 overflow-hidden">
@@ -10,6 +10,7 @@
                         src="{{ Storage::disk('public')->url($simulation->thumbnail) }}"
                         alt="{{ $simulation->title }}"
                         class="w-full h-full object-cover transition duration-300"
+                        loading="lazy"
                     />
                 @else
                     <div class="w-full h-full flex items-center justify-center bg-gradient-to-br from-blue-500 to-purple-600">
@@ -39,7 +40,7 @@
                 {{-- Creator avatar --}}
                 <a href="{{ route('creators.show', $simulation->user->id) }}" class="w-9 h-9 rounded-full bg-gray-300 flex-shrink-0 overflow-hidden hover:ring-2 hover:ring-blue-300 transition" onclick="event.stopPropagation();">
                     @if($simulation->user->avatar)
-                        <img src="{{ Storage::disk('public')->url($simulation->user->avatar) }}" alt="" class="w-full h-full object-cover">
+                        <img src="{{ Storage::disk('public')->url($simulation->user->avatar) }}" alt="" class="w-full h-full object-cover" loading="lazy">
                     @else
                         <div class="w-full h-full flex items-center justify-center bg-blue-100 text-blue-600 font-semibold text-sm">
                             {{ strtoupper(substr($simulation->user->name, 0, 1)) }}
@@ -49,14 +50,14 @@
 
                 <div class="flex-1 min-w-0">
                     <a href="{{ route('simulations.show', $simulation->slug) }}" class="block">
-                        <h3 class="font-semibold text-gray-900 text-sm leading-snug line-clamp-2 group-hover:text-blue-600 transition">
+                        <h3 class="font-semibold text-gray-900 dark:text-gray-100 text-sm leading-snug line-clamp-2 group-hover:text-blue-600 transition">
                             {{ $simulation->title }}
                         </h3>
                     </a>
-                    <a href="{{ route('creators.show', $simulation->user->id) }}" class="text-xs text-gray-500 mt-1 hover:text-blue-600 transition inline-block" onclick="event.stopPropagation();">
+                    <a href="{{ route('creators.show', $simulation->user->id) }}" class="text-xs text-gray-500 dark:text-gray-400 mt-1 hover:text-blue-600 transition inline-block" onclick="event.stopPropagation();">
                         {{ $simulation->user->name }}
                     </a>
-                    <div class="flex items-center gap-2 text-xs text-gray-500 mt-0.5 flex-wrap">
+                    <div class="flex items-center gap-2 text-xs text-gray-500 dark:text-gray-400 mt-0.5 flex-wrap">
                         @php $avgRating = $simulation->average_rating ?? $simulation->ratings()->avg('rating'); @endphp
                         @if($avgRating)
                             <div class="flex items-center gap-0.5">

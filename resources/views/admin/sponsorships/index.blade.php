@@ -14,12 +14,6 @@
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
 
-            @if(session('success'))
-                <div class="mb-4 bg-green-50 border border-green-200 text-green-700 px-4 py-3 rounded-lg text-sm">
-                    {{ session('success') }}
-                </div>
-            @endif
-
             {{-- Dashboard Stats --}}
             <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
                 <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-4 text-center">

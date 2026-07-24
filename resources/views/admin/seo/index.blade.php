@@ -15,13 +15,6 @@
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
 
-            {{-- Success Message --}}
-            @if(session('success'))
-                <div class="mb-6 p-4 bg-green-50 border border-green-200 text-green-700 rounded-lg text-sm">
-                    {{ session('success') }}
-                </div>
-            @endif
-
             {{-- Search --}}
             <div class="mb-6">
                 <form method="GET" action="{{ route('admin.seo.index') }}" class="flex items-center gap-2">

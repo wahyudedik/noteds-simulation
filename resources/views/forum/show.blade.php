@@ -213,10 +213,10 @@
                     }
                     location.reload();
                 } else {
-                    alert(data.message || 'Gagal memberikan vote.');
+                    window.showToast(data.message || 'Gagal memberikan vote.', 'error');
                 }
             })
-            .catch(() => alert('Terjadi kesalahan.'));
+            .catch(() => window.showToast('Terjadi kesalahan.', 'error'));
         }
     </script>
     @endpush

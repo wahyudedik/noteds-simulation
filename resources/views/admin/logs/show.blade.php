@@ -21,20 +21,6 @@
 
     <div class="py-8 max-w-4xl mx-auto px-4 sm:px-6">
 
-        {{-- Toast Notification --}}
-        <div x-data="{ show: false, message: '' }" x-show="show" x-cloak
-             x-transition:enter="transition ease-out duration-300"
-             x-transition:enter-start="opacity-0 translate-y-2"
-             x-transition:enter-end="opacity-100 translate-y-0"
-             x-transition:leave="transition ease-in duration-200"
-             x-transition:leave-start="opacity-100 translate-y-0"
-             x-transition:leave-end="opacity-0 translate-y-2"
-             class="fixed bottom-6 right-6 z-50 bg-gray-900 text-white px-4 py-3 rounded-xl shadow-lg flex items-center gap-2"
-             x-init="$watch('$store.clipboardToast', val => { if(val) { message = val; show = true; setTimeout(() => { show = false; $store.clipboardToast = ''; }, 2500); } })">
-            <svg class="w-5 h-5 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
-            <span x-text="message" class="text-sm font-medium"></span>
-        </div>
-
         {{-- Entry Info --}}
         <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 mb-6">
             <h3 class="font-semibold text-gray-900 mb-4">Detail Error</h3>
@@ -201,15 +187,8 @@
         }
 
         function showToast(message) {
-            window.dispatchEvent(new CustomEvent('clipboard-toast', { detail: { message } }));
+            window.showToast(message, 'success');
         }
-
-        document.addEventListener('alpine:init', () => {
-            Alpine.store('clipboardToast', '');
-            window.addEventListener('clipboard-toast', (e) => {
-                Alpine.store('clipboardToast', e.detail.message);
-            });
-        });
     </script>
     @endpush
 </x-app-layout>

@@ -10,11 +10,7 @@
         <div class="max-w-3xl mx-auto sm:px-6 lg:px-8">
 
             {{-- Breadcrumb --}}
-            <nav class="flex items-center gap-2 text-sm text-gray-500 mb-6" aria-label="Breadcrumb">
-                <a href="{{ route('collections.index') }}" class="hover:text-blue-600 transition">Collection</a>
-                <span>/</span>
-                <span class="text-gray-900 font-medium">{{ Str::limit($collection->title, 40) }}</span>
-            </nav>
+            <x-breadcrumb :items="[['label' => 'Collection', 'url' => route('collections.index')], ['label' => Str::limit($collection->title, 40)]]" />
 
             {{-- Edit Form --}}
             <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6 mb-6" x-data="{ saving: false }">

@@ -12,13 +12,6 @@
     <div class="py-12">
         <div class="max-w-5xl mx-auto sm:px-6 lg:px-8 space-y-6">
 
-            {{-- Success Message --}}
-            @if(session('success'))
-                <div class="bg-green-50 border border-green-200 text-green-700 text-sm rounded-lg p-4">
-                    {{ session('success') }}
-                </div>
-            @endif
-
             {{-- Creator Info --}}
             <div class="bg-white border border-gray-100 rounded-xl p-6 shadow-sm">
                 <div class="flex items-start gap-4">

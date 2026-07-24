@@ -121,6 +121,8 @@
             </div>
         </div>
 
+        <x-toast />
+
         @stack('scripts')
     </body>
 </html>

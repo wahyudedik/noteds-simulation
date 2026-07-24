@@ -11,12 +11,6 @@
     <div class="py-12">
         <div class="max-w-5xl mx-auto sm:px-6 lg:px-8">
 
-            @if(session('success'))
-                <div class="mb-4 bg-green-50 border border-green-200 text-green-700 px-4 py-3 rounded-lg text-sm">
-                    {{ session('success') }}
-                </div>
-            @endif
-
             {{-- Create Invoice Form --}}
             <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6 mb-6">
                 <h3 class="text-sm font-semibold text-gray-900 mb-4">Buat Invoice Baru</h3>

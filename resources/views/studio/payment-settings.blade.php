@@ -1,13 +1,6 @@
 <x-studio-layout title="Pengaturan Pembayaran">
     <div class="max-w-2xl mx-auto">
 
-        {{-- Success Message --}}
-        @if(session('success'))
-            <div class="mb-6 p-4 bg-green-50 border border-green-200 text-green-700 rounded-lg text-sm">
-                {{ session('success') }}
-            </div>
-        @endif
-
         <div class="bg-white border border-gray-100 rounded-xl shadow-sm">
             <div class="p-6">
                 <h3 class="text-lg font-semibold text-gray-900 mb-2">Pengaturan Pembayaran</h3>
