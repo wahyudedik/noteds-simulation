@@ -70,6 +70,9 @@ Route::get('/embed/{slug}/code', [EmbedController::class, 'code'])->name('embed.
 // Public creator profile (uses ID for reliability)
 Route::get('/creator/{id}', [FollowController::class, 'profile'])->name('creators.show');
 
+// Public Creator Program landing page
+Route::get('/become-creator', [DashboardController::class, 'becomeCreatorPage'])->name('become-creator-page');
+
 // Auth routes (already registered by Breeze)
 
 // Dashboard for regular users
@@ -151,6 +154,7 @@ Route::middleware(['auth', 'verified'])->prefix('studio')->name('studio.')->grou
 
     // Versioning & Analytics
     Route::get('/simulations/{slug}/versions', [StudioController::class, 'versions'])->name('simulations.versions');
+    Route::post('/simulations/{slug}/versions', [StudioController::class, 'storeVersion'])->name('simulations.versions.store');
     Route::get('/simulations/{slug}/analytics', [StudioController::class, 'analytics'])->name('simulations.analytics');
 
     // Comments Moderation
@@ -257,9 +261,12 @@ Route::middleware(['auth', CheckRole::class.':superadmin,admin'])->prefix('admin
     Route::get('/seo/{seo}/edit', [AdminSeoController::class, 'edit'])->name('seo.edit');
     Route::put('/seo/{seo}', [AdminSeoController::class, 'update'])->name('seo.update');
     Route::delete('/seo/{seo}', [AdminSeoController::class, 'destroy'])->name('seo.destroy');
+    Route::post('/seo/sitemap/regenerate', [AdminSeoController::class, 'regenerateSitemap'])->name('seo.sitemap.regenerate');
 
     // Platform Analytics
     Route::get('/analytics', [AdminAnalyticsController::class, 'index'])->name('analytics.index');
+    Route::get('/analytics/users', [AdminAnalyticsController::class, 'users'])->name('analytics.users');
+    Route::get('/analytics/revenue', [AdminAnalyticsController::class, 'revenue'])->name('analytics.revenue');
 
     // Ad Analytics
     Route::get('/ad-analytics', [AdminAdAnalyticsController::class, 'index'])->name('ad-analytics.index');
@@ -286,6 +293,16 @@ Route::middleware(['auth', CheckRole::class.':superadmin,admin'])->prefix('admin
     Route::get('/certifications', [AdminCertificationController::class, 'index'])->name('certifications.index');
     Route::post('/certifications/award', [AdminCertificationController::class, 'award'])->name('certifications.award');
     Route::patch('/certifications/{certification}/revoke', [AdminCertificationController::class, 'revoke'])->name('certifications.revoke');
+});
+
+// ========== Public REST API ==========
+Route::prefix('api')->name('api.')->group(function () {
+    Route::get('/simulations', [App\Http\Controllers\Api\SimulationController::class, 'index'])->name('simulations.index');
+    Route::get('/simulations/{slug}', [App\Http\Controllers\Api\SimulationController::class, 'show'])->name('simulations.show');
+    Route::get('/simulations/{slug}/comments', [App\Http\Controllers\Api\SimulationController::class, 'comments'])->name('simulations.comments');
+    Route::get('/trending', [App\Http\Controllers\Api\SimulationController::class, 'trending'])->name('trending');
+    Route::get('/categories', [App\Http\Controllers\Api\SimulationController::class, 'categories'])->name('categories');
+    Route::get('/creator/{id}/simulations', [App\Http\Controllers\Api\SimulationController::class, 'creatorSimulations'])->name('creator.simulations');
 });
 
 // ========== Ad Tracking API (AJAX) ==========

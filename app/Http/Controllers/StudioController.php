@@ -406,6 +406,71 @@ class StudioController extends Controller
     }
 
     /**
+     * Store a new version of a simulation (upload new ZIP without full edit).
+     */
+    public function storeVersion(Request $request, string $slug): RedirectResponse
+    {
+        /** @var User $user */
+        $user = Auth::user();
+        $simulation = Simulation::where('user_id', $user->id)
+            ->where('slug', $slug)
+            ->firstOrFail();
+
+        $validated = $request->validate([
+            'simulation_zip' => 'required|file|mimes:zip|max:51200',
+            'changelog' => 'nullable|string|max:1000',
+        ]);
+
+        // Save current version to version history
+        SimulationVersion::create([
+            'simulation_id' => $simulation->id,
+            'version' => $simulation->version ?? '1.0.0',
+            'zip_path' => $simulation->zip_path,
+            'changelog' => $validated['changelog'] ?? 'Versi sebelum update',
+        ]);
+
+        // Upload new ZIP
+        $zipFile = $request->file('simulation_zip');
+        $newSlug = Str::slug($simulation->title);
+        $extractPath = 'simulations/'.$user->id.'/'.$newSlug;
+
+        $zipFile->storeAs('simulations/'.$user->id, $newSlug.'.zip', 'public');
+
+        $fullExtractPath = Storage::disk('public')->path($extractPath);
+        $zip = new \ZipArchive;
+        if ($zip->open(Storage::disk('public')->path('simulations/'.$user->id.'/'.$newSlug.'.zip')) === true) {
+            $zip->extractTo($fullExtractPath);
+            $zip->close();
+        }
+
+        // Read manifest
+        $manifestPath = $fullExtractPath.'/manifest.json';
+        $entryPoint = 'index.html';
+        if (file_exists($manifestPath)) {
+            $manifest = json_decode(file_get_contents($manifestPath), true);
+            $entryPoint = $manifest['entryPoint'] ?? 'index.html';
+        }
+
+        // Bump version
+        $newVersion = $this->bumpVersion($simulation->version ?? '1.0.0');
+
+        $simulation->update([
+            'zip_path' => 'simulations/'.$user->id.'/'.$newSlug.'.zip',
+            'extract_path' => $extractPath,
+            'entry_point' => $entryPoint,
+            'version' => $newVersion,
+        ]);
+
+        // Run security scan
+        $security = app(SecurityService::class);
+        $zipFullPath = Storage::disk('public')->path('simulations/'.$user->id.'/'.$newSlug.'.zip');
+        $security->autoScan($simulation, $zipFullPath);
+
+        return redirect()->route('studio.simulations.versions', $slug)
+            ->with('success', "Versi baru {$newVersion} berhasil diupload.");
+    }
+
+    /**
      * Show analytics for a specific simulation.
      */
     public function analytics(string $slug): View
@@ -765,9 +830,10 @@ class StudioController extends Controller
             ->where('review_status', 'approved')
             ->sum('impressions');
 
-        $totalEarnings = $reputation
-            ? $revenueService->calculateEstimatedRevenue($reputation, (int) $totalImpressions)
-            : 0;
+        // Bug fix: pass $user->id (int), not $reputation (CreatorReputation model).
+        // calculateEstimatedRevenue() returns an array — extract creator_revenue for the view.
+        $earningsData = $revenueService->calculateEstimatedRevenue($user->id);
+        $totalEarnings = $earningsData['creator_revenue'] ?? 0;
 
         $tiers = $revenueService->getTiers();
 

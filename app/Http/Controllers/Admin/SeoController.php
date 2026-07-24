@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\SeoSetting;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Artisan;
 use Illuminate\View\View;
 
 class SeoController extends Controller
@@ -124,5 +125,18 @@ class SeoController extends Controller
 
         return redirect()->route('admin.seo.index')
             ->with('success', 'Pengaturan SEO berhasil dihapus.');
+    }
+
+    /**
+     * Regenerate the sitemap.xml file via Artisan command.
+     */
+    public function regenerateSitemap(): RedirectResponse
+    {
+        Artisan::call('sitemap:generate');
+
+        $output = Artisan::output();
+
+        return redirect()->route('admin.seo.index')
+            ->with('success', 'Sitemap berhasil diregenerasi. '.$output);
     }
 }

@@ -215,6 +215,19 @@
         @endif
     </main>
 
+    {{-- Creator Program CTA --}}
+    <section class="bg-gradient-to-r from-purple-600 to-blue-600 text-white py-12">
+        <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <h2 class="text-2xl md:text-3xl font-bold mb-3">💜 Jadi Kreator di Noteds</h2>
+            <p class="text-purple-100 text-lg max-w-xl mx-auto mb-6">
+                Buat simulasi interaktif, bagikan ilmu, dan berpeluang memperoleh penghasilan. Siapa pun bisa menjadi kreator!
+            </p>
+            <a href="{{ route('become-creator-page') }}" class="inline-block px-8 py-3 bg-white text-purple-700 hover:bg-purple-50 rounded-xl font-semibold transition shadow-lg">
+                Pelajari Program Kreator →
+            </a>
+        </div>
+    </section>
+
     {{-- Footer --}}
     <footer class="bg-white border-t border-gray-200 mt-12">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">

@@ -23,6 +23,9 @@
                     <a href="{{ route('leaderboard.index') }}" class="px-3 py-2 text-sm font-medium text-gray-700 hover:text-blue-600 hover:bg-gray-50 rounded-lg transition">
                         #1
                     </a>
+                    <a href="{{ route('become-creator-page') }}" class="px-3 py-2 text-sm font-medium text-purple-600 hover:text-purple-700 hover:bg-purple-50 rounded-lg transition">
+                        Jadi Kreator
+                    </a>
                     @auth
                         <a href="{{ route('collections.index') }}" class="px-3 py-2 text-sm font-medium text-gray-700 hover:text-blue-600 hover:bg-gray-50 rounded-lg transition">
                             Collection
@@ -184,6 +187,7 @@
             <a href="{{ route('home') }}" class="block px-3 py-2 text-sm font-medium text-gray-700 hover:text-blue-600 hover:bg-gray-50 rounded-lg transition">Beranda</a>
             <a href="{{ route('simulations.explore') }}" class="block px-3 py-2 text-sm font-medium text-gray-700 hover:text-blue-600 hover:bg-gray-50 rounded-lg transition">Jelajahi</a>
             <a href="{{ route('leaderboard.index') }}" class="block px-3 py-2 text-sm font-medium text-gray-700 hover:text-blue-600 hover:bg-gray-50 rounded-lg transition">#1 Leaderboard</a>
+            <a href="{{ route('become-creator-page') }}" class="block px-3 py-2 text-sm font-medium text-purple-600 hover:text-purple-700 hover:bg-purple-50 rounded-lg transition">💜 Jadi Kreator</a>
             @auth
                 <a href="{{ route('collections.index') }}" class="block px-3 py-2 text-sm font-medium text-gray-700 hover:text-blue-600 hover:bg-gray-50 rounded-lg transition">Collection</a>
                 @if(auth()->user()->isAdmin())

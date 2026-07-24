@@ -15,6 +15,14 @@ class DashboardController extends Controller
         private GamificationService $gamification,
     ) {}
 
+    /**
+     * Show the public landing page for the Creator Program.
+     */
+    public function becomeCreatorPage(): View
+    {
+        return view('creators.become-creator');
+    }
+
     public function index(Request $request): View
     {
         $user = $request->user();
