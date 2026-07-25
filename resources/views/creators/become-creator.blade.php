@@ -26,7 +26,10 @@
         }
     </style>
 </head>
-<body class="bg-gray-50 font-sans antialiased">
+<body class="bg-gray-50 dark:bg-gray-900 font-sans antialiased">
+    <a href="#main-content" class="sr-only focus:not-sr-only focus:absolute focus:z-50 focus:top-2 focus:left-2 focus:bg-blue-600 focus:text-white focus:px-4 focus:py-2 focus:rounded-lg focus:font-medium focus:shadow-lg">
+        Lewati ke konten utama
+    </a>
 
     @include('components.app-header')
 
@@ -70,37 +73,37 @@
         </div>
     </div>
 
-    <main class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+    <main id="main-content" class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-16 dark:bg-gray-900">
 
         {{-- Apa itu Noteds Creator? --}}
         <section class="mb-20">
             <div class="text-center mb-12">
-                <h2 class="text-2xl md:text-3xl font-bold text-gray-900 mb-4">Apa itu Noteds Creator?</h2>
-                <p class="text-gray-600 text-lg max-w-2xl mx-auto">
+                <h2 class="text-2xl md:text-3xl font-bold text-gray-900 dark:text-white mb-4">Apa itu Noteds Creator?</h2>
+                <p class="text-gray-600 dark:text-gray-400 text-lg max-w-2xl mx-auto">
                     Noteds Creator adalah program bagi siapa saja yang ingin membuat interactive edukation experience menggunakan HTML dan membagikannya kepada jutaan pengguna melalui Noteds.
                 </p>
             </div>
             <div class="grid md:grid-cols-3 gap-6">
-                <div class="bg-white rounded-2xl p-6 shadow-sm border border-gray-100 text-center">
-                    <div class="w-14 h-14 bg-blue-50 rounded-2xl flex items-center justify-center mx-auto mb-4">
+                <div class="bg-white dark:bg-gray-800 rounded-2xl p-6 shadow-sm border border-gray-100 dark:border-gray-700 text-center">
+                    <div class="w-14 h-14 bg-blue-50 dark:bg-blue-900/30 rounded-2xl flex items-center justify-center mx-auto mb-4">
                         <svg class="w-7 h-7 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"/></svg>
                     </div>
-                    <h3 class="font-semibold text-gray-900 mb-2">Buat Experience</h3>
-                    <p class="text-sm text-gray-500">Kembangkan interactive experience menggunakan HTML, CSS, dan JavaScript.</p>
+                    <h3 class="font-semibold text-gray-900 dark:text-white mb-2">Buat Experience</h3>
+                    <p class="text-sm text-gray-500 dark:text-gray-400">Kembangkan interactive experience menggunakan HTML, CSS, dan JavaScript.</p>
                 </div>
-                <div class="bg-white rounded-2xl p-6 shadow-sm border border-gray-100 text-center">
-                    <div class="w-14 h-14 bg-purple-50 rounded-2xl flex items-center justify-center mx-auto mb-4">
+                <div class="bg-white dark:bg-gray-800 rounded-2xl p-6 shadow-sm border border-gray-100 dark:border-gray-700 text-center">
+                    <div class="w-14 h-14 bg-purple-50 dark:bg-purple-900/30 rounded-2xl flex items-center justify-center mx-auto mb-4">
                         <svg class="w-7 h-7 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
                     </div>
-                    <h3 class="font-semibold text-gray-900 mb-2">Bagikan ke Dunia</h3>
-                    <p class="text-sm text-gray-500">Publikasikan experience dan jangkau jutaan pengguna di seluruh Indonesia.</p>
+                    <h3 class="font-semibold text-gray-900 dark:text-white mb-2">Bagikan ke Dunia</h3>
+                    <p class="text-sm text-gray-500 dark:text-gray-400">Publikasikan experience dan jangkau jutaan pengguna di seluruh Indonesia.</p>
                 </div>
-                <div class="bg-white rounded-2xl p-6 shadow-sm border border-gray-100 text-center">
-                    <div class="w-14 h-14 bg-emerald-50 rounded-2xl flex items-center justify-center mx-auto mb-4">
+                <div class="bg-white dark:bg-gray-800 rounded-2xl p-6 shadow-sm border border-gray-100 dark:border-gray-700 text-center">
+                    <div class="w-14 h-14 bg-emerald-50 dark:bg-emerald-900/30 rounded-2xl flex items-center justify-center mx-auto mb-4">
                         <svg class="w-7 h-7 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg>
                     </div>
-                    <h3 class="font-semibold text-gray-900 mb-2">Pantau Performa</h3>
-                    <p class="text-sm text-gray-500">Dashboard analitik lengkap untuk memantau views, plays, likes, dan penghasilan.</p>
+                    <h3 class="font-semibold text-gray-900 dark:text-white mb-2">Pantau Performa</h3>
+                    <p class="text-sm text-gray-500 dark:text-gray-400">Dashboard analitik lengkap untuk memantau views, plays, likes, dan penghasilan.</p>
                 </div>
             </div>
         </section>
@@ -108,8 +111,8 @@
         {{-- Bagaimana Cara Kerjanya? --}}
         <section class="mb-20">
             <div class="text-center mb-12">
-                <h2 class="text-2xl md:text-3xl font-bold text-gray-900 mb-4">Bagaimana Cara Kerjanya?</h2>
-                <p class="text-gray-600 text-lg">Enam langkah sederhana untuk memulai perjalananmu sebagai kreator.</p>
+                <h2 class="text-2xl md:text-3xl font-bold text-gray-900 dark:text-white mb-4">Bagaimana Cara Kerjanya?</h2>
+                <p class="text-gray-600 dark:text-gray-400 text-lg">Enam langkah sederhana untuk memulai perjalananmu sebagai kreator.</p>
             </div>
             <div class="grid md:grid-cols-2 gap-6">
                 @foreach([
@@ -120,13 +123,13 @@
                     ['title' => 'Pengguna Memainkan Experience', 'desc' => 'Experiencemu dimainkan, disukai, dibagikan, dan diikuti oleh komunitas belajar.'],
                     ['title' => 'Pantau & Kembangkan', 'desc' => 'Gunakan dashboard analitik untuk memantau performa dan terus tingkatkan kualitas karyamu.'],
                 ] as $i => $step)
-                    <div class="flex gap-4 items-start bg-white rounded-2xl p-5 shadow-sm border border-gray-100">
+                    <div class="flex gap-4 items-start bg-white dark:bg-gray-800 rounded-2xl p-5 shadow-sm border border-gray-100 dark:border-gray-700">
                         <div class="step-number w-10 h-10 rounded-xl flex items-center justify-center text-white font-bold text-sm shrink-0">
                             {{ $i + 1 }}
                         </div>
                         <div>
-                            <h3 class="font-semibold text-gray-900 mb-1">{{ $step['title'] }}</h3>
-                            <p class="text-sm text-gray-500">{{ $step['desc'] }}</p>
+                            <h3 class="font-semibold text-gray-900 dark:text-white mb-1">{{ $step['title'] }}</h3>
+                            <p class="text-sm text-gray-500 dark:text-gray-400">{{ $step['desc'] }}</p>
                         </div>
                     </div>
                 @endforeach
@@ -136,38 +139,38 @@
         {{-- Program Monetisasi --}}
         <section class="mb-20">
             <div class="text-center mb-12">
-                <h2 class="text-2xl md:text-3xl font-bold text-gray-900 mb-4">Program Monetisasi</h2>
-                <p class="text-gray-600 text-lg max-w-2xl mx-auto">
+                <h2 class="text-2xl md:text-3xl font-bold text-gray-900 dark:text-white mb-4">Program Monetisasi</h2>
+                <p class="text-gray-600 dark:text-gray-400 text-lg max-w-2xl mx-auto">
                     Noteds menyediakan program apresiasi bagi kreator berdasarkan performa iklan yang ditampilkan dalam experience.
                     Semakin banyak pengguna memainkan experience yang menyertakan iklan, semakin besar potensi penghasilanmu.
                 </p>
             </div>
 
-            <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
-                <div class="p-6 border-b border-gray-100 bg-gradient-to-r from-purple-50 to-blue-50">
-                    <h3 class="font-semibold text-gray-900 text-lg">Revenue Sharing Tiers</h3>
-                    <p class="text-sm text-gray-500 mt-1">Persentase penghasilan yang kamu terima meningkat seiring reputasi dan kualitas karyamu.</p>
+            <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-700 overflow-hidden">
+                <div class="p-6 border-b border-gray-100 dark:border-gray-700 bg-gradient-to-r from-purple-50 to-blue-50 dark:from-purple-900/30 dark:to-blue-900/30">
+                    <h3 class="font-semibold text-gray-900 dark:text-white text-lg">Revenue Sharing Tiers</h3>
+                    <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">Persentase penghasilan yang kamu terima meningkat seiring reputasi dan kualitas karyamu.</p>
                 </div>
-                <div class="grid md:grid-cols-4 divide-y md:divide-y-0 md:divide-x divide-gray-100">
+                <div class="grid grid-cols-2 md:grid-cols-4 divide-x divide-y md:divide-y-0 divide-gray-100 dark:divide-gray-700">
                     @foreach([
-                        ['tier' => 'Basic', 'share' => '55%', 'desc' => 'Creator baru', 'color' => 'gray', 'bg' => 'bg-gray-50'],
-                        ['tier' => 'Verified', 'share' => '65%', 'desc' => '10+ experience, rating ≥ 4.0', 'color' => 'blue', 'bg' => 'bg-blue-50'],
-                        ['tier' => 'Expert', 'share' => '75%', 'desc' => '50+ experience, rating ≥ 4.5', 'color' => 'purple', 'bg' => 'bg-purple-50'],
-                        ['tier' => 'Platinum', 'share' => '85%', 'desc' => '100+ experience, rating ≥ 4.7', 'color' => 'yellow', 'bg' => 'bg-amber-50'],
+                        ['tier' => 'Basic', 'share' => '55%', 'desc' => 'Creator baru', 'color' => 'gray', 'bg' => 'bg-gray-50 dark:bg-gray-700/50'],
+                        ['tier' => 'Verified', 'share' => '65%', 'desc' => '10+ experience, rating ≥ 4.0', 'color' => 'blue', 'bg' => 'bg-blue-50 dark:bg-blue-900/20'],
+                        ['tier' => 'Expert', 'share' => '75%', 'desc' => '50+ experience, rating ≥ 4.5', 'color' => 'purple', 'bg' => 'bg-purple-50 dark:bg-purple-900/20'],
+                        ['tier' => 'Platinum', 'share' => '85%', 'desc' => '100+ experience, rating ≥ 4.7', 'color' => 'yellow', 'bg' => 'bg-amber-50 dark:bg-amber-900/20'],
                     ] as $t)
-                        <div class="p-6 text-center {{ $t['bg'] }}">
-                            <p class="text-xs font-medium text-gray-400 uppercase tracking-wider mb-1">{{ $t['tier'] }}</p>
-                            <p class="text-3xl font-bold text-gray-900">{{ $t['share'] }}</p>
-                            <p class="text-xs text-gray-500 mt-1">kreator share</p>
-                            <p class="text-xs text-gray-400 mt-2">{{ $t['desc'] }}</p>
+                        <div class="p-4 md:p-6 text-center {{ $t['bg'] }}">
+                            <p class="text-xs font-medium text-gray-400 dark:text-gray-500 uppercase tracking-wider mb-1">{{ $t['tier'] }}</p>
+                            <p class="text-2xl md:text-3xl font-bold text-gray-900 dark:text-white">{{ $t['share'] }}</p>
+                            <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">kreator share</p>
+                            <p class="text-xs text-gray-400 dark:text-gray-500 mt-2">{{ $t['desc'] }}</p>
                         </div>
                     @endforeach
                 </div>
             </div>
 
-            <div class="mt-6 bg-amber-50 border border-amber-200 rounded-xl p-4 flex gap-3">
+            <div class="mt-6 bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800 rounded-xl p-4 flex gap-3">
                 <svg class="w-5 h-5 text-amber-500 shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-                <div class="text-sm text-amber-800">
+                <div class="text-sm text-amber-800 dark:text-amber-300">
                     <strong>Catatan:</strong> Penghasilan kreator berasal dari bagi hasil iklan (ad revenue sharing), bukan langsung dari jumlah play. Besaran penghasilan bergantung pada jumlah impression iklan, CPM, kualitas experience, kategori, wilayah, serta kebijakan program yang berlaku. Minimum payout adalah Rp 500.000.
                 </div>
             </div>
@@ -176,12 +179,12 @@
         {{-- Siapa yang Bisa Menjadi Kreator? --}}
         <section class="mb-20">
             <div class="text-center mb-12">
-                <h2 class="text-2xl md:text-3xl font-bold text-gray-900 mb-4">Siapa yang Bisa Menjadi Kreator?</h2>
-                <p class="text-gray-600 text-lg">Siapa pun yang ingin berbagi ilmu melalui interactive experience.</p>
+                <h2 class="text-2xl md:text-3xl font-bold text-gray-900 dark:text-white mb-4">Siapa yang Bisa Menjadi Kreator?</h2>
+                <p class="text-gray-600 dark:text-gray-400 text-lg">Siapa pun yang ingin berbagi ilmu melalui interactive experience.</p>
             </div>
             <div class="flex flex-wrap justify-center gap-3">
                 @foreach(['Guru', 'Dosen', 'Mahasiswa', 'Pelajar', 'Programmer', 'Desainer', 'Peneliti', 'Komunitas STEM', 'Siapa pun yang ingin berbagi ilmu'] as $persona)
-                    <span class="px-5 py-2.5 bg-white border border-gray-200 rounded-full text-sm font-medium text-gray-700 shadow-sm hover:shadow-md transition">
+                    <span class="px-5 py-2.5 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-full text-sm font-medium text-gray-700 dark:text-gray-300 shadow-sm hover:shadow-md transition">
                         {{ $persona }}
                     </span>
                 @endforeach
@@ -191,8 +194,8 @@
         {{-- Dashboard Kreator --}}
         <section class="mb-20">
             <div class="text-center mb-12">
-                <h2 class="text-2xl md:text-3xl font-bold text-gray-900 mb-4">Dashboard Kreator</h2>
-                <p class="text-gray-600 text-lg max-w-2xl mx-auto">Setiap kreator memiliki dashboard lengkap untuk memantau dan mengelola experience mereka.</p>
+                <h2 class="text-2xl md:text-3xl font-bold text-gray-900 dark:text-white mb-4">Dashboard Kreator</h2>
+                <p class="text-gray-600 dark:text-gray-400 text-lg max-w-2xl mx-auto">Setiap kreator memiliki dashboard lengkap untuk memantau dan mengelola experience mereka.</p>
             </div>
             @php
                 $dashboardIcons = [
@@ -212,9 +215,9 @@
             @endphp
             <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
                 @foreach($dashboardIcons as $item)
-                    <div class="bg-white rounded-xl p-4 shadow-sm border border-gray-100 flex items-center gap-3">
+                    <div class="bg-white dark:bg-gray-800 rounded-xl p-4 shadow-sm border border-gray-100 dark:border-gray-700 flex items-center gap-3">
                         <span class="text-blue-500 shrink-0">{!! $item['svg'] !!}</span>
-                        <span class="text-sm font-medium text-gray-700">{{ $item['label'] }}</span>
+                        <span class="text-sm font-medium text-gray-700 dark:text-gray-300">{{ $item['label'] }}</span>
                     </div>
                 @endforeach
             </div>
@@ -223,7 +226,7 @@
         {{-- Mengapa Menjadi Kreator? --}}
         <section class="mb-20">
             <div class="text-center mb-12">
-                <h2 class="text-2xl md:text-3xl font-bold text-gray-900 mb-4">Mengapa Menjadi Kreator di Noteds?</h2>
+                <h2 class="text-2xl md:text-3xl font-bold text-gray-900 dark:text-white mb-4">Mengapa Menjadi Kreator di Noteds?</h2>
             </div>
             @php
                 $whyIcons = [
@@ -237,11 +240,11 @@
             @endphp
             <div class="grid md:grid-cols-2 gap-6">
                 @foreach($whyIcons as $item)
-                    <div class="flex gap-4 items-start bg-white rounded-2xl p-5 shadow-sm border border-gray-100">
+                    <div class="flex gap-4 items-start bg-white dark:bg-gray-800 rounded-2xl p-5 shadow-sm border border-gray-100 dark:border-gray-700">
                         <span class="text-blue-500 shrink-0">{!! $item['svg'] !!}</span>
                         <div>
-                            <h3 class="font-semibold text-gray-900 mb-1">{{ $item['title'] }}</h3>
-                            <p class="text-sm text-gray-500">{{ $item['desc'] }}</p>
+                            <h3 class="font-semibold text-gray-900 dark:text-white mb-1">{{ $item['title'] }}</h3>
+                            <p class="text-sm text-gray-500 dark:text-gray-400">{{ $item['desc'] }}</p>
                         </div>
                     </div>
                 @endforeach
@@ -275,8 +278,8 @@
 
         {{-- CTA Section --}}
         <section class="text-center">
-            <h2 class="text-2xl md:text-3xl font-bold text-gray-900 mb-4">Siap Berkreasi?</h2>
-            <p class="text-gray-600 text-lg mb-8">Mulai perjalananmu sebagai kreator experience edukasi hari ini.</p>
+            <h2 class="text-2xl md:text-3xl font-bold text-gray-900 dark:text-white mb-4">Siap Berkreasi?</h2>
+            <p class="text-gray-600 dark:text-gray-400 text-lg mb-8">Mulai perjalananmu sebagai kreator experience edukasi hari ini.</p>
             <div class="flex flex-wrap justify-center gap-4">
                 @auth
                     @if(auth()->user()->isCreator())
@@ -297,7 +300,7 @@
                     </a>
                 @endauth
             </div>
-            <p class="text-gray-400 text-xs mt-6">
+            <p class="text-gray-400 dark:text-gray-500 text-xs mt-6">
                 <em>Buat Experience. Bagikan Ilmu. Bangun Masa Depan.</em>
             </p>
         </section>
@@ -305,8 +308,8 @@
     </main>
 
     {{-- Footer --}}
-    <footer class="bg-white border-t border-gray-100 mt-16">
-        <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-8 text-center text-sm text-gray-400">
+    <footer class="bg-white dark:bg-gray-800 border-t border-gray-100 dark:border-gray-700 mt-16">
+        <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-8 text-center text-sm text-gray-400 dark:text-gray-500">
             <p>© {{ date('Y') }} {{ config('app.name', 'Noteds') }}. All rights reserved.</p>
         </div>
     </footer>

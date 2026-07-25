@@ -47,6 +47,31 @@
     color: #1e40af;
 }
 
+/* Dark mode toast variants */
+.dark .toast-success {
+    background-color: #052e16;
+    border-color: #166534;
+    color: #86efac;
+}
+
+.dark .toast-error {
+    background-color: #450a0a;
+    border-color: #991b1b;
+    color: #fca5a5;
+}
+
+.dark .toast-warning {
+    background-color: #451a03;
+    border-color: #92400e;
+    color: #fcd34d;
+}
+
+.dark .toast-info {
+    background-color: #172554;
+    border-color: #1e40af;
+    color: #93c5fd;
+}
+
 /* Confirm Modal */
 .confirm-modal-overlay {
     position: fixed;
@@ -69,6 +94,7 @@
 .confirm-modal-card {
     background: white;
     border-radius: 0.75rem;
+    border: 1px solid #f3f4f6;
     padding: 1.5rem;
     width: 100%;
     max-width: 24rem;
@@ -81,6 +107,12 @@
 .confirm-modal-overlay.confirm-modal-show .confirm-modal-card {
     transform: scale(1) translateY(0);
     opacity: 1;
+}
+
+.dark .confirm-modal-card {
+    background: #1f2937;
+    border-color: #374151;
+    color: #f3f4f6;
 }
 
 /* Respect prefers-reduced-motion for accessibility */

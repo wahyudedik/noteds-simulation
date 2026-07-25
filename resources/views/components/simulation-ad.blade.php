@@ -1,8 +1,7 @@
-@props(['simulation' => null])
+@props(['simulation'])
 
 @php
     /** @var \App\Models\Simulation $simulation */
-    $simulation ??= $simulation;
 
     // Get approved creator ads for this simulation
     $creatorAds = \App\Models\CreatorAd::where('simulation_id', $simulation->id)
@@ -77,12 +76,6 @@
                                 @if(! empty($config['target_url']))
                             </a>
                         @endif
-                    </div>
-                @endif
-
-                @if(! empty($creatorAd->code_snippet) && ($config['type'] ?? '') !== 'native' && ($config['type'] ?? '') !== 'banner')
-                    <div class="mt-2">
-                        {!! $creatorAd->code_snippet !!}
                     </div>
                 @endif
 

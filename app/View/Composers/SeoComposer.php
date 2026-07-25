@@ -74,8 +74,8 @@ class SeoComposer
             $routeName === 'simulations.show' => 'simulation:'.$currentRoute->parameter('slug'),
             // Category page: category:{name}
             $routeName === 'simulations.category' => 'category:'.$currentRoute->parameter('category'),
-            // Creator profile page: creator:{id}
-            $routeName === 'creators.show' => 'creator:'.$currentRoute->parameter('creator'),
+            // Creator profile page: creator:{username}
+            $routeName === 'creators.show' => 'creator:'.$currentRoute->parameter('user'),
             // Static pages by route name
             in_array($routeName, ['home', 'simulations.index']) => 'home',
             $routeName === 'simulations.explore' => 'explore',

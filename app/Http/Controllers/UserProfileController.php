@@ -16,13 +16,14 @@ class UserProfileController extends Controller
         $tab ??= 'bookmarks';
 
         $user = $request->user();
-        $validTabs = ['bookmarks', 'history', 'following', 'collections', 'forum'];
+        $validTabs = ['bookmarks', 'history', 'following', 'favorites', 'collections', 'forum'];
         $activeTab = in_array($tab, $validTabs) ? $tab : 'bookmarks';
 
         $data = match ($activeTab) {
             'bookmarks' => $this->getBookmarks($user),
             'history' => $this->getHistory($user),
             'following' => $this->getFollowing($user),
+            'favorites' => $this->getFavorites($user),
             'collections' => $this->getCollections($user),
             'forum' => $this->getForumThreads($user),
             default => [],
@@ -33,6 +34,7 @@ class UserProfileController extends Controller
             'simulations_played' => $user->playHistory()->count(),
             'following' => $user->following()->count(),
             'followers' => $user->followers()->count(),
+            'favorites' => $user->favorites()->count(),
             'comments' => $user->comments()->count(),
             'collections' => $user->collections()->count(),
             'forum_threads' => $user->forumThreads()->count(),
@@ -94,6 +96,19 @@ class UserProfileController extends Controller
             ->paginate(12);
 
         return ['collections' => $collections];
+    }
+
+    /**
+     * Get user's favorited simulations.
+     */
+    private function getFavorites($user): array
+    {
+        $favorites = $user->favorites()
+            ->with('simulation.user')
+            ->latest()
+            ->paginate(12);
+
+        return ['favorites' => $favorites];
     }
 
     /**

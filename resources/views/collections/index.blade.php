@@ -1,7 +1,7 @@
 <x-app-layout>
     <x-slot name="header">
         <div class="flex items-center justify-between">
-            <h2 class="font-semibold text-xl text-gray-800 leading-tight">
+            <h2 class="font-semibold text-xl text-gray-800 dark:text-white leading-tight">
                 <svg class="inline w-5 h-5 mr-1 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/></svg>
                 Collection Saya
             </h2>
@@ -15,23 +15,10 @@
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
 
-            {{-- Status Messages --}}
-            @if(session('status'))
-                <div class="mb-4 p-3 bg-green-50 border border-green-200 text-green-700 text-sm rounded-lg">
-                    @if(session('status') === 'collection-created')
-                        Collection berhasil dibuat.
-                    @elseif(session('status') === 'collection-updated')
-                        Collection berhasil diperbarui.
-                    @elseif(session('status') === 'collection-deleted')
-                        Collection berhasil dihapus.
-                    @endif
-                </div>
-            @endif
-
             @if($collections->count() > 0)
                 <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                     @foreach($collections as $collection)
-                        <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-md transition">
+                        <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 overflow-hidden hover:shadow-md transition">
                             {{-- Thumbnail --}}
                             <div class="aspect-video bg-gradient-to-br from-blue-500 to-purple-600 relative">
                                 @if($collection->thumbnail)
@@ -52,22 +39,22 @@
 
                             {{-- Info --}}
                             <div class="p-4">
-                                <a href="{{ route('collections.show', $collection->slug) }}" class="text-gray-900 font-semibold text-sm hover:text-blue-600 transition line-clamp-1">
+                                <a href="{{ route('collections.show', $collection->slug) }}" class="text-gray-900 dark:text-white font-semibold text-sm hover:text-blue-600 transition line-clamp-1">
                                     {{ $collection->title }}
                                 </a>
-                                <p class="text-gray-500 text-xs mt-1">{{ $collection->simulations_count }} experience &middot; {{ $collection->formatted_view_count }} dilihat</p>
+                                <p class="text-gray-500 dark:text-gray-400 text-xs mt-1">{{ $collection->simulations_count }} experience &middot; {{ $collection->formatted_view_count }} dilihat</p>
                                 @if($collection->description)
-                                    <p class="text-gray-500 text-xs mt-2 line-clamp-2">{{ $collection->description }}</p>
+                                    <p class="text-gray-500 dark:text-gray-400 text-xs mt-2 line-clamp-2">{{ $collection->description }}</p>
                                 @endif
 
                                 <div class="flex items-center gap-2 mt-3">
-                                    <a href="{{ route('collections.edit', $collection) }}" class="flex-1 text-center px-3 py-1.5 bg-gray-100 hover:bg-gray-200 text-gray-700 text-xs font-medium rounded-lg transition">
+                                    <a href="{{ route('collections.edit', $collection) }}" class="flex-1 text-center px-3 py-1.5 bg-gray-100 hover:bg-gray-200 dark:bg-gray-700 dark:hover:bg-gray-600 text-gray-700 dark:text-gray-300 text-xs font-medium rounded-lg transition">
                                         Edit
                                     </a>
                                     <form action="{{ route('collections.destroy', $collection) }}" method="POST">
                                         @csrf
                                         @method('DELETE')
-                                        <button type="button" onclick="confirmSubmit(this.closest('form'), 'Hapus collection ini?')" class="px-3 py-1.5 bg-red-50 hover:bg-red-100 text-red-600 text-xs font-medium rounded-lg transition">
+                                        <button type="button" onclick="confirmSubmit(this.closest('form'), 'Hapus collection ini?')" class="px-3 py-1.5 bg-red-50 hover:bg-red-100 dark:bg-red-900/30 dark:hover:bg-red-900/50 text-red-600 dark:text-red-400 text-xs font-medium rounded-lg transition">
                                             Hapus
                                         </button>
                                     </form>
@@ -82,9 +69,9 @@
                 </div>
             @else
                 <div class="text-center py-16">
-                    <svg class="w-16 h-16 text-gray-300 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/></svg>
-                    <h3 class="text-gray-500 text-lg font-medium">Belum ada collection</h3>
-                    <p class="text-gray-400 text-sm mt-2">Buat collection untuk mengorganisasi experience favorit Anda.</p>
+                    <svg class="w-16 h-16 text-gray-300 dark:text-gray-600 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/></svg>
+                    <h3 class="text-gray-500 dark:text-gray-400 text-lg font-medium">Belum ada collection</h3>
+                    <p class="text-gray-400 dark:text-gray-500 text-sm mt-2">Buat collection untuk mengorganisasi experience favorit Anda.</p>
                     <a href="{{ route('collections.create') }}" class="inline-flex items-center gap-2 mt-4 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium rounded-lg transition">
                         Buat Collection Pertama
                     </a>

@@ -17,6 +17,7 @@ class SuperAdminSeeder extends Seeder
             ['email' => 'info@noteds.com'],
             [
                 'name' => 'Super Admin',
+                'username' => 'superadmin',
                 'password' => Hash::make('Wahyu123456789@'),
                 'role' => 'superadmin',
                 'email_verified_at' => now(),

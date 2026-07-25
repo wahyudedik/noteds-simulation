@@ -1,6 +1,6 @@
 <x-app-layout>
     <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
+        <h2 class="font-semibold text-xl text-gray-800 dark:text-white leading-tight">
             #1 Leaderboard
         </h2>
     </x-slot>
@@ -12,7 +12,7 @@
             <div class="flex items-center gap-2 mb-6">
                 @foreach(['all' => 'Semua Waktu', 'month' => 'Bulan Ini', 'week' => 'Minggu Ini'] as $key => $label)
                     <a href="{{ route('leaderboard.index', ['period' => $key]) }}"
-                       class="px-4 py-2 text-sm font-medium rounded-lg transition {{ $period === $key ? 'bg-gray-900 text-white' : 'bg-white text-gray-600 hover:bg-gray-100 border border-gray-200' }}">
+                       class="px-4 py-2 text-sm font-medium rounded-lg transition {{ $period === $key ? 'bg-gray-900 text-white dark:bg-white dark:text-gray-900' : 'bg-white text-gray-600 hover:bg-gray-100 border border-gray-200 dark:bg-gray-800 dark:text-gray-300 dark:hover:bg-gray-700 dark:border-gray-700' }}">
                         {{ $label }}
                     </a>
                 @endforeach
@@ -33,15 +33,15 @@
                                 @if($entry['user']->avatar)
                                     <img src="{{ Storage::disk('public')->url($entry['user']->avatar) }}"
                                          alt="{{ $entry['user']->name }}"
-                                         class="w-16 h-16 rounded-full object-cover border-2 {{ $rank === 1 ? 'border-yellow-400' : 'border-gray-300' }} shadow-lg mb-2" />
+                                         class="w-16 h-16 rounded-full object-cover border-2 {{ $rank === 1 ? 'border-yellow-400' : 'border-gray-300 dark:border-gray-600' }} shadow-lg mb-2" />
                                 @else
-                                    <div class="w-16 h-16 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center text-2xl font-bold border-2 {{ $rank === 1 ? 'border-yellow-400' : 'border-gray-300' }} shadow-lg mb-2">
+                                    <div class="w-16 h-16 rounded-full bg-blue-100 dark:bg-blue-900/50 text-blue-600 dark:text-blue-400 flex items-center justify-center text-2xl font-bold border-2 {{ $rank === 1 ? 'border-yellow-400' : 'border-gray-300 dark:border-gray-600' }} shadow-lg mb-2">
                                         {{ strtoupper(substr($entry['user']->name, 0, 1)) }}
                                     </div>
                                 @endif
-                                <p class="text-sm font-semibold text-gray-900 max-w-[100px] truncate">{{ $entry['user']->name }}</p>
-                                <p class="text-xs text-gray-500">{{ number_format($entry['points']) }} pts</p>
-                                <div class="mt-2 w-20 bg-gray-100 rounded-t-lg overflow-hidden {{ $podiumHeights[$rank] }}">
+                                <p class="text-sm font-semibold text-gray-900 dark:text-white max-w-[100px] truncate">{{ $entry['user']->name }}</p>
+                                <p class="text-xs text-gray-500 dark:text-gray-400">{{ number_format($entry['points']) }} pts</p>
+                                <div class="mt-2 w-20 bg-gray-100 dark:bg-gray-700 rounded-t-lg overflow-hidden {{ $podiumHeights[$rank] }}">
                                     <div class="w-full h-full bg-gradient-to-t {{ $podiumColors[$rank] }} rounded-t-lg flex items-center justify-center">
                                         <span class="text-white text-2xl font-bold">{{ $rank }}</span>
                                     </div>
@@ -53,52 +53,51 @@
             @endif
 
             {{-- Full Leaderboard Table --}}
-            <div class="bg-white border border-gray-100 rounded-xl shadow-sm overflow-hidden">
+            <div class="bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700 rounded-xl shadow-sm overflow-hidden">
                 @if($leaderboard->count() > 0)
                     <div class="overflow-x-auto">
                         <table class="w-full text-sm">
                             <thead>
-                                <tr class="border-b border-gray-100 bg-gray-50">
-                                    <th class="text-left py-3 px-3 sm:px-4 text-gray-500 font-medium w-12">#</th>
-                                    <th class="text-left py-3 px-3 sm:px-4 text-gray-500 font-medium">Pengguna</th>
-                                    <th class="hidden sm:table-cell text-center py-3 px-3 sm:px-4 text-gray-500 font-medium">Level</th>
-                                    <th class="text-center py-3 px-3 sm:px-4 text-gray-500 font-medium">Streak</th>
-                                    <th class="text-right py-3 px-3 sm:px-4 text-gray-500 font-medium">Poin</th>
+                                <tr class="border-b border-gray-100 dark:border-gray-700 bg-gray-50 dark:bg-gray-900/50">
+                                    <th class="text-left py-3 px-3 sm:px-4 text-gray-500 dark:text-gray-400 font-medium w-12">#</th>
+                                    <th class="text-left py-3 px-3 sm:px-4 text-gray-500 dark:text-gray-400 font-medium">Pengguna</th>
+                                    <th class="hidden sm:table-cell text-center py-3 px-3 sm:px-4 text-gray-500 dark:text-gray-400 font-medium">Level</th>
+                                    <th class="text-center py-3 px-3 sm:px-4 text-gray-500 dark:text-gray-400 font-medium">Streak</th>
+                                    <th class="text-right py-3 px-3 sm:px-4 text-gray-500 dark:text-gray-400 font-medium">Poin</th>
                                 </tr>
                             </thead>
-                            <tbody class="divide-y divide-gray-50">
+                            <tbody class="divide-y divide-gray-50 dark:divide-gray-700">
                                 @foreach($leaderboard as $rank => $entry)
-                                    <tr class="hover:bg-gray-50 transition {{ $rank < 3 ? 'bg-yellow-50/30' : '' }}">
+                                    <tr class="hover:bg-gray-50 dark:hover:bg-gray-700/50 transition {{ $rank < 3 ? 'bg-yellow-50/30 dark:bg-yellow-900/10' : '' }}">
                                         <td class="py-3 px-3 sm:px-4">
-                                            @if($rank === 0)
-                                                <span class="text-lg">(1st)</span>
-                                            @elseif($rank === 1)
-                                                <span class="text-lg">(2nd)</span>
-                                            @elseif($rank === 2)
-                                                <span class="text-lg">(3rd)</span>
+                                            @if($rank < 3)
+                                                @php
+                                                    $rankLabels = [0 => '🥇 1', 1 => '🥈 2', 2 => '🥉 3'];
+                                                @endphp
+                                                <span class="text-sm font-semibold text-gray-900 dark:text-white">{{ $rankLabels[$rank] }}</span>
                                             @else
-                                                <span class="text-sm font-medium text-gray-500">{{ $rank + 1 }}</span>
+                                                <span class="text-sm font-medium text-gray-500 dark:text-gray-400">{{ $rank + 1 }}</span>
                                             @endif
                                         </td>
                                         <td class="py-3 px-3 sm:px-4">
-                                            <a href="{{ route('creators.show', $entry['user']->id) }}" class="flex items-center gap-3 hover:opacity-80 transition">
+                                            <a href="{{ route('creators.show', $entry['user']->username) }}" class="flex items-center gap-3 hover:opacity-80 transition">
                                                 @if($entry['user']->avatar)
                                                     <img src="{{ Storage::disk('public')->url($entry['user']->avatar) }}"
                                                          alt="{{ $entry['user']->name }}"
                                                          class="w-8 h-8 rounded-full object-cover" />
                                                 @else
-                                                    <div class="w-8 h-8 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center text-xs font-semibold">
+                                                    <div class="w-8 h-8 rounded-full bg-blue-100 dark:bg-blue-900/50 text-blue-600 dark:text-blue-400 flex items-center justify-center text-xs font-semibold">
                                                         {{ strtoupper(substr($entry['user']->name, 0, 1)) }}
                                                     </div>
                                                 @endif
                                                 <div class="min-w-0">
-                                                    <span class="font-medium text-gray-900 hover:text-blue-600 transition block truncate">{{ $entry['user']->name }}</span>
-                                                    <span class="hidden sm:block text-xs text-gray-400">Lv.{{ $entry['level'] }} {{ $entry['level_title'] }}</span>
+                                                    <span class="font-medium text-gray-900 dark:text-white hover:text-blue-600 transition block truncate">{{ $entry['user']->name }}</span>
+                                                    <span class="hidden sm:block text-xs text-gray-400 dark:text-gray-500">Lv.{{ $entry['level'] }} {{ $entry['level_title'] }}</span>
                                                 </div>
                                             </a>
                                         </td>
                                         <td class="hidden sm:table-cell py-3 px-3 sm:px-4 text-center">
-                                            <span class="inline-flex items-center gap-1 px-2 py-0.5 text-xs font-medium bg-blue-100 text-blue-700 rounded-full">
+                                            <span class="inline-flex items-center gap-1 px-2 py-0.5 text-xs font-medium bg-blue-100 dark:bg-blue-900/50 text-blue-700 dark:text-blue-400 rounded-full">
                                                 Lv.{{ $entry['level'] }} {{ $entry['level_title'] }}
                                             </span>
                                         </td>
@@ -109,10 +108,10 @@
                                                     <span class="font-medium text-orange-600">{{ $entry['streak'] }}</span>
                                                 </span>
                                             @else
-                                                <span class="text-gray-400">—</span>
+                                                <span class="text-gray-400 dark:text-gray-600">—</span>
                                             @endif
                                         </td>
-                                        <td class="py-3 px-3 sm:px-4 text-right font-semibold text-gray-900">{{ number_format($entry['points']) }}</td>
+                                        <td class="py-3 px-3 sm:px-4 text-right font-semibold text-gray-900 dark:text-white">{{ number_format($entry['points']) }}</td>
                                     </tr>
                                 @endforeach
                             </tbody>
@@ -120,9 +119,9 @@
                     </div>
                 @else
                     <div class="text-center py-16">
-                        <svg class="w-16 h-16 text-gray-300 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
-                        <h3 class="text-gray-500 text-lg font-medium">Belum ada data leaderboard</h3>
-                        <p class="text-gray-400 text-sm mt-2">Mulai bermain experience untuk mendapatkan poin dan naik level!</p>
+                        <svg class="w-16 h-16 text-gray-300 dark:text-gray-600 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
+                        <h3 class="text-gray-500 dark:text-gray-400 text-lg font-medium">Belum ada data leaderboard</h3>
+                        <p class="text-gray-400 dark:text-gray-500 text-sm mt-2">Mulai bermain experience untuk mendapatkan poin dan naik level!</p>
                     </div>
                 @endif
             </div>

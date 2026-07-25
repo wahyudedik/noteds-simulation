@@ -75,7 +75,7 @@
             </div>
         @elseif($ad->content)
             {{-- Native/HTML Ad --}}
-            <div class="relative rounded-lg border border-gray-200 p-3 bg-gray-50">
+            <div class="relative rounded-lg border border-gray-200 dark:border-gray-700 p-3 bg-gray-50 dark:bg-gray-800">
                 @if($ad->target_url)
                     <a
                         href="{{ $ad->target_url }}"

@@ -3,13 +3,13 @@
 @endphp
 
 <x-app-layout>
-    <main id="main-content" class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
 
         {{-- Profile Header --}}
-        <div class="bg-white rounded-2xl p-6 sm:p-8 shadow-sm border border-gray-100">
+        <div class="bg-white dark:bg-gray-800 rounded-2xl p-6 sm:p-8 shadow-sm border border-gray-100 dark:border-gray-700">
             <div class="flex flex-col sm:flex-row items-center sm:items-start gap-6">
                 {{-- Avatar --}}
-                <div class="w-24 h-24 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 text-3xl font-bold overflow-hidden flex-shrink-0">
+                <div class="w-24 h-24 rounded-full bg-blue-100 dark:bg-blue-900/50 flex items-center justify-center text-blue-600 dark:text-blue-400 text-3xl font-bold overflow-hidden flex-shrink-0">
                     @if($user->avatar)
                         <img src="{{ Storage::disk('public')->url($user->avatar) }}" alt="{{ $user->name }}" class="w-full h-full object-cover" />
                     @else
@@ -19,40 +19,40 @@
 
                 {{-- Info --}}
                 <div class="flex-1 text-center sm:text-left">
-                    <h1 class="text-2xl font-bold text-gray-900">{{ $user->name }}</h1>
+                    <h1 class="text-2xl font-bold text-gray-900 dark:text-white">{{ $user->name }}</h1>
                     @if($user->bio)
-                        <p class="text-gray-500 text-sm mt-2 max-w-lg">{{ $user->bio }}</p>
+                        <p class="text-gray-500 dark:text-gray-400 text-sm mt-2 max-w-lg">{{ $user->bio }}</p>
                     @endif
-                    <p class="text-xs text-gray-400 mt-2">Bergabung {{ $user->created_at->translatedFormat('d M Y') }}</p>
+                    <p class="text-xs text-gray-400 dark:text-gray-500 mt-2">Bergabung {{ $user->created_at->translatedFormat('d M Y') }}</p>
 
                     <div class="flex items-center gap-6 mt-4 justify-center sm:justify-start">
                         <div class="text-center">
-                            <p class="text-gray-900 font-bold text-lg">{{ $stats['bookmarks'] }}</p>
-                            <p class="text-gray-500 text-xs">Bookmark</p>
+                            <p class="text-gray-900 dark:text-white font-bold text-lg">{{ $stats['bookmarks'] }}</p>
+                            <p class="text-gray-500 dark:text-gray-400 text-xs">Bookmark</p>
                         </div>
                         <div class="text-center">
-                            <p class="text-gray-900 font-bold text-lg">{{ $stats['simulations_played'] }}</p>
-                            <p class="text-gray-500 text-xs">Dimainkan</p>
+                            <p class="text-gray-900 dark:text-white font-bold text-lg">{{ $stats['simulations_played'] }}</p>
+                            <p class="text-gray-500 dark:text-gray-400 text-xs">Dimainkan</p>
                         </div>
                         <div class="text-center">
-                            <p class="text-gray-900 font-bold text-lg">{{ $stats['following'] }}</p>
-                            <p class="text-gray-500 text-xs">Mengikuti</p>
+                            <p class="text-gray-900 dark:text-white font-bold text-lg">{{ $stats['following'] }}</p>
+                            <p class="text-gray-500 dark:text-gray-400 text-xs">Mengikuti</p>
                         </div>
                         <div class="text-center">
-                            <p class="text-gray-900 font-bold text-lg">{{ $stats['followers'] }}</p>
-                            <p class="text-gray-500 text-xs">Pengikut</p>
+                            <p class="text-gray-900 dark:text-white font-bold text-lg">{{ $stats['followers'] }}</p>
+                            <p class="text-gray-500 dark:text-gray-400 text-xs">Pengikut</p>
                         </div>
                         <div class="text-center">
-                            <p class="text-gray-900 font-bold text-lg">{{ $stats['comments'] }}</p>
-                            <p class="text-gray-500 text-xs">Komentar</p>
+                            <p class="text-gray-900 dark:text-white font-bold text-lg">{{ $stats['comments'] }}</p>
+                            <p class="text-gray-500 dark:text-gray-400 text-xs">Komentar</p>
                         </div>
                     </div>
 
                     <div class="mt-4 flex gap-3 justify-center sm:justify-start">
-                        <a href="{{ route('profile.edit') }}" class="px-4 py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 text-sm font-medium rounded-lg transition">
+                        <a href="{{ route('profile.edit') }}" class="px-4 py-2 bg-gray-100 hover:bg-gray-200 dark:bg-gray-700 dark:hover:bg-gray-600 text-gray-700 dark:text-gray-300 text-sm font-medium rounded-lg transition">
                             Edit Profil
                         </a>
-                        <a href="{{ route('creators.show', $user->id) }}" class="px-4 py-2 bg-blue-100 hover:bg-blue-200 text-blue-700 text-sm font-medium rounded-lg transition">
+                        <a href="{{ route('creators.show', $user->username) }}" class="px-4 py-2 bg-blue-100 hover:bg-blue-200 dark:bg-blue-900/50 dark:hover:bg-blue-900/70 text-blue-700 dark:text-blue-400 text-sm font-medium rounded-lg transition">
                             Lihat Profil Publik
                         </a>
                     </div>
@@ -62,30 +62,35 @@
 
         {{-- Tabs --}}
         <div class="mt-8">
-            <div class="border-b border-gray-200">
+            <div class="border-b border-gray-200 dark:border-gray-700">
                 <nav class="flex gap-1 -mb-px overflow-x-auto">
                     <a href="{{ route('user-profile.index') }}"
-                        class="px-5 py-3 text-sm font-medium border-b-2 transition whitespace-nowrap {{ $activeTab === 'bookmarks' ? 'border-blue-600 text-blue-600' : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300' }}">
+                        class="px-5 py-3 text-sm font-medium border-b-2 transition whitespace-nowrap {{ $activeTab === 'bookmarks' ? 'border-blue-600 text-blue-600' : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 dark:text-gray-400 dark:hover:text-gray-200 dark:hover:border-gray-600' }}">
                         <svg class="inline w-4 h-4 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z" /></svg>
                         Bookmark
                     </a>
                     <a href="{{ route('user-profile.tab', 'history') }}"
-                        class="px-5 py-3 text-sm font-medium border-b-2 transition whitespace-nowrap {{ $activeTab === 'history' ? 'border-blue-600 text-blue-600' : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300' }}">
+                        class="px-5 py-3 text-sm font-medium border-b-2 transition whitespace-nowrap {{ $activeTab === 'history' ? 'border-blue-600 text-blue-600' : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 dark:text-gray-400 dark:hover:text-gray-200 dark:hover:border-gray-600' }}">
                         <svg class="inline w-4 h-4 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
                         Riwayat
                     </a>
                     <a href="{{ route('user-profile.tab', 'following') }}"
-                        class="px-5 py-3 text-sm font-medium border-b-2 transition whitespace-nowrap {{ $activeTab === 'following' ? 'border-blue-600 text-blue-600' : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300' }}">
+                        class="px-5 py-3 text-sm font-medium border-b-2 transition whitespace-nowrap {{ $activeTab === 'following' ? 'border-blue-600 text-blue-600' : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 dark:text-gray-400 dark:hover:text-gray-200 dark:hover:border-gray-600' }}">
                         <svg class="inline w-4 h-4 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z" /></svg>
                         Mengikuti
                     </a>
+                    <a href="{{ route('user-profile.tab', 'favorites') }}"
+                        class="px-5 py-3 text-sm font-medium border-b-2 transition whitespace-nowrap {{ $activeTab === 'favorites' ? 'border-blue-600 text-blue-600' : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 dark:text-gray-400 dark:hover:text-gray-200 dark:hover:border-gray-600' }}">
+                        <svg class="inline w-4 h-4 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" /></svg>
+                        Favorit
+                    </a>
                     <a href="{{ route('user-profile.tab', 'collections') }}"
-                        class="px-5 py-3 text-sm font-medium border-b-2 transition whitespace-nowrap {{ $activeTab === 'collections' ? 'border-blue-600 text-blue-600' : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300' }}">
+                        class="px-5 py-3 text-sm font-medium border-b-2 transition whitespace-nowrap {{ $activeTab === 'collections' ? 'border-blue-600 text-blue-600' : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 dark:text-gray-400 dark:hover:text-gray-200 dark:hover:border-gray-600' }}">
                         <svg class="inline w-4 h-4 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/></svg>
                         Collection
                     </a>
                     <a href="{{ route('user-profile.tab', 'forum') }}"
-                        class="px-5 py-3 text-sm font-medium border-b-2 transition whitespace-nowrap {{ $activeTab === 'forum' ? 'border-blue-600 text-blue-600' : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300' }}">
+                        class="px-5 py-3 text-sm font-medium border-b-2 transition whitespace-nowrap {{ $activeTab === 'forum' ? 'border-blue-600 text-blue-600' : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 dark:text-gray-400 dark:hover:text-gray-200 dark:hover:border-gray-600' }}">
                         <svg class="inline w-4 h-4 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8h2a2 2 0 012 2v6a2 2 0 01-2 2h-2v4l-4-4H9a2 2 0 01-2-2v-1m0-4V6a2 2 0 012-2h6a2 2 0 012 2v6a2 2 0 01-2 2h-2v4l-4-4z" /></svg>
                         Forum
                     </a>
@@ -110,9 +115,9 @@
                         </div>
                     @else
                         <div class="text-center py-16">
-                            <svg class="w-16 h-16 text-gray-300 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z" /></svg>
-                            <h3 class="text-gray-500 text-lg font-medium">Belum ada bookmark</h3>
-                            <p class="text-gray-400 text-sm mt-2">Experience yang Anda bookmark akan muncul di sini.</p>
+                            <svg class="w-16 h-16 text-gray-300 dark:text-gray-600 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z" /></svg>
+                            <h3 class="text-gray-500 dark:text-gray-400 text-lg font-medium">Belum ada bookmark</h3>
+                            <p class="text-gray-400 dark:text-gray-500 text-sm mt-2">Experience yang Anda bookmark akan muncul di sini.</p>
                             <a href="{{ route('home') }}" class="inline-flex items-center gap-2 mt-4 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium rounded-lg transition">
                                 Jelajahi Experience
                             </a>
@@ -135,9 +140,9 @@
                         </div>
                     @else
                         <div class="text-center py-16">
-                            <svg class="w-16 h-16 text-gray-300 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
-                            <h3 class="text-gray-500 text-lg font-medium">Belum ada riwayat</h3>
-                            <p class="text-gray-400 text-sm mt-2">Riwayat bermain experience Anda akan muncul di sini.</p>
+                            <svg class="w-16 h-16 text-gray-300 dark:text-gray-600 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                            <h3 class="text-gray-500 dark:text-gray-400 text-lg font-medium">Belum ada riwayat</h3>
+                            <p class="text-gray-400 dark:text-gray-500 text-sm mt-2">Riwayat bermain experience Anda akan muncul di sini.</p>
                             <a href="{{ route('home') }}" class="inline-flex items-center gap-2 mt-4 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium rounded-lg transition">
                                 Mulai Bermain
                             </a>
@@ -150,9 +155,9 @@
                     @if(isset($data['following']) && $data['following']->count() > 0)
                         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                             @foreach($data['following'] as $creator)
-                                <a href="{{ route('creators.show', $creator->id) }}" class="bg-white rounded-xl p-4 shadow-sm border border-gray-100 hover:shadow-md transition">
+                                <a href="{{ route('creators.show', $creator->username) }}" class="bg-white dark:bg-gray-800 rounded-xl p-4 shadow-sm border border-gray-100 dark:border-gray-700 hover:shadow-md transition">
                                     <div class="flex items-center gap-3">
-                                        <div class="w-12 h-12 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center text-lg font-bold overflow-hidden flex-shrink-0">
+                                        <div class="w-12 h-12 rounded-full bg-blue-100 dark:bg-blue-900/50 text-blue-600 dark:text-blue-400 flex items-center justify-center text-lg font-bold overflow-hidden flex-shrink-0">
                                             @if($creator->avatar)
                                                 <img src="{{ Storage::disk('public')->url($creator->avatar) }}" alt="{{ $creator->name }}" class="w-full h-full object-cover" />
                                             @else
@@ -160,8 +165,8 @@
                                             @endif
                                         </div>
                                         <div class="flex-1 min-w-0">
-                                            <h4 class="text-gray-900 font-medium text-sm truncate">{{ $creator->name }}</h4>
-                                            <p class="text-gray-500 text-xs">{{ $creator->simulations_count }} experience</p>
+                                            <h4 class="text-gray-900 dark:text-white font-medium text-sm truncate">{{ $creator->name }}</h4>
+                                            <p class="text-gray-500 dark:text-gray-400 text-xs">{{ $creator->simulations_count }} experience</p>
                                         </div>
                                     </div>
                                 </a>
@@ -172,11 +177,36 @@
                         </div>
                     @else
                         <div class="text-center py-16">
-                            <svg class="w-16 h-16 text-gray-300 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z" /></svg>
-                            <h3 class="text-gray-500 text-lg font-medium">Belum mengikuti siapapun</h3>
-                            <p class="text-gray-400 text-sm mt-2">Ikuti kreator untuk melihat experience terbaru mereka di sini.</p>
+                            <svg class="w-16 h-16 text-gray-300 dark:text-gray-600 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z" /></svg>
+                            <h3 class="text-gray-500 dark:text-gray-400 text-lg font-medium">Belum mengikuti siapapun</h3>
+                            <p class="text-gray-400 dark:text-gray-500 text-sm mt-2">Ikuti kreator untuk melihat experience terbaru mereka di sini.</p>
                             <a href="{{ route('home') }}" class="inline-flex items-center gap-2 mt-4 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium rounded-lg transition">
                                 Temukan Kreator
+                            </a>
+                        </div>
+                    @endif
+                @endif
+
+                {{-- Favorites Tab --}}
+                @if($activeTab === 'favorites')
+                    @if(isset($data['favorites']) && $data['favorites']->count() > 0)
+                        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                            @foreach($data['favorites'] as $favorite)
+                                @if($favorite->simulation)
+                                    @include('components.simulation-card', ['simulation' => $favorite->simulation])
+                                @endif
+                            @endforeach
+                        </div>
+                        <div class="mt-6">
+                            {{ $data['favorites']->withQueryString()->links() }}
+                        </div>
+                    @else
+                        <div class="text-center py-16">
+                            <svg class="w-16 h-16 text-gray-300 dark:text-gray-600 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" /></svg>
+                            <h3 class="text-gray-500 dark:text-gray-400 text-lg font-medium">Belum ada favorit</h3>
+                            <p class="text-gray-400 dark:text-gray-500 text-sm mt-2">Experience yang Anda favoritkan akan muncul di sini.</p>
+                            <a href="{{ route('home') }}" class="inline-flex items-center gap-2 mt-4 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium rounded-lg transition">
+                                Jelajahi Experience
                             </a>
                         </div>
                     @endif
@@ -187,16 +217,16 @@
                     @if(isset($data['collections']) && $data['collections']->count() > 0)
                         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                             @foreach($data['collections'] as $collection)
-                                <a href="{{ route('collections.show', $collection->slug) }}" class="bg-white rounded-xl p-4 shadow-sm border border-gray-100 hover:shadow-md transition">
+                                <a href="{{ route('collections.show', $collection->slug) }}" class="bg-white dark:bg-gray-800 rounded-xl p-4 shadow-sm border border-gray-100 dark:border-gray-700 hover:shadow-md transition">
                                     <div class="flex items-start gap-3">
-                                        <div class="w-10 h-10 rounded-lg bg-blue-100 text-blue-600 flex items-center justify-center flex-shrink-0">
+                                        <div class="w-10 h-10 rounded-lg bg-blue-100 dark:bg-blue-900/50 text-blue-600 dark:text-blue-400 flex items-center justify-center flex-shrink-0">
                                             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/></svg>
                                         </div>
                                         <div class="flex-1 min-w-0">
-                                            <h4 class="text-gray-900 font-medium text-sm truncate">{{ $collection->title }}</h4>
-                                            <p class="text-gray-500 text-xs mt-1">{{ $collection->simulations_count }} experience</p>
+                                            <h4 class="text-gray-900 dark:text-white font-medium text-sm truncate">{{ $collection->title }}</h4>
+                                            <p class="text-gray-500 dark:text-gray-400 text-xs mt-1">{{ $collection->simulations_count }} experience</p>
                                             @if($collection->description)
-                                                <p class="text-gray-400 text-xs mt-1 line-clamp-2">{{ Str::limit($collection->description, 80) }}</p>
+                                                <p class="text-gray-400 dark:text-gray-500 text-xs mt-1 line-clamp-2">{{ Str::limit($collection->description, 80) }}</p>
                                             @endif
                                         </div>
                                     </div>
@@ -208,9 +238,9 @@
                         </div>
                     @else
                         <div class="text-center py-16">
-                            <svg class="w-16 h-16 text-gray-300 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/></svg>
-                            <h3 class="text-gray-500 text-lg font-medium">Belum ada collection</h3>
-                            <p class="text-gray-400 text-sm mt-2">Buat collection untuk mengelola experience favorit Anda.</p>
+                            <svg class="w-16 h-16 text-gray-300 dark:text-gray-600 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/></svg>
+                            <h3 class="text-gray-500 dark:text-gray-400 text-lg font-medium">Belum ada collection</h3>
+                            <p class="text-gray-400 dark:text-gray-500 text-sm mt-2">Buat collection untuk mengelola experience favorit Anda.</p>
                             <a href="{{ route('collections.create') }}" class="inline-flex items-center gap-2 mt-4 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium rounded-lg transition">
                                 Buat Collection
                             </a>
@@ -222,7 +252,7 @@
                 @if($activeTab === 'forum')
                     {{-- Sub-tabs: Threads & Replies --}}
                     <div class="mb-6" x-data="{ forumTab: 'threads' }">
-                        <div class="flex gap-1 border-b border-gray-200 mb-4">
+                        <div class="flex gap-1 border-b border-gray-200 dark:border-gray-700 mb-4">
                             <button @click="forumTab = 'threads'"
                                 class="px-4 py-2 text-sm font-medium border-b-2 transition"
                                 :class="forumTab === 'threads' ? 'border-blue-600 text-blue-600' : 'border-transparent text-gray-500 hover:text-gray-700'">
@@ -241,11 +271,11 @@
                                 <div class="space-y-3">
                                     @foreach($data['forum_threads'] as $thread)
                                         <a href="{{ route('forum.show', $thread->slug) }}"
-                                            class="block bg-white rounded-xl p-4 shadow-sm border border-gray-100 hover:shadow-md transition">
+                                            class="block bg-white dark:bg-gray-800 rounded-xl p-4 shadow-sm border border-gray-100 dark:border-gray-700 hover:shadow-md transition">
                                             <div class="flex items-start gap-3">
                                                 <div class="flex flex-col items-center gap-1 text-center min-w-[48px]">
-                                                    <span class="text-sm font-bold text-gray-900">{{ $thread->votes_count }}</span>
-                                                    <span class="text-[10px] text-gray-400 uppercase">vote</span>
+                                                    <span class="text-sm font-bold text-gray-900 dark:text-white">{{ $thread->votes_count }}</span>
+                                                    <span class="text-[10px] text-gray-400 dark:text-gray-500 uppercase">vote</span>
                                                 </div>
                                                 <div class="flex-1 min-w-0">
                                                     <div class="flex items-center gap-2 flex-wrap mb-1">
@@ -264,8 +294,8 @@
                                                             <span class="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-medium bg-red-100 text-red-700">Locked</span>
                                                         @endif
                                                     </div>
-                                                    <h4 class="text-sm font-semibold text-gray-900 truncate">{{ $thread->title }}</h4>
-                                                    <div class="flex items-center gap-4 mt-2 text-xs text-gray-500">
+                                                    <h4 class="text-sm font-semibold text-gray-900 dark:text-white truncate">{{ $thread->title }}</h4>
+                                                    <div class="flex items-center gap-4 mt-2 text-xs text-gray-500 dark:text-gray-400">
                                                         <span>{{ $thread->replies_count }} balasan</span>
                                                         <span>{{ $thread->views_count }} dilihat</span>
                                                         <span>{{ $thread->created_at->diffForHumans() }}</span>
@@ -280,9 +310,9 @@
                                 </div>
                             @else
                                 <div class="text-center py-12">
-                                    <svg class="w-14 h-14 text-gray-300 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M17 8h2a2 2 0 012 2v6a2 2 0 01-2 2h-2v4l-4-4H9a2 2 0 01-2-2v-1m0-4V6a2 2 0 012-2h6a2 2 0 012 2v6a2 2 0 01-2 2h-2v4l-4-4z" /></svg>
-                                    <h3 class="text-gray-500 text-lg font-medium">Belum ada thread</h3>
-                                    <p class="text-gray-400 text-sm mt-2">Mulai diskusi dengan membuat thread baru.</p>
+                                    <svg class="w-14 h-14 text-gray-300 dark:text-gray-600 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M17 8h2a2 2 0 012 2v6a2 2 0 01-2 2h-2v4l-4-4H9a2 2 0 01-2-2v-1m0-4V6a2 2 0 012-2h6a2 2 0 012 2v6a2 2 0 01-2 2h-2v4l-4-4z" /></svg>
+                                    <h3 class="text-gray-500 dark:text-gray-400 text-lg font-medium">Belum ada thread</h3>
+                                    <p class="text-gray-400 dark:text-gray-500 text-sm mt-2">Mulai diskusi dengan membuat thread baru.</p>
                                     <a href="{{ route('forum.thread.create') }}" class="inline-flex items-center gap-2 mt-4 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium rounded-lg transition">
                                         Buat Thread
                                     </a>
@@ -296,20 +326,20 @@
                                 <div class="space-y-3">
                                     @foreach($data['forum_replies'] as $reply)
                                         <a href="{{ route('forum.show', $reply->thread->slug) }}#reply-{{ $reply->id }}"
-                                            class="block bg-white rounded-xl p-4 shadow-sm border border-gray-100 hover:shadow-md transition">
+                                            class="block bg-white dark:bg-gray-800 rounded-xl p-4 shadow-sm border border-gray-100 dark:border-gray-700 hover:shadow-md transition">
                                             <div class="flex items-start gap-3">
                                                 <div class="flex-1 min-w-0">
                                                     <p class="text-xs text-gray-500 mb-1">
                                                         Membalas di
-                                                        <span class="font-medium text-gray-700">{{ $reply->thread->title }}</span>
+                                                        <span class="font-medium text-gray-700 dark:text-gray-300">{{ $reply->thread->title }}</span>
                                                         @if($reply->thread->category)
                                                             <span class="inline-flex items-center px-1.5 py-0.5 rounded-full text-[10px] font-medium ml-1" style="background-color: {{ $reply->thread->category->color }}20; color: {{ $reply->thread->category->color }};">
                                                                 {{ $reply->thread->category->name }}
                                                             </span>
                                                         @endif
                                                     </p>
-                                                    <p class="text-sm text-gray-700 line-clamp-2">{!! Str::limit(strip_tags($reply->body), 200) !!}</p>
-                                                    <div class="flex items-center gap-4 mt-2 text-xs text-gray-500">
+                                                    <p class="text-sm text-gray-700 dark:text-gray-300 line-clamp-2">{!! Str::limit(strip_tags($reply->body), 200) !!}</p>
+                                                    <div class="flex items-center gap-4 mt-2 text-xs text-gray-500 dark:text-gray-400">
                                                         <span>{{ $reply->votes_count }} vote</span>
                                                         @if($reply->is_accepted)
                                                             <span class="text-green-600 font-medium">✓ Jawaban Diterima</span>
@@ -326,9 +356,9 @@
                                 </div>
                             @else
                                 <div class="text-center py-12">
-                                    <svg class="w-14 h-14 text-gray-300 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" /></svg>
-                                    <h3 class="text-gray-500 text-lg font-medium">Belum ada balasan</h3>
-                                    <p class="text-gray-400 text-sm mt-2">Bantu komunitas dengan menjawab pertanyaan di forum.</p>
+                                    <svg class="w-14 h-14 text-gray-300 dark:text-gray-600 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" /></svg>
+                                    <h3 class="text-gray-500 dark:text-gray-400 text-lg font-medium">Belum ada balasan</h3>
+                                    <p class="text-gray-400 dark:text-gray-500 text-sm mt-2">Bantu komunitas dengan menjawab pertanyaan di forum.</p>
                                     <a href="{{ route('forum.index') }}" class="inline-flex items-center gap-2 mt-4 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium rounded-lg transition">
                                         Jelajahi Forum
                                     </a>
@@ -340,5 +370,5 @@
 
             </div>
         </div>
-    </main>
+    </div>
 </x-app-layout>

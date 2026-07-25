@@ -73,8 +73,8 @@ Route::get('/sim/serve/{slug}/{path?}', [SimulationController::class, 'serve'])-
 Route::get('/embed/{slug}', [EmbedController::class, 'show'])->name('embed.show');
 Route::get('/embed/{slug}/code', [EmbedController::class, 'code'])->name('embed.code');
 
-// Public creator profile (uses ID for reliability)
-Route::get('/creator/{id}', [FollowController::class, 'profile'])->name('creators.show');
+// Public creator profile (uses username for SEO-friendly URLs)
+Route::get('/creator/{user:username}', [FollowController::class, 'profile'])->name('creators.show');
 
 // Public Creator Program landing page
 Route::get('/become-creator', [DashboardController::class, 'becomeCreatorPage'])->name('become-creator-page');
@@ -116,7 +116,7 @@ Route::middleware('auth')->group(function () {
     Route::post('/ratings/store', [RatingController::class, 'store'])->name('ratings.store');
 
     // Follow/Unfollow creator
-    Route::post('/follows/{id}/toggle', [FollowController::class, 'toggle'])->name('follows.toggle');
+    Route::post('/follows/{user:username}/toggle', [FollowController::class, 'toggle'])->name('follows.toggle');
 
     // Notifications
     Route::get('/notifications', [NotificationController::class, 'index'])->name('notifications.index');
@@ -353,7 +353,7 @@ Route::prefix('api')->name('api.')->group(function () {
     Route::get('/simulations/{slug}/comments', [App\Http\Controllers\Api\SimulationController::class, 'comments'])->name('simulations.comments');
     Route::get('/trending', [App\Http\Controllers\Api\SimulationController::class, 'trending'])->name('trending');
     Route::get('/categories', [App\Http\Controllers\Api\SimulationController::class, 'categories'])->name('categories');
-    Route::get('/creator/{id}/simulations', [App\Http\Controllers\Api\SimulationController::class, 'creatorSimulations'])->name('creator.simulations');
+    Route::get('/creator/{user:username}/simulations', [App\Http\Controllers\Api\SimulationController::class, 'creatorSimulations'])->name('creator.simulations');
 });
 
 // ========== Ad Tracking API (AJAX) ==========

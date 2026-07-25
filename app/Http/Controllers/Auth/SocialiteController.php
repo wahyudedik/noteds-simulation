@@ -7,6 +7,7 @@ use App\Models\User;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Str;
 use Laravel\Socialite\Facades\Socialite;
 use Laravel\Socialite\Two\InvalidStateException;
 
@@ -83,8 +84,18 @@ class SocialiteController extends Controller
                 'email_verified_at' => $user->email_verified_at ?? now(),
             ]);
         } else {
+            // Generate unique username from name
+            $baseUsername = Str::slug($googleUser->name);
+            $username = $baseUsername ?: 'user-'.Str::random(8);
+            $counter = 1;
+            while (User::where('username', $username)->exists()) {
+                $username = $baseUsername.'-'.$counter;
+                $counter++;
+            }
+
             $user = User::create([
                 'name' => $googleUser->name,
+                'username' => $username,
                 'email' => $googleUser->email,
                 'google_id' => $googleUser->id,
                 'email_verified_at' => now(),

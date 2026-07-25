@@ -22,7 +22,7 @@
                     @php
                         $followerUser = $follow->follower;
                     @endphp
-                    <a href="{{ route('creators.show', $followerUser->id) }}" class="bg-white border border-gray-100 rounded-xl shadow-sm p-4 hover:shadow-md transition flex items-center gap-4">
+                    <a href="{{ route('creators.show', $followerUser->username) }}" class="bg-white border border-gray-100 rounded-xl shadow-sm p-4 hover:shadow-md transition flex items-center gap-4">
                         @if($followerUser->avatar)
                             <img src="{{ Storage::disk('public')->url($followerUser->avatar) }}" alt="{{ $followerUser->name }}" class="w-12 h-12 rounded-full object-cover shrink-0" />
                         @else

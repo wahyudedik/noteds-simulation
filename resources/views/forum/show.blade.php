@@ -68,7 +68,7 @@
                             </div>
                         @endif
                         <div>
-                            <a href="{{ route('creators.show', $thread->user_id) }}" class="text-sm font-medium text-gray-900 hover:text-blue-600 transition">{{ $thread->user->name }}</a>
+                            <a href="{{ route('creators.show', $thread->user->username) }}" class="text-sm font-medium text-gray-900 hover:text-blue-600 transition">{{ $thread->user->name }}</a>
                             <p class="text-xs text-gray-400">{{ $thread->created_at->diffForHumans() }} · {{ number_format($thread->views_count) }} dilihat</p>
                         </div>
                     </div>

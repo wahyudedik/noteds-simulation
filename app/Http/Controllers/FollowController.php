@@ -22,24 +22,24 @@ class FollowController extends Controller
      * - User follow: POST /follows/{userId}/toggle
      * - Simulation follow: POST /follows/{userId}/toggle with body { followable_type: 'simulation', followable_id: N }
      */
-    public function toggle(Request $request, int $id): JsonResponse|RedirectResponse
+    public function toggle(Request $request, User $user): JsonResponse|RedirectResponse
     {
         $followableType = $request->input('followable_type', 'user');
-        $followableId = $request->input('followable_id', $id);
 
         if ($followableType === 'simulation') {
+            $followableId = $request->input('followable_id');
+
             return $this->toggleSimulationFollow($request, (int) $followableId);
         }
 
-        return $this->toggleUserFollow($request, $id);
+        return $this->toggleUserFollow($request, $user);
     }
 
     /**
      * Toggle follow/unfollow a creator (user).
      */
-    private function toggleUserFollow(Request $request, int $id): JsonResponse|RedirectResponse
+    private function toggleUserFollow(Request $request, User $creator): JsonResponse|RedirectResponse
     {
-        $creator = User::findOrFail($id);
 
         if ($creator->id === Auth::id()) {
             if ($request->ajax() || $request->wantsJson()) {
@@ -82,7 +82,7 @@ class FollowController extends Controller
                 'body' => Auth::user()->name.' mengikuti Anda.',
                 'data' => [
                     'follower_id' => Auth::id(),
-                    'url' => route('creators.show', Auth::id()),
+                    'url' => route('creators.show', Auth::user()->username),
                 ],
             ]);
         }
@@ -159,9 +159,9 @@ class FollowController extends Controller
     /**
      * Display a creator's public profile page.
      */
-    public function profile(int $id): View
+    public function profile(User $user): View
     {
-        $creator = User::findOrFail($id);
+        $creator = $user;
 
         // Eager-load counts to avoid N+1 in the view
         $creator->loadCount([

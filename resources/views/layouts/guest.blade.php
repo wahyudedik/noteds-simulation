@@ -15,7 +15,7 @@
         <!-- Scripts -->
         @vite(['resources/css/app.css', 'resources/js/app.js'])
     </head>
-    <body class="font-sans text-gray-900 antialiased">
+    <body class="font-sans text-gray-900 dark:text-gray-100 antialiased">
         <div class="min-h-screen flex">
             {{-- Left Panel: Branding --}}
             <div class="hidden lg:flex lg:w-1/2 xl:w-[55%] relative overflow-hidden"
@@ -78,13 +78,13 @@
             </div>
 
             {{-- Right Panel: Auth Form --}}
-            <div class="w-full lg:w-1/2 xl:w-[45%] flex items-center justify-center p-6 sm:p-8 bg-gray-50">
+            <div class="w-full lg:w-1/2 xl:w-[45%] flex items-center justify-center p-6 sm:p-8 bg-gray-50 dark:bg-gray-900">
                 <div class="w-full max-w-md">
                     {{-- Mobile logo --}}
                     <div class="lg:hidden flex items-center justify-center mb-8">
                         <a href="/" class="flex items-center gap-3">
                             <img src="{{ asset('logo.jpeg') }}" alt="{{ config('app.name') }}" class="w-10 h-10 rounded-xl object-cover shadow-md" />
-                            <span class="text-2xl font-bold text-gray-900">Noteds</span>
+                            <span class="text-2xl font-bold text-gray-900 dark:text-white">Noteds</span>
                         </a>
                     </div>
 
@@ -92,7 +92,7 @@
 
                     {{-- Footer links --}}
                     <div class="mt-8 text-center">
-                        <a href="{{ route('home') }}" class="text-sm text-gray-500 hover:text-gray-700 transition">
+                        <a href="{{ route('home') }}" class="text-sm text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 transition">
                             &larr; Kembali ke beranda
                         </a>
                     </div>

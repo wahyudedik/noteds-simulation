@@ -489,7 +489,7 @@
 
                     {{-- Creator --}}
                     <div class="flex items-center gap-3 mt-5 p-4 bg-white rounded-xl border border-gray-100 shadow-sm">
-                        <a href="{{ route('creators.show', $simulation->user->id) }}" class="flex items-center gap-3 flex-1">
+                        <a href="{{ route('creators.show', $simulation->user->username) }}" class="flex items-center gap-3 flex-1">
                             <div class="w-10 h-10 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center font-semibold overflow-hidden">
                                 @if($simulation->user->avatar)
                                     <img src="{{ Storage::disk('public')->url($simulation->user->avatar) }}" alt="{{ $simulation->user->name }}" class="w-full h-full object-cover" />
@@ -506,7 +506,7 @@
                             @if(auth()->id() !== $simulation->user_id)
                                 <button
                                     id="follow-btn"
-                                    onclick="toggleFollow({{ $simulation->user->id }})"
+                                    onclick="toggleFollow('{{ $simulation->user->username }}')"
                                     class="px-4 py-2 text-sm font-medium rounded-full transition {{ $isFollowing ? 'bg-gray-200 text-gray-700 hover:bg-gray-300' : 'bg-blue-600 text-white hover:bg-blue-700' }}"
                                 >
                                     <span id="follow-text">{{ $isFollowing ? 'Mengikuti' : 'Ikuti' }}</span>
@@ -843,8 +843,8 @@
         }
 
         // ========== Follow ==========
-        function toggleFollow(userId) {
-            ajaxPost('/follows/' + userId + '/toggle', {}, function(result) {
+        function toggleFollow(username) {
+            ajaxPost('/follows/' + username + '/toggle', {}, function(result) {
                 if (!result) return;
                 var btn = document.getElementById('follow-btn');
                 var text = document.getElementById('follow-text');

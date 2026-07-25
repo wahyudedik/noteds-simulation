@@ -29,7 +29,7 @@
             <div class="flex items-center gap-6">
                 <a href="{{ route('home') }}" class="flex items-center gap-2 shrink-0">
                     <img src="{{ asset('logo.jpeg') }}" alt="NotEDs" class="w-8 h-8 rounded-lg object-cover" />
-                    <span class="text-xl font-bold text-gray-900">Noteds</span>
+                    <span class="text-xl font-bold text-gray-900 dark:text-white">Noteds</span>
                 </a>
 
                 {{-- Desktop Nav Links — only 3 core links --}}
@@ -58,16 +58,16 @@
                         @focus="if(searchQuery.length >= 2 && searchResults.length > 0) searchOpen = true"
                         value="{{ $searchTerm }}"
                         placeholder="Cari experience..."
-                        class="w-full pl-4 pr-12 py-2.5 border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
+                        class="w-full pl-4 pr-12 py-2.5 border border-gray-300 dark:border-gray-600 dark:bg-gray-800 dark:text-white rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm placeholder-gray-400 dark:placeholder-gray-500"
                         autocomplete="off"
                     />
-                    <button type="submit" aria-label="Cari" class="absolute right-1 top-1 bottom-1 px-4 bg-gray-100 hover:bg-gray-200 rounded-full transition flex items-center justify-center">
-                        <svg class="w-4 h-4 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <button type="submit" aria-label="Cari" class="absolute right-1 top-1 bottom-1 px-4 bg-gray-100 hover:bg-gray-200 dark:bg-gray-700 dark:hover:bg-gray-600 rounded-full transition flex items-center justify-center">
+                        <svg class="w-4 h-4 text-gray-600 dark:text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
                         </svg>
                     </button>
                     {{-- Live Search Dropdown --}}
-                    <div x-show="searchOpen" x-cloak class="absolute top-full left-0 right-0 mt-2 bg-white rounded-xl shadow-lg border border-gray-100 py-2 z-50 max-h-80 overflow-y-auto">
+                    <div x-show="searchOpen" x-cloak class="absolute top-full left-0 right-0 mt-2 bg-white dark:bg-gray-800 rounded-xl shadow-lg border border-gray-100 dark:border-gray-700 py-2 z-50 max-h-80 overflow-y-auto">
                         <template x-if="searchLoading">
                             <div class="px-4 py-3 text-sm text-gray-400 flex items-center gap-2">
                                 <svg class="w-4 h-4 animate-spin" fill="none" stroke="currentColor" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4" class="opacity-25"></circle><path fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" class="opacity-75"></path></svg>
@@ -77,8 +77,8 @@
                         <template x-if="!searchLoading && searchResults.length > 0">
                             <div>
                                 <template x-for="result in searchResults" :key="result.id">
-                                    <a :href="'/sim/' + result.slug" class="flex items-center gap-3 px-4 py-2.5 hover:bg-gray-50 transition">
-                                        <div class="w-16 aspect-video bg-gray-200 rounded overflow-hidden flex-shrink-0">
+                                    <a :href="'/sim/' + result.slug" class="flex items-center gap-3 px-4 py-2.5 hover:bg-gray-50 dark:hover:bg-gray-700 transition">
+                                        <div class="w-16 aspect-video bg-gray-200 dark:bg-gray-700 rounded overflow-hidden flex-shrink-0">
                                             <template x-if="result.thumbnail">
                                                 <img :src="result.thumbnail" class="w-full h-full object-cover" />
                                             </template>
@@ -89,13 +89,13 @@
                                             </template>
                                         </div>
                                         <div class="flex-1 min-w-0">
-                                            <p class="text-sm font-medium text-gray-900 truncate" x-text="result.title"></p>
-                                            <p class="text-xs text-gray-500" x-text="result.category + ' · ' + result.formatted_play_count + ' dimainkan'"></p>
+                                            <p class="text-sm font-medium text-gray-900 dark:text-white truncate" x-text="result.title"></p>
+                                            <p class="text-xs text-gray-500 dark:text-gray-400" x-text="result.category + ' · ' + result.formatted_play_count + ' dimainkan'"></p>
                                         </div>
                                     </a>
                                 </template>
-                                <div class="border-t border-gray-100 mt-1 pt-1">
-                                    <button type="submit" class="w-full text-left px-4 py-2.5 text-sm text-blue-600 hover:bg-blue-50 transition font-medium" x-text="'Lihat semua hasil untuk "' + searchQuery + '"'"></button>
+                                <div class="border-t border-gray-100 dark:border-gray-700 mt-1 pt-1">
+                                    <button type="submit" class="w-full text-left px-4 py-2.5 text-sm text-blue-600 hover:bg-blue-50 dark:hover:bg-blue-900/30 transition font-medium" x-text="'Lihat semua hasil untuk "' + searchQuery + '"'"></button>
                                 </div>
                             </div>
                         </template>
@@ -137,9 +137,9 @@
 
                         <div x-show="open" x-transition:enter="transition ease-out duration-100" x-transition:enter-start="opacity-0 scale-95" x-transition:enter-end="opacity-100 scale-100" x-transition:leave="transition ease-in duration-75" x-transition:leave-start="opacity-100 scale-100" x-transition:leave-end="opacity-0 scale-95" x-cloak
                             class="absolute right-0 mt-2 w-56 bg-white dark:bg-gray-800 rounded-xl shadow-lg border border-gray-100 dark:border-gray-700 py-1 z-50">
-                            <div class="px-4 py-3 border-b border-gray-100">
-                                <p class="text-sm font-medium text-gray-900">{{ auth()->user()->name }}</p>
-                                <p class="text-xs text-gray-500 truncate">{{ auth()->user()->email }}</p>
+                            <div class="px-4 py-3 border-b border-gray-100 dark:border-gray-700">
+                                <p class="text-sm font-medium text-gray-900 dark:text-white">{{ auth()->user()->name }}</p>
+                                <p class="text-xs text-gray-500 dark:text-gray-400 truncate">{{ auth()->user()->email }}</p>
                             </div>
                             <a href="{{ route('dashboard') }}" class="flex items-center gap-3 px-4 py-2.5 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 transition">
                                 <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/></svg>
@@ -174,7 +174,7 @@
                             <div class="border-t border-gray-100 dark:border-gray-700 my-1"></div>
                             <form method="POST" action="{{ route('logout') }}">
                                 @csrf
-                                <button type="submit" class="flex items-center gap-3 w-full px-4 py-2.5 text-sm text-red-600 hover:bg-red-50 transition">
+                                <button type="submit" class="flex items-center gap-3 w-full px-4 py-2.5 text-sm text-red-600 hover:bg-red-50 dark:hover:bg-red-900/30 transition">
                                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/></svg>
                                     Keluar
                                 </button>
@@ -206,7 +206,7 @@
                     name="search"
                     value="{{ $searchTerm }}"
                     placeholder="Cari experience..."
-                    class="w-full pl-4 pr-10 py-2 border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
+                    class="w-full pl-4 pr-10 py-2 border border-gray-300 dark:border-gray-600 dark:bg-gray-800 dark:text-white rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm placeholder-gray-400 dark:placeholder-gray-500"
                 />
             </form>
         </div>

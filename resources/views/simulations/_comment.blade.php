@@ -9,7 +9,7 @@
 
 <div class="comment-item" id="comment-{{ $comment->id }}" style="margin-left: {{ $depth * 24 }}px;" x-data="{ expanded: false }">
     <div class="flex gap-3 {{ $depth > 0 ? 'mt-3' : '' }}">
-        <a href="{{ route('creators.show', $comment->user->id) }}" class="flex-shrink-0">
+        <a href="{{ route('creators.show', $comment->user->username) }}" class="flex-shrink-0">
             <div class="w-8 h-8 rounded-full bg-gray-200 flex items-center justify-center text-gray-600 text-xs font-semibold overflow-hidden">
                 @if($comment->user->avatar)
                     <img src="{{ Storage::disk('public')->url($comment->user->avatar) }}" alt="{{ $comment->user->name }}" class="w-full h-full object-cover" />
@@ -20,7 +20,7 @@
         </a>
         <div class="flex-1 min-w-0">
             <div class="flex items-center gap-2">
-                <a href="{{ route('creators.show', $comment->user->id) }}" class="text-gray-900 text-sm font-medium hover:text-blue-600 transition">{{ $comment->user->name }}</a>
+                <a href="{{ route('creators.show', $comment->user->username) }}" class="text-gray-900 text-sm font-medium hover:text-blue-600 transition">{{ $comment->user->name }}</a>
                 @if($comment->is_pinned)
                     <span class="text-[10px] bg-yellow-50 text-yellow-700 px-1.5 py-0.5 rounded font-medium">DIPIN</span>
                 @endif

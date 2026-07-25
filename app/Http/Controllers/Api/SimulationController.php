@@ -153,15 +153,13 @@ class SimulationController extends Controller
     /**
      * Get simulations by a specific creator.
      *
-     * GET /api/creator/{id}/simulations?page=
+     * GET /api/creator/{user:username}/simulations?page=
      */
-    public function creatorSimulations(int $id, Request $request): JsonResponse
+    public function creatorSimulations(User $user, Request $request): JsonResponse
     {
-        $creator = User::where('id', $id)
-            ->where('role', 'creator')
-            ->first();
+        $creator = $user;
 
-        if (! $creator) {
+        if (! $creator->isCreator()) {
             return response()->json([
                 'success' => false,
                 'message' => 'Kreator tidak ditemukan.',

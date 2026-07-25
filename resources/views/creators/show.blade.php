@@ -74,7 +74,7 @@
                                 @if(auth()->id() !== $creator->id)
                                     <button
                                         id="follow-btn"
-                                        onclick="toggleFollow({{ $creator->id }})"
+                                        onclick="toggleFollow('{{ $creator->username }}')"
                                         class="px-6 py-2 text-sm font-medium rounded-full transition {{ $isFollowing ? 'bg-gray-200 text-gray-700 hover:bg-gray-300' : 'bg-blue-600 text-white hover:bg-blue-700' }}"
                                     >
                                         <span id="follow-text">{{ $isFollowing ? 'Mengikuti' : 'Ikuti' }}</span>
@@ -146,8 +146,8 @@
     </div>
 
     <script>
-        function toggleFollow(userId) {
-            fetch('/follows/' + userId + '/toggle', {
+        function toggleFollow(username) {
+            fetch('/follows/' + username + '/toggle', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
