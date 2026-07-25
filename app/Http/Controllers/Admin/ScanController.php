@@ -22,6 +22,8 @@ class ScanController extends Controller
      */
     public function index(Request $request): View
     {
+        session(['badge_last_seen_scans' => now()]);
+
         $query = CodeScanLog::with(['simulation', 'reviewer'])
             ->orderByDesc('created_at');
 

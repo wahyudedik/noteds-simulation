@@ -30,9 +30,9 @@
                                 @endif
                                 <div class="absolute top-2 right-2">
                                     @if($collection->is_public)
-                                        <span class="px-2 py-0.5 bg-green-100 text-green-700 text-xs font-medium rounded-full">Publik</span>
+                                        <span class="px-2 py-0.5 bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400 text-xs font-medium rounded-full">Publik</span>
                                     @else
-                                        <span class="px-2 py-0.5 bg-gray-100 text-gray-600 text-xs font-medium rounded-full">Privat</span>
+                                        <span class="px-2 py-0.5 bg-gray-100 text-gray-600 dark:bg-gray-700 dark:text-gray-400 text-xs font-medium rounded-full">Privat</span>
                                     @endif
                                 </div>
                             </div>

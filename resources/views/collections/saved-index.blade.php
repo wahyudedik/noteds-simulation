@@ -2,7 +2,7 @@
     <x-slot name="header">
         <div class="flex items-center gap-2">
             <svg class="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z" /></svg>
-            <h2 class="font-semibold text-xl text-gray-800 leading-tight">Collection Tersimpan</h2>
+            <h2 class="font-semibold text-xl text-gray-800 dark:text-white leading-tight">Collection Tersimpan</h2>
         </div>
     </x-slot>
 
@@ -10,9 +10,9 @@
         <div class="max-w-6xl mx-auto sm:px-6 lg:px-8">
             <div class="flex items-center justify-between mb-8">
                 <div>
-                    <p class="text-gray-500 text-sm mt-1">Collection yang Anda simpan dari pengguna lain</p>
+                    <p class="text-gray-500 dark:text-gray-400 text-sm mt-1">Collection yang Anda simpan dari pengguna lain</p>
                 </div>
-                <a href="{{ route('collections.index') }}" class="text-sm text-blue-600 hover:text-blue-700 font-medium">
+                <a href="{{ route('collections.index') }}" class="text-sm text-blue-600 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300 font-medium">
                     → Collection Saya
                 </a>
             </div>
@@ -21,7 +21,7 @@
                 <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                     @foreach($savedCollections as $saved)
                         @php $collection = $saved->collection; @endphp
-                        <a href="{{ route('collections.show', $collection->slug) }}" class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-md transition group">
+                        <a href="{{ route('collections.show', $collection->slug) }}" class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 overflow-hidden hover:shadow-md transition group">
                             <div class="aspect-video bg-gradient-to-br from-blue-500 to-purple-600 relative overflow-hidden">
                                 @if($collection->thumbnail)
                                     <img src="{{ Storage::disk('public')->url($collection->thumbnail) }}" alt="{{ $collection->title }}" class="w-full h-full object-cover" />
@@ -35,19 +35,19 @@
                                 </div>
                             </div>
                             <div class="p-4">
-                                <h3 class="text-gray-900 font-semibold text-sm group-hover:text-blue-600 transition line-clamp-1">{{ $collection->title }}</h3>
+                                <h3 class="text-gray-900 dark:text-white font-semibold text-sm group-hover:text-blue-600 dark:group-hover:text-blue-400 transition line-clamp-1">{{ $collection->title }}</h3>
                                 @if($collection->description)
-                                    <p class="text-gray-500 text-xs mt-1 line-clamp-2">{{ $collection->description }}</p>
+                                    <p class="text-gray-500 dark:text-gray-400 text-xs mt-1 line-clamp-2">{{ $collection->description }}</p>
                                 @endif
                                 <div class="flex items-center gap-2 mt-3">
-                                    <div class="w-6 h-6 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center text-xs font-semibold overflow-hidden">
+                                    <div class="w-6 h-6 rounded-full bg-blue-100 text-blue-600 dark:bg-blue-900/50 dark:text-blue-400 flex items-center justify-center text-xs font-semibold overflow-hidden">
                                         @if($collection->user->avatar)
                                             <img src="{{ Storage::disk('public')->url($collection->user->avatar) }}" alt="" class="w-full h-full object-cover" />
                                         @else
                                             {{ strtoupper(substr($collection->user->name, 0, 1)) }}
                                         @endif
                                     </div>
-                                    <span class="text-xs text-gray-500">{{ $collection->user->name }}</span>
+                                    <span class="text-xs text-gray-500 dark:text-gray-400">{{ $collection->user->name }}</span>
                                 </div>
                             </div>
                         </a>
@@ -59,10 +59,10 @@
                 </div>
             @else
                 <div class="text-center py-16">
-                    <svg class="w-16 h-16 text-gray-300 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z" /></svg>
-                    <h3 class="text-gray-500 text-lg font-medium">Belum ada collection tersimpan</h3>
-                    <p class="text-gray-400 text-sm mt-2">Simpan collection dari pengguna lain untuk melihatnya di sini.</p>
-                    <a href="{{ route('home') }}" class="mt-4 inline-block px-6 py-2 bg-blue-600 text-white text-sm font-medium rounded-lg hover:bg-blue-700 transition">Jelajahi Experience</a>
+                    <svg class="w-16 h-16 text-gray-300 dark:text-gray-600 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z" /></svg>
+                    <h3 class="text-gray-500 dark:text-gray-400 text-lg font-medium">Belum ada collection tersimpan</h3>
+                    <p class="text-gray-400 dark:text-gray-500 text-sm mt-2">Simpan collection dari pengguna lain untuk melihatnya di sini.</p>
+                    <a href="{{ route('home') }}" class="mt-4 inline-block px-6 py-2 bg-blue-600 text-white text-sm font-medium rounded-lg hover:bg-blue-700 dark:hover:bg-blue-500 transition">Jelajahi Experience</a>
                 </div>
             @endif
         </div>

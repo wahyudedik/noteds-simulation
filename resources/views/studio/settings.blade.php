@@ -5,15 +5,15 @@
             @method('PUT')
 
             {{-- Profile Info --}}
-            <div class="bg-white border border-gray-100 rounded-xl shadow-sm p-6 mb-6">
-                <h3 class="text-lg font-semibold text-gray-900 mb-4">Profil Kreator</h3>
+            <div class="bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700 rounded-xl shadow-sm p-6 mb-6">
+                <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">Profil Kreator</h3>
 
                 {{-- Avatar --}}
                 <div class="mb-6">
-                    <label class="block text-sm font-medium text-gray-700 mb-2">Foto Profil</label>
+                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Foto Profil</label>
                     <div class="flex items-center gap-4">
                         <div class="shrink-0">
-                            <div class="w-20 h-20 rounded-full overflow-hidden bg-blue-100 text-blue-600 flex items-center justify-center text-2xl font-bold">
+                            <div class="w-20 h-20 rounded-full overflow-hidden bg-blue-100 text-blue-600 dark:bg-blue-900/50 dark:text-blue-400 flex items-center justify-center text-2xl font-bold">
                                 <span x-show="!avatarSrc">{{ strtoupper(substr($user->name, 0, 1)) }}</span>
                                 <img x-show="avatarSrc" x-cloak :src="avatarSrc" alt="{{ $user->name }}" class="w-20 h-20 rounded-full object-cover" />
                             </div>
@@ -21,10 +21,10 @@
                         <div>
                             <input type="file" name="avatar" accept="image/jpeg,image/png,image/webp" class="hidden" x-ref="avatarInput"
                                    @change="const file = $refs.avatarInput.files[0]; if(file) { const reader = new FileReader(); reader.onload = e => avatarSrc = e.target.result; reader.readAsDataURL(file); }" />
-                            <button type="button" @click="$refs.avatarInput.click()" class="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 hover:bg-gray-200 rounded-lg transition">
+                            <button type="button" @click="$refs.avatarInput.click()" class="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 hover:bg-gray-200 dark:text-gray-300 dark:bg-gray-700 dark:hover:bg-gray-600 rounded-lg transition">
                                 Ubah Foto
                             </button>
-                            <p class="text-xs text-gray-400 mt-1">JPEG/PNG/WebP, maks 2MB</p>
+                            <p class="text-xs text-gray-400 dark:text-gray-500 mt-1">JPEG/PNG/WebP, maks 2MB</p>
                         </div>
                     </div>
                     @error('avatar')
@@ -34,9 +34,9 @@
 
                 {{-- Name --}}
                 <div class="mb-4">
-                    <label for="name" class="block text-sm font-medium text-gray-700 mb-1">Nama <span class="text-red-500">*</span></label>
+                    <label for="name" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Nama <span class="text-red-500">*</span></label>
                     <input type="text" name="name" id="name" value="{{ old('name', $user->name) }}" required maxlength="255"
-                           class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm @error('name') border-red-500 @enderror" />
+                           class="w-full px-4 py-2.5 border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm @error('name') border-red-500 @enderror" />
                     @error('name')
                         <p class="text-xs text-red-500 mt-1">{{ $message }}</p>
                     @enderror
@@ -44,11 +44,11 @@
 
                 {{-- Bio --}}
                 <div x-data="{ bioText: '{{ Str::replace("'", "\\'", old('bio', $user->bio ?? '')) }}' }">
-                    <label for="bio" class="block text-sm font-medium text-gray-700 mb-1">Bio</label>
+                    <label for="bio" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Bio</label>
                     <textarea name="bio" id="bio" rows="4" maxlength="1000" x-model="bioText"
-                              class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm @error('bio') border-red-500 @enderror"
+                              class="w-full px-4 py-2.5 border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm @error('bio') border-red-500 @enderror"
                               placeholder="Ceritakan tentang diri Anda sebagai kreator...">{{ old('bio', $user->bio) }}</textarea>
-                    <p class="text-xs text-gray-400 mt-1 text-right"><span x-text="bioText.length"></span>/1000 karakter</p>
+                    <p class="text-xs text-gray-400 dark:text-gray-500 mt-1 text-right"><span x-text="bioText.length"></span>/1000 karakter</p>
                     @error('bio')
                         <p class="text-xs text-red-500 mt-1">{{ $message }}</p>
                     @enderror
@@ -56,31 +56,31 @@
             </div>
 
             {{-- Account Info (Read-only) --}}
-            <div class="bg-white border border-gray-100 rounded-xl shadow-sm p-6 mb-6">
-                <h3 class="text-lg font-semibold text-gray-900 mb-4">Informasi Akun</h3>
+            <div class="bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700 rounded-xl shadow-sm p-6 mb-6">
+                <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">Informasi Akun</h3>
                 <div class="space-y-3">
-                    <div class="flex items-center justify-between py-2 border-b border-gray-50">
-                        <span class="text-sm text-gray-500">Email</span>
-                        <span class="text-sm font-medium text-gray-900">{{ $user->email }}</span>
+                    <div class="flex items-center justify-between py-2 border-b border-gray-50 dark:border-gray-700">
+                        <span class="text-sm text-gray-500 dark:text-gray-400">Email</span>
+                        <span class="text-sm font-medium text-gray-900 dark:text-white">{{ $user->email }}</span>
                     </div>
-                    <div class="flex items-center justify-between py-2 border-b border-gray-50">
-                        <span class="text-sm text-gray-500">Role</span>
-                        <span class="px-2 py-0.5 text-xs font-medium bg-blue-100 text-blue-700 rounded-full capitalize">{{ $user->role }}</span>
+                    <div class="flex items-center justify-between py-2 border-b border-gray-50 dark:border-gray-700">
+                        <span class="text-sm text-gray-500 dark:text-gray-400">Role</span>
+                        <span class="px-2 py-0.5 text-xs font-medium bg-blue-100 text-blue-700 dark:bg-blue-900/50 dark:text-blue-400 rounded-full capitalize">{{ $user->role }}</span>
                     </div>
-                    <div class="flex items-center justify-between py-2 border-b border-gray-50">
-                        <span class="text-sm text-gray-500">Total Experience</span>
-                        <span class="text-sm font-medium text-gray-900">{{ $user->simulations_count }}</span>
+                    <div class="flex items-center justify-between py-2 border-b border-gray-50 dark:border-gray-700">
+                        <span class="text-sm text-gray-500 dark:text-gray-400">Total Experience</span>
+                        <span class="text-sm font-medium text-gray-900 dark:text-white">{{ $user->simulations_count }}</span>
                     </div>
                     <div class="flex items-center justify-between py-2">
-                        <span class="text-sm text-gray-500">Bergabung</span>
-                        <span class="text-sm font-medium text-gray-900">{{ $user->created_at->format('d M Y') }}</span>
+                        <span class="text-sm text-gray-500 dark:text-gray-400">Bergabung</span>
+                        <span class="text-sm font-medium text-gray-900 dark:text-white">{{ $user->created_at->format('d M Y') }}</span>
                     </div>
                 </div>
             </div>
 
             {{-- Actions --}}
             <div class="flex items-center gap-3">
-                <a href="{{ route('studio.dashboard') }}" class="px-5 py-2.5 text-sm font-medium text-gray-700 bg-gray-100 hover:bg-gray-200 rounded-lg transition">
+                <a href="{{ route('studio.dashboard') }}" class="px-5 py-2.5 text-sm font-medium text-gray-700 bg-gray-100 hover:bg-gray-200 dark:text-gray-300 dark:bg-gray-700 dark:hover:bg-gray-600 rounded-lg transition">
                     Batal
                 </a>
                 <button type="submit" class="px-6 py-2.5 text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 rounded-lg transition"

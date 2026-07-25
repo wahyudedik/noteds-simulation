@@ -20,6 +20,8 @@ class PayoutController extends Controller
      */
     public function index(Request $request): View
     {
+        session(['badge_last_seen_payouts' => now()]);
+
         $query = Payout::with('user', 'reviewer');
 
         $status = $request->input('status', 'pending');

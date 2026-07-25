@@ -15,6 +15,8 @@ class ForumController extends Controller
      */
     public function index(Request $request): View
     {
+        session(['badge_last_seen_forum' => now()]);
+
         $categories = ForumCategory::ordered()->get();
         $sort = $request->input('sort', 'latest');
 

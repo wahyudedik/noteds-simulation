@@ -12,7 +12,7 @@
         @endphp
         @foreach($filters as $key => $label)
             <a href="{{ route('studio.comments', ['filter' => $key]) }}"
-               class="px-3 py-1.5 text-sm font-medium rounded-lg transition {{ $filter === $key ? 'bg-gray-900 text-white' : 'text-gray-600 hover:bg-gray-100' }}">
+               class="px-3 py-1.5 text-sm font-medium rounded-lg transition {{ $filter === $key ? 'bg-gray-900 text-white dark:bg-white dark:text-gray-900' : 'text-gray-600 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-700' }}">
                 {{ $label }}
             </a>
         @endforeach
@@ -22,7 +22,7 @@
     @if($comments->count() > 0)
         <div class="space-y-3">
             @foreach($comments as $comment)
-                <div class="bg-white border border-gray-100 rounded-xl shadow-sm p-5 {{ $comment->is_pinned ? 'ring-2 ring-yellow-200 bg-yellow-50/30' : '' }} {{ $comment->is_reported ? 'ring-2 ring-red-200 bg-red-50/30' : '' }}">
+                <div class="bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700 rounded-xl shadow-sm p-5 {{ $comment->is_pinned ? 'ring-2 ring-yellow-200 dark:ring-yellow-800 bg-yellow-50/30 dark:bg-yellow-900/10' : '' }} {{ $comment->is_reported ? 'ring-2 ring-red-200 dark:ring-red-800 bg-red-50/30 dark:bg-red-900/10' : '' }}">
                     <div class="flex items-start gap-3">
                         @if($comment->user->avatar)
                             <img src="{{ Storage::disk('public')->url($comment->user->avatar) }}" alt="{{ $comment->user->name }}" class="w-10 h-10 rounded-full object-cover shrink-0" />
@@ -31,12 +31,12 @@
                         @endif
                         <div class="flex-1 min-w-0">
                             <div class="flex items-center gap-2 flex-wrap">
-                                <span class="text-sm font-semibold text-gray-900">{{ $comment->user->name }}</span>
-                                <span class="text-xs text-gray-400">·</span>
+                                <span class="text-sm font-semibold text-gray-900 dark:text-white">{{ $comment->user->name }}</span>
+                                <span class="text-xs text-gray-400 dark:text-gray-500">·</span>
                                 <a href="{{ route('simulations.show', $comment->simulation->slug) }}" class="text-xs text-blue-600 hover:underline" target="_blank">
                                     {{ Str::limit($comment->simulation->title, 40) }}
                                 </a>
-                                <span class="text-xs text-gray-400">· {{ $comment->created_at->diffForHumans() }}</span>
+                                <span class="text-xs text-gray-400 dark:text-gray-500">· {{ $comment->created_at->diffForHumans() }}</span>
                                 @if($comment->is_pinned)
                                     <span class="px-1.5 py-0.5 text-xs font-medium bg-yellow-100 text-yellow-700 rounded-full">Disematkan</span>
                                 @endif
@@ -44,16 +44,16 @@
                                     <span class="px-1.5 py-0.5 text-xs font-medium bg-red-100 text-red-700 rounded-full">Dilaporkan</span>
                                 @endif
                             </div>
-                            <p class="text-sm text-gray-700 mt-1.5">{{ $comment->body }}</p>
+                            <p class="text-sm text-gray-700 dark:text-gray-300 mt-1.5">{{ $comment->body }}</p>
 
                             {{-- Replies --}}
                             @if($comment->replies->count() > 0)
-                                <div class="mt-3 ml-2 pl-3 border-l-2 border-gray-100 space-y-2">
+                                <div class="mt-3 ml-2 pl-3 border-l-2 border-gray-100 dark:border-gray-600 space-y-2">
                                     @foreach($comment->replies as $reply)
                                         <div class="text-sm">
-                                            <span class="font-medium text-gray-900">{{ $reply->user->name }}</span>
-                                            <span class="text-xs text-gray-400 ml-1">{{ $reply->created_at->diffForHumans() }}</span>
-                                            <p class="text-gray-600 mt-0.5">{{ $reply->body }}</p>
+                                            <span class="font-medium text-gray-900 dark:text-white">{{ $reply->user->name }}</span>
+                                            <span class="text-xs text-gray-400 dark:text-gray-500 ml-1">{{ $reply->created_at->diffForHumans() }}</span>
+                                            <p class="text-gray-600 dark:text-gray-400 mt-0.5">{{ $reply->body }}</p>
                                         </div>
                                     @endforeach
                                 </div>
@@ -71,7 +71,7 @@
                                     </button>
                                     <div x-show="replyOpen" x-cloak class="flex items-center gap-2 w-full">
                                         <input type="text" name="body" placeholder="Tulis balasan..." required maxlength="2000"
-                                               class="flex-1 px-3 py-1.5 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent" />
+                                               class="flex-1 px-3 py-1.5 text-sm border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent" />
                                         <button type="submit" class="px-3 py-1.5 text-xs font-medium text-white bg-blue-600 hover:bg-blue-700 rounded-lg transition">Kirim</button>
                                     </div>
                                 </form>
@@ -101,12 +101,12 @@
             {{ $comments->links() }}
         </div>
     @else
-        <div class="text-center py-16 bg-white border border-gray-100 rounded-xl shadow-sm">
-            <svg class="w-16 h-16 text-gray-300 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <div class="text-center py-16 bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700 rounded-xl shadow-sm">
+            <svg class="w-16 h-16 text-gray-300 dark:text-gray-600 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
             </svg>
-            <h3 class="text-lg font-medium text-gray-900 mb-2">Tidak ada komentar</h3>
-            <p class="text-sm text-gray-500">Belum ada komentar yang cocok dengan filter ini.</p>
+            <h3 class="text-lg font-medium text-gray-900 dark:text-white mb-2">Tidak ada komentar</h3>
+            <p class="text-sm text-gray-500 dark:text-gray-400">Belum ada komentar yang cocok dengan filter ini.</p>
         </div>
     @endif
 </x-studio-layout>

@@ -179,6 +179,7 @@ Route::middleware(['auth', 'verified'])->prefix('studio')->name('studio.')->grou
     // Versioning & Analytics
     Route::get('/simulations/{slug}/versions', [StudioController::class, 'versions'])->name('simulations.versions');
     Route::post('/simulations/{slug}/versions', [StudioController::class, 'storeVersion'])->name('simulations.versions.store');
+    Route::get('/simulations/{slug}/versions/{versionId}/download', [StudioController::class, 'downloadVersion'])->name('simulations.versions.download');
     Route::get('/simulations/{slug}/analytics', [StudioController::class, 'analytics'])->name('simulations.analytics');
 
     // Comments Moderation

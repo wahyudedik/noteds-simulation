@@ -4,16 +4,16 @@
 
             <x-breadcrumb :items="[['label' => 'Collection', 'url' => route('collections.index')], ['label' => 'Buat Collection']]" />
 
-            <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6" x-data="{ saving: false }" @submit="saving = true">
+            <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 p-6" x-data="{ saving: false }" @submit="saving = true">
                 <form action="{{ route('collections.store') }}" method="POST">
                     @csrf
 
                     <div class="space-y-5">
                         {{-- Title --}}
                         <div>
-                            <label for="title" class="block text-sm font-medium text-gray-700">Judul Collection</label>
+                            <label for="title" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Judul Collection</label>
                             <input type="text" name="title" id="title" value="{{ old('title') }}" required
-                                class="mt-1 block w-full border-gray-300 focus:border-blue-500 focus:ring-blue-500 rounded-md shadow-sm text-sm"
+                                class="mt-1 block w-full border-gray-300 focus:border-blue-500 focus:ring-blue-500 rounded-md shadow-sm text-sm dark:border-gray-600 dark:bg-gray-700 dark:text-white"
                                 placeholder="Contoh: Fisika Dasar - Mekanika" />
                             @error('title')
                                 <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
@@ -22,13 +22,13 @@
 
                         {{-- Description --}}
                         <div>
-                            <label for="description" class="block text-sm font-medium text-gray-700">Deskripsi</label>
+                            <label for="description" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Deskripsi</label>
                             <textarea name="description" id="description" rows="3"
                                 x-data="{ text: '{{ addslashes(old('description')) }}' }"
                                 x-model="text" maxlength="1000"
-                                class="mt-1 block w-full border-gray-300 focus:border-blue-500 focus:ring-blue-500 rounded-md shadow-sm text-sm"
+                                class="mt-1 block w-full border-gray-300 focus:border-blue-500 focus:ring-blue-500 rounded-md shadow-sm text-sm dark:border-gray-600 dark:bg-gray-700 dark:text-white"
                                 placeholder="Jelaskan tentang collection ini...">{{ old('description') }}</textarea>
-                            <p class="text-xs text-gray-400 mt-1"><span x-text="text.length"></span>/1000 karakter</p>
+                            <p class="text-xs text-gray-400 dark:text-gray-500 mt-1"><span x-text="text.length"></span>/1000 karakter</p>
                             @error('description')
                                 <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                             @enderror
@@ -40,8 +40,8 @@
                                 <input type="checkbox" name="is_public" value="1" {{ old('is_public', '1') === '1' ? 'checked' : '' }}
                                     class="rounded border-gray-300 text-blue-600 focus:ring-blue-500" />
                                 <div>
-                                    <span class="text-sm font-medium text-gray-700">Publik</span>
-                                    <p class="text-xs text-gray-500">Collection ini bisa dilihat oleh semua orang</p>
+                                    <span class="text-sm font-medium text-gray-700 dark:text-gray-300">Publik</span>
+                                    <p class="text-xs text-gray-500 dark:text-gray-400">Collection ini bisa dilihat oleh semua orang</p>
                                 </div>
                             </label>
                         </div>
@@ -56,7 +56,7 @@
                                 Membuat...
                             </span>
                         </button>
-                        <a href="{{ route('collections.index') }}" class="px-4 py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 text-sm font-medium rounded-lg transition">
+                        <a href="{{ route('collections.index') }}" class="px-4 py-2 bg-gray-100 hover:bg-gray-200 dark:bg-gray-700 dark:hover:bg-gray-600 text-gray-700 dark:text-gray-300 text-sm font-medium rounded-lg transition">
                             Batal
                         </a>
                     </div>

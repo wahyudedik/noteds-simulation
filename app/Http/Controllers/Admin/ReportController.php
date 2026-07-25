@@ -15,6 +15,8 @@ class ReportController extends Controller
      */
     public function index(Request $request): View
     {
+        session(['badge_last_seen_reports' => now()]);
+
         $query = UserReport::with(['user', 'simulation', 'reviewer'])
             ->orderByDesc('created_at');
 

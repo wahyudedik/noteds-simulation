@@ -1,38 +1,38 @@
 <x-studio-layout :pageTitle="'Analitik: ' . $simulation->title">
     <div class="max-w-5xl mx-auto">
         {{-- Back Link --}}
-        <a href="{{ route('studio.simulations') }}" class="inline-flex items-center gap-1 text-sm text-gray-500 hover:text-gray-700 mb-4">
+        <a href="{{ route('studio.simulations') }}" class="inline-flex items-center gap-1 text-sm text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-white mb-4">
             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" /></svg>
             Kembali ke Experience
         </a>
 
         {{-- Summary Cards --}}
         <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
-            <div class="bg-white border border-gray-100 rounded-xl p-4 shadow-sm">
-                <p class="text-xs text-gray-500">Total Views</p>
-                <p class="text-xl font-bold text-gray-900 mt-1">{{ number_format($simulation->view_count) }}</p>
+            <div class="bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700 rounded-xl p-4 shadow-sm">
+                <p class="text-xs text-gray-500 dark:text-gray-400">Total Views</p>
+                <p class="text-xl font-bold text-gray-900 dark:text-white mt-1">{{ number_format($simulation->view_count) }}</p>
             </div>
-            <div class="bg-white border border-gray-100 rounded-xl p-4 shadow-sm">
-                <p class="text-xs text-gray-500">Total Plays</p>
-                <p class="text-xl font-bold text-gray-900 mt-1">{{ number_format($simulation->play_count) }}</p>
+            <div class="bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700 rounded-xl p-4 shadow-sm">
+                <p class="text-xs text-gray-500 dark:text-gray-400">Total Plays</p>
+                <p class="text-xl font-bold text-gray-900 dark:text-white mt-1">{{ number_format($simulation->play_count) }}</p>
             </div>
-            <div class="bg-white border border-gray-100 rounded-xl p-4 shadow-sm">
-                <p class="text-xs text-gray-500">Completion Rate</p>
-                <p class="text-xl font-bold text-gray-900 mt-1">{{ $completionRate }}%</p>
-                <p class="text-xs text-gray-400 mt-0.5">{{ number_format($totalCompletions) }} / {{ number_format($totalPlays) }} plays</p>
+            <div class="bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700 rounded-xl p-4 shadow-sm">
+                <p class="text-xs text-gray-500 dark:text-gray-400">Completion Rate</p>
+                <p class="text-xl font-bold text-gray-900 dark:text-white mt-1">{{ $completionRate }}%</p>
+                <p class="text-xs text-gray-400 dark:text-gray-500 mt-0.5">{{ number_format($totalCompletions) }} / {{ number_format($totalPlays) }} plays</p>
             </div>
-            <div class="bg-white border border-gray-100 rounded-xl p-4 shadow-sm">
-                <p class="text-xs text-gray-500">Avg. Session</p>
-                <p class="text-xl font-bold text-gray-900 mt-1">{{ $avgSessionDuration }}d</p>
-                <p class="text-xs text-gray-400 mt-0.5">{{ floor($avgSessionDuration / 60) }}m {{ $avgSessionDuration % 60 }}s</p>
+            <div class="bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700 rounded-xl p-4 shadow-sm">
+                <p class="text-xs text-gray-500 dark:text-gray-400">Avg. Session</p>
+                <p class="text-xl font-bold text-gray-900 dark:text-white mt-1">{{ number_format($avgSessionDuration, 0) }} detik</p>
+                <p class="text-xs text-gray-400 dark:text-gray-500 mt-0.5">{{ floor($avgSessionDuration / 60) }}m {{ $avgSessionDuration % 60 }}s</p>
             </div>
         </div>
 
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
             {{-- Views & Plays Chart (30 Hari) --}}
-            <div class="bg-white border border-gray-100 rounded-xl shadow-sm">
-                <div class="px-6 py-4 border-b border-gray-100">
-                    <h3 class="font-semibold text-gray-900">Views & Plays (30 Hari)</h3>
+            <div class="bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700 rounded-xl shadow-sm">
+                <div class="px-6 py-4 border-b border-gray-100 dark:border-gray-700">
+                    <h3 class="font-semibold text-gray-900 dark:text-white">Views & Plays (30 Hari)</h3>
                 </div>
                 <div class="p-6">
                     @if($dailyAnalytics->count() > 0)
@@ -53,12 +53,12 @@
                                 </div>
                             @endforeach
                         </div>
-                        <div class="flex items-center gap-4 mt-3 text-xs text-gray-500">
+                        <div class="flex items-center gap-4 mt-3 text-xs text-gray-500 dark:text-gray-400">
                             <span class="flex items-center gap-1"><span class="w-3 h-3 bg-blue-400 rounded-sm"></span> Views</span>
                             <span class="flex items-center gap-1"><span class="w-3 h-3 bg-emerald-400 rounded-sm"></span> Plays</span>
                         </div>
                     @else
-                        <div class="text-center py-8 text-gray-400 text-sm">
+                        <div class="text-center py-8 text-gray-400 dark:text-gray-500 text-sm">
                             Belum ada data analitik untuk 30 hari terakhir.
                         </div>
                     @endif
@@ -66,9 +66,9 @@
             </div>
 
             {{-- Reaction Breakdown --}}
-            <div class="bg-white border border-gray-100 rounded-xl shadow-sm">
-                <div class="px-6 py-4 border-b border-gray-100">
-                    <h3 class="font-semibold text-gray-900">Reaksi</h3>
+            <div class="bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700 rounded-xl shadow-sm">
+                <div class="px-6 py-4 border-b border-gray-100 dark:border-gray-700">
+                    <h3 class="font-semibold text-gray-900 dark:text-white">Reaksi</h3>
                 </div>
                 <div class="p-6">
                     @if($reactions->count() > 0)
@@ -84,17 +84,17 @@
                                 @endphp
                                 <div>
                                     <div class="flex items-center justify-between text-sm mb-1">
-                                        <span class="capitalize font-medium text-gray-700">{{ $reaction->type }}</span>
-                                        <span class="text-gray-500">{{ $reaction->count }} ({{ number_format($pct, 1) }}%)</span>
+                                        <span class="capitalize font-medium text-gray-700 dark:text-gray-300">{{ $reaction->type }}</span>
+                                        <span class="text-gray-500 dark:text-gray-400">{{ $reaction->count }} ({{ number_format($pct, 1) }}%)</span>
                                     </div>
-                                    <div class="w-full h-2 bg-gray-100 rounded-full overflow-hidden">
+                                    <div class="w-full h-2 bg-gray-100 dark:bg-gray-700 rounded-full overflow-hidden">
                                         <div class="h-full {{ $color }} rounded-full transition-all duration-500" style="width: {{ $pct }}%"></div>
                                     </div>
                                 </div>
                             @endforeach
                         </div>
                     @else
-                        <div class="text-center py-8 text-gray-400 text-sm">
+                        <div class="text-center py-8 text-gray-400 dark:text-gray-500 text-sm">
                             Belum ada reaksi.
                         </div>
                     @endif
@@ -102,9 +102,9 @@
             </div>
 
             {{-- Traffic Sources --}}
-            <div class="bg-white border border-gray-100 rounded-xl shadow-sm">
-                <div class="px-6 py-4 border-b border-gray-100">
-                    <h3 class="font-semibold text-gray-900">Sumber Lalu Lintas</h3>
+            <div class="bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700 rounded-xl shadow-sm">
+                <div class="px-6 py-4 border-b border-gray-100 dark:border-gray-700">
+                    <h3 class="font-semibold text-gray-900 dark:text-white">Sumber Lalu Lintas</h3>
                 </div>
                 <div class="p-6">
                     @if($trafficSources->count() > 0)
@@ -122,17 +122,17 @@
                                 @endphp
                                 <div>
                                     <div class="flex items-center justify-between text-sm mb-1">
-                                        <span class="font-medium text-gray-700">{{ $label }}</span>
-                                        <span class="text-gray-500">{{ number_format($source->total) }} ({{ number_format($pct, 1) }}%)</span>
+                                        <span class="font-medium text-gray-700 dark:text-gray-300">{{ $label }}</span>
+                                        <span class="text-gray-500 dark:text-gray-400">{{ number_format($source->total) }} ({{ number_format($pct, 1) }}%)</span>
                                     </div>
-                                    <div class="w-full h-2 bg-gray-100 rounded-full overflow-hidden">
+                                    <div class="w-full h-2 bg-gray-100 dark:bg-gray-700 rounded-full overflow-hidden">
                                         <div class="h-full {{ $color }} rounded-full transition-all duration-500" style="width: {{ $pct }}%"></div>
                                     </div>
                                 </div>
                             @endforeach
                         </div>
                     @else
-                        <div class="text-center py-8 text-gray-400 text-sm">
+                        <div class="text-center py-8 text-gray-400 dark:text-gray-500 text-sm">
                             Belum ada data sumber lalu lintas.
                         </div>
                     @endif
@@ -140,9 +140,9 @@
             </div>
 
             {{-- Completion & Duration Chart --}}
-            <div class="bg-white border border-gray-100 rounded-xl shadow-sm">
-                <div class="px-6 py-4 border-b border-gray-100">
-                    <h3 class="font-semibold text-gray-900">Completion & Durasi (30 Hari)</h3>
+            <div class="bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700 rounded-xl shadow-sm">
+                <div class="px-6 py-4 border-b border-gray-100 dark:border-gray-700">
+                    <h3 class="font-semibold text-gray-900 dark:text-white">Completion & Durasi (30 Hari)</h3>
                 </div>
                 <div class="p-6">
                     @if($dailyAnalytics->where('plays', '>', 0)->count() > 0)
@@ -163,12 +163,12 @@
                                 </div>
                             @endforeach
                         </div>
-                        <div class="flex items-center gap-4 mt-3 text-xs text-gray-500">
+                        <div class="flex items-center gap-4 mt-3 text-xs text-gray-500 dark:text-gray-400">
                             <span class="flex items-center gap-1"><span class="w-3 h-3 bg-emerald-400 rounded-sm"></span> Plays</span>
                             <span class="flex items-center gap-1"><span class="w-3 h-3 bg-orange-400 rounded-sm"></span> Completion %</span>
                         </div>
                     @else
-                        <div class="text-center py-8 text-gray-400 text-sm">
+                        <div class="text-center py-8 text-gray-400 dark:text-gray-500 text-sm">
                             Belum ada data play untuk 30 hari terakhir.
                         </div>
                     @endif
@@ -176,9 +176,9 @@
             </div>
 
             {{-- Rating Distribution --}}
-            <div class="bg-white border border-gray-100 rounded-xl shadow-sm">
-                <div class="px-6 py-4 border-b border-gray-100">
-                    <h3 class="font-semibold text-gray-900">Distribusi Rating</h3>
+            <div class="bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700 rounded-xl shadow-sm">
+                <div class="px-6 py-4 border-b border-gray-100 dark:border-gray-700">
+                    <h3 class="font-semibold text-gray-900 dark:text-white">Distribusi Rating</h3>
                 </div>
                 <div class="p-6">
                     @for($i = 5; $i >= 1; $i--)
@@ -187,12 +187,12 @@
                             $percentage = $ratingTotal > 0 ? ($count / $ratingTotal) * 100 : 0;
                         @endphp
                         <div class="flex items-center gap-3 mb-2">
-                            <span class="text-sm text-gray-600 w-8">{{ $i }}★</span>
-                            <div class="flex-1 bg-gray-100 rounded-full h-3 overflow-hidden">
+                            <span class="text-sm text-gray-600 dark:text-gray-400 w-8">{{ $i }}★</span>
+                            <div class="flex-1 bg-gray-100 dark:bg-gray-700 rounded-full h-3 overflow-hidden">
                                 <div class="bg-yellow-400 h-full rounded-full transition-all duration-500"
                                      style="width: {{ $percentage }}%"></div>
                             </div>
-                            <span class="text-sm text-gray-500 w-16 text-right">{{ $count }} ({{ number_format($percentage, 1) }}%)</span>
+                            <span class="text-sm text-gray-500 dark:text-gray-400 w-16 text-right">{{ $count }} ({{ number_format($percentage, 1) }}%)</span>
                         </div>
                     @endfor
                 </div>

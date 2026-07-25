@@ -16,6 +16,8 @@ class MarketplaceController extends Controller
      */
     public function index(Request $request): View
     {
+        session(['badge_last_seen_marketplace' => now()]);
+
         $query = MarketplaceListing::with(['simulation', 'creator']);
 
         if ($request->filled('search')) {

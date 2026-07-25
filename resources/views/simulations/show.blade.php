@@ -867,7 +867,7 @@
             var content = input.value.trim();
             if (!content) return;
 
-            // Show loading state for main comment form
+            // Show loading state
             var isMainComment = !parentId;
             if (isMainComment) {
                 var submitBtn = document.getElementById('comment-submit-btn');
@@ -877,12 +877,27 @@
                 submitBtn.classList.add('opacity-70', 'cursor-not-allowed');
                 submitText.textContent = 'Mengirim...';
                 submitSpinner.classList.remove('hidden');
+            } else {
+                // Reply form loading state via Alpine
+                var replyForm = document.getElementById('reply-form-' + parentId);
+                if (replyForm && replyForm.__x) {
+                    replyForm.__x.$data.submitting = true;
+                } else if (replyForm) {
+                    // Fallback: disable input and button manually
+                    input.disabled = true;
+                    var replyBtn = replyForm.querySelector('button');
+                    if (replyBtn) {
+                        replyBtn.disabled = true;
+                        replyBtn.innerHTML = '<span class="flex items-center gap-1"><svg class="w-3 h-3 animate-spin" fill="none" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4" class="opacity-25"></circle><path fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" class="opacity-75"></path></svg> Mengirim...</span>';
+                    }
+                }
             }
 
             var data = { simulation_id: {{ $simulation->id }}, body: content };
             if (parentId) { data.parent_id = parentId; }
 
             ajaxPost('{{ route("comments.store", $simulation->slug) }}', data, function(result) {
+                // Reset loading state
                 if (isMainComment) {
                     var submitBtn = document.getElementById('comment-submit-btn');
                     var submitText = document.getElementById('comment-submit-text');
@@ -891,6 +906,18 @@
                     submitBtn.classList.remove('opacity-70', 'cursor-not-allowed');
                     submitText.textContent = 'Kirim';
                     submitSpinner.classList.add('hidden');
+                } else {
+                    var replyForm = document.getElementById('reply-form-' + parentId);
+                    if (replyForm && replyForm.__x) {
+                        replyForm.__x.$data.submitting = false;
+                    } else if (replyForm) {
+                        input.disabled = false;
+                        var replyBtn = replyForm.querySelector('button');
+                        if (replyBtn) {
+                            replyBtn.disabled = false;
+                            replyBtn.innerHTML = 'Kirim';
+                        }
+                    }
                 }
                 if (!result) return;
                 if (result.success) {

@@ -25,24 +25,24 @@
                     @endif
                     <p class="text-xs text-gray-400 dark:text-gray-500 mt-2">Bergabung {{ $user->created_at->translatedFormat('d M Y') }}</p>
 
-                    <div class="flex items-center gap-6 mt-4 justify-center sm:justify-start">
-                        <div class="text-center">
+                    <div class="flex flex-wrap items-center gap-4 sm:gap-6 mt-4 justify-center sm:justify-start">
+                        <div class="text-center min-w-0">
                             <p class="text-gray-900 dark:text-white font-bold text-lg">{{ $stats['bookmarks'] }}</p>
                             <p class="text-gray-500 dark:text-gray-400 text-xs">Bookmark</p>
                         </div>
-                        <div class="text-center">
+                        <div class="text-center min-w-0">
                             <p class="text-gray-900 dark:text-white font-bold text-lg">{{ $stats['simulations_played'] }}</p>
                             <p class="text-gray-500 dark:text-gray-400 text-xs">Dimainkan</p>
                         </div>
-                        <div class="text-center">
+                        <div class="text-center min-w-0">
                             <p class="text-gray-900 dark:text-white font-bold text-lg">{{ $stats['following'] }}</p>
                             <p class="text-gray-500 dark:text-gray-400 text-xs">Mengikuti</p>
                         </div>
-                        <div class="text-center">
+                        <div class="text-center min-w-0">
                             <p class="text-gray-900 dark:text-white font-bold text-lg">{{ $stats['followers'] }}</p>
                             <p class="text-gray-500 dark:text-gray-400 text-xs">Pengikut</p>
                         </div>
-                        <div class="text-center">
+                        <div class="text-center min-w-0">
                             <p class="text-gray-900 dark:text-white font-bold text-lg">{{ $stats['comments'] }}</p>
                             <p class="text-gray-500 dark:text-gray-400 text-xs">Komentar</p>
                         </div>

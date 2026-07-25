@@ -24,6 +24,8 @@ class SponsorshipController extends Controller
      */
     public function index(Request $request): View
     {
+        session(['badge_last_seen_sponsorships' => now()]);
+
         $sponsorships = Sponsorship::query()
             ->with('sponsor')
             ->when($request->input('status'), fn ($q, $s) => $q->where('status', $s))

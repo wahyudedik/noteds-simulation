@@ -1,6 +1,6 @@
 <x-app-layout>
     <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
+        <h2 class="font-semibold text-xl text-gray-800 dark:text-white leading-tight">
             <svg class="inline w-5 h-5 mr-1 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" /></svg>
             Notifikasi
         </h2>
@@ -25,7 +25,7 @@
                 <div class="space-y-2" id="notifications-list">
                     @foreach($notifications as $notification)
                         <div
-                            class="p-4 rounded-xl transition cursor-pointer {{ $notification->read_at ? 'bg-white hover:bg-gray-50' : 'bg-blue-50 hover:bg-blue-100 border-l-2 border-blue-500' }}"
+                            class="p-4 rounded-xl transition cursor-pointer {{ $notification->read_at ? 'bg-white hover:bg-gray-50 dark:bg-gray-800 dark:hover:bg-gray-700' : 'bg-blue-50 hover:bg-blue-100 border-l-2 border-blue-500 dark:bg-blue-900/20 dark:hover:bg-blue-900/30' }}"
                             onclick="markAsRead('{{ $notification->id }}', '{{ $notification->data['url'] ?? '#' }}')"
                         >
                             <div class="flex items-start gap-3">
@@ -52,13 +52,13 @@
                                 </div>
 
                                 <div class="flex-1 min-w-0">
-                                    <p class="text-sm {{ $notification->read_at ? 'text-gray-500' : 'text-gray-900 font-medium' }}">
+                                    <p class="text-sm {{ $notification->read_at ? 'text-gray-500 dark:text-gray-400' : 'text-gray-900 dark:text-white font-medium' }}">
                                         {{ $notification->title }}
                                     </p>
-                                    <p class="text-xs {{ $notification->read_at ? 'text-gray-400' : 'text-gray-600' }} mt-1">
+                                    <p class="text-xs {{ $notification->read_at ? 'text-gray-400 dark:text-gray-500' : 'text-gray-600 dark:text-gray-300' }} mt-1">
                                         {{ $notification->body }}
                                     </p>
-                                    <p class="text-xs text-gray-400 mt-1">{{ $notification->created_at->diffForHumans() }}</p>
+                                    <p class="text-xs text-gray-400 dark:text-gray-500 mt-1">{{ $notification->created_at->diffForHumans() }}</p>
                                 </div>
 
                                 @if(!$notification->read_at)
@@ -74,9 +74,9 @@
                 </div>
             @else
                 <div class="text-center py-16">
-                    <svg class="w-16 h-16 text-gray-300 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" /></svg>
-                    <h3 class="text-gray-500 text-lg font-medium">Belum ada notifikasi</h3>
-                    <p class="text-gray-400 text-sm mt-2">Notifikasi akan muncul di sini ketika ada aktivitas terkait Anda.</p>
+                    <svg class="w-16 h-16 text-gray-300 dark:text-gray-600 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" /></svg>
+                    <h3 class="text-gray-500 dark:text-gray-400 text-lg font-medium">Belum ada notifikasi</h3>
+                    <p class="text-gray-400 dark:text-gray-500 text-sm mt-2">Notifikasi akan muncul di sini ketika ada aktivitas terkait Anda.</p>
                 </div>
             @endif
         </div>
@@ -84,61 +84,69 @@
 
     <script>
         function markAsRead(id, url) {
-            fetch('/notifications/' + id + '/mark-read', {
-                method: 'POST',
-                headers: {
-                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
-                    'X-Requested-With': 'XMLHttpRequest',
-                    'Accept': 'application/json'
-                }
-            })
-            .then(function(response) {
-                if (!response.ok || !(response.headers.get('content-type') || '').includes('application/json')) {
-                    return null;
-                }
-                return response.json();
-            })
-            .then(function(data) {
-                if (data && data.message) {
-                    window.showToast(data.message, 'success');
-                }
-                if (url && url !== '#') {
-                    window.location.href = url;
-                } else {
-                    window.location.reload();
-                }
-            })
-            .catch(function() {
-                if (url && url !== '#') {
-                    window.location.href = url;
-                }
-            });
+            try {
+                fetch('/notifications/' + id + '/mark-read', {
+                    method: 'POST',
+                    headers: {
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+                        'X-Requested-With': 'XMLHttpRequest',
+                        'Accept': 'application/json'
+                    }
+                })
+                .then(function(response) {
+                    if (!response.ok || !(response.headers.get('content-type') || '').includes('application/json')) {
+                        return null;
+                    }
+                    return response.json();
+                })
+                .then(function(data) {
+                    if (data && data.message) {
+                        window.showToast(data.message, 'success');
+                    }
+                    if (url && url !== '#' && typeof url === 'string') {
+                        window.location.href = url;
+                    } else {
+                        window.location.reload();
+                    }
+                })
+                .catch(function() {
+                    if (url && url !== '#' && typeof url === 'string') {
+                        window.location.href = url;
+                    }
+                });
+            } catch (e) {
+                window.location.reload();
+            }
         }
 
         function markAllAsRead() {
-            fetch('/notifications/mark-all-read', {
-                method: 'POST',
-                headers: {
-                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
-                    'X-Requested-With': 'XMLHttpRequest',
-                    'Accept': 'application/json'
-                }
-            })
-            .then(function(response) {
-                if (!response.ok || !(response.headers.get('content-type') || '').includes('application/json')) {
-                    return null;
-                }
-                return response.json();
-            })
-            .then(function(data) {
-                if (data && data.message) {
-                    window.showToast(data.message, 'success');
-                }
+            try {
+                fetch('/notifications/mark-all-read', {
+                    method: 'POST',
+                    headers: {
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+                        'X-Requested-With': 'XMLHttpRequest',
+                        'Accept': 'application/json'
+                    }
+                })
+                .then(function(response) {
+                    if (!response.ok || !(response.headers.get('content-type') || '').includes('application/json')) {
+                        return null;
+                    }
+                    return response.json();
+                })
+                .then(function(data) {
+                    if (data && data.message) {
+                        window.showToast(data.message, 'success');
+                    }
+                    window.location.reload();
+                })
+                .catch(function() {
+                    window.location.reload();
+                });
+            } catch (e) {
                 window.location.reload();
-            })
-            .catch(function() {
-                window.location.reload();
-            });
+            }
         }
     </script>
 </x-app-layout>

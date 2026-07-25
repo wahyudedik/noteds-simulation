@@ -411,6 +411,34 @@ class StudioController extends Controller
     }
 
     /**
+     * Download a specific version's ZIP file.
+     */
+    /**
+     * Download a specific version's ZIP file.
+     */
+    public function downloadVersion(string $slug, int $versionId)
+    {
+        /** @var User $user */
+        $user = Auth::user();
+        $simulation = Simulation::where('user_id', $user->id)
+            ->where('slug', $slug)
+            ->firstOrFail();
+
+        $version = SimulationVersion::where('id', $versionId)
+            ->where('simulation_id', $simulation->id)
+            ->firstOrFail();
+
+        if (! $version->zip_path || ! Storage::disk('public')->exists($version->zip_path)) {
+            abort(404, 'File ZIP versi ini tidak ditemukan.');
+        }
+
+        return Storage::disk('public')->download(
+            $version->zip_path,
+            $simulation->slug.'-v'.$version->version.'.zip'
+        );
+    }
+
+    /**
      * Store a new version of a simulation (upload new ZIP without full edit).
      */
     public function storeVersion(Request $request, string $slug): RedirectResponse

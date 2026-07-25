@@ -15,6 +15,8 @@ class UserController extends Controller
      */
     public function index(Request $request): View
     {
+        session(['badge_last_seen_users' => now()]);
+
         $query = User::withCount('simulations');
 
         if ($request->filled('search')) {

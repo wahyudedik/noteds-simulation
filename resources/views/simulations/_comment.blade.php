@@ -10,7 +10,7 @@
 <div class="comment-item" id="comment-{{ $comment->id }}" style="margin-left: {{ $depth * 24 }}px;" x-data="{ expanded: false }">
     <div class="flex gap-3 {{ $depth > 0 ? 'mt-3' : '' }}">
         <a href="{{ route('creators.show', $comment->user->username) }}" class="flex-shrink-0">
-            <div class="w-8 h-8 rounded-full bg-gray-200 flex items-center justify-center text-gray-600 text-xs font-semibold overflow-hidden">
+            <div class="w-8 h-8 rounded-full bg-gray-200 dark:bg-gray-700 flex items-center justify-center text-gray-600 dark:text-gray-300 text-xs font-semibold overflow-hidden">
                 @if($comment->user->avatar)
                     <img src="{{ Storage::disk('public')->url($comment->user->avatar) }}" alt="{{ $comment->user->name }}" class="w-full h-full object-cover" />
                 @else
@@ -20,22 +20,22 @@
         </a>
         <div class="flex-1 min-w-0">
             <div class="flex items-center gap-2">
-                <a href="{{ route('creators.show', $comment->user->username) }}" class="text-gray-900 text-sm font-medium hover:text-blue-600 transition">{{ $comment->user->name }}</a>
+                <a href="{{ route('creators.show', $comment->user->username) }}" class="text-gray-900 dark:text-white text-sm font-medium hover:text-blue-600 transition">{{ $comment->user->name }}</a>
                 @if($comment->is_pinned)
-                    <span class="text-[10px] bg-yellow-50 text-yellow-700 px-1.5 py-0.5 rounded font-medium">DIPIN</span>
+                    <span class="text-[10px] bg-yellow-50 text-yellow-700 dark:bg-yellow-900/30 dark:text-yellow-400 px-1.5 py-0.5 rounded font-medium">DIPIN</span>
                 @endif
-                <span class="text-gray-400 text-xs">{{ $comment->created_at->diffForHumans() }}</span>
+                <span class="text-gray-400 dark:text-gray-500 text-xs">{{ $comment->created_at->diffForHumans() }}</span>
             </div>
-            <p class="text-gray-600 text-sm mt-1 whitespace-pre-line">{{ $comment->body }}</p>
+            <p class="text-gray-600 dark:text-gray-400 text-sm mt-1 whitespace-pre-line">{{ $comment->body }}</p>
 
             {{-- Comment Actions --}}
             @auth
             <div class="flex items-center gap-3 mt-2">
-                    <button onclick="toggleReplyForm({{ $comment->id }})" class="text-gray-400 hover:text-blue-600 text-xs font-medium transition">
+                    <button onclick="toggleReplyForm({{ $comment->id }})" class="text-gray-400 dark:text-gray-500 hover:text-blue-600 dark:hover:text-blue-400 text-xs font-medium transition">
                         Balas
                     </button>
                 @if(auth()->id() === $comment->user_id || auth()->user()->isAdmin())
-                    <button onclick="deleteComment({{ $comment->id }})" class="text-gray-400 hover:text-red-600 text-xs font-medium transition">
+                    <button onclick="deleteComment({{ $comment->id }})" class="text-gray-400 dark:text-gray-500 hover:text-red-600 dark:hover:text-red-400 text-xs font-medium transition">
                         Hapus
                     </button>
                 @endif
@@ -44,20 +44,26 @@
 
             {{-- Reply Form --}}
             @auth
-                <div id="reply-form-{{ $comment->id }}" class="comment-reply mt-3">
+                <div id="reply-form-{{ $comment->id }}" class="comment-reply mt-3" x-data="{ submitting: false }">
                     <div class="flex gap-2">
                         <input
                             id="reply-input-{{ $comment->id }}"
                             type="text"
-                            class="flex-1 bg-white border border-gray-300 rounded-lg px-3 py-1.5 text-gray-900 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 placeholder-gray-400"
+                            class="flex-1 bg-white border border-gray-300 rounded-lg px-3 py-1.5 text-gray-900 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 placeholder-gray-400 dark:bg-gray-700 dark:border-gray-600 dark:text-white dark:placeholder-gray-500 disabled:opacity-50"
                             placeholder="Tulis balasan..."
-                            onkeydown="if(event.key==='Enter'){postComment({{ $comment->id }});}"
+                            :disabled="submitting"
+                            onkeydown="if(event.key==='Enter'){event.preventDefault(); postComment({{ $comment->id }});}"
                         />
                         <button
                             onclick="postComment({{ $comment->id }})"
-                            class="px-3 py-1.5 bg-blue-600 hover:bg-blue-700 text-white text-xs font-medium rounded-lg transition"
+                            :disabled="submitting"
+                            class="px-3 py-1.5 bg-blue-600 hover:bg-blue-700 disabled:bg-blue-400 disabled:cursor-not-allowed text-white text-xs font-medium rounded-lg transition"
                         >
-                            Kirim
+                            <span x-show="!submitting">Kirim</span>
+                            <span x-show="submitting" class="flex items-center gap-1">
+                                <svg class="w-3 h-3 animate-spin" fill="none" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4" class="opacity-25"></circle><path fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" class="opacity-75"></path></svg>
+                                Mengirim...
+                            </span>
                         </button>
                     </div>
                 </div>

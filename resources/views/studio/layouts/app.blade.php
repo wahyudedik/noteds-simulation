@@ -15,18 +15,18 @@
         <!-- Scripts -->
         @vite(['resources/css/app.css', 'resources/js/app.js'])
     </head>
-    <body class="font-sans antialiased bg-gray-50">
+    <body class="font-sans antialiased bg-gray-50 dark:bg-gray-900">
         <div class="min-h-screen flex">
 
             {{-- Sidebar --}}
-            <aside class="hidden lg:flex lg:flex-col w-64 bg-white border-r border-gray-200 fixed inset-y-0 left-0 z-40">
+            <aside class="hidden lg:flex lg:flex-col w-64 bg-white dark:bg-gray-800 border-r border-gray-200 dark:border-gray-700 fixed inset-y-0 left-0 z-40">
                 {{-- Logo --}}
-                <div class="flex items-center gap-2 px-6 h-16 border-b border-gray-100 shrink-0">
+                <div class="flex items-center gap-2 px-6 h-16 border-b border-gray-100 dark:border-gray-700 shrink-0">
                     <a href="{{ route('home') }}" class="flex items-center gap-2">
                         <img src="{{ asset('logo.jpeg') }}" alt="NotEDs" class="w-8 h-8 rounded-lg object-cover" />
-                        <span class="text-lg font-bold text-gray-900">Noteds</span>
+                        <span class="text-lg font-bold text-gray-900 dark:text-white">Noteds</span>
                     </a>
-                    <span class="ml-1 px-2 py-0.5 text-xs font-semibold bg-blue-100 text-blue-700 rounded-full">Studio</span>
+                    <span class="ml-1 px-2 py-0.5 text-xs font-semibold bg-blue-100 text-blue-700 dark:bg-blue-900/50 dark:text-blue-400 rounded-full">Studio</span>
                 </div>
 
                 {{-- Nav Links --}}
@@ -49,7 +49,7 @@
                             $isActive = request()->routeIs($item['route']) || request()->routeIs($item['route'] . '.*');
                         @endphp
                         <a href="{{ route($item['route']) }}"
-                           class="flex items-center gap-3 px-3 py-2.5 text-sm font-medium rounded-lg transition {{ $isActive ? 'bg-blue-50 text-blue-700' : 'text-gray-700 hover:bg-gray-50 hover:text-gray-900' }}">
+                           class="flex items-center gap-3 px-3 py-2.5 text-sm font-medium rounded-lg transition {{ $isActive ? 'bg-blue-50 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400' : 'text-gray-700 hover:bg-gray-50 hover:text-gray-900 dark:text-gray-300 dark:hover:bg-gray-700 dark:hover:text-white' }}">
                             <svg class="w-5 h-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 {!! $item['icon'] !!}
                             </svg>
@@ -59,8 +59,8 @@
                 </nav>
 
                 {{-- Back to Site --}}
-                <div class="px-3 py-4 border-t border-gray-100">
-                    <a href="{{ route('home') }}" class="flex items-center gap-3 px-3 py-2.5 text-sm font-medium text-gray-500 hover:text-gray-700 hover:bg-gray-50 rounded-lg transition">
+                <div class="px-3 py-4 border-t border-gray-100 dark:border-gray-700">
+                    <a href="{{ route('home') }}" class="flex items-center gap-3 px-3 py-2.5 text-sm font-medium text-gray-500 hover:text-gray-700 hover:bg-gray-50 dark:text-gray-400 dark:hover:text-white dark:hover:bg-gray-700 rounded-lg transition">
                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
                         </svg>
@@ -70,17 +70,17 @@
             </aside>
 
             {{-- Mobile Header --}}
-            <div class="lg:hidden fixed top-0 inset-x-0 z-50 bg-white border-b border-gray-200">
+            <div class="lg:hidden fixed top-0 inset-x-0 z-50 bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700">
                 <div class="flex items-center justify-between h-14 px-4">
                     <div class="flex items-center gap-3">
-                        <button @click="mobileSidebar = !mobileSidebar" class="p-1.5 text-gray-600 hover:bg-gray-100 rounded-lg">
+                        <button @click="mobileSidebar = !mobileSidebar" class="p-1.5 text-gray-600 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-700 rounded-lg">
                             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
                             </svg>
                         </button>
                         <a href="{{ route('home') }}" class="flex items-center gap-2">
                             <img src="{{ asset('logo.jpeg') }}" alt="NotEDs" class="w-7 h-7 rounded-lg object-cover" />
-                            <span class="font-bold text-gray-900">Studio</span>
+                            <span class="font-bold text-gray-900 dark:text-white">Studio</span>
                         </a>
                     </div>
                     <a href="{{ route('home') }}" class="text-sm text-blue-600 font-medium">Situs</a>
@@ -90,9 +90,9 @@
             {{-- Main Content --}}
             <div class="flex-1 lg:ml-64">
                 {{-- Desktop Header --}}
-                <header class="hidden lg:block bg-white border-b border-gray-100 sticky top-0 z-30">
+                <header class="hidden lg:block bg-white dark:bg-gray-800 border-b border-gray-100 dark:border-gray-700 sticky top-0 z-30">
                     <div class="flex items-center justify-between h-16 px-8">
-                        <h1 class="text-lg font-semibold text-gray-900">{{ $pageTitle ?? 'Studio' }}</h1>
+                        <h1 class="text-lg font-semibold text-gray-900 dark:text-white">{{ $pageTitle ?? 'Studio' }}</h1>
                         <div class="flex items-center gap-4">
                             @if(Auth::user()->isCreator() || Auth::user()->isAdmin() || Auth::user()->isSuperAdmin())
                                 <a href="{{ route('studio.simulations.create') }}" class="inline-flex items-center gap-2 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium rounded-lg transition">
@@ -106,9 +106,9 @@
                                 @if(Auth::user()->avatar)
                                     <img src="{{ Storage::disk('public')->url(Auth::user()->avatar) }}" alt="{{ Auth::user()->name }}" class="w-8 h-8 rounded-full object-cover" />
                                 @else
-                                    <div class="w-8 h-8 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center text-xs font-semibold">{{ strtoupper(substr(Auth::user()->name, 0, 1)) }}</div>
+                                    <div class="w-8 h-8 rounded-full bg-blue-100 text-blue-600 dark:bg-blue-900/50 dark:text-blue-400 flex items-center justify-center text-xs font-semibold">{{ strtoupper(substr(Auth::user()->name, 0, 1)) }}</div>
                                 @endif
-                                <span class="text-sm font-medium text-gray-700">{{ Auth::user()->name }}</span>
+                                <span class="text-sm font-medium text-gray-700 dark:text-gray-300">{{ Auth::user()->name }}</span>
                             </div>
                         </div>
                     </div>

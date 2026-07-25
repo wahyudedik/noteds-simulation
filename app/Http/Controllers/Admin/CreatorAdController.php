@@ -20,6 +20,8 @@ class CreatorAdController extends Controller
      */
     public function index(Request $request): View
     {
+        session(['badge_last_seen_creator_ads' => now()]);
+
         $query = CreatorAd::with('simulation', 'user', 'reviewer');
 
         $status = $request->input('status', 'pending_review');

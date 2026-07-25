@@ -87,7 +87,12 @@
                         <svg class="w-5 h-5 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"/></svg>
                     </div>
                     <div>
-                        <div class="font-semibold text-gray-900 text-sm">Kelola Pengguna</div>
+                        <div class="flex items-center gap-2">
+                            <span class="font-semibold text-gray-900 text-sm">Kelola Pengguna</span>
+                            @if($badges['new_users_24h'] > 0)
+                                <span class="inline-flex items-center justify-center min-w-[20px] h-5 px-1.5 text-xs font-bold text-white bg-blue-500 rounded-full">{{ $badges['new_users_24h'] }}</span>
+                            @endif
+                        </div>
                         <div class="text-xs text-gray-500">User, role, creator approval</div>
                     </div>
                 </a>
@@ -105,7 +110,12 @@
                         <svg class="w-5 h-5 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 21v-4m0 0V5a2 2 0 012-2h6.5l1 1H21l-3 6 3 6h-8.5l-1-1H5a2 2 0 00-2 2zm9-13.5V9"/></svg>
                     </div>
                     <div>
-                        <div class="font-semibold text-gray-900 text-sm">Laporan Pengguna</div>
+                        <div class="flex items-center gap-2">
+                            <span class="font-semibold text-gray-900 text-sm">Laporan Pengguna</span>
+                            @if($badges['pending_reports'] > 0)
+                                <span class="inline-flex items-center justify-center min-w-[20px] h-5 px-1.5 text-xs font-bold text-white bg-red-500 rounded-full">{{ $badges['pending_reports'] }}</span>
+                            @endif
+                        </div>
                         <div class="text-xs text-gray-500">Review & tindak laporan</div>
                     </div>
                 </a>
@@ -114,7 +124,12 @@
                         <svg class="w-5 h-5 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
                     </div>
                     <div>
-                        <div class="font-semibold text-gray-900 text-sm">Security Scans</div>
+                        <div class="flex items-center gap-2">
+                            <span class="font-semibold text-gray-900 text-sm">Security Scans</span>
+                            @if($badges['new_scans_with_issues'] > 0)
+                                <span class="inline-flex items-center justify-center min-w-[20px] h-5 px-1.5 text-xs font-bold text-white bg-orange-500 rounded-full">{{ $badges['new_scans_with_issues'] }}</span>
+                            @endif
+                        </div>
                         <div class="text-xs text-gray-500">Auto-scan, sandbox, review</div>
                     </div>
                 </a>
@@ -132,7 +147,12 @@
                         <svg class="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/></svg>
                     </div>
                     <div>
-                        <div class="font-semibold text-gray-900 text-sm">Kelola Experience</div>
+                        <div class="flex items-center gap-2">
+                            <span class="font-semibold text-gray-900 text-sm">Kelola Experience</span>
+                            @if($badges['draft_simulations'] > 0)
+                                <span class="inline-flex items-center justify-center min-w-[20px] h-5 px-1.5 text-xs font-bold text-white bg-yellow-500 rounded-full">{{ $badges['draft_simulations'] }}</span>
+                            @endif
+                        </div>
                         <div class="text-xs text-gray-500">CRUD & publish</div>
                     </div>
                 </a>
@@ -150,7 +170,12 @@
                         <svg class="w-5 h-5 text-pink-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
                     </div>
                     <div>
-                        <div class="font-semibold text-gray-900 text-sm">Review Iklan Creator</div>
+                        <div class="flex items-center gap-2">
+                            <span class="font-semibold text-gray-900 text-sm">Review Iklan Creator</span>
+                            @if($badges['pending_creator_ads'] > 0)
+                                <span class="inline-flex items-center justify-center min-w-[20px] h-5 px-1.5 text-xs font-bold text-white bg-pink-500 rounded-full">{{ $badges['pending_creator_ads'] }}</span>
+                            @endif
+                        </div>
                         <div class="text-xs text-gray-500">Approve, reject, flag iklan</div>
                     </div>
                 </a>
@@ -168,7 +193,12 @@
                         <svg class="w-5 h-5 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z"/></svg>
                     </div>
                     <div>
-                        <div class="font-semibold text-gray-900 text-sm">Payout Creator</div>
+                        <div class="flex items-center gap-2">
+                            <span class="font-semibold text-gray-900 text-sm">Payout Creator</span>
+                            @if($badges['pending_payouts'] > 0)
+                                <span class="inline-flex items-center justify-center min-w-[20px] h-5 px-1.5 text-xs font-bold text-white bg-emerald-500 rounded-full">{{ $badges['pending_payouts'] }}</span>
+                            @endif
+                        </div>
                         <div class="text-xs text-gray-500">Approve, bayar, tolak payout</div>
                     </div>
                 </a>
@@ -213,7 +243,12 @@
                         <svg class="w-5 h-5 text-lime-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 100 4 2 2 0 000-4z"/></svg>
                     </div>
                     <div>
-                        <div class="font-semibold text-gray-900 text-sm">Marketplace</div>
+                        <div class="flex items-center gap-2">
+                            <span class="font-semibold text-gray-900 text-sm">Marketplace</span>
+                            @if($badges['pending_purchases'] > 0)
+                                <span class="inline-flex items-center justify-center min-w-[20px] h-5 px-1.5 text-xs font-bold text-white bg-lime-600 rounded-full">{{ $badges['pending_purchases'] }}</span>
+                            @endif
+                        </div>
                         <div class="text-xs text-gray-500">Listing, penjualan, revenue</div>
                     </div>
                 </a>
@@ -231,7 +266,12 @@
                         <svg class="w-5 h-5 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8h2a2 2 0 012 2v6a2 2 0 01-2 2h-2v4l-4-4H9a2 2 0 01-2-2v-1m0-4V6a2 2 0 012-2h6a2 2 0 012 2v6a2 2 0 01-2 2h-2v4l-4-4z" /></svg>
                     </div>
                     <div>
-                        <div class="font-semibold text-gray-900 text-sm">Forum / Komunitas</div>
+                        <div class="flex items-center gap-2">
+                            <span class="font-semibold text-gray-900 text-sm">Forum / Komunitas</span>
+                            @if($badges['unsolved_threads'] > 0)
+                                <span class="inline-flex items-center justify-center min-w-[20px] h-5 px-1.5 text-xs font-bold text-white bg-indigo-500 rounded-full">{{ $badges['unsolved_threads'] }}</span>
+                            @endif
+                        </div>
                         <div class="text-xs text-gray-500">Threads, replies, moderasi</div>
                     </div>
                 </a>
@@ -258,7 +298,12 @@
                         <svg class="w-5 h-5 text-teal-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" /></svg>
                     </div>
                     <div>
-                        <div class="font-semibold text-gray-900 text-sm">Sponsorship</div>
+                        <div class="flex items-center gap-2">
+                            <span class="font-semibold text-gray-900 text-sm">Sponsorship</span>
+                            @if($badges['pending_sponsorships'] > 0)
+                                <span class="inline-flex items-center justify-center min-w-[20px] h-5 px-1.5 text-xs font-bold text-white bg-teal-500 rounded-full">{{ $badges['pending_sponsorships'] }}</span>
+                            @endif
+                        </div>
                         <div class="text-xs text-gray-500">Perjanjian sponsorship & invoice</div>
                     </div>
                 </a>

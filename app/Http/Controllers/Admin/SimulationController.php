@@ -19,6 +19,8 @@ class SimulationController extends Controller
      */
     public function index(): View
     {
+        session(['badge_last_seen_simulations' => now()]);
+
         $simulations = Simulation::with('user')
             ->latest()
             ->paginate(20);
