@@ -16,16 +16,6 @@
     <priority>0.7</priority>
             </url>
     <url>
-    <loc>http://noteds-simulation.test/login</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.3</priority>
-            </url>
-    <url>
-    <loc>http://noteds-simulation.test/register</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.3</priority>
-            </url>
-    <url>
     <loc>http://noteds-simulation.test/sim/sdsfds</loc>
     <lastmod>2026-07-24T06:00:48+07:00</lastmod>
     <changefreq>weekly</changefreq>

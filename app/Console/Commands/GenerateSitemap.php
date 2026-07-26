@@ -24,6 +24,8 @@ class GenerateSitemap extends Command
      */
     public function handle(): int
     {
+        $baseUrl = config('app.url');
+
         $sitemap = Sitemap::create()
             ->add(
                 Url::create('/')
@@ -39,21 +41,12 @@ class GenerateSitemap extends Command
                 Url::create('/leaderboard')
                     ->setPriority(0.7)
                     ->setChangeFrequency('weekly')
-            )
-            ->add(
-                Url::create('/login')
-                    ->setPriority(0.3)
-                    ->setChangeFrequency('monthly')
-            )
-            ->add(
-                Url::create('/register')
-                    ->setPriority(0.3)
-                    ->setChangeFrequency('monthly')
             );
 
-        // Add published simulations
+        // Add published simulations (exclude seed/dummy data with short slugs)
         Simulation::published()
             ->select('slug', 'title', 'description', 'updated_at')
+            ->whereRaw('CHAR_LENGTH(slug) > 5')
             ->chunk(200, function ($simulations) use ($sitemap) {
                 foreach ($simulations as $simulation) {
                     $sitemap->add(
@@ -81,7 +74,7 @@ class GenerateSitemap extends Command
 
         $sitemap->writeToFile(public_path('sitemap.xml'));
 
-        $this->info('Sitemap generated successfully at public/sitemap.xml');
+        $this->info("Sitemap generated successfully at public/sitemap.xml (base URL: {$baseUrl})");
 
         return Command::SUCCESS;
     }

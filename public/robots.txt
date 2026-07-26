@@ -9,4 +9,4 @@ Disallow: /my-collections/
 Disallow: /notifications/
 Disallow: /saved-collections/
 
-Sitemap: https://noteds.test/sitemap.xml
+Sitemap: https://noteds.com/sitemap.xml
