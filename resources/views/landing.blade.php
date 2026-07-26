@@ -239,9 +239,11 @@
                     <img src="{{ asset('logo.jpeg') }}" alt="Noteds" class="w-6 h-6 rounded object-cover" />
                     <span class="font-semibold text-gray-900 dark:text-white">Noteds</span>
                 </div>
-                <p class="text-sm text-gray-500 dark:text-gray-400">
-                    Interactive Experience &copy; {{ date('Y') }}
-                </p>
+                <div class="flex items-center gap-4 text-sm text-gray-500 dark:text-gray-400">
+                    <a href="{{ route('privacy-policy') }}" class="hover:text-gray-700 dark:hover:text-gray-200 transition">Kebijakan Privasi</a>
+                    <a href="{{ route('terms-of-service') }}" class="hover:text-gray-700 dark:hover:text-gray-200 transition">Syarat & Ketentuan</a>
+                    <span>&copy; {{ date('Y') }}</span>
+                </div>
             </div>
         </div>
     </footer>

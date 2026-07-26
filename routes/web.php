@@ -51,6 +51,10 @@ use Illuminate\Support\Facades\Route;
 // Health Check endpoint
 Route::get('/health', HealthController::class)->name('health');
 
+// Legal pages
+Route::view('/kebijakan-privasi', 'pages.privacy-policy')->name('privacy-policy');
+Route::view('/syarat-ketentuan', 'pages.terms-of-service')->name('terms-of-service');
+
 // Landing page = simulation feed (like YouTube homepage)
 Route::get('/', [SimulationController::class, 'index'])->name('home');
 
