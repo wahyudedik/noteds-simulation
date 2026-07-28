@@ -1,8 +1,8 @@
 <x-guest-layout>
     {{-- Header --}}
     <div class="mb-8">
-        <h2 class="text-2xl font-bold text-gray-900">Lupa Password</h2>
-        <p class="mt-1 text-sm text-gray-600">Masukkan email Anda dan kami akan mengirimkan link reset password.</p>
+        <h2 class="text-2xl font-bold text-gray-900 dark:text-white">Lupa Password</h2>
+        <p class="mt-1 text-sm text-gray-600 dark:text-gray-400">Masukkan email Anda dan kami akan mengirimkan link reset password.</p>
     </div>
 
     {{-- Session Status --}}

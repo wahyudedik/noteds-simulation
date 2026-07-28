@@ -17,7 +17,7 @@
     <div class="my-6 space-y-4">
         {{-- Creator Ads --}}
         @foreach($creatorAds as $creatorAd)
-            <div class="creator-ad bg-white border border-gray-200 rounded-xl p-4" data-ad-id="{{ $creatorAd->id }}">
+            <div class="creator-ad bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl p-4" data-ad-id="{{ $creatorAd->id }}">
                 <div class="flex items-center justify-between mb-2">
                     <span class="text-[10px] text-gray-400 uppercase tracking-wide">Sponsored</span>
                 </div>
@@ -51,17 +51,17 @@
                         @endif
                         <div>
                             @if(! empty($config['title']))
-                                <h4 class="text-sm font-semibold text-gray-900">{{ $config['title'] }}</h4>
+                                <h4 class="text-sm font-semibold text-gray-900 dark:text-white">{{ $config['title'] }}</h4>
                             @endif
                             @if(! empty($config['description']))
-                                <p class="text-xs text-gray-500 mt-0.5">{{ $config['description'] }}</p>
+                                <p class="text-xs text-gray-500 dark:text-gray-400 mt-0.5">{{ $config['description'] }}</p>
                             @endif
                             @if(! empty($config['target_url']))
                                 <a
                                     href="{{ $config['target_url'] }}"
                                     target="_blank"
                                     rel="noopener noreferrer nofollow"
-                                    class="text-xs text-blue-600 hover:underline mt-1 inline-block"
+                                    class="text-xs text-blue-600 dark:text-blue-400 hover:underline mt-1 inline-block"
                                 >Kunjungi</a>
                             @endif
                         </div>

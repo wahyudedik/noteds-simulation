@@ -127,7 +127,7 @@
                             @if(auth()->user()->avatar)
                                 <img src="{{ Storage::disk('public')->url(auth()->user()->avatar) }}" alt="" class="w-7 h-7 rounded-full object-cover" />
                             @else
-                                <div class="w-7 h-7 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center text-xs font-semibold">
+                                <div class="w-7 h-7 rounded-full bg-blue-100 dark:bg-blue-900/50 text-blue-600 dark:text-blue-400 flex items-center justify-center text-xs font-semibold">
                                     {{ strtoupper(substr(auth()->user()->name, 0, 1)) }}
                                 </div>
                             @endif
@@ -189,7 +189,7 @@
                 @endauth
 
                 {{-- Mobile Hamburger --}}
-                <button @click="mobileOpen = !mobileOpen" aria-label="Menu navigasi" class="sm:hidden inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-gray-500 hover:bg-gray-100 transition min-h-[44px] min-w-[44px]">
+                <button @click="mobileOpen = !mobileOpen" aria-label="Menu navigasi" class="sm:hidden inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-gray-500 dark:hover:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 transition min-h-[44px] min-w-[44px]">
                     <svg class="h-5 w-5" stroke="currentColor" fill="none" viewBox="0 0 24 24">
                         <path :class="{'hidden': mobileOpen, 'inline-flex': !mobileOpen}" class="inline-flex" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
                         <path :class="{'hidden': !mobileOpen, 'inline-flex': mobileOpen}" class="hidden" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />

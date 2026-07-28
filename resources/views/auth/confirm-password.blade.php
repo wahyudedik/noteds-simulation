@@ -1,8 +1,8 @@
 <x-guest-layout>
     {{-- Header --}}
     <div class="mb-8">
-        <h2 class="text-2xl font-bold text-gray-900">Konfirmasi Password</h2>
-        <p class="mt-1 text-sm text-gray-600">Ini adalah area aman. Silakan masukkan password Anda untuk melanjutkan.</p>
+        <h2 class="text-2xl font-bold text-gray-900 dark:text-white">Konfirmasi Password</h2>
+        <p class="mt-1 text-sm text-gray-600 dark:text-gray-400">Ini adalah area aman. Silakan masukkan password Anda untuk melanjutkan.</p>
     </div>
 
     <form method="POST" action="{{ route('password.confirm') }}">

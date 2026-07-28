@@ -1,14 +1,14 @@
 <x-guest-layout>
     {{-- Header --}}
     <div class="mb-8">
-        <h2 class="text-2xl font-bold text-gray-900">Verifikasi Email</h2>
-        <p class="mt-1 text-sm text-gray-600">
+        <h2 class="text-2xl font-bold text-gray-900 dark:text-white">Verifikasi Email</h2>
+        <p class="mt-1 text-sm text-gray-600 dark:text-gray-400">
             Terima kasih telah mendaftar! Sebelum memulai, silakan verifikasi alamat email Anda dengan mengklik link yang kami kirimkan.
         </p>
     </div>
 
     @if (session('status') == 'verification-link-sent')
-        <div class="mb-4 p-3 bg-green-50 border border-green-200 rounded-xl text-sm text-green-700">
+        <div class="mb-4 p-3 bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-xl text-sm text-green-700 dark:text-green-400">
             {{ __('Link verifikasi baru telah dikirim ke alamat email Anda.') }}
         </div>
     @endif
@@ -23,7 +23,7 @@
 
         <form method="POST" action="{{ route('logout') }}">
             @csrf
-            <button type="submit" class="text-sm text-gray-600 hover:text-gray-900 underline transition">
+            <button type="submit" class="text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200 underline transition">
                 {{ __('Keluar') }}
             </button>
         </form>
