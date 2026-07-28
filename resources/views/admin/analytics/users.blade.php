@@ -1,4 +1,4 @@
-<x-app-layout>
+﻿<x-app-layout>
     <x-slot name="header">
         <div class="flex items-center justify-between">
             <h2 class="font-semibold text-xl text-gray-800 leading-tight">
@@ -6,12 +6,12 @@
                 User Analytics
             </h2>
             <div class="flex items-center gap-2">
-                <a href="{{ route('admin.analytics.index') }}" class="px-3 py-1.5 text-sm font-medium rounded-lg transition bg-gray-100 text-gray-600 hover:bg-gray-200">
+                <a href="{{ route('admin.analytics.index') }}" class="px-3 py-1.5 text-sm font-medium rounded-lg transition bg-gray-100 text-gray-600 dark:text-gray-400 hover:bg-gray-200">
                     ← Overview
                 </a>
                 @foreach(['7' => '7 Hari', '30' => '30 Hari', '90' => '90 Hari'] as $p => $label)
                     <a href="{{ route('admin.analytics.users', ['period' => $p]) }}"
-                        class="px-3 py-1.5 text-sm font-medium rounded-lg transition {{ $period === $p ? 'bg-blue-600 text-white' : 'bg-gray-100 text-gray-600 hover:bg-gray-200' }}">
+                        class="px-3 py-1.5 text-sm font-medium rounded-lg transition {{ $period === $p ? 'bg-blue-600 text-white' : 'bg-gray-100 text-gray-600 dark:text-gray-400 hover:bg-gray-200' }}">
                         {{ $label }}
                     </a>
                 @endforeach
@@ -24,31 +24,31 @@
 
             {{-- Summary Stats --}}
             <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
-                <div class="bg-white border border-gray-100 rounded-xl p-5 shadow-sm">
-                    <p class="text-sm text-gray-500">Total Users</p>
-                    <p class="text-2xl font-bold text-gray-900 mt-1">{{ number_format($totalUsers) }}</p>
+                <div class="bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700 rounded-xl p-5 shadow-sm">
+                    <p class="text-sm text-gray-500 dark:text-gray-400">Total Users</p>
+                    <p class="text-2xl font-bold text-gray-900 dark:text-white mt-1">{{ number_format($totalUsers) }}</p>
                 </div>
-                <div class="bg-white border border-gray-100 rounded-xl p-5 shadow-sm">
-                    <p class="text-sm text-gray-500">Aktif ({{ $period }} hari)</p>
-                    <p class="text-2xl font-bold text-green-600 mt-1">{{ number_format($activeUsers) }}</p>
+                <div class="bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700 rounded-xl p-5 shadow-sm">
+                    <p class="text-sm text-gray-500 dark:text-gray-400">Aktif ({{ $period }} hari)</p>
+                    <p class="text-2xl font-bold text-green-600 dark:text-green-400 mt-1">{{ number_format($activeUsers) }}</p>
                     @if($totalUsers > 0)
-                        <p class="text-xs text-gray-400 mt-1">{{ round(($activeUsers / $totalUsers) * 100, 1) }}% dari total</p>
+                        <p class="text-xs text-gray-400 dark:text-gray-500 mt-1">{{ round(($activeUsers / $totalUsers) * 100, 1) }}% dari total</p>
                     @endif
                 </div>
-                <div class="bg-white border border-gray-100 rounded-xl p-5 shadow-sm">
-                    <p class="text-sm text-gray-500">Total Plays</p>
-                    <p class="text-2xl font-bold text-gray-900 mt-1">{{ number_format($totalPlays) }}</p>
+                <div class="bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700 rounded-xl p-5 shadow-sm">
+                    <p class="text-sm text-gray-500 dark:text-gray-400">Total Plays</p>
+                    <p class="text-2xl font-bold text-gray-900 dark:text-white mt-1">{{ number_format($totalPlays) }}</p>
                 </div>
-                <div class="bg-white border border-gray-100 rounded-xl p-5 shadow-sm">
-                    <p class="text-sm text-gray-500">Total Komentar</p>
-                    <p class="text-2xl font-bold text-gray-900 mt-1">{{ number_format($totalComments) }}</p>
+                <div class="bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700 rounded-xl p-5 shadow-sm">
+                    <p class="text-sm text-gray-500 dark:text-gray-400">Total Komentar</p>
+                    <p class="text-2xl font-bold text-gray-900 dark:text-white mt-1">{{ number_format($totalComments) }}</p>
                 </div>
             </div>
 
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
                 {{-- Registration Trends Chart --}}
-                <div class="bg-white border border-gray-100 rounded-xl p-6 shadow-sm">
-                    <h3 class="text-lg font-semibold text-gray-900 mb-4">Tren Registrasi</h3>
+                <div class="bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700 rounded-xl p-6 shadow-sm">
+                    <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">Tren Registrasi</h3>
                     <div class="h-64 flex items-end gap-1">
                         @forelse($registrations as $reg)
                             <div class="flex-1 flex flex-col items-center">
@@ -56,18 +56,18 @@
                                      style="height: {{ max(4, ($reg->count / max($registrations->max('count'), 1)) * 220) }}px"
                                      title="{{ $reg->date }}: {{ $reg->count }} registrasi"></div>
                                 @if($loop->index % 7 === 0)
-                                    <span class="text-[10px] text-gray-400 mt-1">{{ \Carbon\Carbon::parse($reg->date)->format('d') }}</span>
+                                    <span class="text-[10px] text-gray-400 dark:text-gray-500 mt-1">{{ \Carbon\Carbon::parse($reg->date)->format('d') }}</span>
                                 @endif
                             </div>
                         @empty
-                            <div class="flex-1 flex items-center justify-center text-gray-400 text-sm">Belum ada data registrasi</div>
+                            <div class="flex-1 flex items-center justify-center text-gray-400 dark:text-gray-500 text-sm">Belum ada data registrasi</div>
                         @endforelse
                     </div>
                 </div>
 
                 {{-- Role Breakdown --}}
-                <div class="bg-white border border-gray-100 rounded-xl p-6 shadow-sm">
-                    <h3 class="text-lg font-semibold text-gray-900 mb-4">Role Breakdown</h3>
+                <div class="bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700 rounded-xl p-6 shadow-sm">
+                    <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">Role Breakdown</h3>
                     @if($roleBreakdown->count() > 0)
                         <div class="space-y-4">
                             @php
@@ -79,8 +79,8 @@
                                 @php $percentage = $totalUsers > 0 ? round(($role->count / $totalUsers) * 100, 1) : 0; @endphp
                                 <div>
                                     <div class="flex items-center justify-between mb-1">
-                                        <span class="text-sm font-medium text-gray-700">{{ $roleLabels[$role->role] ?? ucfirst($role->role) }}</span>
-                                        <span class="text-sm text-gray-500">{{ number_format($role->count) }} ({{ $percentage }}%)</span>
+                                        <span class="text-sm font-medium text-gray-700 dark:text-gray-300 dark:text-gray-300">{{ $roleLabels[$role->role] ?? ucfirst($role->role) }}</span>
+                                        <span class="text-sm text-gray-500 dark:text-gray-400">{{ number_format($role->count) }} ({{ $percentage }}%)</span>
                                     </div>
                                     <div class="w-full bg-gray-100 rounded-full h-3 overflow-hidden">
                                         <div class="{{ $roleColors[$role->role] ?? 'bg-gray-500' }} h-full rounded-full transition-all" style="width: {{ ($role->count / $maxRoleCount) * 100 }}%"></div>
@@ -89,52 +89,52 @@
                             @endforeach
                         </div>
                     @else
-                        <p class="text-gray-500 text-sm">Belum ada data role.</p>
+                        <p class="text-gray-500 dark:text-gray-400 text-sm">Belum ada data role.</p>
                     @endif
                 </div>
             </div>
 
             {{-- Top Creators --}}
-            <div class="bg-white border border-gray-100 rounded-xl overflow-hidden shadow-sm">
+            <div class="bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700 rounded-xl overflow-hidden shadow-sm">
                 <div class="p-6 border-b border-gray-100">
-                    <h3 class="text-lg font-semibold text-gray-900">Top Creators</h3>
-                    <p class="text-xs text-gray-500 mt-1">Berdasarkan jumlah experience yang diunggah</p>
+                    <h3 class="text-lg font-semibold text-gray-900 dark:text-white">Top Creators</h3>
+                    <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">Berdasarkan jumlah experience yang diunggah</p>
                 </div>
                 @if($topCreators->count() > 0)
                     <div class="overflow-x-auto">
                         <table class="w-full text-sm">
                             <thead>
-                                <tr class="border-b border-gray-200 bg-gray-50">
-                                    <th class="text-left py-3 px-4 text-gray-500 font-medium w-10">#</th>
-                                    <th class="text-left py-3 px-4 text-gray-500 font-medium">Nama</th>
-                                    <th class="text-left py-3 px-4 text-gray-500 font-medium">Email</th>
-                                    <th class="text-center py-3 px-4 text-gray-500 font-medium">Experience</th>
-                                    <th class="text-left py-3 px-4 text-gray-500 font-medium">Bergabung</th>
+                                <tr class="border-b border-gray-200 dark:border-gray-700 bg-gray-50">
+                                    <th class="text-left py-3 px-4 text-gray-500 dark:text-gray-400 font-medium w-10">#</th>
+                                    <th class="text-left py-3 px-4 text-gray-500 dark:text-gray-400 font-medium">Nama</th>
+                                    <th class="text-left py-3 px-4 text-gray-500 dark:text-gray-400 font-medium">Email</th>
+                                    <th class="text-center py-3 px-4 text-gray-500 dark:text-gray-400 font-medium">Experience</th>
+                                    <th class="text-left py-3 px-4 text-gray-500 dark:text-gray-400 font-medium">Bergabung</th>
                                 </tr>
                             </thead>
                             <tbody class="divide-y divide-gray-50">
                                 @foreach($topCreators as $index => $creator)
-                                    <tr class="hover:bg-gray-50 transition">
-                                        <td class="py-3 px-4 text-gray-500">{{ $index + 1 }}</td>
+                                    <tr class="hover:bg-gray-50 dark:bg-gray-700/50 dark:hover:bg-gray-600/50 transition">
+                                        <td class="py-3 px-4 text-gray-500 dark:text-gray-400">{{ $index + 1 }}</td>
                                         <td class="py-3 px-4">
-                                            <a href="{{ route('admin.users.show', $creator->id) }}" class="font-medium text-gray-900 hover:text-blue-600 transition">
+                                            <a href="{{ route('admin.users.show', $creator->id) }}" class="font-medium text-gray-900 dark:text-white hover:text-blue-600 dark:text-blue-400 transition">
                                                 {{ $creator->name }}
                                             </a>
                                         </td>
-                                        <td class="py-3 px-4 text-gray-500">{{ $creator->email }}</td>
+                                        <td class="py-3 px-4 text-gray-500 dark:text-gray-400">{{ $creator->email }}</td>
                                         <td class="py-3 px-4 text-center">
-                                            <span class="px-2 py-1 bg-blue-100 text-blue-700 text-xs font-medium rounded-full">
+                                            <span class="px-2 py-1 bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400 text-xs font-medium rounded-full">
                                                 {{ $creator->simulations_count }}
                                             </span>
                                         </td>
-                                        <td class="py-3 px-4 text-gray-400 text-xs">{{ $creator->created_at->format('d M Y') }}</td>
+                                        <td class="py-3 px-4 text-gray-400 dark:text-gray-500 text-xs">{{ $creator->created_at->format('d M Y') }}</td>
                                     </tr>
                                 @endforeach
                             </tbody>
                         </table>
                     </div>
                 @else
-                    <div class="p-6 text-center text-gray-500 text-sm">Belum ada creator.</div>
+                    <div class="p-6 text-center text-gray-500 dark:text-gray-400 text-sm">Belum ada creator.</div>
                 @endif
             </div>
         </div>

@@ -1,4 +1,4 @@
-<x-app-layout>
+﻿<x-app-layout>
     <x-slot name="header">
         <div class="flex items-center justify-between">
             <h2 class="font-semibold text-xl text-gray-800 leading-tight">
@@ -12,17 +12,17 @@
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 space-y-6">
             {{-- Stats --}}
             <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-5">
-                    <div class="text-sm text-gray-500 mb-1">Total Sertifikasi</div>
-                    <div class="text-2xl font-bold text-gray-900">{{ $totalCerts }}</div>
+                <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 p-5">
+                    <div class="text-sm text-gray-500 dark:text-gray-400 mb-1">Total Sertifikasi</div>
+                    <div class="text-2xl font-bold text-gray-900 dark:text-white">{{ $totalCerts }}</div>
                 </div>
-                <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-5">
-                    <div class="text-sm text-gray-500 mb-1">Aktif</div>
-                    <div class="text-2xl font-bold text-emerald-600">{{ $activeCerts }}</div>
+                <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 p-5">
+                    <div class="text-sm text-gray-500 dark:text-gray-400 mb-1">Aktif</div>
+                    <div class="text-2xl font-bold text-emerald-600 dark:text-emerald-400">{{ $activeCerts }}</div>
                 </div>
-                <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-5">
-                    <div class="text-sm text-gray-500 mb-1">Kreator Eligible</div>
-                    <div class="text-2xl font-bold text-amber-600">{{ count($eligibleCreators) }}</div>
+                <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 p-5">
+                    <div class="text-sm text-gray-500 dark:text-gray-400 mb-1">Kreator Eligible</div>
+                    <div class="text-2xl font-bold text-amber-600 dark:text-amber-400">{{ count($eligibleCreators) }}</div>
                 </div>
             </div>
 
@@ -37,14 +37,14 @@
                         @foreach ($eligibleCreators as $item)
                             <div class="flex items-center justify-between bg-white rounded-lg px-4 py-3 border border-amber-100">
                                 <div class="flex items-center gap-3">
-                                    <div class="w-8 h-8 bg-amber-100 rounded-full flex items-center justify-center text-sm font-bold text-amber-700">{{ substr($item['user']->name, 0, 1) }}</div>
+                                    <div class="w-8 h-8 bg-amber-100 dark:bg-amber-900/30 rounded-full flex items-center justify-center text-sm font-bold text-amber-700">{{ substr($item['user']->name, 0, 1) }}</div>
                                     <div>
-                                        <div class="text-sm font-medium text-gray-900">{{ $item['user']->name }}</div>
-                                        <div class="text-xs text-gray-500">{{ $item['user']->email }}</div>
+                                        <div class="text-sm font-medium text-gray-900 dark:text-white">{{ $item['user']->name }}</div>
+                                        <div class="text-xs text-gray-500 dark:text-gray-400">{{ $item['user']->email }}</div>
                                     </div>
                                 </div>
                                 <div class="flex items-center gap-3">
-                                    <span class="px-2 py-1 text-xs font-medium rounded-full bg-amber-100 text-amber-700">
+                                    <span class="px-2 py-1 text-xs font-medium rounded-full bg-amber-100 dark:bg-amber-900/30 text-amber-700">
                                         Eligible: {{ $item['level'] }}
                                     </span>
                                     <form method="POST" action="{{ route('admin.certifications.award') }}">
@@ -62,7 +62,7 @@
             @endif
 
             {{-- Filters --}}
-            <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-4">
+            <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 p-4">
                 <form method="GET" class="flex flex-wrap gap-3">
                     <input type="text" name="search" value="{{ request('search') }}" placeholder="Cari kreator..."
                         class="flex-1 min-w-[200px] rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm" />
@@ -78,31 +78,31 @@
                         <option value="expired" {{ request('status') === 'expired' ? 'selected' : '' }}>Expired</option>
                         <option value="revoked" {{ request('status') === 'revoked' ? 'selected' : '' }}>Revoked</option>
                     </select>
-                    <button type="submit" class="px-4 py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 text-sm font-medium rounded-lg transition">Filter</button>
+                    <button type="submit" class="px-4 py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 dark:text-gray-300 text-sm font-medium rounded-lg transition">Filter</button>
                 </form>
             </div>
 
             {{-- Table --}}
-            <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+            <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 overflow-hidden">
                 <div class="overflow-x-auto">
                     <table class="min-w-full divide-y divide-gray-200">
                         <thead class="bg-gray-50">
                             <tr>
-                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Kreator</th>
-                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Level</th>
-                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Status</th>
-                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Awarded</th>
-                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Expires</th>
-                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Reviewer</th>
-                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Aksi</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">Kreator</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">Level</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">Status</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">Awarded</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">Expires</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">Reviewer</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">Aksi</th>
                             </tr>
                         </thead>
                         <tbody class="divide-y divide-gray-200">
                             @forelse ($certifications as $cert)
-                                <tr class="hover:bg-gray-50">
+                                <tr class="hover:bg-gray-50 dark:bg-gray-700/50 dark:hover:bg-gray-600/50">
                                     <td class="px-6 py-4">
-                                        <div class="text-sm font-medium text-gray-900">{{ $cert->user->name ?? '-' }}</div>
-                                        <div class="text-xs text-gray-500">{{ $cert->user->email ?? '' }}</div>
+                                        <div class="text-sm font-medium text-gray-900 dark:text-white">{{ $cert->user->name ?? '-' }}</div>
+                                        <div class="text-xs text-gray-500 dark:text-gray-400">{{ $cert->user->email ?? '' }}</div>
                                     </td>
                                     <td class="px-6 py-4">
                                         <span class="px-2 py-1 text-xs font-medium rounded-full {{ $cert->level_badge_class }}">
@@ -112,31 +112,31 @@
                                     <td class="px-6 py-4">
                                         <span class="px-2 py-1 text-xs font-medium rounded-full {{ $cert->status_badge_class }}">{{ $cert->status }}</span>
                                     </td>
-                                    <td class="px-6 py-4 text-sm text-gray-700">{{ $cert->awarded_at?->format('d M Y') ?? '-' }}</td>
-                                    <td class="px-6 py-4 text-sm text-gray-700">{{ $cert->expires_at?->format('d M Y') ?? 'Seumur Hidup' }}</td>
-                                    <td class="px-6 py-4 text-sm text-gray-700">{{ $cert->reviewer->name ?? '-' }}</td>
+                                    <td class="px-6 py-4 text-sm text-gray-700 dark:text-gray-300 dark:text-gray-300">{{ $cert->awarded_at?->format('d M Y') ?? '-' }}</td>
+                                    <td class="px-6 py-4 text-sm text-gray-700 dark:text-gray-300 dark:text-gray-300">{{ $cert->expires_at?->format('d M Y') ?? 'Seumur Hidup' }}</td>
+                                    <td class="px-6 py-4 text-sm text-gray-700 dark:text-gray-300 dark:text-gray-300">{{ $cert->reviewer->name ?? '-' }}</td>
                                     <td class="px-6 py-4 text-sm">
                                         @if ($cert->isActive())
                                             <form method="POST" action="{{ route('admin.certifications.revoke', $cert) }}" class="inline">
                                                 @csrf
                                                 @method('PATCH')
                                                 <button type="submit" onclick="return confirm('Cabut sertifikasi ini?')"
-                                                    class="text-red-600 hover:text-red-800">Cabut</button>
+                                                    class="text-red-600 dark:text-red-400 hover:text-red-800">Cabut</button>
                                             </form>
                                         @else
-                                            <span class="text-gray-400">—</span>
+                                            <span class="text-gray-400 dark:text-gray-500">—</span>
                                         @endif
                                     </td>
                                 </tr>
                             @empty
                                 <tr>
-                                    <td colspan="7" class="px-6 py-12 text-center text-sm text-gray-500">Belum ada sertifikasi.</td>
+                                    <td colspan="7" class="px-6 py-12 text-center text-sm text-gray-500 dark:text-gray-400">Belum ada sertifikasi.</td>
                                 </tr>
                             @endforelse
                         </tbody>
                     </table>
                 </div>
-                <div class="px-6 py-4 border-t border-gray-200">
+                <div class="px-6 py-4 border-t border-gray-200 dark:border-gray-700">
                     {{ $certifications->links() }}
                 </div>
             </div>

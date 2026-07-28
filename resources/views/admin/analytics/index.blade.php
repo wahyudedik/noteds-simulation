@@ -1,4 +1,4 @@
-<x-app-layout>
+﻿<x-app-layout>
     <x-slot name="header">
         <div class="flex items-center justify-between">
             <h2 class="font-semibold text-xl text-gray-800 leading-tight">
@@ -8,7 +8,7 @@
             <div class="flex items-center gap-2">
                 @foreach(['7' => '7 Hari', '30' => '30 Hari', '90' => '90 Hari'] as $p => $label)
                     <a href="{{ route('admin.analytics.index', ['period' => $p]) }}"
-                        class="px-3 py-1.5 text-sm font-medium rounded-lg transition {{ $period === $p ? 'bg-blue-600 text-white' : 'bg-gray-100 text-gray-600 hover:bg-gray-200' }}">
+                        class="px-3 py-1.5 text-sm font-medium rounded-lg transition {{ $period === $p ? 'bg-blue-600 text-white' : 'bg-gray-100 text-gray-600 dark:text-gray-400 hover:bg-gray-200' }}">
                         {{ $label }}
                     </a>
                 @endforeach
@@ -26,12 +26,12 @@
                     Overview
                 </a>
                 <a href="{{ route('admin.analytics.users', ['period' => $period]) }}"
-                    class="px-4 py-2 text-sm font-medium rounded-lg bg-white text-gray-600 border border-gray-200 hover:border-blue-600 hover:text-blue-600 transition">
+                    class="px-4 py-2 text-sm font-medium rounded-lg bg-white text-gray-600 dark:text-gray-400 border border-gray-200 dark:border-gray-700 hover:border-blue-600 hover:text-blue-600 dark:text-blue-400 transition">
                     <svg class="inline w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197m13.5-9a2.5 2.5 0 11-5 0 2.5 2.5 0 015 0z"/></svg>
                     Users
                 </a>
                 <a href="{{ route('admin.analytics.revenue', ['period' => $period]) }}"
-                    class="px-4 py-2 text-sm font-medium rounded-lg bg-white text-gray-600 border border-gray-200 hover:border-blue-600 hover:text-blue-600 transition">
+                    class="px-4 py-2 text-sm font-medium rounded-lg bg-white text-gray-600 dark:text-gray-400 border border-gray-200 dark:border-gray-700 hover:border-blue-600 hover:text-blue-600 dark:text-blue-400 transition">
                     <svg class="inline w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
                     Revenue
                 </a>
@@ -39,51 +39,51 @@
 
             {{-- Current Stats --}}
             <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
-                <div class="bg-white border border-gray-100 rounded-xl p-5 shadow-sm">
-                    <p class="text-sm text-gray-500">Total Users</p>
-                    <p class="text-2xl font-bold text-gray-900 mt-1">{{ number_format($currentStats['total_users']) }}</p>
+                <div class="bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700 rounded-xl p-5 shadow-sm">
+                    <p class="text-sm text-gray-500 dark:text-gray-400">Total Users</p>
+                    <p class="text-2xl font-bold text-gray-900 dark:text-white mt-1">{{ number_format($currentStats['total_users']) }}</p>
                     @if(isset($growth['users']))
-                        <p class="text-xs text-green-600 mt-1">+{{ number_format($growth['users']) }} periode lalu</p>
+                        <p class="text-xs text-green-600 dark:text-green-400 mt-1">+{{ number_format($growth['users']) }} periode lalu</p>
                     @endif
                 </div>
-                <div class="bg-white border border-gray-100 rounded-xl p-5 shadow-sm">
-                    <p class="text-sm text-gray-500">Total Experience</p>
-                    <p class="text-2xl font-bold text-gray-900 mt-1">{{ number_format($currentStats['total_simulations']) }}</p>
-                    <p class="text-xs text-gray-400 mt-1">{{ $currentStats['published_simulations'] }} published</p>
+                <div class="bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700 rounded-xl p-5 shadow-sm">
+                    <p class="text-sm text-gray-500 dark:text-gray-400">Total Experience</p>
+                    <p class="text-2xl font-bold text-gray-900 dark:text-white mt-1">{{ number_format($currentStats['total_simulations']) }}</p>
+                    <p class="text-xs text-gray-400 dark:text-gray-500 mt-1">{{ $currentStats['published_simulations'] }} published</p>
                 </div>
-                <div class="bg-white border border-gray-100 rounded-xl p-5 shadow-sm">
-                    <p class="text-sm text-gray-500">Total Views</p>
-                    <p class="text-2xl font-bold text-gray-900 mt-1">{{ number_format($currentStats['total_views']) }}</p>
+                <div class="bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700 rounded-xl p-5 shadow-sm">
+                    <p class="text-sm text-gray-500 dark:text-gray-400">Total Views</p>
+                    <p class="text-2xl font-bold text-gray-900 dark:text-white mt-1">{{ number_format($currentStats['total_views']) }}</p>
                     @if(isset($growth['views']))
-                        <p class="text-xs text-green-600 mt-1">+{{ number_format($growth['views']) }} periode lalu</p>
+                        <p class="text-xs text-green-600 dark:text-green-400 mt-1">+{{ number_format($growth['views']) }} periode lalu</p>
                     @endif
                 </div>
-                <div class="bg-white border border-gray-100 rounded-xl p-5 shadow-sm">
-                    <p class="text-sm text-gray-500">Total Plays</p>
-                    <p class="text-2xl font-bold text-gray-900 mt-1">{{ number_format($currentStats['total_plays']) }}</p>
+                <div class="bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700 rounded-xl p-5 shadow-sm">
+                    <p class="text-sm text-gray-500 dark:text-gray-400">Total Plays</p>
+                    <p class="text-2xl font-bold text-gray-900 dark:text-white mt-1">{{ number_format($currentStats['total_plays']) }}</p>
                     @if(isset($growth['plays']))
-                        <p class="text-xs text-green-600 mt-1">+{{ number_format($growth['plays']) }} periode lalu</p>
+                        <p class="text-xs text-green-600 dark:text-green-400 mt-1">+{{ number_format($growth['plays']) }} periode lalu</p>
                     @endif
                 </div>
             </div>
 
             {{-- Revenue & Comments --}}
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
-                <div class="bg-white border border-gray-100 rounded-xl p-5 shadow-sm">
-                    <p class="text-sm text-gray-500">Total Revenue Iklan</p>
-                    <p class="text-2xl font-bold text-green-600 mt-1">Rp {{ number_format($currentStats['total_ad_revenue'], 0, ',', '.') }}</p>
+                <div class="bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700 rounded-xl p-5 shadow-sm">
+                    <p class="text-sm text-gray-500 dark:text-gray-400">Total Revenue Iklan</p>
+                    <p class="text-2xl font-bold text-green-600 dark:text-green-400 mt-1">Rp {{ number_format($currentStats['total_ad_revenue'], 0, ',', '.') }}</p>
                 </div>
-                <div class="bg-white border border-gray-100 rounded-xl p-5 shadow-sm">
-                    <p class="text-sm text-gray-500">Total Komentar</p>
-                    <p class="text-2xl font-bold text-gray-900 mt-1">{{ number_format($currentStats['total_comments']) }}</p>
+                <div class="bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700 rounded-xl p-5 shadow-sm">
+                    <p class="text-sm text-gray-500 dark:text-gray-400">Total Komentar</p>
+                    <p class="text-2xl font-bold text-gray-900 dark:text-white mt-1">{{ number_format($currentStats['total_comments']) }}</p>
                 </div>
             </div>
 
             {{-- Charts --}}
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
                 {{-- Registrations Chart --}}
-                <div class="bg-white border border-gray-100 rounded-xl p-6 shadow-sm">
-                    <h3 class="text-lg font-semibold text-gray-900 mb-4">Registrasi Baru</h3>
+                <div class="bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700 rounded-xl p-6 shadow-sm">
+                    <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">Registrasi Baru</h3>
                     <div class="h-64 flex items-end gap-1">
                         @forelse($analytics->take(30) as $a)
                             <div class="flex-1 flex flex-col items-center">
@@ -91,18 +91,18 @@
                                      style="height: {{ $a->new_registrations > 0 ? max(4, ($a->new_registrations / max($analytics->max('new_registrations'), 1)) * 220) : 0 }}px"
                                      title="{{ $a->date->format('d M') }}: {{ $a->new_registrations }} registrasi"></div>
                                 @if($loop->index % 7 === 0)
-                                    <span class="text-[10px] text-gray-400 mt-1">{{ $a->date->format('d') }}</span>
+                                    <span class="text-[10px] text-gray-400 dark:text-gray-500 mt-1">{{ $a->date->format('d') }}</span>
                                 @endif
                             </div>
                         @empty
-                            <div class="flex-1 flex items-center justify-center text-gray-400 text-sm">Belum ada data</div>
+                            <div class="flex-1 flex items-center justify-center text-gray-400 dark:text-gray-500 text-sm">Belum ada data</div>
                         @endforelse
                     </div>
                 </div>
 
                 {{-- Views Chart --}}
-                <div class="bg-white border border-gray-100 rounded-xl p-6 shadow-sm">
-                    <h3 class="text-lg font-semibold text-gray-900 mb-4">Total Views (Harian)</h3>
+                <div class="bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700 rounded-xl p-6 shadow-sm">
+                    <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">Total Views (Harian)</h3>
                     <div class="h-64 flex items-end gap-1">
                         @forelse($analytics->take(30) as $a)
                             <div class="flex-1 flex flex-col items-center">
@@ -110,19 +110,19 @@
                                      style="height: {{ $a->total_views > 0 ? max(4, ($a->total_views / max($analytics->max('total_views'), 1)) * 220) : 0 }}px"
                                      title="{{ $a->date->format('d M') }}: {{ number_format($a->total_views) }} views"></div>
                                 @if($loop->index % 7 === 0)
-                                    <span class="text-[10px] text-gray-400 mt-1">{{ $a->date->format('d') }}</span>
+                                    <span class="text-[10px] text-gray-400 dark:text-gray-500 mt-1">{{ $a->date->format('d') }}</span>
                                 @endif
                             </div>
                         @empty
-                            <div class="flex-1 flex items-center justify-center text-gray-400 text-sm">Belum ada data</div>
+                            <div class="flex-1 flex items-center justify-center text-gray-400 dark:text-gray-500 text-sm">Belum ada data</div>
                         @endforelse
                     </div>
                 </div>
             </div>
 
             {{-- Top Categories --}}
-            <div class="bg-white border border-gray-100 rounded-xl p-6 shadow-sm">
-                <h3 class="text-lg font-semibold text-gray-900 mb-4">Kategori Terpopuler</h3>
+            <div class="bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700 rounded-xl p-6 shadow-sm">
+                <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">Kategori Terpopuler</h3>
                 @if($topCategories->count() > 0)
                     <div class="space-y-3">
                         @foreach($topCategories as $cat)
@@ -131,17 +131,17 @@
                                 $percentage = ($cat->count / $maxCount) * 100;
                             @endphp
                             <div class="flex items-center gap-4">
-                                <div class="w-24 text-sm text-gray-700 font-medium truncate">{{ $cat->category }}</div>
+                                <div class="w-24 text-sm text-gray-700 dark:text-gray-300 font-medium truncate">{{ $cat->category }}</div>
                                 <div class="flex-1 bg-gray-100 rounded-full h-5 overflow-hidden">
                                     <div class="bg-blue-500 h-full rounded-full transition-all" style="width: {{ $percentage }}%"></div>
                                 </div>
-                                <div class="w-20 text-right text-sm text-gray-500">{{ number_format($cat->count) }} experience</div>
-                                <div class="w-24 text-right text-xs text-gray-400">{{ number_format($cat->total_views) }} views</div>
+                                <div class="w-20 text-right text-sm text-gray-500 dark:text-gray-400">{{ number_format($cat->count) }} experience</div>
+                                <div class="w-24 text-right text-xs text-gray-400 dark:text-gray-500">{{ number_format($cat->total_views) }} views</div>
                             </div>
                         @endforeach
                     </div>
                 @else
-                    <p class="text-gray-500 text-sm">Belum ada data kategori.</p>
+                    <p class="text-gray-500 dark:text-gray-400 text-sm">Belum ada data kategori.</p>
                 @endif
             </div>
         </div>

@@ -1,4 +1,4 @@
-<x-app-layout>
+﻿<x-app-layout>
     <x-slot name="header">
         <div class="flex items-center justify-between">
             <h2 class="font-semibold text-xl text-gray-800 leading-tight">
@@ -16,22 +16,22 @@
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 space-y-6">
             {{-- Stats --}}
             <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-5">
-                    <div class="text-sm text-gray-500 mb-1">Total Challenge</div>
-                    <div class="text-2xl font-bold text-gray-900">{{ $totalChallenges }}</div>
+                <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 p-5">
+                    <div class="text-sm text-gray-500 dark:text-gray-400 mb-1">Total Challenge</div>
+                    <div class="text-2xl font-bold text-gray-900 dark:text-white">{{ $totalChallenges }}</div>
                 </div>
-                <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-5">
-                    <div class="text-sm text-gray-500 mb-1">Sedang Aktif</div>
-                    <div class="text-2xl font-bold text-emerald-600">{{ $activeChallenges }}</div>
+                <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 p-5">
+                    <div class="text-sm text-gray-500 dark:text-gray-400 mb-1">Sedang Aktif</div>
+                    <div class="text-2xl font-bold text-emerald-600 dark:text-emerald-400">{{ $activeChallenges }}</div>
                 </div>
-                <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-5">
-                    <div class="text-sm text-gray-500 mb-1">Total Peserta</div>
-                    <div class="text-2xl font-bold text-blue-600">{{ $totalEntries }}</div>
+                <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 p-5">
+                    <div class="text-sm text-gray-500 dark:text-gray-400 mb-1">Total Peserta</div>
+                    <div class="text-2xl font-bold text-blue-600 dark:text-blue-400">{{ $totalEntries }}</div>
                 </div>
             </div>
 
             {{-- Filters --}}
-            <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-4">
+            <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 p-4">
                 <form method="GET" class="flex flex-wrap gap-3">
                     <select name="status" class="rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm">
                         <option value="">Semua Status</option>
@@ -46,54 +46,54 @@
                         <option value="monthly" {{ request('type') === 'monthly' ? 'selected' : '' }}>Bulanan</option>
                         <option value="annual" {{ request('type') === 'annual' ? 'selected' : '' }}>Tahunan</option>
                     </select>
-                    <button type="submit" class="px-4 py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 text-sm font-medium rounded-lg transition">Filter</button>
+                    <button type="submit" class="px-4 py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 dark:text-gray-300 text-sm font-medium rounded-lg transition">Filter</button>
                 </form>
             </div>
 
             {{-- Table --}}
-            <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+            <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 overflow-hidden">
                 <div class="overflow-x-auto">
                     <table class="min-w-full divide-y divide-gray-200">
                         <thead class="bg-gray-50">
                             <tr>
-                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Judul</th>
-                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Tipe</th>
-                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Tema</th>
-                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Periode</th>
-                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Peserta</th>
-                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Status</th>
-                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Aksi</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">Judul</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">Tipe</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">Tema</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">Periode</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">Peserta</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">Status</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">Aksi</th>
                             </tr>
                         </thead>
                         <tbody class="divide-y divide-gray-200">
                             @forelse ($challenges as $challenge)
-                                <tr class="hover:bg-gray-50">
-                                    <td class="px-6 py-4 text-sm font-medium text-gray-900">{{ $challenge->title }}</td>
+                                <tr class="hover:bg-gray-50 dark:bg-gray-700/50 dark:hover:bg-gray-600/50">
+                                    <td class="px-6 py-4 text-sm font-medium text-gray-900 dark:text-white">{{ $challenge->title }}</td>
                                     <td class="px-6 py-4">
-                                        <span class="px-2 py-1 text-xs font-medium rounded-full bg-slate-100 text-slate-700">{{ $challenge->type_label }}</span>
+                                        <span class="px-2 py-1 text-xs font-medium rounded-full bg-slate-100 dark:bg-slate-700 text-slate-700">{{ $challenge->type_label }}</span>
                                     </td>
-                                    <td class="px-6 py-4 text-sm text-gray-700">{{ $challenge->theme }}</td>
-                                    <td class="px-6 py-4 text-xs text-gray-500">
+                                    <td class="px-6 py-4 text-sm text-gray-700 dark:text-gray-300 dark:text-gray-300">{{ $challenge->theme }}</td>
+                                    <td class="px-6 py-4 text-xs text-gray-500 dark:text-gray-400">
                                         {{ $challenge->start_date->format('d M Y') }} —<br>{{ $challenge->end_date->format('d M Y') }}
                                     </td>
-                                    <td class="px-6 py-4 text-sm font-medium text-gray-900">{{ $challenge->entries_count }}</td>
+                                    <td class="px-6 py-4 text-sm font-medium text-gray-900 dark:text-white">{{ $challenge->entries_count }}</td>
                                     <td class="px-6 py-4">
                                         <span class="px-2 py-1 text-xs font-medium rounded-full {{ $challenge->status_badge_class }}">{{ $challenge->status }}</span>
                                     </td>
                                     <td class="px-6 py-4 text-sm space-x-2">
-                                        <a href="{{ route('admin.challenges.show', $challenge) }}" class="text-blue-600 hover:text-blue-800">Detail</a>
-                                        <a href="{{ route('admin.challenges.edit', $challenge) }}" class="text-amber-600 hover:text-amber-800">Edit</a>
+                                        <a href="{{ route('admin.challenges.show', $challenge) }}" class="text-blue-600 dark:text-blue-400 hover:text-blue-800">Detail</a>
+                                        <a href="{{ route('admin.challenges.edit', $challenge) }}" class="text-amber-600 dark:text-amber-400 hover:text-amber-800">Edit</a>
                                     </td>
                                 </tr>
                             @empty
                                 <tr>
-                                    <td colspan="7" class="px-6 py-12 text-center text-sm text-gray-500">Belum ada challenge.</td>
+                                    <td colspan="7" class="px-6 py-12 text-center text-sm text-gray-500 dark:text-gray-400">Belum ada challenge.</td>
                                 </tr>
                             @endforelse
                         </tbody>
                     </table>
                 </div>
-                <div class="px-6 py-4 border-t border-gray-200">
+                <div class="px-6 py-4 border-t border-gray-200 dark:border-gray-700">
                     {{ $challenges->links() }}
                 </div>
             </div>

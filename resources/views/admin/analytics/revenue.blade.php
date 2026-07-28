@@ -1,4 +1,4 @@
-<x-app-layout>
+﻿<x-app-layout>
     <x-slot name="header">
         <div class="flex items-center justify-between">
             <h2 class="font-semibold text-xl text-gray-800 leading-tight">
@@ -6,12 +6,12 @@
                 Revenue Analytics
             </h2>
             <div class="flex items-center gap-2">
-                <a href="{{ route('admin.analytics.index') }}" class="px-3 py-1.5 text-sm font-medium rounded-lg transition bg-gray-100 text-gray-600 hover:bg-gray-200">
+                <a href="{{ route('admin.analytics.index') }}" class="px-3 py-1.5 text-sm font-medium rounded-lg transition bg-gray-100 text-gray-600 dark:text-gray-400 hover:bg-gray-200">
                     ← Overview
                 </a>
                 @foreach(['7' => '7 Hari', '30' => '30 Hari', '90' => '90 Hari'] as $p => $label)
                     <a href="{{ route('admin.analytics.revenue', ['period' => $p]) }}"
-                        class="px-3 py-1.5 text-sm font-medium rounded-lg transition {{ $period === $p ? 'bg-blue-600 text-white' : 'bg-gray-100 text-gray-600 hover:bg-gray-200' }}">
+                        class="px-3 py-1.5 text-sm font-medium rounded-lg transition {{ $period === $p ? 'bg-blue-600 text-white' : 'bg-gray-100 text-gray-600 dark:text-gray-400 hover:bg-gray-200' }}">
                         {{ $label }}
                     </a>
                 @endforeach
@@ -24,36 +24,36 @@
 
             {{-- Revenue Summary --}}
             <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
-                <div class="bg-white border border-gray-100 rounded-xl p-5 shadow-sm">
-                    <p class="text-sm text-gray-500">Total Revenue ({{ $period }} hari)</p>
-                    <p class="text-2xl font-bold text-green-600 mt-1">Rp {{ number_format($totalRevenue, 0, ',', '.') }}</p>
+                <div class="bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700 rounded-xl p-5 shadow-sm">
+                    <p class="text-sm text-gray-500 dark:text-gray-400">Total Revenue ({{ $period }} hari)</p>
+                    <p class="text-2xl font-bold text-green-600 dark:text-green-400 mt-1">Rp {{ number_format($totalRevenue, 0, ',', '.') }}</p>
                 </div>
-                <div class="bg-white border border-gray-100 rounded-xl p-5 shadow-sm">
-                    <p class="text-sm text-gray-500">Creator Ad Revenue</p>
-                    <p class="text-2xl font-bold text-blue-600 mt-1">Rp {{ number_format($creatorAdRevenue, 0, ',', '.') }}</p>
+                <div class="bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700 rounded-xl p-5 shadow-sm">
+                    <p class="text-sm text-gray-500 dark:text-gray-400">Creator Ad Revenue</p>
+                    <p class="text-2xl font-bold text-blue-600 dark:text-blue-400 mt-1">Rp {{ number_format($creatorAdRevenue, 0, ',', '.') }}</p>
                 </div>
-                <div class="bg-white border border-gray-100 rounded-xl p-5 shadow-sm">
-                    <p class="text-sm text-gray-500">Platform Ad Revenue</p>
-                    <p class="text-2xl font-bold text-purple-600 mt-1">Rp {{ number_format($platformAdRevenue, 0, ',', '.') }}</p>
+                <div class="bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700 rounded-xl p-5 shadow-sm">
+                    <p class="text-sm text-gray-500 dark:text-gray-400">Platform Ad Revenue</p>
+                    <p class="text-2xl font-bold text-purple-600 dark:text-purple-400 mt-1">Rp {{ number_format($platformAdRevenue, 0, ',', '.') }}</p>
                 </div>
             </div>
 
             {{-- Payout Stats --}}
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
-                <div class="bg-white border border-gray-100 rounded-xl p-5 shadow-sm">
-                    <p class="text-sm text-gray-500">Sudah Dibayar ({{ $period }} hari)</p>
-                    <p class="text-2xl font-bold text-green-600 mt-1">Rp {{ number_format($totalPaid, 0, ',', '.') }}</p>
+                <div class="bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700 rounded-xl p-5 shadow-sm">
+                    <p class="text-sm text-gray-500 dark:text-gray-400">Sudah Dibayar ({{ $period }} hari)</p>
+                    <p class="text-2xl font-bold text-green-600 dark:text-green-400 mt-1">Rp {{ number_format($totalPaid, 0, ',', '.') }}</p>
                 </div>
-                <div class="bg-white border border-gray-100 rounded-xl p-5 shadow-sm">
-                    <p class="text-sm text-gray-500">Menunggu Payout</p>
-                    <p class="text-2xl font-bold text-yellow-600 mt-1">Rp {{ number_format($pendingPayouts, 0, ',', '.') }}</p>
+                <div class="bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700 rounded-xl p-5 shadow-sm">
+                    <p class="text-sm text-gray-500 dark:text-gray-400">Menunggu Payout</p>
+                    <p class="text-2xl font-bold text-yellow-600 dark:text-yellow-400 mt-1">Rp {{ number_format($pendingPayouts, 0, ',', '.') }}</p>
                 </div>
             </div>
 
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
                 {{-- Revenue by Tier --}}
-                <div class="bg-white border border-gray-100 rounded-xl p-6 shadow-sm">
-                    <h3 class="text-lg font-semibold text-gray-900 mb-4">Revenue per Tier</h3>
+                <div class="bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700 rounded-xl p-6 shadow-sm">
+                    <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">Revenue per Tier</h3>
                     @if($revenueByTier->count() > 0)
                         <div class="space-y-4">
                             @php
@@ -65,8 +65,8 @@
                                 @php $percentage = $totalRevenue > 0 ? round(($tier->total / $totalRevenue) * 100, 1) : 0; @endphp
                                 <div>
                                     <div class="flex items-center justify-between mb-1">
-                                        <span class="text-sm font-medium text-gray-700">{{ $tierLabels[$tier->revenue_tier] ?? ucfirst($tier->revenue_tier) }}</span>
-                                        <span class="text-sm text-gray-500">{{ number_format($tier->creators) }} creator · Rp {{ number_format($tier->total, 0, ',', '.') }}</span>
+                                        <span class="text-sm font-medium text-gray-700 dark:text-gray-300 dark:text-gray-300">{{ $tierLabels[$tier->revenue_tier] ?? ucfirst($tier->revenue_tier) }}</span>
+                                        <span class="text-sm text-gray-500 dark:text-gray-400">{{ number_format($tier->creators) }} creator · Rp {{ number_format($tier->total, 0, ',', '.') }}</span>
                                     </div>
                                     <div class="w-full bg-gray-100 rounded-full h-3 overflow-hidden">
                                         <div class="{{ $tierColors[$tier->revenue_tier] ?? 'bg-gray-500' }} h-full rounded-full transition-all" style="width: {{ $maxTierRevenue > 0 ? ($tier->total / $maxTierRevenue) * 100 : 0 }}%"></div>
@@ -75,13 +75,13 @@
                             @endforeach
                         </div>
                     @else
-                        <p class="text-gray-500 text-sm">Belum ada data revenue per tier.</p>
+                        <p class="text-gray-500 dark:text-gray-400 text-sm">Belum ada data revenue per tier.</p>
                     @endif
                 </div>
 
                 {{-- Revenue Split --}}
-                <div class="bg-white border border-gray-100 rounded-xl p-6 shadow-sm">
-                    <h3 class="text-lg font-semibold text-gray-900 mb-4">Revenue Split</h3>
+                <div class="bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700 rounded-xl p-6 shadow-sm">
+                    <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">Revenue Split</h3>
                     @if($totalRevenue > 0)
                         @php
                             $creatorPercent = round(($creatorAdRevenue / $totalRevenue) * 100, 1);
@@ -92,8 +92,8 @@
                             <div class="flex items-center gap-4">
                                 <div class="flex-1">
                                     <div class="flex items-center justify-between mb-1">
-                                        <span class="text-sm font-medium text-gray-700">Creator</span>
-                                        <span class="text-sm text-gray-500">{{ $creatorPercent }}%</span>
+                                        <span class="text-sm font-medium text-gray-700 dark:text-gray-300 dark:text-gray-300">Creator</span>
+                                        <span class="text-sm text-gray-500 dark:text-gray-400">{{ $creatorPercent }}%</span>
                                     </div>
                                     <div class="w-full bg-gray-100 rounded-full h-6 overflow-hidden">
                                         <div class="bg-blue-500 h-full rounded-full flex items-center justify-end pr-2" style="width: {{ max($creatorPercent, 5) }}%">
@@ -107,8 +107,8 @@
                             <div class="flex items-center gap-4">
                                 <div class="flex-1">
                                     <div class="flex items-center justify-between mb-1">
-                                        <span class="text-sm font-medium text-gray-700">Platform</span>
-                                        <span class="text-sm text-gray-500">{{ $platformPercent }}%</span>
+                                        <span class="text-sm font-medium text-gray-700 dark:text-gray-300 dark:text-gray-300">Platform</span>
+                                        <span class="text-sm text-gray-500 dark:text-gray-400">{{ $platformPercent }}%</span>
                                     </div>
                                     <div class="w-full bg-gray-100 rounded-full h-6 overflow-hidden">
                                         <div class="bg-purple-500 h-full rounded-full flex items-center justify-end pr-2" style="width: {{ max($platformPercent, 5) }}%">
@@ -121,38 +121,38 @@
                             </div>
                         </div>
                     @else
-                        <p class="text-gray-500 text-sm">Belum ada data revenue.</p>
+                        <p class="text-gray-500 dark:text-gray-400 text-sm">Belum ada data revenue.</p>
                     @endif
                 </div>
             </div>
 
             {{-- Top Earning Simulations --}}
-            <div class="bg-white border border-gray-100 rounded-xl overflow-hidden shadow-sm">
+            <div class="bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700 rounded-xl overflow-hidden shadow-sm">
                 <div class="p-6 border-b border-gray-100">
-                    <h3 class="text-lg font-semibold text-gray-900">Top Experience Berdasarkan Revenue</h3>
+                    <h3 class="text-lg font-semibold text-gray-900 dark:text-white">Top Experience Berdasarkan Revenue</h3>
                 </div>
                 @if($topEarningSimulations->count() > 0)
                     <div class="overflow-x-auto">
                         <table class="w-full text-sm">
                             <thead>
-                                <tr class="border-b border-gray-200 bg-gray-50">
-                                    <th class="text-left py-3 px-4 text-gray-500 font-medium w-10">#</th>
-                                    <th class="text-left py-3 px-4 text-gray-500 font-medium">Judul</th>
-                                    <th class="text-center py-3 px-4 text-gray-500 font-medium">Plays</th>
-                                    <th class="text-right py-3 px-4 text-gray-500 font-medium">Revenue</th>
+                                <tr class="border-b border-gray-200 dark:border-gray-700 bg-gray-50">
+                                    <th class="text-left py-3 px-4 text-gray-500 dark:text-gray-400 font-medium w-10">#</th>
+                                    <th class="text-left py-3 px-4 text-gray-500 dark:text-gray-400 font-medium">Judul</th>
+                                    <th class="text-center py-3 px-4 text-gray-500 dark:text-gray-400 font-medium">Plays</th>
+                                    <th class="text-right py-3 px-4 text-gray-500 dark:text-gray-400 font-medium">Revenue</th>
                                 </tr>
                             </thead>
                             <tbody class="divide-y divide-gray-50">
                                 @foreach($topEarningSimulations as $index => $sim)
-                                    <tr class="hover:bg-gray-50 transition">
-                                        <td class="py-3 px-4 text-gray-500">{{ $index + 1 }}</td>
+                                    <tr class="hover:bg-gray-50 dark:bg-gray-700/50 dark:hover:bg-gray-600/50 transition">
+                                        <td class="py-3 px-4 text-gray-500 dark:text-gray-400">{{ $index + 1 }}</td>
                                         <td class="py-3 px-4">
-                                            <a href="{{ route('simulations.show', $sim->slug) }}" class="font-medium text-gray-900 hover:text-blue-600 transition" target="_blank">
+                                            <a href="{{ route('simulations.show', $sim->slug) }}" class="font-medium text-gray-900 dark:text-white hover:text-blue-600 dark:text-blue-400 transition" target="_blank">
                                                 {{ Str::limit($sim->title, 50) }}
                                             </a>
                                         </td>
-                                        <td class="py-3 px-4 text-center text-gray-500">{{ number_format($sim->play_count) }}</td>
-                                        <td class="py-3 px-4 text-right font-medium text-green-600">
+                                        <td class="py-3 px-4 text-center text-gray-500 dark:text-gray-400">{{ number_format($sim->play_count) }}</td>
+                                        <td class="py-3 px-4 text-right font-medium text-green-600 dark:text-green-400">
                                             Rp {{ number_format($sim->creator_ads_sum_revenue ?? 0, 0, ',', '.') }}
                                         </td>
                                     </tr>
@@ -161,7 +161,7 @@
                         </table>
                     </div>
                 @else
-                    <div class="p-6 text-center text-gray-500 text-sm">Belum ada experience yang menghasilkan revenue.</div>
+                    <div class="p-6 text-center text-gray-500 dark:text-gray-400 text-sm">Belum ada experience yang menghasilkan revenue.</div>
                 @endif
             </div>
         </div>

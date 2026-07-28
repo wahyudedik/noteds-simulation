@@ -1,8 +1,8 @@
-<x-app-layout>
+﻿<x-app-layout>
     <x-slot name="header">
         <div class="flex items-center justify-between">
             <div class="flex items-center gap-3">
-                <a href="{{ route('admin.logs.index') }}" class="text-gray-400 hover:text-gray-600 transition">
+                <a href="{{ route('admin.logs.index') }}" class="text-gray-400 dark:text-gray-500 hover:text-gray-600 dark:text-gray-400 transition">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/></svg>
                 </a>
                 <h2 class="font-semibold text-xl text-gray-800">Error Log #{{ $entryId }}</h2>
@@ -14,7 +14,7 @@
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3"/></svg>
                     Copy untuk AI Debug
                 </button>
-                <a href="{{ route('admin.logs.index') }}" class="text-sm text-gray-500 hover:text-gray-700">&larr; Kembali ke Logs</a>
+                <a href="{{ route('admin.logs.index') }}" class="text-sm text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:text-gray-300 dark:text-gray-300">&larr; Kembali ke Logs</a>
             </div>
         </div>
     </x-slot>
@@ -23,24 +23,24 @@
 
         {{-- Entry Info --}}
         <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 mb-6">
-            <h3 class="font-semibold text-gray-900 mb-4">Detail Error</h3>
+            <h3 class="font-semibold text-gray-900 dark:text-white mb-4">Detail Error</h3>
             <dl class="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
                 <div>
-                    <dt class="text-gray-500">Timestamp</dt>
-                    <dd class="font-mono font-medium text-gray-900">{{ $entry['timestamp'] }}</dd>
+                    <dt class="text-gray-500 dark:text-gray-400">Timestamp</dt>
+                    <dd class="font-mono font-medium text-gray-900 dark:text-white">{{ $entry['timestamp'] }}</dd>
                 </div>
                 <div>
-                    <dt class="text-gray-500">Level</dt>
+                    <dt class="text-gray-500 dark:text-gray-400">Level</dt>
                     <dd>
                         <span class="inline-flex px-2 py-0.5 text-xs font-bold uppercase rounded-full
                             {{ match($entry['level']) {
                                 'emergency' => 'bg-red-900 text-white',
-                                'alert' => 'bg-pink-100 text-pink-700',
+                                'alert' => 'bg-pink-100 dark:bg-pink-900/30 text-pink-700',
                                 'critical' => 'bg-red-800 text-white',
-                                'error' => 'bg-red-100 text-red-700',
-                                'warning' => 'bg-yellow-100 text-yellow-700',
-                                'notice' => 'bg-blue-100 text-blue-700',
-                                'info' => 'bg-green-100 text-green-700',
+                                'error' => 'bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400',
+                                'warning' => 'bg-yellow-100 text-yellow-700 dark:bg-yellow-900/30 dark:text-yellow-400',
+                                'notice' => 'bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400',
+                                'info' => 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400',
                                 'debug' => 'bg-gray-100 text-gray-500',
                                 default => 'bg-gray-100 text-gray-500',
                             } }}">
@@ -49,12 +49,12 @@
                     </dd>
                 </div>
                 <div>
-                    <dt class="text-gray-500">Channel</dt>
-                    <dd class="font-medium text-gray-900">{{ $entry['channel'] }}</dd>
+                    <dt class="text-gray-500 dark:text-gray-400">Channel</dt>
+                    <dd class="font-medium text-gray-900 dark:text-white">{{ $entry['channel'] }}</dd>
                 </div>
                 <div>
-                    <dt class="text-gray-500">Log File</dt>
-                    <dd class="font-mono text-xs text-gray-600">laravel.log</dd>
+                    <dt class="text-gray-500 dark:text-gray-400">Log File</dt>
+                    <dd class="font-mono text-xs text-gray-600 dark:text-gray-400">laravel.log</dd>
                 </div>
             </dl>
         </div>
@@ -62,8 +62,8 @@
         {{-- Error Message --}}
         <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 mb-6">
             <div class="flex items-center justify-between mb-4">
-                <h3 class="font-semibold text-gray-900">Pesan Error</h3>
-                <button onclick="copySection('message')" class="inline-flex items-center gap-1 px-2 py-1 text-xs font-medium text-orange-600 hover:bg-orange-50 rounded-lg transition">
+                <h3 class="font-semibold text-gray-900 dark:text-white">Pesan Error</h3>
+                <button onclick="copySection('message')" class="inline-flex items-center gap-1 px-2 py-1 text-xs font-medium text-orange-600 dark:text-orange-400 hover:bg-orange-50 rounded-lg transition">
                     <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3"/></svg>
                     Copy
                 </button>
@@ -75,13 +75,13 @@
         @if($entry['context'])
             <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 mb-6">
                 <div class="flex items-center justify-between mb-4">
-                    <h3 class="font-semibold text-gray-900">Context</h3>
-                    <button onclick="copySection('context')" class="inline-flex items-center gap-1 px-2 py-1 text-xs font-medium text-orange-600 hover:bg-orange-50 rounded-lg transition">
+                    <h3 class="font-semibold text-gray-900 dark:text-white">Context</h3>
+                    <button onclick="copySection('context')" class="inline-flex items-center gap-1 px-2 py-1 text-xs font-medium text-orange-600 dark:text-orange-400 hover:bg-orange-50 rounded-lg transition">
                         <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3"/></svg>
                         Copy
                     </button>
                 </div>
-                <pre id="context" class="bg-gray-50 border border-gray-200 rounded-xl p-4 font-mono text-sm text-gray-800 whitespace-pre-wrap overflow-x-auto">{{ $entry['context'] }}</pre>
+                <pre id="context" class="bg-gray-50 dark:bg-gray-700/50 border border-gray-200 dark:border-gray-700 rounded-xl p-4 font-mono text-sm text-gray-800 whitespace-pre-wrap overflow-x-auto">{{ $entry['context'] }}</pre>
             </div>
         @endif
 
@@ -89,8 +89,8 @@
         @if($entry['stackTrace'])
             <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 mb-6">
                 <div class="flex items-center justify-between mb-4">
-                    <h3 class="font-semibold text-gray-900">Stack Trace</h3>
-                    <button onclick="copySection('stackTrace')" class="inline-flex items-center gap-1 px-2 py-1 text-xs font-medium text-orange-600 hover:bg-orange-50 rounded-lg transition">
+                    <h3 class="font-semibold text-gray-900 dark:text-white">Stack Trace</h3>
+                    <button onclick="copySection('stackTrace')" class="inline-flex items-center gap-1 px-2 py-1 text-xs font-medium text-orange-600 dark:text-orange-400 hover:bg-orange-50 rounded-lg transition">
                         <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3"/></svg>
                         Copy
                     </button>
@@ -104,8 +104,8 @@
         {{-- Raw Entry --}}
         <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
             <div class="flex items-center justify-between mb-4">
-                <h3 class="font-semibold text-gray-900">Raw Entry (untuk AI)</h3>
-                <button onclick="copyEntry()" class="inline-flex items-center gap-1 px-2 py-1 text-xs font-medium text-orange-600 hover:bg-orange-50 rounded-lg transition">
+                <h3 class="font-semibold text-gray-900 dark:text-white">Raw Entry (untuk AI)</h3>
+                <button onclick="copyEntry()" class="inline-flex items-center gap-1 px-2 py-1 text-xs font-medium text-orange-600 dark:text-orange-400 hover:bg-orange-50 rounded-lg transition">
                     <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3"/></svg>
                     Copy Semua
                 </button>

@@ -1,4 +1,4 @@
-<x-app-layout>
+﻿<x-app-layout>
     <x-slot name="header">
         <div class="flex items-center justify-between">
             <h2 class="font-semibold text-xl text-gray-800 leading-tight">
@@ -8,7 +8,7 @@
             <div class="flex items-center gap-2">
                 @foreach(['7' => '7 Hari', '30' => '30 Hari', '90' => '90 Hari'] as $p => $label)
                     <a href="{{ route('admin.ad-analytics.index', ['period' => $p]) }}"
-                        class="px-3 py-1.5 text-sm font-medium rounded-lg transition {{ $period === $p ? 'bg-blue-600 text-white' : 'bg-gray-100 text-gray-600 hover:bg-gray-200' }}">
+                        class="px-3 py-1.5 text-sm font-medium rounded-lg transition {{ $period === $p ? 'bg-blue-600 text-white' : 'bg-gray-100 text-gray-600 dark:text-gray-400 hover:bg-gray-200' }}">
                         {{ $label }}
                     </a>
                 @endforeach
@@ -22,32 +22,32 @@
             {{-- Summary Cards --}}
             <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
                 {{-- Platform Ads --}}
-                <div class="bg-white border border-gray-100 rounded-xl p-5 shadow-sm">
-                    <p class="text-sm text-gray-500">Platform Impressions</p>
-                    <p class="text-2xl font-bold text-gray-900 mt-1">{{ number_format($platformImpressions) }}</p>
-                    <p class="text-xs text-gray-400 mt-1">CTR: {{ $platformCtr }}%</p>
+                <div class="bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700 rounded-xl p-5 shadow-sm">
+                    <p class="text-sm text-gray-500 dark:text-gray-400">Platform Impressions</p>
+                    <p class="text-2xl font-bold text-gray-900 dark:text-white mt-1">{{ number_format($platformImpressions) }}</p>
+                    <p class="text-xs text-gray-400 dark:text-gray-500 mt-1">CTR: {{ $platformCtr }}%</p>
                 </div>
-                <div class="bg-white border border-gray-100 rounded-xl p-5 shadow-sm">
-                    <p class="text-sm text-gray-500">Platform Clicks</p>
-                    <p class="text-2xl font-bold text-blue-600 mt-1">{{ number_format($platformClicks) }}</p>
-                    <p class="text-xs text-gray-400 mt-1">Revenue: Rp {{ number_format($platformRevenue, 0, ',', '.') }}</p>
+                <div class="bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700 rounded-xl p-5 shadow-sm">
+                    <p class="text-sm text-gray-500 dark:text-gray-400">Platform Clicks</p>
+                    <p class="text-2xl font-bold text-blue-600 dark:text-blue-400 mt-1">{{ number_format($platformClicks) }}</p>
+                    <p class="text-xs text-gray-400 dark:text-gray-500 mt-1">Revenue: Rp {{ number_format($platformRevenue, 0, ',', '.') }}</p>
                 </div>
                 {{-- Creator Ads --}}
-                <div class="bg-white border border-gray-100 rounded-xl p-5 shadow-sm">
-                    <p class="text-sm text-gray-500">Creator Impressions</p>
-                    <p class="text-2xl font-bold text-gray-900 mt-1">{{ number_format($creatorImpressions) }}</p>
-                    <p class="text-xs text-gray-400 mt-1">CTR: {{ $creatorCtr }}%</p>
+                <div class="bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700 rounded-xl p-5 shadow-sm">
+                    <p class="text-sm text-gray-500 dark:text-gray-400">Creator Impressions</p>
+                    <p class="text-2xl font-bold text-gray-900 dark:text-white mt-1">{{ number_format($creatorImpressions) }}</p>
+                    <p class="text-xs text-gray-400 dark:text-gray-500 mt-1">CTR: {{ $creatorCtr }}%</p>
                 </div>
-                <div class="bg-white border border-gray-100 rounded-xl p-5 shadow-sm">
-                    <p class="text-sm text-gray-500">Creator Clicks</p>
-                    <p class="text-2xl font-bold text-violet-600 mt-1">{{ number_format($creatorClicks) }}</p>
-                    <p class="text-xs text-gray-400 mt-1">Revenue: Rp {{ number_format($creatorRevenue, 0, ',', '.') }}</p>
+                <div class="bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700 rounded-xl p-5 shadow-sm">
+                    <p class="text-sm text-gray-500 dark:text-gray-400">Creator Clicks</p>
+                    <p class="text-2xl font-bold text-violet-600 dark:text-violet-400 mt-1">{{ number_format($creatorClicks) }}</p>
+                    <p class="text-xs text-gray-400 dark:text-gray-500 mt-1">Revenue: Rp {{ number_format($creatorRevenue, 0, ',', '.') }}</p>
                 </div>
             </div>
 
             {{-- Impression Trend Chart (CSS-based) --}}
-            <div class="bg-white border border-gray-100 rounded-xl p-6 shadow-sm mb-8">
-                <h3 class="text-lg font-semibold text-gray-900 mb-4">Impression Trend ({{ $period }} Hari)</h3>
+            <div class="bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700 rounded-xl p-6 shadow-sm mb-8">
+                <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">Impression Trend ({{ $period }} Hari)</h3>
                 @if($chartLabels->count() > 0)
                     <div class="flex items-end gap-1 h-48">
                         @foreach($chartLabels as $i => $date)
@@ -62,91 +62,91 @@
                                     <div class="flex-1 bg-violet-400 rounded-t" style="height: {{ max(2, $creatorHeight) }}px"></div>
                                 </div>
                                 @if($loop->index % 7 === 0)
-                                    <span class="text-[10px] text-gray-400">{{ \Carbon\Carbon::parse($date)->format('d') }}</span>
+                                    <span class="text-[10px] text-gray-400 dark:text-gray-500">{{ \Carbon\Carbon::parse($date)->format('d') }}</span>
                                 @endif
                             </div>
                         @endforeach
                     </div>
                     <div class="flex items-center gap-4 mt-3 justify-center">
-                        <div class="flex items-center gap-1"><div class="w-3 h-3 bg-blue-400 rounded"></div><span class="text-xs text-gray-500">Platform Ads</span></div>
-                        <div class="flex items-center gap-1"><div class="w-3 h-3 bg-violet-400 rounded"></div><span class="text-xs text-gray-500">Creator Ads</span></div>
+                        <div class="flex items-center gap-1"><div class="w-3 h-3 bg-blue-400 rounded"></div><span class="text-xs text-gray-500 dark:text-gray-400">Platform Ads</span></div>
+                        <div class="flex items-center gap-1"><div class="w-3 h-3 bg-violet-400 rounded"></div><span class="text-xs text-gray-500 dark:text-gray-400">Creator Ads</span></div>
                     </div>
                 @else
-                    <p class="text-gray-400 text-sm text-center py-8">Belum ada data impression.</p>
+                    <p class="text-gray-400 dark:text-gray-500 text-sm text-center py-8">Belum ada data impression.</p>
                 @endif
             </div>
 
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
                 {{-- Top Platform Ads --}}
-                <div class="bg-white border border-gray-100 rounded-xl p-6 shadow-sm">
-                    <h3 class="text-lg font-semibold text-gray-900 mb-4">Top Platform Ads</h3>
+                <div class="bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700 rounded-xl p-6 shadow-sm">
+                    <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">Top Platform Ads</h3>
                     @if($topPlatformAds->count() > 0)
                         <div class="overflow-x-auto">
                             <table class="w-full text-sm">
                                 <thead>
-                                    <tr class="border-b border-gray-200">
-                                        <th class="text-left py-2 text-gray-500 font-medium">Judul</th>
-                                        <th class="text-center py-2 text-gray-500 font-medium">Imp</th>
-                                        <th class="text-center py-2 text-gray-500 font-medium">Click</th>
-                                        <th class="text-center py-2 text-gray-500 font-medium">CTR</th>
-                                        <th class="text-right py-2 text-gray-500 font-medium">Revenue</th>
+                                    <tr class="border-b border-gray-200 dark:border-gray-700">
+                                        <th class="text-left py-2 text-gray-500 dark:text-gray-400 font-medium">Judul</th>
+                                        <th class="text-center py-2 text-gray-500 dark:text-gray-400 font-medium">Imp</th>
+                                        <th class="text-center py-2 text-gray-500 dark:text-gray-400 font-medium">Click</th>
+                                        <th class="text-center py-2 text-gray-500 dark:text-gray-400 font-medium">CTR</th>
+                                        <th class="text-right py-2 text-gray-500 dark:text-gray-400 font-medium">Revenue</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     @foreach($topPlatformAds as $ad)
-                                    <tr class="border-b border-gray-100 hover:bg-gray-50">
-                                        <td class="py-2 text-gray-900">{{ Str::limit($ad['title'], 25) }}</td>
-                                        <td class="py-2 text-center text-gray-500">{{ number_format($ad['impressions']) }}</td>
-                                        <td class="py-2 text-center text-gray-500">{{ number_format($ad['clicks']) }}</td>
+                                    <tr class="border-b border-gray-100 hover:bg-gray-50 dark:bg-gray-700/50 dark:hover:bg-gray-600/50">
+                                        <td class="py-2 text-gray-900 dark:text-white">{{ Str::limit($ad['title'], 25) }}</td>
+                                        <td class="py-2 text-center text-gray-500 dark:text-gray-400">{{ number_format($ad['impressions']) }}</td>
+                                        <td class="py-2 text-center text-gray-500 dark:text-gray-400">{{ number_format($ad['clicks']) }}</td>
                                         <td class="py-2 text-center">
-                                            <span class="text-xs font-medium {{ $ad['ctr'] >= 2 ? 'text-green-600' : 'text-gray-500' }}">{{ $ad['ctr'] }}%</span>
+                                            <span class="text-xs font-medium {{ $ad['ctr'] >= 2 ? 'text-green-600 dark:text-green-400' : 'text-gray-500' }}">{{ $ad['ctr'] }}%</span>
                                         </td>
-                                        <td class="py-2 text-right text-gray-500">Rp {{ number_format($ad['revenue'], 0, ',', '.') }}</td>
+                                        <td class="py-2 text-right text-gray-500 dark:text-gray-400">Rp {{ number_format($ad['revenue'], 0, ',', '.') }}</td>
                                     </tr>
                                     @endforeach
                                 </tbody>
                             </table>
                         </div>
                     @else
-                        <p class="text-gray-400 text-sm text-center py-4">Belum ada data.</p>
+                        <p class="text-gray-400 dark:text-gray-500 text-sm text-center py-4">Belum ada data.</p>
                     @endif
                 </div>
 
                 {{-- Top Creator Ads --}}
-                <div class="bg-white border border-gray-100 rounded-xl p-6 shadow-sm">
-                    <h3 class="text-lg font-semibold text-gray-900 mb-4">Top Creator Ads</h3>
+                <div class="bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700 rounded-xl p-6 shadow-sm">
+                    <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">Top Creator Ads</h3>
                     @if($topCreatorAds->count() > 0)
                         <div class="overflow-x-auto">
                             <table class="w-full text-sm">
                                 <thead>
-                                    <tr class="border-b border-gray-200">
-                                        <th class="text-left py-2 text-gray-500 font-medium">Judul</th>
-                                        <th class="text-center py-2 text-gray-500 font-medium">Imp</th>
-                                        <th class="text-center py-2 text-gray-500 font-medium">Click</th>
-                                        <th class="text-center py-2 text-gray-500 font-medium">CTR</th>
-                                        <th class="text-right py-2 text-gray-500 font-medium">Revenue</th>
+                                    <tr class="border-b border-gray-200 dark:border-gray-700">
+                                        <th class="text-left py-2 text-gray-500 dark:text-gray-400 font-medium">Judul</th>
+                                        <th class="text-center py-2 text-gray-500 dark:text-gray-400 font-medium">Imp</th>
+                                        <th class="text-center py-2 text-gray-500 dark:text-gray-400 font-medium">Click</th>
+                                        <th class="text-center py-2 text-gray-500 dark:text-gray-400 font-medium">CTR</th>
+                                        <th class="text-right py-2 text-gray-500 dark:text-gray-400 font-medium">Revenue</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     @foreach($topCreatorAds as $ad)
-                                    <tr class="border-b border-gray-100 hover:bg-gray-50">
+                                    <tr class="border-b border-gray-100 hover:bg-gray-50 dark:bg-gray-700/50 dark:hover:bg-gray-600/50">
                                         <td class="py-2">
-                                            <div class="text-gray-900">{{ Str::limit($ad['title'], 25) }}</div>
-                                            <div class="text-xs text-gray-400">{{ $ad['creator'] }}</div>
+                                            <div class="text-gray-900 dark:text-white">{{ Str::limit($ad['title'], 25) }}</div>
+                                            <div class="text-xs text-gray-400 dark:text-gray-500">{{ $ad['creator'] }}</div>
                                         </td>
-                                        <td class="py-2 text-center text-gray-500">{{ number_format($ad['impressions']) }}</td>
-                                        <td class="py-2 text-center text-gray-500">{{ number_format($ad['clicks']) }}</td>
+                                        <td class="py-2 text-center text-gray-500 dark:text-gray-400">{{ number_format($ad['impressions']) }}</td>
+                                        <td class="py-2 text-center text-gray-500 dark:text-gray-400">{{ number_format($ad['clicks']) }}</td>
                                         <td class="py-2 text-center">
-                                            <span class="text-xs font-medium {{ $ad['ctr'] >= 2 ? 'text-green-600' : 'text-gray-500' }}">{{ $ad['ctr'] }}%</span>
+                                            <span class="text-xs font-medium {{ $ad['ctr'] >= 2 ? 'text-green-600 dark:text-green-400' : 'text-gray-500' }}">{{ $ad['ctr'] }}%</span>
                                         </td>
-                                        <td class="py-2 text-right text-gray-500">Rp {{ number_format($ad['revenue'], 0, ',', '.') }}</td>
+                                        <td class="py-2 text-right text-gray-500 dark:text-gray-400">Rp {{ number_format($ad['revenue'], 0, ',', '.') }}</td>
                                     </tr>
                                     @endforeach
                                 </tbody>
                             </table>
                         </div>
                     @else
-                        <p class="text-gray-400 text-sm text-center py-4">Belum ada data.</p>
+                        <p class="text-gray-400 dark:text-gray-500 text-sm text-center py-4">Belum ada data.</p>
                     @endif
                 </div>
             </div>

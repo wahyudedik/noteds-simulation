@@ -1,4 +1,4 @@
-<x-app-layout>
+﻿<x-app-layout>
     <x-slot name="header">
         <div class="flex items-center justify-between">
             <h2 class="font-semibold text-xl text-gray-800 leading-tight">
@@ -6,20 +6,20 @@
                 Error Logs
             </h2>
             <div class="flex items-center gap-3">
-                <a href="{{ route('admin.logs.download') }}" class="inline-flex items-center gap-2 px-3 py-1.5 bg-gray-100 hover:bg-gray-200 text-gray-700 text-sm font-medium rounded-lg transition">
+                <a href="{{ route('admin.logs.download') }}" class="inline-flex items-center gap-2 px-3 py-1.5 bg-gray-100 hover:bg-gray-200 text-gray-700 dark:text-gray-300 text-sm font-medium rounded-lg transition">
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
                     Download
                 </a>
                 @if(auth()->user()->role === 'superadmin')
                     <form action="{{ route('admin.logs.clear') }}" method="POST">
                         @csrf
-                        <button type="button" onclick="confirmSubmit(this.closest('form'), 'Yakin ingin menghapus seluruh log? Tindakan ini tidak dapat dibatalkan.', { title: 'Hapus Semua Log', confirmText: 'Ya, Hapus' })" class="inline-flex items-center gap-2 px-3 py-1.5 bg-red-50 hover:bg-red-100 text-red-700 text-sm font-medium rounded-lg transition">
+                        <button type="button" onclick="confirmSubmit(this.closest('form'), 'Yakin ingin menghapus seluruh log? Tindakan ini tidak dapat dibatalkan.', { title: 'Hapus Semua Log', confirmText: 'Ya, Hapus' })" class="inline-flex items-center gap-2 px-3 py-1.5 bg-red-50 hover:bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400 text-sm font-medium rounded-lg transition">
                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
                             Clear Log
                         </button>
                     </form>
                 @endif
-                <a href="{{ route('admin.dashboard') }}" class="text-sm text-gray-500 hover:text-gray-700">&larr; Kembali</a>
+                <a href="{{ route('admin.dashboard') }}" class="text-sm text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:text-gray-300 dark:text-gray-300">&larr; Kembali</a>
             </div>
         </div>
     </x-slot>
@@ -36,40 +36,40 @@
         {{-- Stats Grid --}}
         <div class="grid grid-cols-3 md:grid-cols-5 lg:grid-cols-9 gap-3 mb-6">
             <div class="bg-white rounded-xl border border-gray-100 p-3 text-center shadow-sm">
-                <div class="text-xl font-bold text-gray-900">{{ $stats['total'] }}</div>
-                <div class="text-xs text-gray-500">Total</div>
+                <div class="text-xl font-bold text-gray-900 dark:text-white">{{ $stats['total'] }}</div>
+                <div class="text-xs text-gray-500 dark:text-gray-400">Total</div>
             </div>
             <div class="bg-white rounded-xl border border-gray-100 p-3 text-center shadow-sm">
-                <div class="text-xl font-bold text-red-600">{{ $stats['error'] }}</div>
-                <div class="text-xs text-gray-500">Error</div>
+                <div class="text-xl font-bold text-red-600 dark:text-red-400">{{ $stats['error'] }}</div>
+                <div class="text-xs text-gray-500 dark:text-gray-400">Error</div>
             </div>
             <div class="bg-white rounded-xl border border-gray-100 p-3 text-center shadow-sm">
                 <div class="text-xl font-bold text-red-800">{{ $stats['critical'] }}</div>
-                <div class="text-xs text-gray-500">Critical</div>
+                <div class="text-xs text-gray-500 dark:text-gray-400">Critical</div>
             </div>
             <div class="bg-white rounded-xl border border-gray-100 p-3 text-center shadow-sm">
                 <div class="text-xl font-bold text-red-900">{{ $stats['emergency'] }}</div>
-                <div class="text-xs text-gray-500">Emergency</div>
+                <div class="text-xs text-gray-500 dark:text-gray-400">Emergency</div>
             </div>
             <div class="bg-white rounded-xl border border-gray-100 p-3 text-center shadow-sm">
-                <div class="text-xl font-bold text-pink-600">{{ $stats['alert'] }}</div>
-                <div class="text-xs text-gray-500">Alert</div>
+                <div class="text-xl font-bold text-pink-600 dark:text-pink-400">{{ $stats['alert'] }}</div>
+                <div class="text-xs text-gray-500 dark:text-gray-400">Alert</div>
             </div>
             <div class="bg-white rounded-xl border border-gray-100 p-3 text-center shadow-sm">
-                <div class="text-xl font-bold text-yellow-600">{{ $stats['warning'] }}</div>
-                <div class="text-xs text-gray-500">Warning</div>
+                <div class="text-xl font-bold text-yellow-600 dark:text-yellow-400">{{ $stats['warning'] }}</div>
+                <div class="text-xs text-gray-500 dark:text-gray-400">Warning</div>
             </div>
             <div class="bg-white rounded-xl border border-gray-100 p-3 text-center shadow-sm">
-                <div class="text-xl font-bold text-blue-600">{{ $stats['notice'] }}</div>
-                <div class="text-xs text-gray-500">Notice</div>
+                <div class="text-xl font-bold text-blue-600 dark:text-blue-400">{{ $stats['notice'] }}</div>
+                <div class="text-xs text-gray-500 dark:text-gray-400">Notice</div>
             </div>
             <div class="bg-white rounded-xl border border-gray-100 p-3 text-center shadow-sm">
-                <div class="text-xl font-bold text-green-600">{{ $stats['info'] }}</div>
-                <div class="text-xs text-gray-500">Info</div>
+                <div class="text-xl font-bold text-green-600 dark:text-green-400">{{ $stats['info'] }}</div>
+                <div class="text-xs text-gray-500 dark:text-gray-400">Info</div>
             </div>
             <div class="bg-white rounded-xl border border-gray-100 p-3 text-center shadow-sm">
-                <div class="text-xl font-bold text-gray-400">{{ $stats['debug'] }}</div>
-                <div class="text-xs text-gray-500">Debug</div>
+                <div class="text-xl font-bold text-gray-400 dark:text-gray-500">{{ $stats['debug'] }}</div>
+                <div class="text-xs text-gray-500 dark:text-gray-400">Debug</div>
             </div>
         </div>
 
@@ -81,18 +81,18 @@
                     $levels = [
                         '' => ['label' => 'Semua', 'class' => 'bg-gray-100 text-gray-700'],
                         'emergency' => ['label' => 'Emergency', 'class' => 'bg-red-900 text-white'],
-                        'alert' => ['label' => 'Alert', 'class' => 'bg-pink-100 text-pink-700'],
+                        'alert' => ['label' => 'Alert', 'class' => 'bg-pink-100 dark:bg-pink-900/30 text-pink-700'],
                         'critical' => ['label' => 'Critical', 'class' => 'bg-red-800 text-white'],
-                        'error' => ['label' => 'Error', 'class' => 'bg-red-100 text-red-700'],
-                        'warning' => ['label' => 'Warning', 'class' => 'bg-yellow-100 text-yellow-700'],
-                        'notice' => ['label' => 'Notice', 'class' => 'bg-blue-100 text-blue-700'],
-                        'info' => ['label' => 'Info', 'class' => 'bg-green-100 text-green-700'],
+                        'error' => ['label' => 'Error', 'class' => 'bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400'],
+                        'warning' => ['label' => 'Warning', 'class' => 'bg-yellow-100 text-yellow-700 dark:bg-yellow-900/30 dark:text-yellow-400'],
+                        'notice' => ['label' => 'Notice', 'class' => 'bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400'],
+                        'info' => ['label' => 'Info', 'class' => 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400'],
                         'debug' => ['label' => 'Debug', 'class' => 'bg-gray-100 text-gray-500'],
                     ];
                 @endphp
                 @foreach($levels as $key => $level)
                     <a href="{{ route('admin.logs.index', array_filter(['level' => $key ?: null, 'search' => $search ?: null])) }}"
-                       class="px-3 py-1.5 text-xs font-medium rounded-full transition {{ $currentLevel === $key ? $level['class'] : 'bg-gray-100 text-gray-500 hover:bg-gray-200' }}">
+                       class="px-3 py-1.5 text-xs font-medium rounded-full transition {{ $currentLevel === $key ? $level['class'] : 'bg-gray-100 text-gray-500 dark:text-gray-400 hover:bg-gray-200' }}">
                         {{ $level['label'] }}
                     </a>
                 @endforeach
@@ -106,7 +106,7 @@
                 <div class="relative">
                     <input type="text" name="search" value="{{ $search }}" placeholder="Cari error message..."
                            class="w-full pl-4 pr-10 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent" />
-                    <button type="submit" class="absolute right-2 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600">
+                    <button type="submit" class="absolute right-2 top-1/2 -translate-y-1/2 text-gray-400 dark:text-gray-500 hover:text-gray-600 dark:text-gray-400">
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
                     </button>
                 </div>
@@ -125,28 +125,28 @@
                 <table class="w-full">
                     <thead>
                         <tr class="border-b border-gray-100">
-                            <th class="text-left px-5 py-3 text-xs font-semibold text-gray-500 uppercase w-16">#</th>
-                            <th class="text-left px-5 py-3 text-xs font-semibold text-gray-500 uppercase w-44">Waktu</th>
-                            <th class="text-left px-5 py-3 text-xs font-semibold text-gray-500 uppercase w-24">Level</th>
-                            <th class="text-left px-5 py-3 text-xs font-semibold text-gray-500 uppercase">Pesan Error</th>
-                            <th class="text-right px-5 py-3 text-xs font-semibold text-gray-500 uppercase w-28">Aksi</th>
+                            <th class="text-left px-5 py-3 text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase w-16">#</th>
+                            <th class="text-left px-5 py-3 text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase w-44">Waktu</th>
+                            <th class="text-left px-5 py-3 text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase w-24">Level</th>
+                            <th class="text-left px-5 py-3 text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase">Pesan Error</th>
+                            <th class="text-right px-5 py-3 text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase w-28">Aksi</th>
                         </tr>
                     </thead>
                     <tbody>
                         @foreach($entries as $entry)
-                            <tr class="border-b border-50 hover:bg-gray-50 transition" x-data="{ copied: false }">
-                                <td class="px-5 py-3 text-xs text-gray-400 font-mono">{{ $entry['id'] }}</td>
-                                <td class="px-5 py-3 text-sm text-gray-600 font-mono whitespace-nowrap">{{ $entry['timestamp'] }}</td>
+                            <tr class="border-b border-50 hover:bg-gray-50 dark:bg-gray-700/50 dark:hover:bg-gray-600/50 transition" x-data="{ copied: false }">
+                                <td class="px-5 py-3 text-xs text-gray-400 dark:text-gray-500 font-mono">{{ $entry['id'] }}</td>
+                                <td class="px-5 py-3 text-sm text-gray-600 dark:text-gray-400 font-mono whitespace-nowrap">{{ $entry['timestamp'] }}</td>
                                 <td class="px-5 py-3">
                                     <span class="inline-flex px-2 py-0.5 text-xs font-bold uppercase rounded-full
                                         {{ match($entry['level']) {
                                             'emergency' => 'bg-red-900 text-white',
-                                            'alert' => 'bg-pink-100 text-pink-700',
+                                            'alert' => 'bg-pink-100 dark:bg-pink-900/30 text-pink-700',
                                             'critical' => 'bg-red-800 text-white',
-                                            'error' => 'bg-red-100 text-red-700',
-                                            'warning' => 'bg-yellow-100 text-yellow-700',
-                                            'notice' => 'bg-blue-100 text-blue-700',
-                                            'info' => 'bg-green-100 text-green-700',
+                                            'error' => 'bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400',
+                                            'warning' => 'bg-yellow-100 text-yellow-700 dark:bg-yellow-900/30 dark:text-yellow-400',
+                                            'notice' => 'bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400',
+                                            'info' => 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400',
                                             'debug' => 'bg-gray-100 text-gray-500',
                                             default => 'bg-gray-100 text-gray-500',
                                         } }}">
@@ -154,7 +154,7 @@
                                     </span>
                                 </td>
                                 <td class="px-5 py-3">
-                                    <a href="{{ route('admin.logs.show', $entry['id']) }}" class="text-sm text-gray-900 hover:text-orange-600 transition line-clamp-2 font-mono">
+                                    <a href="{{ route('admin.logs.show', $entry['id']) }}" class="text-sm text-gray-900 dark:text-white hover:text-orange-600 dark:text-orange-400 transition line-clamp-2 font-mono">
                                         {{ Str::limit($entry['message'], 120) }}
                                     </a>
                                 </td>
@@ -162,13 +162,13 @@
                                     <div class="flex items-center justify-end gap-2">
                                         <button
                                             onclick="copySingleEntry({{ Js::from($entry) }})"
-                                            class="inline-flex items-center gap-1 px-2 py-1 text-xs font-medium text-orange-600 hover:bg-orange-50 rounded-lg transition"
+                                            class="inline-flex items-center gap-1 px-2 py-1 text-xs font-medium text-orange-600 dark:text-orange-400 hover:bg-orange-50 rounded-lg transition"
                                             title="Copy error ini ke clipboard">
                                             <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3"/></svg>
                                             Copy
                                         </button>
                                         <a href="{{ route('admin.logs.show', $entry['id']) }}"
-                                           class="inline-flex items-center gap-1 px-2 py-1 text-xs font-medium text-gray-500 hover:bg-gray-100 rounded-lg transition"
+                                           class="inline-flex items-center gap-1 px-2 py-1 text-xs font-medium text-gray-500 dark:text-gray-400 hover:bg-gray-100 rounded-lg transition"
                                            title="Lihat detail">
                                             <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>
                                             Detail
@@ -182,10 +182,10 @@
             @else
                 <div class="text-center py-16">
                     <svg class="w-16 h-16 mx-auto text-gray-300 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-                    <p class="text-gray-500 text-lg font-medium">Tidak ada error log ditemukan</p>
-                    <p class="text-gray-400 text-sm mt-1">
+                    <p class="text-gray-500 dark:text-gray-400 text-lg font-medium">Tidak ada error log ditemukan</p>
+                    <p class="text-gray-400 dark:text-gray-500 text-sm mt-1">
                         @if($currentLevel || $search)
-                            <a href="{{ route('admin.logs.index') }}" class="text-orange-600 hover:underline">Hapus filter</a> untuk melihat semua log.
+                            <a href="{{ route('admin.logs.index') }}" class="text-orange-600 dark:text-orange-400 hover:underline">Hapus filter</a> untuk melihat semua log.
                         @else
                             Aplikasi berjalan tanpa error saat ini.
                         @endif
@@ -195,7 +195,7 @@
         </div>
 
         {{-- Info --}}
-        <div class="mt-4 text-xs text-gray-400 text-center">
+        <div class="mt-4 text-xs text-gray-400 dark:text-gray-500 text-center">
             Menampilkan {{ count($entries) }} entry terbaru. File: <code class="bg-gray-100 px-1.5 py-0.5 rounded">storage/logs/laravel.log</code>
         </div>
     </div>
