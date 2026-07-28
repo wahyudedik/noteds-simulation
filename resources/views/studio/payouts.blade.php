@@ -31,6 +31,44 @@
             </div>
         </div>
 
+        {{-- Earnings Breakdown --}}
+        <div class="bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700 rounded-xl p-6 shadow-sm">
+            <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">Rincian Pendapatan</h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                {{-- Ad Revenue --}}
+                <div class="p-4 bg-gray-50 dark:bg-gray-700/50 rounded-lg">
+                    <div class="flex items-center gap-2 mb-2">
+                        <svg class="w-5 h-5 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 15l-2 5L9 9l11 4-5 2zm0 0l5 5M7.188 2.239l.777 2.897M5.136 7.965l-2.898-.777M13.95 4.05l-2.122 2.122m-5.657 5.656l-2.12 2.122" /></svg>
+                        <span class="text-sm font-medium text-gray-700 dark:text-gray-300">Pendapatan Iklan</span>
+                    </div>
+                    <p class="text-xl font-bold text-gray-900 dark:text-white">Rp {{ number_format($earnings['ad_revenue'], 0, ',', '.') }}</p>
+                </div>
+
+                {{-- Marketplace Revenue --}}
+                <div class="p-4 bg-gray-50 dark:bg-gray-700/50 rounded-lg">
+                    <div class="flex items-center gap-2 mb-2">
+                        <svg class="w-5 h-5 text-emerald-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 100 4 2 2 0 000-4z" /></svg>
+                        <span class="text-sm font-medium text-gray-700 dark:text-gray-300">Pendapatan Marketplace</span>
+                    </div>
+                    <p class="text-xl font-bold text-emerald-600 dark:text-emerald-400">Rp {{ number_format($earnings['marketplace_earnings'], 0, ',', '.') }}</p>
+                    @if($earnings['marketplace_gross_sales'] > 0)
+                        <div class="mt-2 text-xs text-gray-500 dark:text-gray-400 space-y-0.5">
+                            <p>Penjualan kotor: Rp {{ number_format($earnings['marketplace_gross_sales'], 0, ',', '.') }}</p>
+                            <p>Platform fee ({{ config('midtrans.platform_fee_percentage', 20) }}%): -Rp {{ number_format($earnings['marketplace_platform_fee'], 0, ',', '.') }}</p>
+                        </div>
+                    @endif
+                </div>
+            </div>
+
+            {{-- Total Summary --}}
+            <div class="mt-4 p-4 bg-emerald-50 dark:bg-emerald-900/20 rounded-lg border border-emerald-200 dark:border-emerald-800">
+                <div class="flex items-center justify-between">
+                    <span class="text-sm font-medium text-emerald-700 dark:text-emerald-300">Total Pendapatan Bersih</span>
+                    <span class="text-xl font-bold text-emerald-700 dark:text-emerald-300">Rp {{ number_format($earnings['total_net'], 0, ',', '.') }}</span>
+                </div>
+            </div>
+        </div>
+
         {{-- Request Payout --}}
         @if($availableBalance >= $minPayout)
             <div class="bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700 rounded-xl p-6 shadow-sm">

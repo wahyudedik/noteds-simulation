@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\CreatorApplication;
 use App\Models\User;
 
 it('shows the creator program landing page to guests', function () {
@@ -21,14 +22,21 @@ it('shows the creator program landing page to authenticated users', function () 
     $response->assertSee('Noteds Creator');
 });
 
-it('allows authenticated user to become a creator via POST', function () {
+it('creates a pending creator application via POST', function () {
     $user = User::factory()->create(['role' => 'user']);
 
-    $response = $this->actingAs($user)->post(route('become-creator'));
+    $response = $this->actingAs($user)->post(route('become-creator'), [
+        'reason' => 'Saya ingin menjadi kreator dan berbagi simulasi edukasi kepada komunitas.',
+    ]);
 
     $response->assertRedirect();
+    $this->assertDatabaseHas(CreatorApplication::class, [
+        'user_id' => $user->id,
+        'status' => 'pending',
+    ]);
+    // Role should NOT change until admin approves
     $user->refresh();
-    expect($user->role)->toBe('creator');
+    expect($user->role)->toBe('user');
 });
 
 it('does not redirect already-creators', function () {

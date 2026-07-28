@@ -28,6 +28,7 @@ class PayoutController extends Controller
         $availableBalance = $this->payoutService->getAvailableBalance($user);
         $totalPaid = $this->payoutService->getTotalPaid($user);
         $minPayout = $this->payoutService->getMinPayout();
+        $earnings = $this->payoutService->getEarningsBreakdown($user);
 
         $payouts = Payout::where('user_id', $user->id)
             ->latest()
@@ -35,7 +36,7 @@ class PayoutController extends Controller
 
         $paymentSettings = CreatorPaymentSetting::where('user_id', $user->id)->first();
 
-        return view('studio.payouts', compact('availableBalance', 'totalPaid', 'minPayout', 'payouts', 'paymentSettings'));
+        return view('studio.payouts', compact('availableBalance', 'totalPaid', 'minPayout', 'payouts', 'paymentSettings', 'earnings'));
     }
 
     /**

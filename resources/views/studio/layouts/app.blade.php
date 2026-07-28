@@ -15,7 +15,7 @@
         <!-- Scripts -->
         @vite(['resources/css/app.css', 'resources/js/app.js'])
     </head>
-    <body class="font-sans antialiased bg-gray-50 dark:bg-gray-900">
+    <body class="font-sans antialiased bg-gray-50 dark:bg-gray-900" x-data="{ mobileSidebar: false }">
         <div class="min-h-screen flex">
 
             {{-- Sidebar --}}
@@ -74,7 +74,7 @@
             <div class="lg:hidden fixed top-0 inset-x-0 z-50 bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700">
                 <div class="flex items-center justify-between h-14 px-4">
                     <div class="flex items-center gap-3">
-                        <button @click="mobileSidebar = !mobileSidebar" class="p-1.5 text-gray-600 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-700 rounded-lg">
+                        <button @click="mobileSidebar = !mobileSidebar" class="p-1.5 text-gray-600 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-700 rounded-lg" aria-label="Toggle menu">
                             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
                             </svg>
@@ -88,8 +88,48 @@
                 </div>
             </div>
 
+            {{-- Mobile Sidebar Overlay --}}
+            <div x-show="mobileSidebar" x-transition:enter="transition-opacity duration-200" x-transition:leave="transition-opacity duration-200"
+                 @click="mobileSidebar = false"
+                 class="lg:hidden fixed inset-0 z-50 bg-black/50" x-cloak></div>
+
+            {{-- Mobile Sidebar Drawer --}}
+            <aside x-show="mobileSidebar" x-transition:enter="transition-transform duration-200" x-transition:enter-start="-translate-x-full" x-transition:enter-end="translate-x-0"
+                   x-transition:leave="transition-transform duration-200" x-transition:leave-start="translate-x-0" x-transition:leave-end="-translate-x-full"
+                   class="lg:hidden fixed inset-y-0 left-0 z-50 w-64 bg-white dark:bg-gray-800 border-r border-gray-200 dark:border-gray-700 shadow-xl overflow-y-auto" x-cloak>
+                <div class="flex items-center gap-2 px-6 h-14 border-b border-gray-100 dark:border-gray-700 shrink-0">
+                    <a href="{{ route('home') }}" class="flex items-center gap-2">
+                        <img src="{{ asset('logo.jpeg') }}" alt="NotEDs" class="w-7 h-7 rounded-lg object-cover" />
+                        <span class="font-bold text-gray-900 dark:text-white">Noteds</span>
+                    </a>
+                    <span class="px-2 py-0.5 text-xs font-semibold bg-blue-100 text-blue-700 dark:bg-blue-900/50 dark:text-blue-400 rounded-full">Studio</span>
+                </div>
+                <nav class="px-3 py-4 space-y-1">
+                    @foreach ($navItems as $item)
+                        @php
+                            $isActive = request()->routeIs($item['route']) || request()->routeIs($item['route'] . '.*');
+                        @endphp
+                        <a href="{{ route($item['route']) }}" @click="mobileSidebar = false"
+                           class="flex items-center gap-3 px-3 py-2.5 text-sm font-medium rounded-lg transition {{ $isActive ? 'bg-blue-50 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400' : 'text-gray-700 hover:bg-gray-50 hover:text-gray-900 dark:text-gray-300 dark:hover:bg-gray-700 dark:hover:text-white' }}">
+                            <svg class="w-5 h-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                {!! $item['icon'] !!}
+                            </svg>
+                            {{ $item['label'] }}
+                        </a>
+                    @endforeach
+                </nav>
+                <div class="px-3 py-4 border-t border-gray-100 dark:border-gray-700">
+                    <a href="{{ route('home') }}" class="flex items-center gap-3 px-3 py-2.5 text-sm font-medium text-gray-500 hover:text-gray-700 hover:bg-gray-50 dark:text-gray-400 dark:hover:text-white dark:hover:bg-gray-700 rounded-lg transition">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+                        </svg>
+                        Kembali ke Situs
+                    </a>
+                </div>
+            </aside>
+
             {{-- Main Content --}}
-            <div class="flex-1 lg:ml-64">
+            <div class="flex-1 lg:ml-64 pt-14 lg:pt-0">
                 {{-- Desktop Header --}}
                 <header class="hidden lg:block bg-white dark:bg-gray-800 border-b border-gray-100 dark:border-gray-700 sticky top-0 z-30">
                     <div class="flex items-center justify-between h-16 px-8">
@@ -116,7 +156,7 @@
                 </header>
 
                 {{-- Page Content --}}
-                <main class="p-8">
+                <main class="p-4 sm:p-6 lg:p-8">
                     {{ $slot }}
                 </main>
             </div>

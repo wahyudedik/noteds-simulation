@@ -8,6 +8,7 @@ use App\Models\Comment;
 use App\Models\CreatorAd;
 use App\Models\CreatorReputation;
 use App\Models\Follow;
+use App\Models\MarketplaceListing;
 use App\Models\Notification;
 use App\Models\Rating;
 use App\Models\Reaction;
@@ -892,6 +893,116 @@ class StudioController extends Controller
         $dailyRevenue = $revenueService->getDailyRevenue($user, 30);
 
         return view('studio.revenue-detail', compact('breakdown', 'dailyRevenue'));
+    }
+
+    // ========== Marketplace Listing ==========
+
+    /**
+     * Show marketplace listing settings for a simulation.
+     */
+    public function marketplaceSettings(string $slug): View
+    {
+        /** @var User $user */
+        $user = Auth::user();
+        $simulation = Simulation::where('slug', $slug)
+            ->where('user_id', $user->id)
+            ->firstOrFail();
+
+        $listing = MarketplaceListing::where('simulation_id', $simulation->id)
+            ->where('user_id', $user->id)
+            ->first();
+
+        return view('studio.marketplace-settings', compact('simulation', 'listing'));
+    }
+
+    /**
+     * Create or update a marketplace listing for a simulation.
+     */
+    public function storeMarketplaceListing(Request $request, string $slug): RedirectResponse
+    {
+        /** @var User $user */
+        $user = Auth::user();
+        $simulation = Simulation::where('slug', $slug)
+            ->where('user_id', $user->id)
+            ->firstOrFail();
+
+        $validated = $request->validate([
+            'price' => 'required|numeric|min:1000|max:100000000',
+            'currency' => 'required|in:IDR,USD',
+            'license_type' => 'required|in:single,institutional,subscription',
+            'demo_available' => 'boolean',
+            'demo_limit_minutes' => 'nullable|integer|min:0|max:60',
+            'is_active' => 'boolean',
+        ]);
+
+        $validated['simulation_id'] = $simulation->id;
+        $validated['user_id'] = $user->id;
+        $validated['total_sales'] = 0;
+        $validated['total_revenue'] = 0;
+        $validated['demo_available'] = $validated['demo_available'] ?? false;
+        $validated['demo_limit_minutes'] = $validated['demo_limit_minutes'] ?? 0;
+        $validated['is_active'] = $validated['is_active'] ?? true;
+
+        MarketplaceListing::updateOrCreate(
+            ['simulation_id' => $simulation->id, 'user_id' => $user->id],
+            $validated
+        );
+
+        return redirect()->route('studio.simulations.marketplace', $slug)
+            ->with('success', 'Pengaturan marketplace berhasil disimpan.');
+    }
+
+    /**
+     * Update an existing marketplace listing.
+     */
+    public function updateMarketplaceListing(Request $request, string $slug): RedirectResponse
+    {
+        /** @var User $user */
+        $user = Auth::user();
+        $simulation = Simulation::where('slug', $slug)
+            ->where('user_id', $user->id)
+            ->firstOrFail();
+
+        $listing = MarketplaceListing::where('simulation_id', $simulation->id)
+            ->where('user_id', $user->id)
+            ->firstOrFail();
+
+        $validated = $request->validate([
+            'price' => 'required|numeric|min:1000|max:100000000',
+            'currency' => 'required|in:IDR,USD',
+            'license_type' => 'required|in:single,institutional,subscription',
+            'demo_available' => 'boolean',
+            'demo_limit_minutes' => 'nullable|integer|min:0|max:60',
+            'is_active' => 'boolean',
+        ]);
+
+        $validated['demo_available'] = $validated['demo_available'] ?? false;
+        $validated['demo_limit_minutes'] = $validated['demo_limit_minutes'] ?? 0;
+        $validated['is_active'] = $validated['is_active'] ?? true;
+
+        $listing->update($validated);
+
+        return redirect()->route('studio.simulations.marketplace', $slug)
+            ->with('success', 'Pengaturan marketplace berhasil diperbarui.');
+    }
+
+    /**
+     * Remove a simulation from the marketplace.
+     */
+    public function removeFromMarketplace(string $slug): RedirectResponse
+    {
+        /** @var User $user */
+        $user = Auth::user();
+        $simulation = Simulation::where('slug', $slug)
+            ->where('user_id', $user->id)
+            ->firstOrFail();
+
+        MarketplaceListing::where('simulation_id', $simulation->id)
+            ->where('user_id', $user->id)
+            ->delete();
+
+        return redirect()->route('studio.simulations.marketplace', $slug)
+            ->with('success', 'Simulasi berhasil dihapus dari marketplace.');
     }
 
     // ========== Helper Methods ==========

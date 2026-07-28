@@ -145,6 +145,165 @@
                             <p class="text-sm text-gray-500 dark:text-gray-400 text-center py-4">Belum ada ulasan.</p>
                         @endif
                     </div>
+
+                    {{-- Marketplace Reviews --}}
+                    <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 p-6" x-data="marketplaceReview()">
+                        <div class="flex items-center justify-between mb-4">
+                            <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100">Review Pembeli</h3>
+                            <span class="text-sm text-gray-500 dark:text-gray-400">{{ $reviews->count() }} review</span>
+                        </div>
+
+                        {{-- Review Form (for purchasers who haven't reviewed) --}}
+                        @auth
+                            @if($hasPurchased && !$userReview)
+                                <div class="mb-6 p-4 bg-gray-50 dark:bg-gray-700/50 rounded-lg border border-gray-200 dark:border-gray-600">
+                                    <h4 class="text-sm font-medium text-gray-900 dark:text-gray-100 mb-3">Tulis Review Anda</h4>
+                                    <form @submit.prevent="submitReview">
+                                        {{-- Star Rating Input --}}
+                                        <div class="flex items-center gap-1 mb-3">
+                                            @for($i = 1; $i <= 5; $i++)
+                                                <button
+                                                    type="button"
+                                                    @click="form.rating = {{ $i }}"
+                                                    class="focus:outline-none transition-colors"
+                                                >
+                                                    <svg
+                                                        class="w-7 h-7 transition-colors"
+                                                        :class="form.rating >= {{ $i }} ? 'text-amber-400' : 'text-gray-300 dark:text-gray-600 hover:text-amber-300'"
+                                                        fill="currentColor"
+                                                        viewBox="0 0 20 20"
+                                                    ><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" /></svg>
+                                                </button>
+                                            @endfor
+                                            <span class="ml-2 text-sm text-gray-500 dark:text-gray-400" x-text="form.rating > 0 ? form.rating + '/5' : 'Pilih rating'"></span>
+                                        </div>
+                                        <textarea
+                                            x-model="form.review_text"
+                                            rows="3"
+                                            maxlength="1000"
+                                            placeholder="Ceritakan pengalaman Anda dengan simulasi ini... (opsional)"
+                                            class="w-full rounded-lg border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100 text-sm shadow-sm focus:border-emerald-500 focus:ring-emerald-500"
+                                        ></textarea>
+                                        <div class="flex items-center justify-between mt-3">
+                                            <span class="text-xs text-gray-400" x-text="form.review_text.length + '/1000'"></span>
+                                            <button
+                                                type="submit"
+                                                :disabled="form.rating === 0 || submitting"
+                                                class="inline-flex items-center gap-2 px-4 py-2 bg-emerald-600 hover:bg-emerald-700 disabled:bg-gray-400 disabled:cursor-not-allowed text-white rounded-lg text-sm font-medium transition-colors"
+                                            >
+                                                <svg x-show="submitting" class="animate-spin w-4 h-4" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path></svg>
+                                                Kirim Review
+                                            </button>
+                                        </div>
+                                    </form>
+                                </div>
+                            @endif
+
+                            {{-- Edit existing review (Alpine.js controlled) --}}
+                            @if($userReview)
+                                <div x-show="editingReviewId === {{ $userReview->id }}" x-transition class="mb-6 p-4 bg-gray-50 dark:bg-gray-700/50 rounded-lg border border-gray-200 dark:border-gray-600">
+                                    <h4 class="text-sm font-medium text-gray-900 dark:text-gray-100 mb-3">Edit Review</h4>
+                                    <form @submit.prevent="updateReview({{ $userReview->id }})">
+                                        <div class="flex items-center gap-1 mb-3">
+                                            @for($i = 1; $i <= 5; $i++)
+                                                <button
+                                                    type="button"
+                                                    @click="editForm.rating = {{ $i }}"
+                                                    class="focus:outline-none transition-colors"
+                                                >
+                                                    <svg
+                                                        class="w-7 h-7 transition-colors"
+                                                        :class="editForm.rating >= {{ $i }} ? 'text-amber-400' : 'text-gray-300 dark:text-gray-600 hover:text-amber-300'"
+                                                        fill="currentColor"
+                                                        viewBox="0 0 20 20"
+                                                    ><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" /></svg>
+                                                </button>
+                                            @endfor
+                                        </div>
+                                        <textarea
+                                            x-model="editForm.review_text"
+                                            rows="3"
+                                            maxlength="1000"
+                                            class="w-full rounded-lg border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100 text-sm shadow-sm focus:border-emerald-500 focus:ring-emerald-500"
+                                        ></textarea>
+                                        <div class="flex items-center gap-2 mt-3">
+                                            <button
+                                                type="submit"
+                                                :disabled="submitting"
+                                                class="inline-flex items-center gap-2 px-4 py-2 bg-emerald-600 hover:bg-emerald-700 disabled:bg-gray-400 text-white rounded-lg text-sm font-medium transition-colors"
+                                            >
+                                                Simpan
+                                            </button>
+                                            <button
+                                                type="button"
+                                                @click="editingReviewId = null"
+                                                class="px-4 py-2 text-sm text-gray-600 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-200 transition-colors"
+                                            >
+                                                Batal
+                                            </button>
+                                        </div>
+                                    </form>
+                                </div>
+                            @endif
+                        @endauth
+
+                        {{-- Review List --}}
+                        @if($reviews->count() > 0)
+                            <div class="space-y-4">
+                                @foreach($reviews as $review)
+                                    <div class="flex gap-3 pb-4 {{ !$loop->last ? 'border-b border-gray-100 dark:border-gray-700' : '' }}">
+                                        <div class="w-9 h-9 rounded-full bg-gradient-to-br from-emerald-400 to-teal-500 flex items-center justify-center text-white text-xs font-bold flex-shrink-0">
+                                            {{ strtoupper(substr($review->user->name, 0, 1)) }}
+                                        </div>
+                                        <div class="flex-1 min-w-0">
+                                            <div class="flex items-center gap-2 flex-wrap">
+                                                <span class="text-sm font-medium text-gray-900 dark:text-gray-100">{{ $review->user->name }}</span>
+                                                <div class="flex items-center gap-0.5">
+                                                    @for($i = 1; $i <= 5; $i++)
+                                                        <svg class="w-3.5 h-3.5 {{ $i <= $review->rating ? 'text-amber-400' : 'text-gray-300 dark:text-gray-600' }}" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" /></svg>
+                                                    @endfor
+                                                </div>
+                                                <span class="text-xs text-gray-400 dark:text-gray-500">{{ $review->time_ago }}</span>
+                                            </div>
+                                            @if($review->review_text)
+                                                <p class="mt-1.5 text-sm text-gray-600 dark:text-gray-400">{{ $review->review_text }}</p>
+                                            @endif
+                                            {{-- Author actions --}}
+                                            @auth
+                                                @if(auth()->id() === $review->user_id)
+                                                    <div class="flex items-center gap-3 mt-2">
+                                                        <button
+                                                            @click="startEdit({{ $review->id }}, {{ $review->rating }}, '{{ addslashes($review->review_text ?? '') }}')"
+                                                            class="text-xs text-emerald-600 dark:text-emerald-400 hover:text-emerald-700 dark:hover:text-emerald-300 font-medium transition-colors"
+                                                        >
+                                                            Edit
+                                                        </button>
+                                                        <button
+                                                            @click="deleteReview({{ $review->id }})"
+                                                            class="text-xs text-red-500 hover:text-red-600 font-medium transition-colors"
+                                                        >
+                                                            Hapus
+                                                        </button>
+                                                    </div>
+                                                @endif
+                                            @endauth
+                                        </div>
+                                    </div>
+                                @endforeach
+                            </div>
+                        @else
+                            <p class="text-sm text-gray-500 dark:text-gray-400 text-center py-6">
+                                Belum ada review dari pembeli.
+                            </p>
+                        @endif
+
+                        {{-- Flash Messages --}}
+                        <div x-show="message" x-transition class="mt-4 p-3 rounded-lg text-sm"
+                            :class="messageType === 'success' ? 'bg-emerald-50 dark:bg-emerald-900/20 text-emerald-700 dark:text-emerald-400' : 'bg-red-50 dark:bg-red-900/20 text-red-700 dark:text-red-400'"
+                        >
+                            <span x-text="message"></span>
+                        </div>
+                    </div>
                 </div>
 
                 {{-- Sidebar --}}
@@ -175,7 +334,7 @@
                                 </a>
                             </div>
                         @else
-                            <form action="#" method="POST" x-data>
+                            <form action="{{ route('marketplace.checkout', $listing->id) }}" method="POST" x-data>
                                 @csrf
                                 <button
                                     type="submit"
@@ -253,4 +412,130 @@
             @endif
         </div>
     </div>
+
+    @push('scripts')
+    <script>
+        function marketplaceReview() {
+            return {
+                form: { rating: 0, review_text: '' },
+                editForm: { rating: 0, review_text: '' },
+                editingReviewId: null,
+                submitting: false,
+                message: '',
+                messageType: 'success',
+
+                startEdit(id, rating, text) {
+                    this.editingReviewId = id;
+                    this.editForm = { rating: rating, review_text: text || '' };
+                },
+
+                async submitReview() {
+                    if (this.form.rating === 0) return;
+                    this.submitting = true;
+                    this.message = '';
+
+                    try {
+                        const response = await fetch('{{ route("marketplace.reviews.store") }}', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+                                'Accept': 'application/json',
+                            },
+                            body: JSON.stringify({
+                                listing_id: {{ $listing->id }},
+                                rating: this.form.rating,
+                                review_text: this.form.review_text,
+                            }),
+                        });
+
+                        const data = await response.json();
+
+                        if (response.ok) {
+                            this.message = data.message;
+                            this.messageType = 'success';
+                            setTimeout(() => window.location.reload(), 1000);
+                        } else {
+                            this.message = data.message || 'Terjadi kesalahan.';
+                            this.messageType = 'error';
+                        }
+                    } catch (e) {
+                        this.message = 'Terjadi kesalahan jaringan.';
+                        this.messageType = 'error';
+                    } finally {
+                        this.submitting = false;
+                    }
+                },
+
+                async updateReview(id) {
+                    this.submitting = true;
+                    this.message = '';
+
+                    try {
+                        const response = await fetch(`/marketplace/reviews/${id}`, {
+                            method: 'PUT',
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+                                'Accept': 'application/json',
+                            },
+                            body: JSON.stringify({
+                                rating: this.editForm.rating,
+                                review_text: this.editForm.review_text,
+                            }),
+                        });
+
+                        const data = await response.json();
+
+                        if (response.ok) {
+                            this.message = data.message;
+                            this.messageType = 'success';
+                            setTimeout(() => window.location.reload(), 1000);
+                        } else {
+                            this.message = data.message || 'Terjadi kesalahan.';
+                            this.messageType = 'error';
+                        }
+                    } catch (e) {
+                        this.message = 'Terjadi kesalahan jaringan.';
+                        this.messageType = 'error';
+                    } finally {
+                        this.submitting = false;
+                    }
+                },
+
+                async deleteReview(id) {
+                    if (!confirm('Yakin ingin menghapus review ini?')) return;
+                    this.submitting = true;
+                    this.message = '';
+
+                    try {
+                        const response = await fetch(`/marketplace/reviews/${id}`, {
+                            method: 'DELETE',
+                            headers: {
+                                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+                                'Accept': 'application/json',
+                            },
+                        });
+
+                        const data = await response.json();
+
+                        if (response.ok) {
+                            this.message = data.message;
+                            this.messageType = 'success';
+                            setTimeout(() => window.location.reload(), 1000);
+                        } else {
+                            this.message = data.message || 'Terjadi kesalahan.';
+                            this.messageType = 'error';
+                        }
+                    } catch (e) {
+                        this.message = 'Terjadi kesalahan jaringan.';
+                        this.messageType = 'error';
+                    } finally {
+                        this.submitting = false;
+                    }
+                },
+            };
+        }
+    </script>
+    @endpush
 </x-app-layout>

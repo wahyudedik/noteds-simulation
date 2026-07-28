@@ -96,7 +96,7 @@
                                         <input type="text" readonly value="{{ $link->url }}"
                                             class="w-48 px-2 py-1 border border-gray-200 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-300 rounded text-xs font-mono bg-gray-50"
                                             id="link-{{ $link->id }}">
-                                        <button type="button" onclick="navigator.clipboard.writeText(document.getElementById('link-{{ $link->id }}').value); this.textContent='✓'; setTimeout(() => this.textContent='📋', 1500)"
+                                        <button type="button" onclick="copyToClipboard(this, 'link-{{ $link->id }}')"
                                             class="p-1 text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 transition" title="Salin link">
                                             📋
                                         </button>
@@ -148,4 +148,43 @@
             </div>
         </div>
     </div>
+
+    @push('scripts')
+    <script>
+        function copyToClipboard(button, inputId) {
+            var text = document.getElementById(inputId).value;
+            if (navigator.clipboard && navigator.clipboard.writeText) {
+                navigator.clipboard.writeText(text).then(function() {
+                    showCopied(button);
+                }).catch(function() {
+                    fallbackCopy(text, button);
+                });
+            } else {
+                fallbackCopy(text, button);
+            }
+        }
+
+        function fallbackCopy(text, button) {
+            var textarea = document.createElement('textarea');
+            textarea.value = text;
+            textarea.style.position = 'fixed';
+            textarea.style.opacity = '0';
+            document.body.appendChild(textarea);
+            textarea.select();
+            try {
+                document.execCommand('copy');
+                showCopied(button);
+            } catch (e) {
+                // Silently fail — clipboard not available
+            }
+            document.body.removeChild(textarea);
+        }
+
+        function showCopied(button) {
+            var original = button.textContent;
+            button.textContent = '✓';
+            setTimeout(function() { button.textContent = original; }, 1500);
+        }
+    </script>
+    @endpush
 </x-studio-layout>

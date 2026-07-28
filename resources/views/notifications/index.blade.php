@@ -14,7 +14,7 @@
                 @if($notifications->count() > 0)
                     <button
                         onclick="markAllAsRead()"
-                        class="text-sm text-blue-600 hover:text-blue-700 font-medium transition"
+                        class="text-sm text-blue-600 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300 font-medium transition"
                     >
                         Tandai semua sudah dibaca
                     </button>
@@ -31,11 +31,11 @@
                             <div class="flex items-start gap-3">
                                 {{-- Icon based on type --}}
                                 <div class="w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0
-                                    @if($notification->type === 'comment') bg-blue-100 text-blue-600
-                                    @elseif($notification->type === 'follow') bg-green-100 text-green-600
-                                    @elseif($notification->type === 'reaction') bg-purple-100 text-purple-600
-                                    @elseif($notification->type === 'rating') bg-yellow-100 text-yellow-600
-                                    @else bg-gray-100 text-gray-500
+                                    @if($notification->type === 'comment') bg-blue-100 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400
+                                    @elseif($notification->type === 'follow') bg-green-100 dark:bg-green-900/30 text-green-600 dark:text-green-400
+                                    @elseif($notification->type === 'reaction') bg-purple-100 dark:bg-purple-900/30 text-purple-600 dark:text-purple-400
+                                    @elseif($notification->type === 'rating') bg-yellow-100 dark:bg-yellow-900/30 text-yellow-600 dark:text-yellow-400
+                                    @else bg-gray-100 dark:bg-gray-700 text-gray-500 dark:text-gray-400
                                     @endif
                                 ">
                                     @if($notification->type === 'comment')

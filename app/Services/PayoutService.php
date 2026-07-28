@@ -5,6 +5,7 @@ namespace App\Services;
 use App\Models\CreatorAd;
 use App\Models\CreatorPaymentSetting;
 use App\Models\CreatorReputation;
+use App\Models\MarketplacePurchase;
 use App\Models\Payout;
 use App\Models\User;
 
@@ -30,22 +31,40 @@ class PayoutService
             return false;
         }
 
-        // Creator must have approved ads
-        $totalRevenue = CreatorAd::where('user_id', $user->id)
-            ->where('review_status', 'approved')
-            ->sum('revenue');
-
-        return $totalRevenue >= self::MIN_PAYOUT_IDR;
+        return $this->getAvailableBalance($user) >= self::MIN_PAYOUT_IDR;
     }
 
     /**
-     * Get the pending balance for a creator.
+     * Get the ad revenue balance for a creator.
      */
-    public function getPendingBalance(User $user): float
+    public function getAdRevenue(User $user): float
     {
         return (float) CreatorAd::where('user_id', $user->id)
             ->where('review_status', 'approved')
             ->sum('revenue');
+    }
+
+    /**
+     * Get the marketplace earnings for a creator (after platform fee deduction).
+     */
+    public function getMarketplaceEarnings(User $user): float
+    {
+        $platformFeePercent = config('midtrans.platform_fee_percentage', 20);
+        $creatorSharePercent = 100 - $platformFeePercent;
+
+        $totalSales = MarketplacePurchase::where('payment_status', 'completed')
+            ->whereHas('listing', fn ($q) => $q->where('user_id', $user->id))
+            ->sum('amount');
+
+        return $totalSales * ($creatorSharePercent / 100);
+    }
+
+    /**
+     * Get the pending balance for a creator (ad revenue + marketplace earnings).
+     */
+    public function getPendingBalance(User $user): float
+    {
+        return $this->getAdRevenue($user) + $this->getMarketplaceEarnings($user);
     }
 
     /**
@@ -67,6 +86,30 @@ class PayoutService
         $totalPaid = $this->getTotalPaid($user);
 
         return max(0, $totalRevenue - $totalPaid);
+    }
+
+    /**
+     * Get detailed earnings breakdown for a creator.
+     */
+    public function getEarningsBreakdown(User $user): array
+    {
+        $adRevenue = $this->getAdRevenue($user);
+        $marketplaceEarnings = $this->getMarketplaceEarnings($user);
+        $platformFeePercent = config('midtrans.platform_fee_percentage', 20);
+
+        $totalSales = MarketplacePurchase::where('payment_status', 'completed')
+            ->whereHas('listing', fn ($q) => $q->where('user_id', $user->id))
+            ->sum('amount');
+
+        return [
+            'ad_revenue' => $adRevenue,
+            'marketplace_gross_sales' => (float) $totalSales,
+            'marketplace_platform_fee' => (float) ($totalSales * ($platformFeePercent / 100)),
+            'marketplace_earnings' => $marketplaceEarnings,
+            'total_gross' => $adRevenue + (float) $totalSales,
+            'total_platform_fees' => (float) ($totalSales * ($platformFeePercent / 100)),
+            'total_net' => $adRevenue + $marketplaceEarnings,
+        ];
     }
 
     /**

@@ -11,7 +11,9 @@ use App\Services\GamificationService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\View\View;
 use ZipArchive;
@@ -504,9 +506,63 @@ class SimulationController extends Controller
 
         $mimeType = $mimes[$extension] ?? (mime_content_type($filePath) ?: 'application/octet-stream');
 
+        // For HTML files, rewrite Tailwind CDN URLs to use our proxy
+        // This ensures CDN loads reliably from same-origin instead of external CDN
+        if (in_array($extension, ['html', 'htm'])) {
+            $content = file_get_contents($filePath);
+            if (str_contains($content, 'cdn.tailwindcss.com')) {
+                $proxyUrl = route('simulations.tailwind-proxy');
+                $content = str_replace(
+                    ['https://cdn.tailwindcss.com', 'http://cdn.tailwindcss.com'],
+                    [$proxyUrl, $proxyUrl],
+                    $content
+                );
+
+                return response($content, 200, [
+                    'Content-Type' => 'text/html',
+                    'Cache-Control' => 'public, max-age=86400',
+                ]);
+            }
+        }
+
         return response()->file($filePath, [
             'Content-Type' => $mimeType,
             'Cache-Control' => 'public, max-age=86400',
+        ]);
+    }
+
+    /**
+     * Proxy the Tailwind CSS CDN script through our domain.
+     * This ensures the JIT compiler loads reliably from same-origin,
+     * avoiding CSP issues, CORS errors, and CDN latency in iframe context.
+     * The script is cached for 24 hours to reduce upstream requests.
+     */
+    public function tailwindProxy()
+    {
+        $script = Cache::remember('tailwind-cdn-proxy', 3600 * 24, function () {
+            $response = Http::timeout(15)
+                ->withHeaders([
+                    'Accept' => 'application/javascript, text/javascript, */*',
+                    'User-Agent' => 'NotEDS-Simulation-Proxy/1.0',
+                ])
+                ->get('https://cdn.tailwindcss.com');
+
+            if ($response->failed()) {
+                // Return a minimal fallback that prevents JS errors
+                return '// Tailwind CDN temporarily unavailable — fallback active'."\n"
+                    .'document.addEventListener("DOMContentLoaded",function(){'
+                    .'document.querySelectorAll("[class]").forEach(function(el){'
+                    .'el.style.cssText="font-family:sans-serif;line-height:1.5";});});';
+            }
+
+            return $response->body();
+        });
+
+        return response($script, 200, [
+            'Content-Type' => 'application/javascript; charset=utf-8',
+            'Cache-Control' => 'public, max-age=86400',
+            'Access-Control-Allow-Origin' => '*',
+            'X-Content-Type-Options' => 'nosniff',
         ]);
     }
 

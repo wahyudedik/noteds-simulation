@@ -36,6 +36,8 @@ use App\Http\Controllers\ForumVoteController;
 use App\Http\Controllers\HealthController;
 use App\Http\Controllers\LeaderboardController;
 use App\Http\Controllers\MarketplaceController;
+use App\Http\Controllers\MarketplacePaymentController;
+use App\Http\Controllers\MarketplaceReviewController;
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\PayoutController;
 use App\Http\Controllers\ProfileController;
@@ -72,6 +74,8 @@ Route::get('/explore', [SimulationController::class, 'explore'])->name('simulati
 
 // Public simulation routes
 Route::get('/explore/{category}', [SimulationController::class, 'category'])->name('simulations.category');
+// Tailwind CDN proxy — must be BEFORE {slug} routes to avoid wildcard capture
+Route::get('/sim/tailwind-proxy.js', [SimulationController::class, 'tailwindProxy'])->name('simulations.tailwind-proxy');
 Route::get('/sim/{slug}', [SimulationController::class, 'show'])->name('simulations.show');
 Route::get('/sim/{slug}/play', [SimulationController::class, 'play'])->name('simulations.play');
 Route::get('/sim/serve/{slug}/{path?}', [SimulationController::class, 'serve'])->name('simulations.serve')->where('path', '.*');
@@ -91,6 +95,23 @@ Route::get('/ref/{code}', [AffiliateController::class, 'track'])->name('affiliat
 
 // Marketplace (public)
 Route::get('/marketplace', [MarketplaceController::class, 'index'])->name('marketplace.index');
+Route::post('/marketplace/callback', [MarketplacePaymentController::class, 'callback'])->name('marketplace.callback');
+
+// Marketplace Payment (auth required — must be before {slug} wildcard)
+Route::middleware('auth')->group(function () {
+    Route::post('/marketplace/{listing}/checkout', [MarketplacePaymentController::class, 'checkout'])->name('marketplace.checkout');
+    Route::get('/marketplace/success', [MarketplacePaymentController::class, 'success'])->name('marketplace.success');
+    Route::get('/my-purchases', [MarketplacePaymentController::class, 'history'])->name('marketplace.history');
+});
+
+// Marketplace Reviews (AJAX — auth required)
+Route::middleware('auth')->group(function () {
+    Route::post('/marketplace/reviews', [MarketplaceReviewController::class, 'store'])->name('marketplace.reviews.store');
+    Route::put('/marketplace/reviews/{review}', [MarketplaceReviewController::class, 'update'])->name('marketplace.reviews.update');
+    Route::delete('/marketplace/reviews/{review}', [MarketplaceReviewController::class, 'destroy'])->name('marketplace.reviews.destroy');
+});
+
+// Marketplace wildcard route (must be AFTER specific marketplace routes)
 Route::get('/marketplace/{slug}', [MarketplaceController::class, 'show'])->name('marketplace.show');
 
 // Auth routes (already registered by Breeze)
@@ -216,6 +237,12 @@ Route::middleware(['auth', 'verified'])->prefix('studio')->name('studio.')->grou
     Route::delete('/simulations/{slug}/ads/{creatorAd}', [StudioController::class, 'destroyAd'])->name('simulations.ads.destroy');
     Route::get('/ads/revenue', [StudioController::class, 'adRevenue'])->name('ads-revenue');
     Route::get('/ads/revenue/detail', [StudioController::class, 'revenueDetail'])->name('ads-revenue.detail');
+
+    // Marketplace Listing
+    Route::get('/simulations/{slug}/marketplace', [StudioController::class, 'marketplaceSettings'])->name('simulations.marketplace');
+    Route::post('/simulations/{slug}/marketplace', [StudioController::class, 'storeMarketplaceListing'])->name('simulations.marketplace.store');
+    Route::put('/simulations/{slug}/marketplace', [StudioController::class, 'updateMarketplaceListing'])->name('simulations.marketplace.update');
+    Route::delete('/simulations/{slug}/marketplace', [StudioController::class, 'removeFromMarketplace'])->name('simulations.marketplace.remove');
 
     // Payouts
     Route::get('/payouts', [PayoutController::class, 'index'])->name('payouts');

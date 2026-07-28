@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\MarketplaceListing;
+use App\Models\MarketplaceReview;
 use App\Models\Simulation;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
@@ -114,6 +115,19 @@ class MarketplaceController extends Controller
         // Check if current user has purchased
         $hasPurchased = auth()->check() && $listing->isPurchasedBy(auth()->user());
 
+        // Marketplace reviews
+        $reviews = MarketplaceReview::where('listing_id', $listing->id)
+            ->with('user')
+            ->orderBy('created_at', 'desc')
+            ->get();
+
+        $userReview = null;
+        if (auth()->check()) {
+            $userReview = MarketplaceReview::where('user_id', auth()->id())
+                ->where('listing_id', $listing->id)
+                ->first();
+        }
+
         // Rating distribution
         $ratingDistribution = $simulation->ratings
             ->groupBy(fn ($r) => (int) $r->rating)
@@ -134,6 +148,8 @@ class MarketplaceController extends Controller
             'simulation',
             'listing',
             'hasPurchased',
+            'reviews',
+            'userReview',
             'ratingCounts',
             'relatedListings'
         ));

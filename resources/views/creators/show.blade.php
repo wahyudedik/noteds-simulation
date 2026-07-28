@@ -9,10 +9,16 @@
     <style>
         .simulation-card:hover .thumbnail-overlay { opacity: 1; }
         .simulation-card:hover img { transform: scale(1.05); }
+        /* Touch-friendly: ensure active state works on mobile tap */
+        .simulation-card:active .thumbnail-overlay { opacity: 1; }
+        @media (hover: none) {
+            .simulation-card .thumbnail-overlay { opacity: 0.7; }
+            .simulation-card:active img { transform: scale(1.05); }
+        }
     </style>
 
-    <div class="py-12">
-        <div class="max-w-5xl mx-auto sm:px-6 lg:px-8">
+    <div class="py-6 sm:py-12">
+        <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
 
             <x-breadcrumb :items="[['label' => 'Explore', 'url' => route('simulations.explore')], ['label' => $creator->name]]" />
 
@@ -109,7 +115,7 @@
                 <h2 class="text-xl font-bold text-gray-900 dark:text-white mb-4">Experience ({{ $simulations->count() }})</h2>
 
                 @if($simulations->count() > 0)
-                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5">
                         @foreach($simulations as $sim)
                             <a href="{{ route('simulations.show', $sim->slug) }}" class="simulation-card group">
                                 <div class="bg-white dark:bg-gray-800 rounded-xl overflow-hidden shadow-sm border border-gray-100 dark:border-gray-700">

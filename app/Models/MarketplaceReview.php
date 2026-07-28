@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-class MarketplacePurchase extends Model
+class MarketplaceReview extends Model
 {
     use HasFactory;
 
@@ -14,20 +14,14 @@ class MarketplacePurchase extends Model
         'user_id',
         'listing_id',
         'simulation_id',
-        'amount',
-        'payment_method',
-        'payment_status',
-        'transaction_id',
-        'snap_token',
-        'midtrans_order_id',
-        'paid_at',
+        'rating',
+        'review_text',
     ];
 
     protected function casts(): array
     {
         return [
-            'amount' => 'decimal:2',
-            'paid_at' => 'datetime',
+            'rating' => 'integer',
         ];
     }
 
@@ -50,19 +44,22 @@ class MarketplacePurchase extends Model
 
     // ─── Helpers ──────────────────────────────────────────────────
 
-    public function getFormattedAmountAttribute(): string
+    public function getStarHtmlAttribute(): string
     {
-        return 'Rp '.number_format($this->amount, 0, ',', '.');
+        $html = '';
+        for ($i = 1; $i <= 5; $i++) {
+            if ($i <= $this->rating) {
+                $html .= '<svg class="w-4 h-4 text-yellow-400 fill-current" viewBox="0 0 20 20"><path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z"/></svg>';
+            } else {
+                $html .= '<svg class="w-4 h-4 text-gray-300 dark:text-gray-600 fill-current" viewBox="0 0 20 20"><path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z"/></svg>';
+            }
+        }
+
+        return $html;
     }
 
-    public function getStatusBadgeClassAttribute(): string
+    public function getTimeAgoAttribute(): string
     {
-        return match ($this->payment_status) {
-            'completed' => 'bg-emerald-100 text-emerald-700',
-            'pending' => 'bg-amber-100 text-amber-700',
-            'failed' => 'bg-red-100 text-red-700',
-            'refunded' => 'bg-slate-100 text-slate-700',
-            default => 'bg-slate-100 text-slate-700',
-        };
+        return $this->created_at->diffForHumans();
     }
 }
