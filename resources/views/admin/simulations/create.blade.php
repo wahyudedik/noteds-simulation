@@ -1,6 +1,6 @@
-﻿<x-app-layout>
+<x-app-layout>
     <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
+        <h2 class="font-semibold text-xl text-gray-800 dark:text-white leading-tight">
             <svg class="inline w-5 h-5 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" /></svg>
             Upload Experience Baru
         </h2>
@@ -92,13 +92,13 @@
                                         Struktur Experience Package:
                                     </p>
                                     <pre class="font-mono text-gray-600 dark:text-gray-400 leading-relaxed overflow-x-auto"><code>simulation.zip
-├── manifest.json          <span class="text-gray-400 dark:text-gray-500"># Metadata experience (judul, kategori, versi, dll.)</span>
-├── index.html             <span class="text-gray-400 dark:text-gray-500"># File entry point experience</span>
-├── assets/
-│   ├── css/
-│   ├── js/
-│   └── images/
-└── README.md              <span class="text-gray-400 dark:text-gray-500"># Dokumentasi teknis (opsional)</span></code></pre>
++-- manifest.json          <span class="text-gray-400 dark:text-gray-500"># Metadata experience (judul, kategori, versi, dll.)</span>
++-- index.html             <span class="text-gray-400 dark:text-gray-500"># File entry point experience</span>
++-- assets/
+�   +-- css/
+�   +-- js/
+�   +-- images/
++-- README.md              <span class="text-gray-400 dark:text-gray-500"># Dokumentasi teknis (opsional)</span></code></pre>
 
                                     <div class="mt-3 pt-3 border-t border-gray-200 dark:border-gray-700">
                                         <p class="font-semibold text-gray-700 dark:text-gray-300 mb-1">

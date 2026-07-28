@@ -1,10 +1,10 @@
-﻿<x-app-layout>
+<x-app-layout>
     <x-slot name="header">
         <div class="flex items-center gap-3">
             <a href="{{ route('admin.sponsors.index') }}" class="text-gray-400 dark:text-gray-500 hover:text-gray-600 dark:text-gray-400">
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
             </a>
-            <h2 class="font-semibold text-xl text-gray-800 leading-tight">Detail Sponsor</h2>
+            <h2 class="font-semibold text-xl text-gray-800 dark:text-white leading-tight">Detail Sponsor</h2>
         </div>
     </x-slot>
 
@@ -97,7 +97,7 @@
                                         <div class="flex items-center gap-4 text-xs text-gray-500 dark:text-gray-400">
                                             <span>{{ $sponsorship->package_label }}</span>
                                             <span>Rp {{ number_format($sponsorship->budget, 0, ',', '.') }}</span>
-                                            <span>{{ $sponsorship->start_date->format('d M Y') }} — {{ $sponsorship->end_date->format('d M Y') }}</span>
+                                            <span>{{ $sponsorship->start_date->format('d M Y') }} � {{ $sponsorship->end_date->format('d M Y') }}</span>
                                         </div>
                                         {{-- Budget Progress --}}
                                         <div class="mt-2">

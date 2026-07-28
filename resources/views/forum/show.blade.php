@@ -67,7 +67,7 @@
                     {{-- Author Info --}}
                     <div class="flex items-center gap-3 mb-4">
                         @if($thread->user->avatar)
-                            <img src="{{ Storage::disk('public')->url($thread->user->avatar) }}" alt="" class="w-8 h-8 rounded-full object-cover" />
+                            <img src="{{ Storage::disk('public')->url($thread->user->avatar) }}" alt="Avatar" class="w-8 h-8 rounded-full object-cover" />
                         @else
                             <div class="w-8 h-8 rounded-full bg-blue-100 text-blue-600 dark:bg-blue-900/50 dark:text-blue-400 flex items-center justify-center text-xs font-bold">
                                 {{ strtoupper(substr($thread->user->name, 0, 1)) }}

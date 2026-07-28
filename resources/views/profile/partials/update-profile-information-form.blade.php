@@ -29,7 +29,7 @@
                     </template>
                     <template x-if="!preview">
                         @if($user->avatar)
-                            <img src="{{ \Illuminate\Support\Facades\Storage::disk('public')->url($user->avatar) }}" alt="" class="w-full h-full object-cover" />
+                            <img src="{{ \Illuminate\Support\Facades\Storage::disk('public')->url($user->avatar) }}" alt="Avatar" class="w-full h-full object-cover" />
                         @else
                             <div class="w-full h-full flex items-center justify-center text-2xl font-semibold text-gray-400 dark:text-gray-500">
                                 {{ strtoupper(substr($user->name, 0, 1)) }}

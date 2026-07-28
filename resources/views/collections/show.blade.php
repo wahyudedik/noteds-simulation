@@ -46,7 +46,7 @@
                             <a href="{{ route('creators.show', $collection->user->username) }}" class="flex items-center gap-2">
                                 <div class="w-8 h-8 rounded-full bg-blue-100 dark:bg-blue-900/50 text-blue-600 dark:text-blue-400 flex items-center justify-center text-xs font-semibold overflow-hidden">
                                     @if($collection->user->avatar)
-                                        <img src="{{ Storage::disk('public')->url($collection->user->avatar) }}" alt="" class="w-full h-full object-cover" />
+                                        <img src="{{ Storage::disk('public')->url($collection->user->avatar) }}" alt="Avatar" class="w-full h-full object-cover" />
                                     @else
                                         {{ strtoupper(substr($collection->user->name, 0, 1)) }}
                                     @endif

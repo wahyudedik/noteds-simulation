@@ -547,7 +547,7 @@
                         <div class="flex gap-3 mb-6">
                             <div class="w-8 h-8 rounded-full bg-gray-200 dark:bg-gray-700 text-gray-600 dark:text-gray-300 flex items-center justify-center text-xs font-semibold flex-shrink-0 overflow-hidden">
                                 @if(auth()->user()->avatar)
-                                    <img src="{{ Storage::disk('public')->url(auth()->user()->avatar) }}" alt="" class="w-full h-full object-cover" />
+                                    <img src="{{ Storage::disk('public')->url(auth()->user()->avatar) }}" alt="Avatar" class="w-full h-full object-cover" />
                                 @else
                                     {{ strtoupper(substr(auth()->user()->name, 0, 1)) }}
                                 @endif

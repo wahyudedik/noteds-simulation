@@ -1,7 +1,7 @@
 <x-app-layout>
     <x-slot name="header">
         <div class="flex items-center justify-between">
-            <h2 class="font-semibold text-xl text-gray-800 leading-tight">
+            <h2 class="font-semibold text-xl text-gray-800 dark:text-white leading-tight">
                 <svg class="inline w-5 h-5 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg>
                 Detail Creator: {{ $creator->name }}
             </h2>
@@ -16,7 +16,7 @@
             <div class="bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700 rounded-xl p-6 shadow-sm">
                 <div class="flex items-start gap-4">
                     @if($creator->avatar)
-                        <img src="{{ Storage::disk('public')->url($creator->avatar) }}" alt="" class="w-16 h-16 rounded-full object-cover" />
+                        <img src="{{ Storage::disk('public')->url($creator->avatar) }}" alt="Avatar" class="w-16 h-16 rounded-full object-cover" />
                     @else
                         <div class="w-16 h-16 rounded-full bg-blue-100 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 flex items-center justify-center text-2xl font-bold">{{ strtoupper(substr($creator->name, 0, 1)) }}</div>
                     @endif

@@ -1,12 +1,12 @@
-﻿<x-app-layout>
+<x-app-layout>
     <x-slot name="header">
         <div class="flex items-center justify-between">
-            <h2 class="font-semibold text-xl text-gray-800 leading-tight">
+            <h2 class="font-semibold text-xl text-gray-800 dark:text-white leading-tight">
                 <svg class="w-5 h-5 inline-block mr-1 text-gray-400 dark:text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg>
                 {{ $user->name }}
             </h2>
             <a href="{{ route('admin.users.index') }}" class="px-3 py-1.5 bg-gray-100 hover:bg-gray-200 text-gray-700 dark:text-gray-300 text-sm font-medium rounded-lg transition">
-                ← Kembali
+                ? Kembali
             </a>
         </div>
     </x-slot>
@@ -203,7 +203,7 @@
                                                 {{ Str::limit($sim->title, 40) }}
                                             </a>
                                             <div class="text-xs text-gray-500 dark:text-gray-400 mt-0.5">
-                                                {{ $sim->category }} · {{ number_format($sim->view_count) }} views
+                                                {{ $sim->category }} � {{ number_format($sim->view_count) }} views
                                             </div>
                                         </div>
                                         <div class="ml-3 flex-shrink-0">

@@ -125,7 +125,7 @@
                     <div class="relative" x-data="{ open: false }" @click.away="open = false">
                         <button @click="open = !open" aria-label="Menu pengguna" class="flex items-center gap-2 px-3 py-1.5 text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition min-h-[44px]">
                             @if(auth()->user()->avatar)
-                                <img src="{{ Storage::disk('public')->url(auth()->user()->avatar) }}" alt="" class="w-7 h-7 rounded-full object-cover" />
+                                <img src="{{ Storage::disk('public')->url(auth()->user()->avatar) }}" alt="Avatar" class="w-7 h-7 rounded-full object-cover" />
                             @else
                                 <div class="w-7 h-7 rounded-full bg-blue-100 dark:bg-blue-900/50 text-blue-600 dark:text-blue-400 flex items-center justify-center text-xs font-semibold">
                                     {{ strtoupper(substr(auth()->user()->name, 0, 1)) }}

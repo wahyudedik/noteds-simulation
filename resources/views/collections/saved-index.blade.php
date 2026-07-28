@@ -42,7 +42,7 @@
                                 <div class="flex items-center gap-2 mt-3">
                                     <div class="w-6 h-6 rounded-full bg-blue-100 text-blue-600 dark:bg-blue-900/50 dark:text-blue-400 flex items-center justify-center text-xs font-semibold overflow-hidden">
                                         @if($collection->user->avatar)
-                                            <img src="{{ Storage::disk('public')->url($collection->user->avatar) }}" alt="" class="w-full h-full object-cover" />
+                                            <img src="{{ Storage::disk('public')->url($collection->user->avatar) }}" alt="Avatar" class="w-full h-full object-cover" />
                                         @else
                                             {{ strtoupper(substr($collection->user->name, 0, 1)) }}
                                         @endif

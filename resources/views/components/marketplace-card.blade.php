@@ -60,7 +60,7 @@
                 {{-- Creator avatar --}}
                 <a href="{{ route('creators.show', $creator->username) }}" class="w-9 h-9 rounded-full bg-gray-300 dark:bg-gray-600 flex-shrink-0 overflow-hidden hover:ring-2 hover:ring-blue-300 transition" onclick="event.stopPropagation();">
                     @if($creator->avatar)
-                        <img src="{{ Storage::disk('public')->url($creator->avatar) }}" alt="" class="w-full h-full object-cover" loading="lazy">
+                        <img src="{{ Storage::disk('public')->url($creator->avatar) }}" alt="{{ $creator->name }}" class="w-full h-full object-cover" loading="lazy">
                     @else
                         <div class="w-full h-full flex items-center justify-center bg-blue-100 dark:bg-blue-900/50 text-blue-600 dark:text-blue-400 font-semibold text-sm">
                             {{ strtoupper(substr($creator->name, 0, 1)) }}

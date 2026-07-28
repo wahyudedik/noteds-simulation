@@ -32,7 +32,7 @@
             {{-- Author --}}
             <div class="flex items-center gap-2 mb-1.5">
                 @if($reply->user->avatar)
-                    <img src="{{ Storage::disk('public')->url($reply->user->avatar) }}" alt="" class="w-5 h-5 rounded-full object-cover" />
+                    <img src="{{ Storage::disk('public')->url($reply->user->avatar) }}" alt="Avatar" class="w-5 h-5 rounded-full object-cover" />
                 @else
                     <div class="w-5 h-5 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center text-[8px] font-bold">
                         {{ strtoupper(substr($reply->user->name, 0, 1)) }}

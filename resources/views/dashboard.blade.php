@@ -3,7 +3,7 @@
         <div class="flex items-center justify-between">
             <div>
                 <x-breadcrumb :items="[['label' => 'Dashboard']]" />
-                <h2 class="font-semibold text-xl text-gray-800 leading-tight">
+                <h2 class="font-semibold text-xl text-gray-800 dark:text-white leading-tight">
                     {{ __('Dashboard') }}
                 </h2>
             </div>

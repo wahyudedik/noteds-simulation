@@ -1,4 +1,4 @@
-﻿<x-app-layout>
+<x-app-layout>
     <x-slot name="header">
         <div class="flex items-center gap-3">
             <a href="{{ route('admin.reports.index') }}" class="text-gray-400 dark:text-gray-500 hover:text-gray-600 dark:text-gray-400 transition">
@@ -53,7 +53,7 @@
                     <h3 class="font-semibold text-gray-900 dark:text-white mb-4">Experience yang Dilaporkan</h3>
                     <div class="flex items-start gap-4">
                         @if($report->simulation->thumbnail)
-                            <img src="{{ Storage::disk('public')->url($report->simulation->thumbnail) }}" class="w-20 h-14 object-cover rounded-lg" alt="">
+                            <img src="{{ Storage::disk('public')->url($report->simulation->thumbnail) }}" class="w-20 h-14 object-cover rounded-lg" alt="Thumbnail">
                         @else
                             <div class="w-20 h-14 bg-gray-100 rounded-lg flex items-center justify-center">
                                 <svg class="w-6 h-6 text-gray-400 dark:text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"/></svg>
@@ -61,10 +61,10 @@
                         @endif
                         <div>
                             <a href="{{ route('simulations.show', $report->simulation->slug) }}" class="font-medium text-gray-900 dark:text-white hover:text-blue-600 dark:text-blue-400 transition">{{ $report->simulation->title }}</a>
-                            <div class="text-xs text-gray-500 dark:text-gray-400 mt-1">oleh {{ $report->simulation->user->name }} · {{ $report->simulation->formatted_play_count }} dimainkan</div>
+                            <div class="text-xs text-gray-500 dark:text-gray-400 mt-1">oleh {{ $report->simulation->user->name }} � {{ $report->simulation->formatted_play_count }} dimainkan</div>
                             <div class="flex gap-2 mt-2">
                                 <a href="{{ route('admin.simulations.show', $report->simulation) }}" class="text-xs text-blue-600 dark:text-blue-400 hover:underline">Lihat Detail</a>
-                                <span class="text-gray-300">·</span>
+                                <span class="text-gray-300">�</span>
                                 <a href="{{ route('simulations.show', $report->simulation->slug) }}" target="_blank" class="text-xs text-blue-600 dark:text-blue-400 hover:underline">Buka Experience</a>
                             </div>
                         </div>
@@ -80,8 +80,8 @@
                                 <div class="flex items-center gap-3 p-3 bg-gray-50 dark:bg-gray-700/50 rounded-xl">
                                     <div class="text-sm">
                                         <span class="font-medium text-gray-700 dark:text-gray-300 dark:text-gray-300">{{ $prev->user->name }}</span>
-                                        <span class="text-gray-400 dark:text-gray-500">· {{ match($prev->reason) { 'malware' => 'Malware', 'spam_ads' => 'Spam', 'inappropriate' => 'Tidak Pantas', default => 'Lainnya' } }}</span>
-                                        <span class="text-gray-400 dark:text-gray-500">· {{ $prev->created_at->diffForHumans() }}</span>
+                                        <span class="text-gray-400 dark:text-gray-500">� {{ match($prev->reason) { 'malware' => 'Malware', 'spam_ads' => 'Spam', 'inappropriate' => 'Tidak Pantas', default => 'Lainnya' } }}</span>
+                                        <span class="text-gray-400 dark:text-gray-500">� {{ $prev->created_at->diffForHumans() }}</span>
                                     </div>
                                 </div>
                             @endforeach
@@ -126,7 +126,7 @@
                             @endif
                             @if($report->reviewer)
                                 <div class="mt-2 text-xs text-gray-400 dark:text-gray-500">
-                                    Direview oleh {{ $report->reviewer->name }} · {{ $report->reviewed_at?->diffForHumans() }}
+                                    Direview oleh {{ $report->reviewer->name }} � {{ $report->reviewed_at?->diffForHumans() }}
                                 </div>
                             @endif
                         </div>

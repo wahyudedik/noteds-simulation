@@ -1,10 +1,10 @@
-﻿<x-app-layout>
+<x-app-layout>
     <x-slot name="header">
         <div class="flex items-center gap-3">
             <a href="{{ route('admin.sponsorships.show', $sponsorship) }}" class="text-gray-400 dark:text-gray-500 hover:text-gray-600 dark:text-gray-400">
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
             </a>
-            <h2 class="font-semibold text-xl text-gray-800 leading-tight">Invoice — {{ $sponsorship->title }}</h2>
+            <h2 class="font-semibold text-xl text-gray-800 dark:text-white leading-tight">Invoice � {{ $sponsorship->title }}</h2>
         </div>
     </x-slot>
 

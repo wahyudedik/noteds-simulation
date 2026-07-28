@@ -1,13 +1,13 @@
-﻿<x-app-layout>
+<x-app-layout>
     <x-slot name="header">
         <div class="flex items-center justify-between">
-            <h2 class="font-semibold text-xl text-gray-800 leading-tight">
+            <h2 class="font-semibold text-xl text-gray-800 dark:text-white leading-tight">
                 <svg class="inline w-5 h-5 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
                 Revenue Analytics
             </h2>
             <div class="flex items-center gap-2">
                 <a href="{{ route('admin.analytics.index') }}" class="px-3 py-1.5 text-sm font-medium rounded-lg transition bg-gray-100 text-gray-600 dark:text-gray-400 hover:bg-gray-200">
-                    ← Overview
+                    ? Overview
                 </a>
                 @foreach(['7' => '7 Hari', '30' => '30 Hari', '90' => '90 Hari'] as $p => $label)
                     <a href="{{ route('admin.analytics.revenue', ['period' => $p]) }}"
@@ -66,7 +66,7 @@
                                 <div>
                                     <div class="flex items-center justify-between mb-1">
                                         <span class="text-sm font-medium text-gray-700 dark:text-gray-300 dark:text-gray-300">{{ $tierLabels[$tier->revenue_tier] ?? ucfirst($tier->revenue_tier) }}</span>
-                                        <span class="text-sm text-gray-500 dark:text-gray-400">{{ number_format($tier->creators) }} creator · Rp {{ number_format($tier->total, 0, ',', '.') }}</span>
+                                        <span class="text-sm text-gray-500 dark:text-gray-400">{{ number_format($tier->creators) }} creator � Rp {{ number_format($tier->total, 0, ',', '.') }}</span>
                                     </div>
                                     <div class="w-full bg-gray-100 rounded-full h-3 overflow-hidden">
                                         <div class="{{ $tierColors[$tier->revenue_tier] ?? 'bg-gray-500' }} h-full rounded-full transition-all" style="width: {{ $maxTierRevenue > 0 ? ($tier->total / $maxTierRevenue) * 100 : 0 }}%"></div>

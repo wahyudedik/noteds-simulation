@@ -1,13 +1,13 @@
-﻿<x-app-layout>
+<x-app-layout>
     <x-slot name="header">
         <div class="flex items-center justify-between">
-            <h2 class="font-semibold text-xl text-gray-800 leading-tight">
+            <h2 class="font-semibold text-xl text-gray-800 dark:text-white leading-tight">
                 <svg class="inline w-5 h-5 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
                 User Analytics
             </h2>
             <div class="flex items-center gap-2">
                 <a href="{{ route('admin.analytics.index') }}" class="px-3 py-1.5 text-sm font-medium rounded-lg transition bg-gray-100 text-gray-600 dark:text-gray-400 hover:bg-gray-200">
-                    ← Overview
+                    ? Overview
                 </a>
                 @foreach(['7' => '7 Hari', '30' => '30 Hari', '90' => '90 Hari'] as $p => $label)
                     <a href="{{ route('admin.analytics.users', ['period' => $p]) }}"

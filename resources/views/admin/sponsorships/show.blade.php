@@ -1,10 +1,10 @@
-﻿<x-app-layout>
+<x-app-layout>
     <x-slot name="header">
         <div class="flex items-center gap-3">
             <a href="{{ route('admin.sponsorships.index') }}" class="text-gray-400 dark:text-gray-500 hover:text-gray-600 dark:text-gray-400">
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
             </a>
-            <h2 class="font-semibold text-xl text-gray-800 leading-tight">Detail Sponsorship</h2>
+            <h2 class="font-semibold text-xl text-gray-800 dark:text-white leading-tight">Detail Sponsorship</h2>
         </div>
     </x-slot>
 
@@ -41,7 +41,7 @@
                                 <form action="{{ route('admin.sponsorships.pause', $sponsorship) }}" method="POST" class="inline">
                                     @csrf
                                     <button type="submit" class="px-3 py-1.5 text-xs font-medium text-white bg-amber-600 hover:bg-amber-700 rounded-lg transition">
-                                        ⏸ Jeda
+                                        ? Jeda
                                     </button>
                                 </form>
                                 <form action="{{ route('admin.sponsorships.complete', $sponsorship) }}" method="POST" class="inline">
@@ -131,7 +131,7 @@
                                             @endif
                                             <div>
                                                 <p class="text-sm font-medium text-gray-900 dark:text-white">{{ $ad->title }}</p>
-                                                <p class="text-xs text-gray-500 dark:text-gray-400">{{ ucfirst($ad->position) }} · {{ $ad->type }}</p>
+                                                <p class="text-xs text-gray-500 dark:text-gray-400">{{ ucfirst($ad->position) }} � {{ $ad->type }}</p>
                                             </div>
                                         </div>
                                         <div class="text-right text-xs text-gray-500 dark:text-gray-400">
@@ -153,7 +153,7 @@
                     <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 p-6">
                         <div class="flex items-center justify-between mb-4">
                             <h3 class="text-sm font-semibold text-gray-900 dark:text-white">Invoice ({{ $invoices->count() }})</h3>
-                            <a href="{{ route('admin.sponsorships.invoices', $sponsorship) }}" class="text-xs text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 font-medium">Lihat Semua →</a>
+                            <a href="{{ route('admin.sponsorships.invoices', $sponsorship) }}" class="text-xs text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 font-medium">Lihat Semua ?</a>
                         </div>
                         @if($invoices->count() > 0)
                             <div class="space-y-2">
