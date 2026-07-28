@@ -344,10 +344,9 @@ echo ""
 # Step 9: Install npm dependencies & build
 info "Step 9: Building frontend assets..."
 if [ -f "package.json" ]; then
-    # Fix deprecated npm config warning (init.module → init-module)
-    npm config delete init.module 2>/dev/null || true
-    npm ci --legacy-peer-deps 2>/dev/null || npm install --legacy-peer-deps 2>/dev/null || warn "npm install bermasalah."
-    npm run build 2>&1 || warn "Frontend build bermasalah."
+    # Suppress deprecated npm config warnings (e.g. init.module)
+    npm ci --legacy-peer-deps 2>&1 | grep -v "npm warn config" || npm install --legacy-peer-deps 2>&1 | grep -v "npm warn config" || warn "npm install bermasalah."
+    npm run build 2>&1 | grep -v "npm warn config" || warn "Frontend build bermasalah."
     success "Frontend built."
 else
     warn "No package.json found, skipping frontend build."
