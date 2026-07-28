@@ -239,14 +239,20 @@ echo ""
 info "Step 2: Pulling latest code..."
 DEPLOY_SCRIPT_HASH_BEFORE=$(md5sum "$0" 2>/dev/null | awk '{print $1}')
 if [ -d ".git" ]; then
-    # Stash local changes before pull (aman, bisa di-restore)
-    git stash 2>/dev/null || true
-    git pull origin main 2>/dev/null || git pull origin master 2>/dev/null || {
-        warn "No git remote found, skipping pull."
-    }
-    success "Code updated."
+    # Check if any remote is configured
+    GIT_REMOTE=$(git remote 2>/dev/null | head -1)
+    if [ -n "$GIT_REMOTE" ]; then
+        # Stash local changes before pull (aman, bisa di-restore)
+        git stash 2>/dev/null || true
+        git pull "$GIT_REMOTE" main 2>/dev/null || git pull "$GIT_REMOTE" master 2>/dev/null || {
+            warn "Git pull gagal dari remote '${GIT_REMOTE}'."
+        }
+        success "Code updated."
+    else
+        info "  Tidak ada git remote, skip pull (code di-deploy langsung)."
+    fi
 else
-    warn "Not a git repository, skipping pull."
+    info "  Bukan git repository, skip pull."
 fi
 
 # Re-exec if deploy.sh was updated by git pull
@@ -260,9 +266,10 @@ echo ""
 # Step 3: Install PHP dependencies
 # Use --no-scripts to avoid post-update-cmd errors (e.g. laravel/boost not installed in production)
 info "Step 3: Installing composer dependencies..."
-composer install --no-dev --optimize-autoloader --no-interaction --no-scripts 2>&1 || {
+# Suppress PHP warnings (e.g. mbstring already loaded) from Composer output
+composer install --no-dev --optimize-autoloader --no-interaction --no-scripts 2>&1 | grep -v "PHP Warning:" || {
     warn "Composer install had issues, trying update..."
-    composer update --no-dev --optimize-autoloader --no-interaction --no-scripts 2>&1 || warn "Composer update juga bermasalah."
+    composer update --no-dev --optimize-autoloader --no-interaction --no-scripts 2>&1 | grep -v "PHP Warning:" || warn "Composer update juga bermasalah."
 }
 # Run post-install/update scripts manually (package:discover, vendor:publish, etc.)
 # Skip boost:update as it's only available in dev environment
@@ -337,6 +344,8 @@ echo ""
 # Step 9: Install npm dependencies & build
 info "Step 9: Building frontend assets..."
 if [ -f "package.json" ]; then
+    # Fix deprecated npm config warning (init.module → init-module)
+    npm config delete init.module 2>/dev/null || true
     npm ci --legacy-peer-deps 2>/dev/null || npm install --legacy-peer-deps 2>/dev/null || warn "npm install bermasalah."
     npm run build 2>&1 || warn "Frontend build bermasalah."
     success "Frontend built."
