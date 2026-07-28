@@ -21,6 +21,7 @@ use App\Http\Controllers\Admin\SponsorController as AdminSponsorController;
 use App\Http\Controllers\Admin\SponsorshipController as AdminSponsorshipController;
 use App\Http\Controllers\Admin\UserController as AdminUserController;
 use App\Http\Controllers\AdTrackingController;
+use App\Http\Controllers\AffiliateController;
 use App\Http\Controllers\BookmarkController;
 use App\Http\Controllers\CollectionController;
 use App\Http\Controllers\CommentController;
@@ -34,6 +35,7 @@ use App\Http\Controllers\ForumThreadController;
 use App\Http\Controllers\ForumVoteController;
 use App\Http\Controllers\HealthController;
 use App\Http\Controllers\LeaderboardController;
+use App\Http\Controllers\MarketplaceController;
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\PayoutController;
 use App\Http\Controllers\ProfileController;
@@ -60,6 +62,7 @@ Route::get('/', [SimulationController::class, 'index'])->name('home');
 
 // Leaderboard (public)
 Route::get('/leaderboard', [LeaderboardController::class, 'index'])->name('leaderboard.index');
+Route::get('/leaderboard/creators', [LeaderboardController::class, 'creators'])->name('leaderboard.creators');
 
 // AJAX Search API
 Route::get('/api/search', [SimulationController::class, 'search'])->name('simulations.search');
@@ -83,6 +86,13 @@ Route::get('/creator/{user:username}', [FollowController::class, 'profile'])->na
 // Public Creator Program landing page
 Route::get('/become-creator', [DashboardController::class, 'becomeCreatorPage'])->name('become-creator-page');
 
+// Affiliate tracking (public)
+Route::get('/ref/{code}', [AffiliateController::class, 'track'])->name('affiliate.track');
+
+// Marketplace (public)
+Route::get('/marketplace', [MarketplaceController::class, 'index'])->name('marketplace.index');
+Route::get('/marketplace/{slug}', [MarketplaceController::class, 'show'])->name('marketplace.show');
+
 // Auth routes (already registered by Breeze)
 
 // Dashboard for regular users
@@ -95,6 +105,7 @@ Route::middleware('auth')->group(function () {
 
     // Become Creator
     Route::post('/become-creator', [DashboardController::class, 'becomeCreator'])->name('become-creator');
+    Route::post('/cancel-application', [DashboardController::class, 'cancelApplication'])->name('cancel-application');
 
     // User Profile (My Profile with tabs)
     Route::get('/my-profile', [UserProfileController::class, 'index'])->name('user-profile.index');
@@ -204,12 +215,18 @@ Route::middleware(['auth', 'verified'])->prefix('studio')->name('studio.')->grou
     Route::post('/simulations/{slug}/ads', [StudioController::class, 'storeAd'])->name('simulations.ads.store');
     Route::delete('/simulations/{slug}/ads/{creatorAd}', [StudioController::class, 'destroyAd'])->name('simulations.ads.destroy');
     Route::get('/ads/revenue', [StudioController::class, 'adRevenue'])->name('ads-revenue');
+    Route::get('/ads/revenue/detail', [StudioController::class, 'revenueDetail'])->name('ads-revenue.detail');
 
     // Payouts
     Route::get('/payouts', [PayoutController::class, 'index'])->name('payouts');
     Route::post('/payouts/request', [PayoutController::class, 'requestPayout'])->name('payouts.request');
     Route::get('/payment-settings', [PayoutController::class, 'paymentSettings'])->name('payment-settings');
     Route::put('/payment-settings', [PayoutController::class, 'updatePaymentSettings'])->name('payment-settings.update');
+
+    // Affiliate Links
+    Route::get('/affiliate', [AffiliateController::class, 'index'])->name('affiliate');
+    Route::post('/affiliate/generate', [AffiliateController::class, 'generate'])->name('affiliate.generate');
+    Route::delete('/affiliate/{link}', [AffiliateController::class, 'destroy'])->name('affiliate.destroy');
 });
 
 // Public collection view
@@ -227,6 +244,8 @@ Route::middleware(['auth', CheckRole::class.':superadmin,admin'])->prefix('admin
     Route::get('/users/{user}', [AdminUserController::class, 'show'])->name('users.show');
     Route::put('/users/{user}/role', [AdminUserController::class, 'updateRole'])->name('users.update-role');
     Route::post('/users/{user}/approve-creator', [AdminUserController::class, 'approveCreator'])->name('users.approve-creator');
+    Route::post('/users/{user}/verify-creator', [AdminUserController::class, 'verifyCreator'])->name('users.verify-creator');
+    Route::post('/users/{user}/revoke-verification', [AdminUserController::class, 'revokeVerification'])->name('users.revoke-verification');
     Route::patch('/users/{user}/deactivate', [AdminUserController::class, 'deactivate'])->name('users.deactivate');
     Route::delete('/users/{user}', [AdminUserController::class, 'destroy'])->name('users.destroy');
 
@@ -275,6 +294,11 @@ Route::middleware(['auth', CheckRole::class.':superadmin,admin'])->prefix('admin
     Route::get('/creators/{creator}', [AdminCreatorController::class, 'show'])->name('creators.show');
     Route::put('/creators/{creator}/reputation', [AdminCreatorController::class, 'updateReputation'])->name('creators.update-reputation');
     Route::post('/creators/{creator}/toggle-suspend', [AdminCreatorController::class, 'toggleSuspend'])->name('creators.toggle-suspend');
+
+    // Creator Applications
+    Route::get('/creator-applications', [AdminCreatorController::class, 'applications'])->name('creators.applications');
+    Route::post('/creator-applications/{application}/approve', [AdminCreatorController::class, 'approveApplication'])->name('creators.applications.approve');
+    Route::post('/creator-applications/{application}/reject', [AdminCreatorController::class, 'rejectApplication'])->name('creators.applications.reject');
 
     // Payout Management
     Route::get('/payouts', [AdminPayoutController::class, 'index'])->name('payouts.index');

@@ -20,6 +20,7 @@ use App\Models\TrafficSource;
 use App\Models\User;
 use App\Services\AdRevenueService;
 use App\Services\CreatorReputationService;
+use App\Services\PlayRevenueService;
 use App\Services\SecurityService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -85,6 +86,9 @@ class StudioController extends Controller
             ->limit(10)
             ->get();
 
+        // Revenue breakdown for dashboard
+        $revenueBreakdown = app(PlayRevenueService::class)->getRevenueBreakdown($user);
+
         return view('studio.dashboard', compact(
             'totalSimulations',
             'publishedCount',
@@ -99,6 +103,7 @@ class StudioController extends Controller
             'trendDays',
             'topSimulations',
             'recentComments',
+            'revenueBreakdown',
         ));
     }
 
@@ -872,6 +877,21 @@ class StudioController extends Controller
         $tiers = $revenueService->getTiers();
 
         return view('studio.revenue', compact('reputation', 'tier', 'totalImpressions', 'totalEarnings', 'tiers'));
+    }
+
+    /**
+     * Show detailed revenue breakdown per simulation.
+     */
+    public function revenueDetail(): View
+    {
+        /** @var User $user */
+        $user = Auth::user();
+
+        $revenueService = app(PlayRevenueService::class);
+        $breakdown = $revenueService->getRevenueBreakdown($user);
+        $dailyRevenue = $revenueService->getDailyRevenue($user, 30);
+
+        return view('studio.revenue-detail', compact('breakdown', 'dailyRevenue'));
     }
 
     // ========== Helper Methods ==========

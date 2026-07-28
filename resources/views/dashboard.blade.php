@@ -39,25 +39,104 @@
 
             {{-- Creator Onboarding --}}
             @if(!$isCreator)
-            <div class="bg-gradient-to-r from-emerald-500 to-teal-600 rounded-xl p-6 text-white shadow-sm">
-                <div class="flex items-center gap-4">
-                    <div class="w-12 h-12 bg-white/20 rounded-full flex items-center justify-center">
-                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"/>
-                        </svg>
+                @if($pendingApplication)
+                    {{-- Pending Application Status --}}
+                    <div class="bg-gradient-to-r from-amber-500 to-orange-500 rounded-xl p-6 text-white shadow-sm">
+                        <div class="flex items-center gap-4">
+                            <div class="w-12 h-12 bg-white/20 rounded-full flex items-center justify-center">
+                                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                                </svg>
+                            </div>
+                            <div class="flex-1">
+                                <h3 class="font-semibold text-lg">Pengajuan Sedang Diproses</h3>
+                                <p class="text-orange-100 text-sm mt-1">Pengajuan kreatormu sedang ditinjau oleh admin. Estimasi 1-3 hari kerja.</p>
+                            </div>
+                            <form action="{{ route('cancel-application') }}" method="POST" class="shrink-0">
+                                @csrf
+                                <button type="button" onclick="confirmSubmit(this.closest('form'), 'Batalkan pengajuan kreator?')" class="px-4 py-2 bg-white/20 hover:bg-white/30 text-white text-sm font-medium rounded-lg transition">
+                                    Batalkan
+                                </button>
+                            </form>
+                        </div>
                     </div>
-                    <div class="flex-1">
-                        <h3 class="font-semibold text-lg">Mulai Kreasi!</h3>
-                        <p class="text-emerald-100 text-sm mt-1">Upload interactive experience pertamamu dan jangkau ribuan pelajar di seluruh Indonesia.</p>
+                @elseif($rejectedApplication)
+                    {{-- Rejected Application — Show form again --}}
+                    <div class="bg-gradient-to-r from-emerald-500 to-teal-600 rounded-xl p-6 text-white shadow-sm" x-data="{ showForm: false }">
+                        <div x-show="!showForm">
+                            <div class="flex items-center gap-4">
+                                <div class="w-12 h-12 bg-white/20 rounded-full flex items-center justify-center">
+                                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/>
+                                    </svg>
+                                </div>
+                                <div class="flex-1">
+                                    <h3 class="font-semibold text-lg">Ajukan Lagi</h3>
+                                    <p class="text-emerald-100 text-sm mt-1">Pengajuan sebelumnya ditolak. Kamu bisa mengajukan ulang dengan alasan yang lebih baik.</p>
+                                </div>
+                                <button @click="showForm = true" class="px-5 py-2.5 bg-white text-emerald-700 font-semibold text-sm rounded-lg hover:bg-emerald-50 transition shadow-sm shrink-0">
+                                    Ajukan Ulang
+                                </button>
+                            </div>
+                        </div>
+                        <div x-show="showForm" x-cloak class="mt-4">
+                            <form action="{{ route('become-creator') }}" method="POST">
+                                @csrf
+                                <div>
+                                    <label for="reason" class="block text-sm font-medium text-white mb-1">Alasan Mendaftar Kreator</label>
+                                    <textarea name="reason" id="reason" rows="3" required minlength="20" maxlength="1000" placeholder="Jelaskan mengapa kamu ingin menjadi kreator dan apa yang akan kamu buat..." class="w-full rounded-lg border-white/30 bg-white/20 text-white placeholder-white/50 focus:border-white focus:ring-white text-sm"></textarea>
+                                    <p class="text-xs text-emerald-100 mt-1">Minimal 20 karakter</p>
+                                </div>
+                                <div class="flex gap-3 mt-3">
+                                    <button type="submit" class="px-5 py-2.5 bg-white text-emerald-700 font-semibold text-sm rounded-lg hover:bg-emerald-50 transition shadow-sm">
+                                        Kirim Pengajuan
+                                    </button>
+                                    <button type="button" @click="showForm = false" class="px-4 py-2.5 bg-white/20 hover:bg-white/30 text-white text-sm font-medium rounded-lg transition">
+                                        Batal
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
                     </div>
-                    <form action="{{ route('become-creator') }}" method="POST" class="shrink-0">
-                        @csrf
-                        <button type="submit" class="px-5 py-2.5 bg-white text-emerald-700 font-semibold text-sm rounded-lg hover:bg-emerald-50 transition shadow-sm">
-                            Jadikan Kreator
-                        </button>
-                    </form>
-                </div>
-            </div>
+                @else
+                    {{-- No application yet — Show form --}}
+                    <div class="bg-gradient-to-r from-emerald-500 to-teal-600 rounded-xl p-6 text-white shadow-sm" x-data="{ showForm: false }">
+                        <div x-show="!showForm">
+                            <div class="flex items-center gap-4">
+                                <div class="w-12 h-12 bg-white/20 rounded-full flex items-center justify-center">
+                                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"/>
+                                    </svg>
+                                </div>
+                                <div class="flex-1">
+                                    <h3 class="font-semibold text-lg">Mulai Kreasi!</h3>
+                                    <p class="text-emerald-100 text-sm mt-1">Upload interactive experience pertamamu dan jangkau ribuan pelajar di seluruh Indonesia.</p>
+                                </div>
+                                <button @click="showForm = true" class="px-5 py-2.5 bg-white text-emerald-700 font-semibold text-sm rounded-lg hover:bg-emerald-50 transition shadow-sm shrink-0">
+                                    Jadikan Kreator
+                                </button>
+                            </div>
+                        </div>
+                        <div x-show="showForm" x-cloak class="mt-4">
+                            <form action="{{ route('become-creator') }}" method="POST">
+                                @csrf
+                                <div>
+                                    <label for="reason" class="block text-sm font-medium text-white mb-1">Alasan Mendaftar Kreator</label>
+                                    <textarea name="reason" id="reason" rows="3" required minlength="20" maxlength="1000" placeholder="Jelaskan mengapa kamu ingin menjadi kreator dan apa yang akan kamu buat..." class="w-full rounded-lg border-white/30 bg-white/20 text-white placeholder-white/50 focus:border-white focus:ring-white text-sm"></textarea>
+                                    <p class="text-xs text-emerald-100 mt-1">Minimal 20 karakter</p>
+                                </div>
+                                <div class="flex gap-3 mt-3">
+                                    <button type="submit" class="px-5 py-2.5 bg-white text-emerald-700 font-semibold text-sm rounded-lg hover:bg-emerald-50 transition shadow-sm">
+                                        Kirim Pengajuan
+                                    </button>
+                                    <button type="button" @click="showForm = false" class="px-4 py-2.5 bg-white/20 hover:bg-white/30 text-white text-sm font-medium rounded-lg transition">
+                                        Batal
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                @endif
             @endif
 
             {{-- Stats Cards --}}

@@ -20,6 +20,7 @@ class CreatorReputation extends Model
         'reports_received',
         'revenue_tier',
         'total_revenue',
+        'ranking_score',
     ];
 
     protected function casts(): array
@@ -32,6 +33,7 @@ class CreatorReputation extends Model
             'flagged_count' => 'integer',
             'reports_received' => 'integer',
             'total_revenue' => 'decimal:2',
+            'ranking_score' => 'decimal:2',
         ];
     }
 

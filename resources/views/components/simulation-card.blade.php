@@ -54,8 +54,11 @@
                             {{ $simulation->title }}
                         </h3>
                     </a>
-                    <a href="{{ route('creators.show', $simulation->user->username) }}" class="text-xs text-gray-500 dark:text-gray-400 mt-1 hover:text-blue-600 transition inline-block" onclick="event.stopPropagation();">
+                    <a href="{{ route('creators.show', $simulation->user->username) }}" class="text-xs text-gray-500 dark:text-gray-400 mt-1 hover:text-blue-600 transition inline-flex items-center gap-1" onclick="event.stopPropagation();">
                         {{ $simulation->user->name }}
+                        @if($simulation->user->isVerifiedCreator())
+                            <x-verified-badge :type="$simulation->user->verification_badge" size="sm" />
+                        @endif
                     </a>
                     <div class="flex items-center gap-2 text-xs text-gray-500 dark:text-gray-400 mt-0.5 flex-wrap">
                         @if($simulation->average_rating)

@@ -5,7 +5,10 @@
             <h2 class="text-lg font-semibold text-gray-900 dark:text-white">Revenue Iklan</h2>
             <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">Pendapatan dari iklan creator yang Anda ajukan</p>
         </div>
-        <a href="{{ route('studio.dashboard') }}" class="text-sm text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-white">← Kembali</a>
+        <div class="flex items-center gap-3">
+            <a href="{{ route('studio.ads-revenue.detail') }}" class="text-sm text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 font-medium">Lihat Detail Revenue →</a>
+            <a href="{{ route('studio.dashboard') }}" class="text-sm text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-white">← Kembali</a>
+        </div>
     </div>
 
     {{-- Revenue Stats --}}

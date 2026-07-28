@@ -4,7 +4,9 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\CreatorAd;
+use App\Models\CreatorApplication;
 use App\Models\CreatorReputation;
+use App\Models\Notification;
 use App\Models\User;
 use App\Services\AdRevenueService;
 use App\Services\CreatorReputationService;
@@ -144,5 +146,123 @@ class CreatorController extends Controller
 
         return redirect()->route('admin.creators.show', $creator)
             ->with('success', "Creator {$creator->name} berhasil diaktifkan kembali.");
+    }
+
+    /**
+     * Display pending creator applications.
+     */
+    public function applications(Request $request): View
+    {
+        $query = CreatorApplication::with('user');
+
+        if ($request->filled('status')) {
+            $query->where('status', $request->input('status'));
+        } else {
+            $query->where('status', 'pending');
+        }
+
+        $applications = $query->latest()->paginate(20)->withQueryString();
+
+        $counts = [
+            'pending' => CreatorApplication::where('status', 'pending')->count(),
+            'approved' => CreatorApplication::where('status', 'approved')->count(),
+            'rejected' => CreatorApplication::where('status', 'rejected')->count(),
+        ];
+
+        return view('admin.creators.applications', compact('applications', 'counts'));
+    }
+
+    /**
+     * Approve a creator application.
+     */
+    public function approveApplication(Request $request, CreatorApplication $application): RedirectResponse
+    {
+        if (! $application->isPending()) {
+            return redirect()->back()->with('error', 'Pengajuan ini sudah diproses.');
+        }
+
+        $user = $application->user;
+
+        if ($user->isCreator()) {
+            return redirect()->back()->with('error', 'Pengguna ini sudah menjadi creator.');
+        }
+
+        // Approve application
+        $application->update([
+            'status' => 'approved',
+            'reviewed_by' => auth()->id(),
+            'reviewed_at' => now(),
+            'review_notes' => $request->input('review_notes', 'Disetujui oleh admin'),
+        ]);
+
+        // Update user role
+        $user->update(['role' => 'creator']);
+
+        // Create reputation record
+        CreatorReputation::firstOrCreate(
+            ['user_id' => $user->id],
+            [
+                'score' => 100,
+                'total_uploads' => 0,
+                'approved_count' => 0,
+                'rejected_count' => 0,
+                'flagged_count' => 0,
+                'reports_received' => 0,
+                'revenue_tier' => 'basic',
+                'total_revenue' => 0,
+            ]
+        );
+
+        // Notify user
+        Notification::create([
+            'user_id' => $user->id,
+            'type' => 'creator_approved',
+            'title' => 'Pengajuan Kreator Disetujui!',
+            'body' => 'Selamat! Pengajuanmu sebagai kreator telah disetujui. Kamu sekarang bisa mulai membuat simulasi interaktif.',
+            'data' => [
+                'application_id' => $application->id,
+            ],
+        ]);
+
+        return redirect()->route('admin.creators.applications')
+            ->with('success', "Pengajuan {$user->name} berhasil disetujui.");
+    }
+
+    /**
+     * Reject a creator application.
+     */
+    public function rejectApplication(Request $request, CreatorApplication $application): RedirectResponse
+    {
+        if (! $application->isPending()) {
+            return redirect()->back()->with('error', 'Pengajuan ini sudah diproses.');
+        }
+
+        $validated = $request->validate([
+            'review_notes' => 'nullable|string|max:500',
+        ]);
+
+        $user = $application->user;
+
+        // Reject application
+        $application->update([
+            'status' => 'rejected',
+            'reviewed_by' => auth()->id(),
+            'reviewed_at' => now(),
+            'review_notes' => $validated['review_notes'] ?? 'Ditolak oleh admin',
+        ]);
+
+        // Notify user
+        Notification::create([
+            'user_id' => $user->id,
+            'type' => 'creator_rejected',
+            'title' => 'Pengajuan Kreator Ditolak',
+            'body' => 'Pengajuanmu sebagai kreator belum dapat disetujui. '.($validated['review_notes'] ?? 'Silakan coba lagi nanti.'),
+            'data' => [
+                'application_id' => $application->id,
+            ],
+        ]);
+
+        return redirect()->route('admin.creators.applications')
+            ->with('success', "Pengajuan {$user->name} berhasil ditolak.");
     }
 }

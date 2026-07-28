@@ -191,14 +191,14 @@
     </div>
 
     {{-- Revenue Tiers Info --}}
-    <div class="mt-6 bg-white border border-gray-100 rounded-xl p-6 shadow-sm">
-        <h3 class="font-semibold text-gray-900 mb-4">Revenue Sharing Tiers</h3>
+    <div class="mt-6 bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700 rounded-xl p-6 shadow-sm">
+        <h3 class="font-semibold text-gray-900 dark:text-white mb-4">Revenue Sharing Tiers</h3>
         <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
             @foreach($revenueTiers as $key => $tier)
-                <div class="border rounded-lg p-3 {{ ($reputation->revenue_tier ?? 'basic') === $key ? 'border-blue-300 bg-blue-50' : 'border-gray-200' }}">
-                    <p class="text-sm font-semibold text-gray-900">{{ $tier['name'] }}</p>
-                    <p class="text-xs text-gray-500 mt-1">{{ $tier['creator_share'] }}% Creator / {{ $tier['platform_share'] }}% Platform</p>
-                    <p class="text-[10px] text-gray-400 mt-1">{{ $tier['requirements'] }}</p>
+                <div class="border rounded-lg p-3 {{ ($reputation->revenue_tier ?? 'basic') === $key ? 'border-blue-300 dark:border-blue-600 bg-blue-50 dark:bg-blue-900/30' : 'border-gray-200 dark:border-gray-600' }}">
+                    <p class="text-sm font-semibold text-gray-900 dark:text-white">{{ $tier['name'] }}</p>
+                    <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">{{ $tier['creator_share'] }}% Creator / {{ $tier['platform_share'] }}% Platform</p>
+                    <p class="text-[10px] text-gray-400 dark:text-gray-500 mt-1">{{ $tier['requirements'] }}</p>
                 </div>
             @endforeach
         </div>

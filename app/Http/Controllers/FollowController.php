@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\CreatorReputation;
 use App\Models\Follow;
 use App\Models\Notification;
 use App\Models\Simulation;
@@ -177,6 +178,11 @@ class FollowController extends Controller
 
         $isFollowing = Auth::check() && Auth::user()->isFollowing($creator);
 
-        return view('creators.show', compact('creator', 'simulations', 'isFollowing'));
+        // Determine ranking position for "Top 10" badge
+        $rankingPosition = CreatorReputation::where('ranking_score', '>', $creator->reputation?->ranking_score ?? 0)
+            ->count() + 1;
+        $isTop10 = $creator->reputation && $rankingPosition <= 10;
+
+        return view('creators.show', compact('creator', 'simulations', 'isFollowing', 'rankingPosition', 'isTop10'));
     }
 }

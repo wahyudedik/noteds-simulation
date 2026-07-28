@@ -8,6 +8,19 @@
     <div class="py-12">
         <div class="max-w-4xl mx-auto sm:px-6 lg:px-8">
 
+            {{-- Leaderboard Type Tabs --}}
+            <div class="flex items-center justify-between mb-6">
+                <div class="flex items-center gap-2">
+                    <span class="inline-flex items-center px-3 py-1.5 text-sm font-semibold bg-gray-900 text-white dark:bg-white dark:text-gray-900 rounded-lg">
+                        🎯 Poin
+                    </span>
+                    <a href="{{ route('leaderboard.creators') }}"
+                       class="px-3 py-1.5 text-sm font-medium rounded-lg transition bg-white text-gray-600 hover:bg-gray-100 border border-gray-200 dark:bg-gray-800 dark:text-gray-300 dark:hover:bg-gray-700 dark:border-gray-700">
+                        🏆 Creator
+                    </a>
+                </div>
+            </div>
+
             {{-- Period Tabs --}}
             <div class="flex items-center gap-2 mb-6">
                 @foreach(['all' => 'Semua Waktu', 'month' => 'Bulan Ini', 'week' => 'Minggu Ini'] as $key => $label)

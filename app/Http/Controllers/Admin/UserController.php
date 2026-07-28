@@ -110,6 +110,47 @@ class UserController extends Controller
     }
 
     /**
+     * Verify creator account.
+     */
+    public function verifyCreator(Request $request, User $user): RedirectResponse
+    {
+        if (! $user->isCreator()) {
+            return redirect()->back()->with('error', 'Pengguna ini bukan creator.');
+        }
+
+        if ($user->verified_at !== null) {
+            return redirect()->back()->with('error', 'Pengguna ini sudah terverifikasi.');
+        }
+
+        $notes = $request->input('verification_notes');
+        $user->update([
+            'verified_at' => now(),
+            'verification_notes' => $notes,
+        ]);
+
+        return redirect()->route('admin.users.show', $user)
+            ->with('success', "Creator {$user->name} berhasil diverifikasi.");
+    }
+
+    /**
+     * Revoke creator verification.
+     */
+    public function revokeVerification(User $user): RedirectResponse
+    {
+        if ($user->verified_at === null) {
+            return redirect()->back()->with('error', 'Pengguna ini belum terverifikasi.');
+        }
+
+        $user->update([
+            'verified_at' => null,
+            'verification_notes' => null,
+        ]);
+
+        return redirect()->route('admin.users.show', $user)
+            ->with('success', "Verifikasi creator {$user->name} berhasil dicabut.");
+    }
+
+    /**
      * Delete user account.
      */
     public function destroy(User $user): RedirectResponse

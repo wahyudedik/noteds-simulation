@@ -14,7 +14,7 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
-#[Fillable(['name', 'username', 'email', 'password', 'role', 'avatar', 'bio', 'google_id'])]
+#[Fillable(['name', 'username', 'email', 'password', 'role', 'avatar', 'bio', 'google_id', 'verified_at', 'verification_notes'])]
 #[Hidden(['password', 'remember_token'])]
 class User extends Authenticatable implements MustVerifyEmail
 {
@@ -30,6 +30,7 @@ class User extends Authenticatable implements MustVerifyEmail
     {
         return [
             'email_verified_at' => 'datetime',
+            'verified_at' => 'datetime',
             'password' => 'hashed',
         ];
     }
@@ -56,6 +57,14 @@ class User extends Authenticatable implements MustVerifyEmail
     public function isCreator(): bool
     {
         return in_array($this->role, ['superadmin', 'admin', 'creator']);
+    }
+
+    /**
+     * Check if user is a verified creator.
+     */
+    public function isVerifiedCreator(): bool
+    {
+        return $this->isCreator() && $this->verified_at !== null;
     }
 
     // ─── Relationships ────────────────────────────────────────────
@@ -297,6 +306,22 @@ class User extends Authenticatable implements MustVerifyEmail
     public function getShareCountAttribute(): int
     {
         return $this->hasMany(Share::class)->count();
+    }
+
+    /**
+     * Get verification badge type for display.
+     */
+    public function getVerificationBadgeAttribute(): ?string
+    {
+        if (! $this->isVerifiedCreator()) {
+            return null;
+        }
+
+        return match (true) {
+            $this->reputation?->revenue_tier === 'platinum' => 'platinum',
+            $this->reputation?->revenue_tier === 'expert' => 'expert',
+            default => 'verified',
+        };
     }
 
     /**

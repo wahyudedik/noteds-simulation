@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\CreatorApplication;
 use App\Models\Notification;
 use App\Models\User;
 use App\Services\GamificationService;
@@ -28,6 +29,20 @@ class DashboardController extends Controller
         $user = $request->user();
 
         $isCreator = $user->isCreator();
+        $pendingApplication = null;
+        $rejectedApplication = null;
+
+        if (! $isCreator) {
+            $pendingApplication = CreatorApplication::where('user_id', $user->id)
+                ->where('status', 'pending')
+                ->latest()
+                ->first();
+
+            $rejectedApplication = CreatorApplication::where('user_id', $user->id)
+                ->where('status', 'rejected')
+                ->latest()
+                ->first();
+        }
 
         $stats = [
             'bookmarks' => $user->bookmarks()->count(),
@@ -61,6 +76,8 @@ class DashboardController extends Controller
             'recent_bookmarks' => $recent_bookmarks,
             'recent_history' => $recent_history,
             'levelProgress' => $levelProgress,
+            'pendingApplication' => $pendingApplication,
+            'rejectedApplication' => $rejectedApplication,
         ]);
     }
 
@@ -75,10 +92,27 @@ class DashboardController extends Controller
             return redirect()->route('dashboard')->with('status', 'Kamu sudah menjadi kreator!');
         }
 
-        // Update user role to creator
-        $user->update(['role' => 'creator']);
+        // Check if user already has a pending application
+        $existingPending = CreatorApplication::where('user_id', $user->id)
+            ->where('status', 'pending')
+            ->exists();
 
-        // Notify all admins/superadmins about the new creator
+        if ($existingPending) {
+            return redirect()->route('dashboard')->with('error', 'Kamu sudah memiliki pengajuan yang sedang diproses.');
+        }
+
+        $validated = $request->validate([
+            'reason' => 'required|string|min:20|max:1000',
+        ]);
+
+        // Create application
+        CreatorApplication::create([
+            'user_id' => $user->id,
+            'reason' => $validated['reason'],
+            'status' => 'pending',
+        ]);
+
+        // Notify all admins/superadmins about the new application
         $admins = User::where('role', 'superadmin')
             ->orWhere('role', 'admin')
             ->get();
@@ -87,8 +121,8 @@ class DashboardController extends Controller
             Notification::create([
                 'user_id' => $admin->id,
                 'type' => 'creator_request',
-                'title' => 'Kreator Baru',
-                'body' => "{$user->name} telah bergabung sebagai kreator baru.",
+                'title' => 'Pengajuan Kreator Baru',
+                'body' => "{$user->name} telah mengajukan diri sebagai kreator. Menunggu persetujuan admin.",
                 'data' => [
                     'user_id' => $user->id,
                     'user_name' => $user->name,
@@ -96,6 +130,27 @@ class DashboardController extends Controller
             ]);
         }
 
-        return redirect()->route('dashboard')->with('status', 'Selamat! Kamu sekarang adalah kreator. Mulai buat simulasi interaktifmu!');
+        return redirect()->route('dashboard')->with('status', 'Pengajuan kreator berhasil dikirim! Admin akan meninjau aplikasimu dalam 1-3 hari kerja.');
+    }
+
+    /**
+     * Cancel a pending creator application.
+     */
+    public function cancelApplication(Request $request): RedirectResponse
+    {
+        $user = $request->user();
+
+        $application = CreatorApplication::where('user_id', $user->id)
+            ->where('status', 'pending')
+            ->latest()
+            ->first();
+
+        if (! $application) {
+            return redirect()->route('dashboard')->with('error', 'Tidak ada pengajuan yang bisa dibatalkan.');
+        }
+
+        $application->update(['status' => 'rejected', 'review_notes' => 'Dibatalkan oleh pengguna']);
+
+        return redirect()->route('dashboard')->with('status', 'Pengajuan kreator berhasil dibatalkan.');
     }
 }
