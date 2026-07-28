@@ -504,7 +504,8 @@
                 },
 
                 async deleteReview(id) {
-                    if (!confirm('Yakin ingin menghapus review ini?')) return;
+                    const confirmed = await window.showConfirm('Yakin ingin menghapus review ini?', { title: 'Hapus Review', confirmText: 'Ya, Hapus' });
+                    if (!confirmed) return;
                     this.submitting = true;
                     this.message = '';
 

@@ -1,4 +1,4 @@
-﻿<x-app-layout>
+<x-app-layout>
     <x-slot name="header">
         <div class="flex items-center gap-3">
             <a href="{{ route('admin.challenges.index') }}" class="text-gray-400 dark:text-gray-500 hover:text-gray-600 dark:text-gray-400">
@@ -73,11 +73,12 @@
                                 class="w-full rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm">{{ old('prize_description', $challenge->prize_description) }}</textarea>
                         </div>
 
-                        <div class="flex justify-between pt-4 border-t border-gray-100">
-                            <form method="POST" action="{{ route('admin.challenges.destroy', $challenge) }}" onsubmit="return confirm('Yakin hapus challenge ini?')">
+                        <div class="flex justify-between pt-4 border-t border-gray-100 dark:border-gray-700">
+                            <form method="POST" action="{{ route('admin.challenges.destroy', $challenge) }}">
                                 @csrf
                                 @method('DELETE')
-                                <button type="submit" class="px-4 py-2 text-sm font-medium text-red-600 dark:text-red-400 bg-red-50 hover:bg-red-100 dark:bg-red-900/30 rounded-lg transition">Hapus</button>
+                                <button type="button" class="px-4 py-2 text-sm font-medium text-red-600 dark:text-red-400 bg-red-50 hover:bg-red-100 dark:bg-red-900/30 rounded-lg transition"
+                                    onclick="confirmSubmit(this.closest('form'), 'Yakin ingin menghapus challenge ini? Semua entri terkait juga akan dihapus.', { title: 'Hapus Challenge', confirmText: 'Ya, Hapus' })">Hapus</button>
                             </form>
                             <div class="flex gap-3">
                                 <a href="{{ route('admin.challenges.index') }}" class="px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 bg-gray-100 hover:bg-gray-200 rounded-lg transition">Batal</a>

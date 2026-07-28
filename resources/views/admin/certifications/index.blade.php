@@ -1,4 +1,4 @@
-﻿<x-app-layout>
+<x-app-layout>
     <x-slot name="header">
         <div class="flex items-center justify-between">
             <h2 class="font-semibold text-xl text-gray-800 leading-tight">
@@ -51,7 +51,7 @@
                                         @csrf
                                         <input type="hidden" name="user_id" value="{{ $item['user']->id }}" />
                                         <input type="hidden" name="level" value="{{ $item['level'] }}" />
-                                        <button type="submit" onclick="return confirm('Berikan sertifikasi {{ $item['level'] }} ke {{ $item['user']->name }}?')"
+                                        <button type="submit" onclick="confirmSubmit(this.closest('form'), 'Berikan sertifikasi {{ ucfirst($item['level']) }} ke {{ $item['user']->name }}?', { title: 'Berikan Sertifikasi', confirmText: 'Ya, Berikan' })"
                                             class="px-3 py-1 text-xs font-medium text-white bg-blue-600 hover:bg-blue-700 rounded-lg transition">Berikan</button>
                                     </form>
                                 </div>
@@ -120,7 +120,7 @@
                                             <form method="POST" action="{{ route('admin.certifications.revoke', $cert) }}" class="inline">
                                                 @csrf
                                                 @method('PATCH')
-                                                <button type="submit" onclick="return confirm('Cabut sertifikasi ini?')"
+                                                <button type="submit" onclick="confirmSubmit(this.closest('form'), 'Cabut sertifikasi {{ $cert->level_label }} dari {{ $cert->user->name }}?', { title: 'Cabut Sertifikasi', confirmText: 'Ya, Cabut' })"
                                                     class="text-red-600 dark:text-red-400 hover:text-red-800">Cabut</button>
                                             </form>
                                         @else

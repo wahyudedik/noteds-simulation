@@ -12,7 +12,7 @@
 
             <div class="flex items-center justify-between mb-6 flex-wrap gap-3">
                 <div class="flex items-center gap-3">
-                    <h1 class="text-2xl font-bold text-gray-900">{{ $category }}</h1>
+                    <h1 class="text-2xl font-bold text-gray-900 dark:text-white">{{ $category }}</h1>
                     <span class="text-sm text-gray-500">({{ $simulations->total() }} experience)</span>
                 </div>
                 <div class="flex items-center gap-1">

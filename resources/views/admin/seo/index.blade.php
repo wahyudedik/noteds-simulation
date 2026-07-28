@@ -1,4 +1,4 @@
-﻿<x-app-layout>
+<x-app-layout>
     <x-slot name="header">
         <div class="flex items-center justify-between">
             <h2 class="font-semibold text-xl text-gray-800 leading-tight">
@@ -60,10 +60,11 @@
                                         <td class="py-3 px-2 text-gray-400 dark:text-gray-500 text-xs">{{ $seo->updated_at->diffForHumans() }}</td>
                                         <td class="py-3 px-2 text-right space-x-2">
                                             <a href="{{ route('admin.seo.edit', $seo) }}" class="text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 text-xs font-medium">Edit</a>
-                                            <form method="POST" action="{{ route('admin.seo.destroy', $seo) }}" class="inline" onsubmit="return confirm('Yakin ingin menghapus?')">
+                                            <form method="POST" action="{{ route('admin.seo.destroy', $seo) }}" class="inline">
                                                 @csrf
                                                 @method('DELETE')
-                                                <button type="submit" class="text-red-600 dark:text-red-400 hover:text-red-700 text-xs font-medium">Hapus</button>
+                                                <button type="button" class="text-red-600 dark:text-red-400 hover:text-red-700 text-xs font-medium"
+                                                    onclick="confirmSubmit(this.closest('form'), 'Yakin ingin menghapus SEO setting ini?', { title: 'Hapus SEO Setting', confirmText: 'Ya, Hapus' })">Hapus</button>
                                             </form>
                                         </td>
                                     </tr>

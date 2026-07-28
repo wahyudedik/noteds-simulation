@@ -54,6 +54,9 @@
             <main id="main-content">
                 {{ $slot }}
             </main>
+
+            <!-- Footer -->
+            <x-app-footer />
         </div>
 
         <x-toast />

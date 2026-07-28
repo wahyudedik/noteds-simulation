@@ -168,10 +168,9 @@
                                 <td class="py-3 px-4 text-center text-gray-500 dark:text-gray-400">{{ number_format($ad->impressions ?? 0) }}</td>
                                 <td class="py-3 px-4 text-right">
                                     @if($ad->review_status !== 'approved')
-                                        <form action="{{ route('studio.simulations.ads.destroy', [$simulation->slug, $ad->id]) }}" method="POST" class="inline"
-                                              x-data x-on:submit.prevent="if(confirm('Hapus iklan ini?')) $el.submit()">
+                                        <form action="{{ route('studio.simulations.ads.destroy', [$simulation->slug, $ad->id]) }}" method="POST" class="inline">
                                             @csrf @method('DELETE')
-                                            <button type="submit" class="text-red-500 hover:text-red-700 text-xs font-medium">Hapus</button>
+                                            <button type="button" onclick="confirmSubmit(this.closest('form'), 'Yakin ingin menghapus iklan ini?', { title: 'Hapus Iklan', confirmText: 'Ya, Hapus' })" class="text-red-500 hover:text-red-700 text-xs font-medium">Hapus</button>
                                         </form>
                                     @endif
                                 </td>

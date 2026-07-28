@@ -1,4 +1,4 @@
-﻿<x-app-layout>
+<x-app-layout>
     <x-slot name="header">
         <div class="flex items-center justify-between">
             <h2 class="font-semibold text-xl text-gray-800 leading-tight">
@@ -98,7 +98,7 @@
                     {{-- Approve --}}
                     <form action="{{ route('admin.creator-ads.approve', $creatorAd) }}" method="POST">
                         @csrf
-                        <button type="submit" onclick="return confirm('Setujui iklan ini?')"
+                        <button type="submit" onclick="confirmSubmit(this.closest('form'), 'Setujui iklan ini?', { title: 'Setujui Iklan', confirmText: 'Ya, Setujui' })"
                             class="px-4 py-2 bg-green-600 hover:bg-green-700 text-white text-sm font-medium rounded-lg transition">
                             ✓ Setujui
                         </button>
@@ -108,7 +108,7 @@
                     <form action="{{ route('admin.creator-ads.reject', $creatorAd) }}" method="POST" class="flex items-center gap-2">
                         @csrf
                         <input type="text" name="review_notes" placeholder="Alasan penolakan (opsional)" class="text-sm border-gray-300 rounded-lg focus:ring-red-500 focus:border-red-500">
-                        <button type="submit" onclick="return confirm('Tolak iklan ini?')"
+                        <button type="submit" onclick="confirmSubmit(this.closest('form'), 'Tolak iklan ini?', { title: 'Tolak Iklan', confirmText: 'Ya, Tolak' })"
                             class="px-4 py-2 bg-red-600 hover:bg-red-700 text-white text-sm font-medium rounded-lg transition">
                             ✗ Tolak
                         </button>
@@ -118,7 +118,7 @@
                     <form action="{{ route('admin.creator-ads.flag', $creatorAd) }}" method="POST" class="flex items-center gap-2">
                         @csrf
                         <input type="text" name="review_notes" placeholder="Alasan flag (opsional)" class="text-sm border-gray-300 rounded-lg focus:ring-orange-500 focus:border-orange-500">
-                        <button type="submit" onclick="return confirm('Tandai mencurigakan?')"
+                        <button type="submit" onclick="confirmSubmit(this.closest('form'), 'Tandai iklan ini sebagai mencurigakan?', { title: 'Flag Iklan', confirmText: 'Ya, Flag' })"
                             class="px-4 py-2 bg-orange-500 hover:bg-orange-600 text-white text-sm font-medium rounded-lg transition">
                             ⚑ Flag
                         </button>

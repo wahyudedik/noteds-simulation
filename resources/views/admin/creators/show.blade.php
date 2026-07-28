@@ -1,4 +1,4 @@
-﻿<x-app-layout>
+<x-app-layout>
     <x-slot name="header">
         <div class="flex items-center justify-between">
             <h2 class="font-semibold text-xl text-gray-800 leading-tight">
@@ -36,7 +36,7 @@
                         @endif
                         <div class="flex gap-2 mt-2 justify-end">
                             <form action="{{ route('admin.creators.toggle-suspend', $creator) }}" method="POST"
-                                  x-data x-on:submit.prevent="if(confirm('Yakin ingin {{ $creator->reputation && $creator->reputation->score < 20 ? 'mengaktifkan' : 'menangguhkan' }} creator ini?')) $el.submit()">
+                                  x-data="{ submitting: false }" x-on:submit.prevent="showConfirm('Yakin ingin {{ $creator->reputation && $creator->reputation->score < 20 ? 'mengaktifkan' : 'menangguhkan' }} creator ini?', { title: '{{ $creator->reputation && $creator->reputation->score < 20 ? 'Aktifkan' : 'Tangguhkan' }} Creator', confirmText: 'Ya, {{ $creator->reputation && $creator->reputation->score < 20 ? 'Aktifkan' : 'Tangguhkan' }}' }).then(confirmed => { if (confirmed) { $el.submit(); } })">
                                 @csrf
                                 <button type="submit" class="text-xs font-medium px-3 py-1.5 rounded-lg transition
                                     {{ $creator->reputation && $creator->reputation->score < 20 ? 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400 hover:bg-green-200' : 'bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400 hover:bg-red-200' }}">

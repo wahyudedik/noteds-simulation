@@ -1,4 +1,4 @@
-﻿<x-app-layout>
+<x-app-layout>
     <x-slot name="header">
         <div class="flex items-center justify-between">
             <h2 class="font-semibold text-xl text-gray-800 leading-tight">
@@ -188,7 +188,7 @@
                                         <textarea name="review_notes" rows="2" placeholder="Alasan penolakan" class="w-full text-sm border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500"></textarea>
                                     </div>
                                     <button type="submit" class="w-full px-4 py-2 bg-red-600 hover:bg-red-700 text-white text-sm font-medium rounded-lg transition"
-                                        onclick="return confirm('Yakin ingin menolak payout ini?')">
+                                        onclick="confirmSubmit(this.closest('form'), 'Yakin ingin menolak payout ini? Berikan alasan penolakan jika diperlukan.', { title: 'Tolak Payout', confirmText: 'Ya, Tolak' })">
                                         ✗ Tolak
                                     </button>
                                 </form>

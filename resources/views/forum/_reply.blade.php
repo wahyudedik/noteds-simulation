@@ -73,10 +73,11 @@
 
                     {{-- Delete (owner or admin) --}}
                     @if($reply->isOwnedBy(auth()->user()) || auth()->user()->isAdmin())
-                        <form action="{{ route('forum.reply.destroy', $reply->id) }}" method="POST" onsubmit="return confirm('Yakin ingin menghapus balasan ini?')">
+                        <form action="{{ route('forum.reply.destroy', $reply->id) }}" method="POST">
                             @csrf
                             @method('DELETE')
-                            <button type="submit" class="text-xs text-gray-400 dark:text-gray-500 hover:text-red-500 dark:hover:text-red-400 transition font-medium">
+                            <button type="button" class="text-xs text-gray-400 dark:text-gray-500 hover:text-red-500 dark:hover:text-red-400 transition font-medium"
+                                onclick="confirmSubmit(this.closest('form'), 'Yakin ingin menghapus balasan ini?', { title: 'Hapus Balasan', confirmText: 'Ya, Hapus' })">
                                 Hapus
                             </button>
                         </form>

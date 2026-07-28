@@ -254,6 +254,14 @@ class User extends Authenticatable implements MustVerifyEmail
     }
 
     /**
+     * Get experience projects created by this user.
+     */
+    public function experienceProjects(): HasMany
+    {
+        return $this->hasMany(ExperienceProject::class);
+    }
+
+    /**
      * Get badges earned by this user.
      */
     public function badges(): BelongsToMany

@@ -27,6 +27,7 @@ use App\Http\Controllers\CollectionController;
 use App\Http\Controllers\CommentController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\EmbedController;
+use App\Http\Controllers\ExperienceBuilderController;
 use App\Http\Controllers\FavoriteController;
 use App\Http\Controllers\FollowController;
 use App\Http\Controllers\ForumController;
@@ -254,6 +255,19 @@ Route::middleware(['auth', 'verified'])->prefix('studio')->name('studio.')->grou
     Route::get('/affiliate', [AffiliateController::class, 'index'])->name('affiliate');
     Route::post('/affiliate/generate', [AffiliateController::class, 'generate'])->name('affiliate.generate');
     Route::delete('/affiliate/{link}', [AffiliateController::class, 'destroy'])->name('affiliate.destroy');
+
+    // Experience Builder
+    Route::prefix('builder')->name('builder.')->group(function () {
+        Route::get('/', [ExperienceBuilderController::class, 'index'])->name('index');
+        Route::get('/templates', [ExperienceBuilderController::class, 'templates'])->name('templates');
+        Route::post('/projects', [ExperienceBuilderController::class, 'createProject'])->name('projects.create');
+        Route::get('/projects/{project}/edit', [ExperienceBuilderController::class, 'edit'])->name('projects.edit');
+        Route::put('/projects/{project}', [ExperienceBuilderController::class, 'update'])->name('projects.update');
+        Route::post('/projects/{project}/preview', [ExperienceBuilderController::class, 'preview'])->name('projects.preview');
+        Route::post('/projects/{project}/export', [ExperienceBuilderController::class, 'export'])->name('projects.export');
+        Route::post('/projects/{project}/publish', [ExperienceBuilderController::class, 'publish'])->name('projects.publish');
+        Route::delete('/projects/{project}', [ExperienceBuilderController::class, 'destroy'])->name('projects.destroy');
+    });
 });
 
 // Public collection view

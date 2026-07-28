@@ -84,7 +84,7 @@
                             <p class="text-xs text-gray-400 dark:text-gray-500 mt-1">Maks: Rp {{ number_format($availableBalance, 0, ',', '.') }}</p>
                         </div>
                         <button type="submit" class="px-6 py-2.5 bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium rounded-lg transition"
-                            onclick="return confirm('Yakin ingin mengajukan payout?')">
+                            onclick="confirmSubmit(this.closest('form'), 'Yakin ingin mengajukan payout? Minimum payout adalah Rp 500.000.', { title: 'Ajukan Payout', confirmText: 'Ya, Ajukan' })">
                             Ajukan Payout
                         </button>
                     </div>

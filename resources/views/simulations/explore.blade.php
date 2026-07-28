@@ -2,7 +2,7 @@
     <x-slot name="header">
         <div class="flex items-center gap-2">
             <svg class="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>
-            <h2 class="font-semibold text-xl text-gray-800 leading-tight">Jelajahi Experience</h2>
+            <h2 class="font-semibold text-xl text-gray-800 dark:text-white leading-tight">Jelajahi Experience</h2>
         </div>
     </x-slot>
 

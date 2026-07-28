@@ -106,11 +106,11 @@
                                 <td class="px-6 py-4 text-center text-gray-700 dark:text-gray-300">{{ $link->conversions }}</td>
                                 <td class="px-6 py-4 text-right text-green-600 dark:text-green-400 font-medium">Rp {{ number_format($link->total_commission, 0, ',', '.') }}</td>
                                 <td class="px-6 py-4 text-center">
-                                    <form method="POST" action="{{ route('studio.affiliate.destroy', $link) }}" class="inline"
-                                        onsubmit="return confirm('Yakin ingin menghapus link afiliasi ini?')">
+                                    <form method="POST" action="{{ route('studio.affiliate.destroy', $link) }}" class="inline">
                                         @csrf
                                         @method('DELETE')
-                                        <button type="submit" class="text-red-500 hover:text-red-700 dark:text-red-400 dark:hover:text-red-300 text-xs font-medium transition">
+                                        <button type="button" class="text-red-500 hover:text-red-700 dark:text-red-400 dark:hover:text-red-300 text-xs font-medium transition"
+                                            onclick="confirmSubmit(this.closest('form'), 'Yakin ingin menghapus link afiliasi ini?', { title: 'Hapus Link Afiliasi', confirmText: 'Ya, Hapus' })">
                                             Hapus
                                         </button>
                                     </form>
