@@ -412,9 +412,11 @@ echo ""
 
 # Step 15: Backfill thumbnail variants for existing simulations
 info "Step 15: Backfilling thumbnail variants..."
-BACKFILL_OUTPUT=$(php artisan thumbnail:backfill --no-interaction 2>&1)
-if echo "$BACKFILL_OUTPUT" | grep -qi "command.*not found\|there are no commands"; then
-    warn "thumbnail:backfill command not found (first deploy? skip — thumbnails will be generated on next upload)."
+BACKFILL_OUTPUT=$(php artisan backfill:thumbnail-variants --no-interaction 2>&1) || true
+if echo "$BACKFILL_OUTPUT" | grep -qi "command.*not found\|there are no commands\|unknown command"; then
+    warn "backfill:thumbnail-variants command not found (first deploy? skip — thumbnails will be generated on next upload)."
+elif echo "$BACKFILL_OUTPUT" | grep -qi "already have thumbnail variants\|Nothing to do"; then
+    success "All thumbnails already have variants — nothing to backfill."
 else
     success "Thumbnail variants backfilled."
 fi
