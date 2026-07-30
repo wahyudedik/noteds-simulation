@@ -26,7 +26,7 @@ class SimulationController extends Controller
     public function explore(Request $request): View
     {
         // Cache categories as array to prevent Eloquent serialization issues
-        $categories = Cache::remember('explore:categories', 3600, fn () => Simulation::published()
+        $categories = Cache::remember('explore:categories:v2', 3600, fn () => Simulation::published()
             ->selectRaw('category, count(*) as count')
             ->groupBy('category')
             ->orderBy('count', 'desc')
@@ -41,7 +41,7 @@ class SimulationController extends Controller
         // Filter by tag if provided
         $activeTag = $request->input('tag');
         // Cache tags as array to prevent Eloquent serialization issues
-        $tags = Cache::remember('explore:tags:20', 3600, fn () => Tag::has('simulations', '>', 0)
+        $tags = Cache::remember('explore:tags:20:v2', 3600, fn () => Tag::has('simulations', '>', 0)
             ->withCount('simulations')
             ->orderByDesc('simulations_count')
             ->take(20)
@@ -227,7 +227,7 @@ class SimulationController extends Controller
     public function index(Request $request): View
     {
         // Cache categories as array to prevent Eloquent serialization issues
-        $categories = Cache::remember('landing:categories', 3600, fn () => Simulation::published()
+        $categories = Cache::remember('landing:categories:v2', 3600, fn () => Simulation::published()
             ->selectRaw('category, count(*) as count')
             ->groupBy('category')
             ->orderBy('count', 'desc')
