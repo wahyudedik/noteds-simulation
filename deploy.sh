@@ -266,11 +266,12 @@ echo ""
 
 # Step 3: Install PHP dependencies
 # Use --no-scripts to avoid post-update-cmd errors (e.g. laravel/boost not installed in production)
+# Use --ignore-platform-reqs to handle PHP version mismatch between dev and production
 info "Step 3: Installing composer dependencies..."
 # Suppress PHP warnings (e.g. mbstring already loaded) from Composer output
-composer install --no-dev --optimize-autoloader --no-interaction --no-scripts 2>&1 | grep -v "PHP Warning:" || {
+composer install --no-dev --optimize-autoloader --no-interaction --no-scripts --ignore-platform-reqs 2>&1 | grep -v "PHP Warning:" || {
     warn "Composer install had issues, trying update..."
-    composer update --no-dev --optimize-autoloader --no-interaction --no-scripts 2>&1 | grep -v "PHP Warning:" || warn "Composer update juga bermasalah."
+    composer update --no-dev --optimize-autoloader --no-interaction --no-scripts --ignore-platform-reqs 2>&1 | grep -v "PHP Warning:" || warn "Composer update juga bermasalah."
 }
 # Run post-install/update scripts manually (package:discover, vendor:publish, etc.)
 # Skip boost:update as it's only available in dev environment
@@ -409,15 +410,38 @@ else
 fi
 echo ""
 
-# Step 15: Warm performance cache
-info "Step 15: Warming performance cache..."
-php artisan cache:clear --no-interaction 2>/dev/null || true
-# Pre-warm explore/landing caches
-php artisan tinker --execute '
-    App\Support\Cache::tags(["explore"])->flush();
-    App\Support\Cache::tags(["landing"])->flush();
-' 2>/dev/null || true
-success "Performance cache warmed."
+# Step 15: Backfill thumbnail variants for existing simulations
+info "Step 15: Backfilling thumbnail variants..."
+BACKFILL_OUTPUT=$(php artisan thumbnail:backfill --no-interaction 2>&1)
+if echo "$BACKFILL_OUTPUT" | grep -qi "command.*not found\|there are no commands"; then
+    warn "thumbnail:backfill command not found (first deploy? skip — thumbnails will be generated on next upload)."
+else
+    success "Thumbnail variants backfilled."
+fi
+echo ""
+
+# Step 16: Deploy nginx performance config (BT Panel / aaPanel)
+info "Step 16: Deploying nginx performance config..."
+NGINX_EXTENSION_DIR="/www/server/panel/vhost/nginx/extension/noteds.com"
+if [ -d "$NGINX_EXTENSION_DIR" ] || [ -d "$(dirname "$NGINX_EXTENSION_DIR")" ]; then
+    mkdir -p "$NGINX_EXTENSION_DIR" 2>/dev/null || true
+    if [ -f "deploy/nginx-static-cache.conf" ]; then
+        cp deploy/nginx-static-cache.conf "$NGINX_EXTENSION_DIR/performance.conf" 2>/dev/null && {
+            success "Nginx performance config deployed to $NGINX_EXTENSION_DIR/performance.conf"
+            # Reload nginx to apply changes
+            if command -v nginx &>/dev/null; then
+                nginx -t 2>/dev/null && nginx -s reload 2>/dev/null && success "Nginx reloaded." || warn "Nginx reload failed — check config syntax."
+            elif [ -f "/etc/init.d/nginx" ]; then
+                /etc/init.d/nginx reload 2>/dev/null && success "Nginx reloaded." || warn "Nginx reload failed."
+            fi
+        } || warn "Gagal copy nginx config."
+    else
+        warn "deploy/nginx-static-cache.conf not found, skipping nginx config."
+    fi
+else
+    warn "BT Panel extension dir not found ($NGINX_EXTENSION_DIR), skipping nginx config."
+    warn "Manual: copy deploy/nginx-static-cache.conf ke nginx server block atau include path."
+fi
 echo ""
 
 # ============================================================
