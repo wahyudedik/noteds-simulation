@@ -25,23 +25,30 @@ class SimulationController extends Controller
      */
     public function explore(Request $request): View
     {
-        // Cache categories (rarely changes)
+        // Cache categories as array to prevent Eloquent serialization issues
         $categories = Cache::remember('explore:categories', 3600, fn () => Simulation::published()
             ->selectRaw('category, count(*) as count')
             ->groupBy('category')
             ->orderBy('count', 'desc')
-            ->get());
+            ->get()
+            ->toArray());
+        // Reconstruct objects from cached arrays for Blade compatibility
+        $categories = collect($categories)->map(fn (array $item) => (object) $item);
 
         // Filter by category if provided
         $activeCategory = $request->input('category');
 
         // Filter by tag if provided
         $activeTag = $request->input('tag');
+        // Cache tags as array to prevent Eloquent serialization issues
         $tags = Cache::remember('explore:tags:20', 3600, fn () => Tag::has('simulations', '>', 0)
             ->withCount('simulations')
             ->orderByDesc('simulations_count')
             ->take(20)
-            ->get());
+            ->get()
+            ->toArray());
+        // Reconstruct objects from cached arrays for Blade compatibility
+        $tags = collect($tags)->map(fn (array $item) => (object) $item);
 
         // Shared scope: apply category + tag filters
         $applyFilters = fn ($q) => $q
@@ -59,9 +66,9 @@ class SimulationController extends Controller
 
         $cacheKey = 'explore:trending:'.$trendingPeriod.($activeCategory ? ':'.$activeCategory : '').($activeTag ? ':'.$activeTag : '');
 
-        $trending = Cache::remember($cacheKey, 300, function () use ($applyFilters, $trendingPeriod) {
+        // Cache IDs only to prevent Eloquent Collection serialization issues
+        $trendingIds = Cache::remember($cacheKey, 300, function () use ($applyFilters, $trendingPeriod) {
             return Simulation::published()
-                ->with('user')
                 ->tap($applyFilters)
                 ->where('published_at', '>=', match ($trendingPeriod) {
                     'day' => now()->subDay(),
@@ -72,39 +79,59 @@ class SimulationController extends Controller
                 })
                 ->orderByDesc('play_count')
                 ->take(12)
-                ->get();
+                ->pluck('id')
+                ->toArray();
         });
+        $trending = Simulation::published()
+            ->with('user')
+            ->whereIn('id', $trendingIds)
+            ->get();
 
-        // Featured simulations (always all-time)
-        $featured = Cache::remember('explore:featured'.($activeCategory ? ':'.$activeCategory : '').($activeTag ? ':'.$activeTag : ''), 1800, function () use ($applyFilters) {
+        // Cache IDs only to prevent Eloquent Collection serialization issues
+        $featuredIds = Cache::remember('explore:featured_ids'.($activeCategory ? ':'.$activeCategory : '').($activeTag ? ':'.$activeTag : ''), 1800, function () use ($applyFilters) {
             return Simulation::published()
-                ->with('user')
                 ->tap($applyFilters)
                 ->orderByDesc('play_count')
                 ->take(6)
-                ->get();
+                ->pluck('id')
+                ->toArray();
         });
+        $featured = Simulation::published()
+            ->with('user')
+            ->whereIn('id', $featuredIds)
+            ->get();
 
-        // Recently added
-        $recent = Cache::remember('explore:recent'.($activeCategory ? ':'.$activeCategory : '').($activeTag ? ':'.$activeTag : ''), 600, function () use ($applyFilters) {
+        // Cache IDs only to prevent Eloquent Collection serialization issues
+        $recentIds = Cache::remember('explore:recent_ids'.($activeCategory ? ':'.$activeCategory : '').($activeTag ? ':'.$activeTag : ''), 600, function () use ($applyFilters) {
             return Simulation::published()
-                ->with('user')
                 ->tap($applyFilters)
                 ->latest('published_at')
                 ->take(12)
-                ->get();
+                ->pluck('id')
+                ->toArray();
         });
+        $recent = Simulation::published()
+            ->with('user')
+            ->whereIn('id', $recentIds)
+            ->get();
 
-        // Highest rated
-        $topRated = Cache::remember('explore:topRated'.($activeCategory ? ':'.$activeCategory : '').($activeTag ? ':'.$activeTag : ''), 1800, function () use ($applyFilters) {
+        // Cache IDs only to prevent Eloquent Collection serialization issues
+        $topRatedIds = Cache::remember('explore:topRated_ids'.($activeCategory ? ':'.$activeCategory : '').($activeTag ? ':'.$activeTag : ''), 1800, function () use ($applyFilters) {
             return Simulation::published()
-                ->with('user')
                 ->tap($applyFilters)
                 ->withAvg('ratings', 'rating')
                 ->orderByDesc('ratings_avg_rating')
                 ->take(12)
-                ->get();
+                ->pluck('id')
+                ->toArray();
         });
+        $topRated = Simulation::published()
+            ->with('user')
+            ->whereIn('id', $topRatedIds)
+            ->withAvg('ratings', 'rating')
+            ->get()
+            ->sortBy(fn ($sim) => array_search($sim->id, $topRatedIds))
+            ->values();
 
         // "For You" — personalized recommendations based on play history
         $forYou = collect();
