@@ -226,18 +226,22 @@ class SimulationController extends Controller
      */
     public function index(Request $request): View
     {
+        // Cache categories as array to prevent Eloquent serialization issues
         $categories = Cache::remember('landing:categories', 3600, fn () => Simulation::published()
             ->selectRaw('category, count(*) as count')
             ->groupBy('category')
             ->orderBy('count', 'desc')
-            ->get());
+            ->get()
+            ->toArray());
+        // Reconstruct objects from cached arrays for Blade compatibility
+        $categories = collect($categories)->map(fn (array $item) => (object) $item);
 
         // Trending simulations — filter by period (day, week, month, year)
         $trendingPeriod = $request->input('period', 'week');
 
-        $trending = Cache::remember('landing:trending:'.$trendingPeriod, 300, function () use ($trendingPeriod) {
+        // Cache IDs only to prevent Eloquent Collection serialization issues
+        $trendingIds = Cache::remember('landing:trending_ids:'.$trendingPeriod, 300, function () use ($trendingPeriod) {
             return Simulation::published()
-                ->with('user')
                 ->where('published_at', '>=', match ($trendingPeriod) {
                     'day' => now()->subDay(),
                     'week' => now()->subWeek(),
@@ -247,22 +251,35 @@ class SimulationController extends Controller
                 })
                 ->orderByDesc('play_count')
                 ->take(12)
-                ->get();
+                ->pluck('id')
+                ->toArray();
         });
-
-        // Latest simulations
-        $latest = Cache::remember('landing:latest', 600, fn () => Simulation::published()
+        $trending = Simulation::published()
             ->with('user')
+            ->whereIn('id', $trendingIds)
+            ->get();
+
+        // Cache IDs only to prevent Eloquent Collection serialization issues
+        $latestIds = Cache::remember('landing:latest_ids', 600, fn () => Simulation::published()
             ->latest('published_at')
             ->take(12)
-            ->get());
-
-        // Most popular all time
-        $popular = Cache::remember('landing:popular', 1800, fn () => Simulation::published()
+            ->pluck('id')
+            ->toArray());
+        $latest = Simulation::published()
             ->with('user')
+            ->whereIn('id', $latestIds)
+            ->get();
+
+        // Cache IDs only to prevent Eloquent Collection serialization issues
+        $popularIds = Cache::remember('landing:popular_ids', 1800, fn () => Simulation::published()
             ->orderByDesc('view_count')
             ->take(12)
-            ->get());
+            ->pluck('id')
+            ->toArray());
+        $popular = Simulation::published()
+            ->with('user')
+            ->whereIn('id', $popularIds)
+            ->get();
 
         // Discovered for You — based on play history
         $discovered = collect();
@@ -292,11 +309,15 @@ class SimulationController extends Controller
 
         // Fallback: if no history or no results, show highest rated
         if ($discovered->isEmpty()) {
-            $discovered = Cache::remember('landing:discovered:fallback', 1800, fn () => Simulation::published()
-                ->with('user')
+            $discoveredIds = Cache::remember('landing:discovered:fallback_ids', 1800, fn () => Simulation::published()
                 ->orderByDesc('average_rating')
                 ->take(12)
-                ->get());
+                ->pluck('id')
+                ->toArray());
+            $discovered = Simulation::published()
+                ->with('user')
+                ->whereIn('id', $discoveredIds)
+                ->get();
         }
 
         // Search
