@@ -74,7 +74,7 @@
 
     {{-- Register Link --}}
     <div class="mt-6 text-center">
-        <p class="text-sm text-gray-600">
+        <p class="text-sm text-gray-600 dark:text-gray-400">
             Belum punya akun?
             <a href="{{ route('register') }}" class="font-semibold text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300 transition">
                 Daftar sekarang

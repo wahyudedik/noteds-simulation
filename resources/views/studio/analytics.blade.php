@@ -7,7 +7,7 @@
         </a>
 
         {{-- Summary Cards --}}
-        <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
+        <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-4 mb-6">
             <div class="bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700 rounded-xl p-4 shadow-sm">
                 <p class="text-xs text-gray-500 dark:text-gray-400">Total Views</p>
                 <p class="text-xl font-bold text-gray-900 dark:text-white mt-1">{{ number_format($simulation->view_count) }}</p>
@@ -26,6 +26,18 @@
                 <p class="text-xl font-bold text-gray-900 dark:text-white mt-1">{{ number_format($avgSessionDuration, 0) }} detik</p>
                 <p class="text-xs text-gray-400 dark:text-gray-500 mt-0.5">{{ floor($avgSessionDuration / 60) }}m {{ $avgSessionDuration % 60 }}s</p>
             </div>
+            <div class="bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700 rounded-xl p-4 shadow-sm">
+                <p class="text-xs text-gray-500 dark:text-gray-400">Rating</p>
+                <div class="flex items-center gap-1.5 mt-1">
+                    @if($simulation->average_rating > 0)
+                        <span class="text-xl font-bold text-gray-900 dark:text-white">{{ number_format($simulation->average_rating, 1) }}</span>
+                        <svg class="w-5 h-5 text-yellow-400" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                    @else
+                        <span class="text-xl font-bold text-gray-400 dark:text-gray-500">—</span>
+                    @endif
+                </div>
+                <p class="text-xs text-gray-400 dark:text-gray-500 mt-0.5">{{ number_format($ratingTotal) }} rating</p>
+            </div>
         </div>
 
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
@@ -39,19 +51,21 @@
                         @php
                             $maxVal = max($dailyAnalytics->pluck('views')->merge($dailyAnalytics->pluck('plays'))->max(), 1);
                         @endphp
-                        <div class="flex items-end gap-1 h-48">
-                            @foreach($dailyAnalytics as $day)
-                                @php
-                                    $viewH = ($day->views / $maxVal) * 100;
-                                    $playH = ($day->plays / $maxVal) * 100;
-                                @endphp
-                                <div class="flex-1 flex flex-col items-center gap-0.5" title="{{ $day->date }}: {{ $day->views }} views, {{ $day->plays }} plays">
-                                    <div class="flex gap-px items-end w-full" style="height: 140px;">
-                                        <div class="flex-1 bg-blue-400 rounded-t hover:bg-blue-500 transition" style="height: {{ $viewH }}%"></div>
-                                        <div class="flex-1 bg-emerald-400 rounded-t hover:bg-emerald-500 transition" style="height: {{ $playH }}%"></div>
+                        <div class="overflow-x-auto">
+                            <div class="flex items-end gap-1 h-48 min-w-[600px]">
+                                @foreach($dailyAnalytics as $day)
+                                    @php
+                                        $viewH = ($day->views / $maxVal) * 100;
+                                        $playH = ($day->plays / $maxVal) * 100;
+                                    @endphp
+                                    <div class="flex-1 flex flex-col items-center gap-0.5" title="{{ $day->date }}: {{ $day->views }} views, {{ $day->plays }} plays">
+                                        <div class="flex gap-px items-end w-full" style="height: 140px;">
+                                            <div class="flex-1 bg-blue-400 rounded-t hover:bg-blue-500 transition" style="height: {{ $viewH }}%"></div>
+                                            <div class="flex-1 bg-emerald-400 rounded-t hover:bg-emerald-500 transition" style="height: {{ $playH }}%"></div>
+                                        </div>
                                     </div>
-                                </div>
-                            @endforeach
+                                @endforeach
+                            </div>
                         </div>
                         <div class="flex items-center gap-4 mt-3 text-xs text-gray-500 dark:text-gray-400">
                             <span class="flex items-center gap-1"><span class="w-3 h-3 bg-blue-400 rounded-sm"></span> Views</span>

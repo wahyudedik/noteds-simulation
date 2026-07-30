@@ -6,7 +6,7 @@
             <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">Kelola iklan yang ditampilkan dalam experience ini</p>
         </div>
         <div class="flex items-center gap-3">
-            <a href="{{ route('studio.ads-revenue') }}" class="text-sm text-blue-600 hover:underline">Lihat Revenue →</a>
+            <a href="{{ route('studio.ads-revenue') }}" class="text-sm text-blue-600 dark:text-blue-400 hover:underline">Lihat Revenue →</a>
             <a href="{{ route('studio.simulations') }}" class="text-sm text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-white">← Kembali</a>
         </div>
     </div>
@@ -16,7 +16,7 @@
         <div class="bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700 rounded-xl p-4 mb-6 shadow-sm">
             <div class="flex items-center justify-between">
                 <div>
-                    <p class="text-sm text-gray-500">Reputasi Creator</p>
+                    <p class="text-sm text-gray-500 dark:text-gray-400">Reputasi Creator</p>
                     <div class="flex items-center gap-2 mt-1">
                         <div class="w-32 h-2 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
                             <div class="h-full bg-green-500 rounded-full" style="width: {{ $reputation->score }}%"></div>
@@ -25,7 +25,7 @@
                     </div>
                 </div>
                 <div class="text-right">
-                    <p class="text-sm text-gray-500">Tier Reputasi</p>
+                    <p class="text-sm text-gray-500 dark:text-gray-400">Tier Reputasi</p>
                     <p class="text-sm font-semibold text-gray-900 dark:text-white mt-1">{{ ucfirst($reputation->revenue_tier ?? 'basic') }}</p>
                 </div>
             </div>
@@ -181,7 +181,7 @@
             </div>
         @else
             <div class="text-center py-8 text-gray-500 dark:text-gray-400">
-                <svg class="w-12 h-12 mx-auto text-gray-300 mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg class="w-12 h-12 mx-auto text-gray-300 dark:text-gray-600 mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/>
                 </svg>
                 <p>Belum ada iklan untuk experience ini.</p>

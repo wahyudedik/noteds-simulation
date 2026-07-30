@@ -75,7 +75,7 @@
                     <input type="number" name="price" id="price" value="{{ old('price', $listing->price ?? 50000) }}"
                         min="1000" max="100000000" step="1000" required
                         class="w-full rounded-lg border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm">
-                    <p class="text-xs text-gray-400 mt-1">Minimum Rp 1.000</p>
+                    <p class="text-xs text-gray-400 dark:text-gray-500 mt-1">Minimum Rp 1.000</p>
                 </div>
 
                 {{-- Currency --}}
@@ -129,7 +129,7 @@
                         value="{{ old('demo_limit_minutes', $listing->demo_limit_minutes ?? 0) }}"
                         min="0" max="60" {{ ($listing->demo_available ?? false) ? '' : 'disabled' }}
                         class="w-full md:w-48 rounded-lg border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm">
-                    <p class="text-xs text-gray-400 mt-1">0 = tanpa batas waktu</p>
+                    <p class="text-xs text-gray-400 dark:text-gray-500 mt-1">0 = tanpa batas waktu</p>
                 </div>
             </div>
 

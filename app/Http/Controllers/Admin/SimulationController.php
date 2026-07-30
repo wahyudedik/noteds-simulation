@@ -3,7 +3,10 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Jobs\ExtractSimulationJob;
+use App\Jobs\ProcessTagsJob;
 use App\Jobs\ResizeThumbnailJob;
+use App\Jobs\ScanSimulationJob;
 use App\Models\Category;
 use App\Models\Simulation;
 use Illuminate\Http\RedirectResponse;
@@ -124,6 +127,13 @@ class SimulationController extends Controller
         ]);
 
         // Dispatch async jobs
+        if (! empty($validated['tags'])) {
+            ProcessTagsJob::dispatch($simulation->id, $validated['tags']);
+        }
+
+        ExtractSimulationJob::dispatch($simulation->id);
+        ScanSimulationJob::dispatch($simulation->id);
+
         if ($thumbnailPath) {
             ResizeThumbnailJob::dispatch($simulation->id);
         }
@@ -169,12 +179,14 @@ class SimulationController extends Controller
         ]);
 
         // Handle thumbnail update
+        $shouldResize = false;
         if ($request->hasFile('thumbnail')) {
             // Delete old thumbnail
             if ($simulation->thumbnail) {
                 Storage::disk('public')->delete($simulation->thumbnail);
             }
             $validated['thumbnail'] = $request->file('thumbnail')->store('thumbnails', 'public');
+            $shouldResize = true;
         }
 
         // Handle publish state change
@@ -183,6 +195,15 @@ class SimulationController extends Controller
         }
 
         $simulation->update($validated);
+
+        // Dispatch async jobs for updates
+        if ($shouldResize) {
+            ResizeThumbnailJob::dispatch($simulation->id);
+        }
+
+        if ($request->has('tags')) {
+            ProcessTagsJob::dispatch($simulation->id, $request->input('tags', ''));
+        }
 
         return redirect()->route('admin.simulations.show', $simulation)
             ->with('success', 'Simulation updated successfully!');

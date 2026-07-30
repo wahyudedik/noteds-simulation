@@ -1,18 +1,12 @@
-<!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="csrf-token" content="{{ csrf_token() }}">
+@php
+    $seo = [
+        'title' => 'Program Kreator — ' . config('app.name'),
+        'description' => 'Bergabung sebagai kreator ' . config('app.name') . '. Buat interactive experience, bagikan ilmu, dan berpeluang memperoleh penghasilan.',
+        'url' => route('become-creator-page'),
+    ];
+@endphp
 
-    <title>Program Kreator — Noteds</title>
-    <meta name="description" content="Bergabung sebagai kreator Noteds. Buat interactive experience, bagikan ilmu, dan berpeluang memperoleh penghasilan.">
-
-    <link rel="icon" type="image/jpeg" href="{{ asset('favicon.jpeg') }}">
-    <link rel="preconnect" href="https://fonts.bunny.net">
-    <link href="https://fonts.bunny.net/css?family=roboto:400,500,700&display=swap" rel="stylesheet" />
-    @vite(['resources/css/app.css', 'resources/js/app.js'])
-
+<x-app-layout :$seo>
     <style>
         .hero-gradient-creator {
             background: linear-gradient(135deg, #2d1b69 0%, #111827 50%, #1e293b 100%);
@@ -25,13 +19,6 @@
             background: linear-gradient(135deg, #6366f1, #3b82f6);
         }
     </style>
-</head>
-<body class="bg-gray-50 dark:bg-gray-900 font-sans antialiased">
-    <a href="#main-content" class="sr-only focus:not-sr-only focus:absolute focus:z-50 focus:top-2 focus:left-2 focus:bg-blue-600 focus:text-white focus:px-4 focus:py-2 focus:rounded-lg focus:font-medium focus:shadow-lg">
-        Lewati ke konten utama
-    </a>
-
-    @include('components.app-header')
 
     {{-- Hero Section --}}
     <div class="hero-gradient-creator text-white py-16 md:py-24">
@@ -73,7 +60,7 @@
         </div>
     </div>
 
-    <main id="main-content" class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-16 dark:bg-gray-900">
+    <main class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-16 dark:bg-gray-900">
 
         {{-- Apa itu Noteds Creator? --}}
         <section class="mb-20">
@@ -147,11 +134,11 @@
             </div>
 
             <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-700 overflow-hidden">
-                <div class="p-6 border-b border-gray-100 dark:border-gray-700 bg-gradient-to-r from-purple-50 to-blue-50 dark:from-purple-900/30 dark:to-blue-900/30">
+                <div class="p-4 md:p-6 border-b border-gray-100 dark:border-gray-700 bg-gradient-to-r from-purple-50 to-blue-50 dark:from-purple-900/30 dark:to-blue-900/30">
                     <h3 class="font-semibold text-gray-900 dark:text-white text-lg">Revenue Sharing Tiers</h3>
                     <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">Persentase penghasilan yang kamu terima meningkat seiring reputasi dan kualitas karyamu.</p>
                 </div>
-                <div class="grid grid-cols-2 md:grid-cols-4 divide-x divide-y md:divide-y-0 divide-gray-100 dark:divide-gray-700">
+                <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 divide-x divide-y md:divide-y-0 divide-gray-100 dark:divide-gray-700">
                     @foreach([
                         ['tier' => 'Basic', 'share' => '55%', 'desc' => 'Creator baru', 'color' => 'gray', 'bg' => 'bg-gray-50 dark:bg-gray-700/50'],
                         ['tier' => 'Verified', 'share' => '65%', 'desc' => '10+ experience, rating ≥ 4.0', 'color' => 'blue', 'bg' => 'bg-blue-50 dark:bg-blue-900/20'],
@@ -306,13 +293,4 @@
         </section>
 
     </main>
-
-    {{-- Footer --}}
-    <footer class="bg-white dark:bg-gray-800 border-t border-gray-100 dark:border-gray-700 mt-16">
-        <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-8 text-center text-sm text-gray-400 dark:text-gray-500">
-            <p>© {{ date('Y') }} {{ config('app.name', 'Noteds') }}. All rights reserved.</p>
-        </div>
-    </footer>
-
-</body>
-</html>
+</x-app-layout>

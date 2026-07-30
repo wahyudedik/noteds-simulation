@@ -46,7 +46,7 @@
                     </div>
                 </div>
                 <div class="text-center">
-                    <p class="text-xs text-gray-500">Tier</p>
+                    <p class="text-xs text-gray-500 dark:text-gray-400">Tier</p>
                     <p class="text-lg font-bold text-gray-900 dark:text-white">{{ ucfirst($reputation->revenue_tier ?? 'basic') }}</p>
                 </div>
             </div>
@@ -78,8 +78,8 @@
                                     <span class="ml-2 text-[10px] bg-blue-100 text-blue-700 dark:bg-blue-900/50 dark:text-blue-400 px-1.5 py-0.5 rounded-full">Aktif</span>
                                 @endif
                             </td>
-                            <td class="py-3 px-4 text-center font-medium text-green-600">{{ $tierData['creator_share'] }}%</td>
-                            <td class="py-3 px-4 text-center text-gray-500">{{ $tierData['platform_share'] }}%</td>
+                            <td class="py-3 px-4 text-center font-medium text-green-600 dark:text-green-400">{{ $tierData['creator_share'] }}%</td>
+                            <td class="py-3 px-4 text-center text-gray-500 dark:text-gray-400">{{ $tierData['platform_share'] }}%</td>
                             <td class="py-3 px-4 text-xs text-gray-500 dark:text-gray-400">{{ $tierData['requirements'] }}</td>
                         </tr>
                     @endforeach

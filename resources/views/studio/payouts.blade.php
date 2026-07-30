@@ -5,7 +5,7 @@
         <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div class="bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700 rounded-xl p-5 shadow-sm">
                 <p class="text-sm text-gray-500 dark:text-gray-400">Saldo Tersedia</p>
-                <p class="text-2xl font-bold text-green-600 mt-1">Rp {{ number_format($availableBalance, 0, ',', '.') }}</p>
+                <p class="text-2xl font-bold text-green-600 dark:text-green-400 mt-1">Rp {{ number_format($availableBalance, 0, ',', '.') }}</p>
                 <p class="text-xs text-gray-400 dark:text-gray-500 mt-1">Minimum payout: Rp {{ number_format($minPayout, 0, ',', '.') }}</p>
             </div>
             <div class="bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700 rounded-xl p-5 shadow-sm">
@@ -23,10 +23,10 @@
                             @default {{ ucfirst($paymentSettings->preferred_method) }}
                         @endswitch
                     </p>
-                    <a href="{{ route('studio.payment-settings') }}" class="text-xs text-blue-600 hover:underline mt-1 inline-block">Update →</a>
+                    <a href="{{ route('studio.payment-settings') }}" class="text-xs text-blue-600 dark:text-blue-400 hover:underline mt-1 inline-block">Update →</a>
                 @else
                     <p class="text-sm text-yellow-600 mt-1">Belum diatur</p>
-                    <a href="{{ route('studio.payment-settings') }}" class="text-xs text-blue-600 hover:underline mt-1 inline-block">Atur Sekarang →</a>
+                    <a href="{{ route('studio.payment-settings') }}" class="text-xs text-blue-600 dark:text-blue-400 hover:underline mt-1 inline-block">Atur Sekarang →</a>
                 @endif
             </div>
         </div>
@@ -93,7 +93,7 @@
         @else
             <div class="bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700 rounded-xl p-6 shadow-sm">
                 <div class="text-center py-4">
-                    <svg class="mx-auto w-12 h-12 text-gray-300 mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z"/></svg>
+                    <svg class="mx-auto w-12 h-12 text-gray-300 dark:text-gray-600 mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z"/></svg>
                     <p class="text-gray-500 dark:text-gray-400 text-sm">Saldo belum mencukupi untuk payout.</p>
                     <p class="text-xs text-gray-400 dark:text-gray-500 mt-1">Minimum payout: Rp {{ number_format($minPayout, 0, ',', '.') }}. Saldo saat ini: Rp {{ number_format($availableBalance, 0, ',', '.') }}</p>
                 </div>

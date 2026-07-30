@@ -1,7 +1,7 @@
 <x-studio-layout :pageTitle="'Experience Saya'">
     {{-- Header --}}
-    <div class="flex items-center justify-between mb-6">
-        <div class="flex items-center gap-2">
+    <div class="flex items-center justify-between mb-6 flex-wrap gap-2">
+        <div class="flex items-center gap-2 flex-wrap">
             <a href="{{ route('studio.simulations') }}?status=all"
                class="px-3 py-1.5 text-sm font-medium rounded-lg transition {{ $status === 'all' ? 'bg-gray-900 text-white dark:bg-white dark:text-gray-900' : 'text-gray-600 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-700' }}">
                 Semua

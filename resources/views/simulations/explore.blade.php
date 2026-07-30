@@ -6,6 +6,7 @@
         </div>
     </x-slot>
 
+    <div x-data="{ loading: false }">
     <style>
         .simulation-card:hover .thumbnail-overlay { opacity: 1; }
         .simulation-card:hover img { transform: scale(1.05); }
@@ -19,6 +20,35 @@
         }
     </style>
 
+    {{-- Loading Skeleton Overlay --}}
+    <div x-show="loading" x-transition:enter="transition ease-out duration-200" x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100" x-cloak class="fixed inset-0 z-50 bg-white/80 dark:bg-gray-900/80 backdrop-blur-sm">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 pt-20">
+            <div class="space-y-8">
+                @foreach(['Paling Populer', 'Trending', 'Rating Tertinggi', 'Baru Ditambahkan'] as $section)
+                    <div>
+                        <div class="h-6 w-40 bg-gray-200 dark:bg-gray-700 rounded mb-4 animate-pulse"></div>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
+                            @foreach(range(1, 4) as $i)
+                                <div class="bg-white dark:bg-gray-800 rounded-xl overflow-hidden shadow-sm border border-gray-100 dark:border-gray-700">
+                                    <div class="aspect-video bg-gray-200 dark:bg-gray-700 animate-pulse"></div>
+                                    <div class="p-4 space-y-3">
+                                        <div class="h-4 bg-gray-200 dark:bg-gray-700 rounded animate-pulse w-3/4"></div>
+                                        <div class="h-3 bg-gray-200 dark:bg-gray-700 rounded animate-pulse w-full"></div>
+                                        <div class="h-3 bg-gray-200 dark:bg-gray-700 rounded animate-pulse w-1/2"></div>
+                                        <div class="flex items-center gap-2 pt-2">
+                                            <div class="w-6 h-6 bg-gray-200 dark:bg-gray-700 rounded-full animate-pulse"></div>
+                                            <div class="h-3 bg-gray-200 dark:bg-gray-700 rounded animate-pulse w-20"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            @endforeach
+                        </div>
+                    </div>
+                @endforeach
+            </div>
+        </div>
+    </div>
+
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
 
@@ -30,12 +60,12 @@
 
                 {{-- Category Chips --}}
                 <div class="mt-6 flex flex-wrap gap-2">
-                    <a href="{{ route('simulations.explore') }}"
+                    <a href="{{ route('simulations.explore') }}" @click="loading = true"
                         class="category-chip px-4 py-2 rounded-full text-sm font-medium transition duration-200 border {{ !$activeCategory ? 'bg-blue-600 text-white border-blue-600' : 'bg-white dark:bg-gray-700 text-gray-600 dark:text-gray-300 border-gray-200 dark:border-gray-600 hover:border-blue-600' }}">
                         Semua
                     </a>
                     @foreach($categories as $cat)
-                        <a href="{{ route('simulations.explore', ['category' => $cat->category]) }}"
+                        <a href="{{ route('simulations.explore', ['category' => $cat->category]) }}" @click="loading = true"
                             class="category-chip px-4 py-2 rounded-full text-sm font-medium transition duration-200 border {{ $activeCategory === $cat->category ? 'bg-blue-600 text-white border-blue-600' : 'bg-white dark:bg-gray-700 text-gray-600 dark:text-gray-300 border-gray-200 dark:border-gray-600 hover:border-blue-600' }}">
                             {{ $cat->category }}
                             <span class="text-xs opacity-70">({{ $cat->count }})</span>
@@ -48,7 +78,7 @@
                 <div class="mt-4 flex flex-wrap gap-2">
                     <span class="text-xs font-medium text-gray-400 self-center mr-1">Tag:</span>
                     @foreach($tags as $tag)
-                        <a href="{{ route('simulations.explore', array_merge(request()->query(), ['tag' => $tag->slug])) }}"
+                        <a href="{{ route('simulations.explore', array_merge(request()->query(), ['tag' => $tag->slug])) }}" @click="loading = true"
                             class="px-3 py-1 rounded-full text-xs font-medium transition duration-200 border {{ ($activeTag ?? '') === $tag->slug ? 'bg-purple-600 text-white border-purple-600' : 'bg-white dark:bg-gray-700 text-gray-500 dark:text-gray-400 border-gray-200 dark:border-gray-600 hover:border-purple-400 hover:text-purple-600' }}">
                             #{{ $tag->name }}
                         </a>
@@ -83,8 +113,8 @@
                     </h2>
                     <div class="flex items-center gap-1">
                         @foreach($trendingPeriods as $key => $label)
-                            <a href="{{ route('simulations.explore', array_merge(request()->query(), ['period' => $key])) }}"
-                                class="px-3 py-1.5 text-xs font-medium rounded-lg transition {{ $trendingPeriod === $key ? 'bg-orange-500 text-white' : 'bg-gray-100 text-gray-600 hover:bg-gray-200' }}">
+                            <a href="{{ route('simulations.explore', array_merge(request()->query(), ['period' => $key])) }}" @click="loading = true"
+                                class="px-3 py-1.5 text-xs font-medium rounded-lg transition {{ $trendingPeriod === $key ? 'bg-orange-500 text-white dark:bg-orange-600' : 'bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600' }}">
                                 {{ $label }}
                             </a>
                         @endforeach
@@ -172,5 +202,6 @@
             </div>
             @endif
         </div>
+    </div>
     </div>
 </x-app-layout>

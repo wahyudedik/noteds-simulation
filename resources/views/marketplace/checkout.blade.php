@@ -62,7 +62,7 @@
                             <p class="text-sm text-gray-600 dark:text-gray-400">
                                 Pembayaran akan diproses melalui Midtrans. Anda akan melihat popup pembayaran Midtrans setelah menekan tombol "Bayar Sekarang".
                             </p>
-                            <div class="mt-4 grid grid-cols-3 gap-3">
+                            <div class="mt-4 grid grid-cols-1 sm:grid-cols-3 gap-3">
                                 <div class="text-center p-3 rounded-lg bg-gray-50 dark:bg-gray-700/50">
                                     <div class="text-xs text-gray-500 dark:text-gray-400">Transfer Bank</div>
                                     <div class="text-sm font-medium text-gray-900 dark:text-gray-100 mt-1">BCA, BNI, Mandiri</div>

@@ -83,36 +83,6 @@
         body.fullscreen-mode {
             overflow: hidden;
         }
-        ::-webkit-scrollbar {
-            width: 8px;
-            height: 8px;
-        }
-        ::-webkit-scrollbar-track {
-            background: #f3f4f6;
-        }
-        ::-webkit-scrollbar-thumb {
-            background: #d1d5db;
-            border-radius: 4px;
-        }
-        ::-webkit-scrollbar-thumb:hover {
-            background: #9ca3af;
-        }
-        .dark ::-webkit-scrollbar-track {
-            background: #1f2937;
-        }
-        .dark ::-webkit-scrollbar-thumb {
-            background: #4b5563;
-        }
-        .dark ::-webkit-scrollbar-thumb:hover {
-            background: #6b7280;
-        }
-        * {
-            scrollbar-width: thin;
-            scrollbar-color: #d1d5db #f3f4f6;
-        }
-        .dark * {
-            scrollbar-color: #4b5563 #1f2937;
-        }
         .reaction-btn.active { background-color: #2563eb; color: white; }
         .bookmark-btn.active { color: #facc15; }
         .rating-star { cursor: pointer; transition: color 0.15s; }
@@ -959,22 +929,7 @@
 
     </script>
 
-    {{-- Footer --}}
-    <footer class="bg-white dark:bg-gray-900 border-t border-gray-200 dark:border-gray-800 mt-12">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-            <div class="flex flex-col md:flex-row items-center justify-between gap-4">
-                <div class="flex items-center gap-2">
-                    <img src="{{ asset('logo.jpeg') }}" alt="Noteds" class="w-6 h-6 rounded object-cover" />
-                    <span class="font-semibold text-gray-900 dark:text-white">Noteds</span>
-                </div>
-                <div class="flex items-center gap-4 text-sm text-gray-500 dark:text-gray-400">
-                    <a href="{{ route('privacy-policy') }}" class="hover:text-gray-700 dark:hover:text-gray-200 transition">Kebijakan Privasi</a>
-                    <a href="{{ route('terms-of-service') }}" class="hover:text-gray-700 dark:hover:text-gray-200 transition">Syarat & Ketentuan</a>
-                    <span>&copy; {{ date('Y') }}</span>
-                </div>
-            </div>
-        </div>
-    </footer>
+    <x-app-footer />
 
     {{-- Back to Top Button --}}
     <div x-data="{ show: false }" x-init="window.addEventListener('scroll', () => { show = window.scrollY > 300 })"

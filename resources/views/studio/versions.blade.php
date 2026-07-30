@@ -13,7 +13,7 @@
                     <h3 class="text-lg font-semibold text-gray-900 dark:text-white">Versi Saat Ini</h3>
                     <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">v{{ $simulation->version ?? '1.0.0' }} · Diperbarui {{ $simulation->updated_at->diffForHumans() }}</p>
                 </div>
-                <a href="{{ route('studio.simulations.edit', $simulation->slug) }}" class="px-4 py-2 text-sm font-medium text-blue-600 bg-blue-50 hover:bg-blue-100 rounded-lg transition">
+                <a href="{{ route('studio.simulations.edit', $simulation->slug) }}" class="px-4 py-2 text-sm font-medium text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-900/30 hover:bg-blue-100 dark:hover:bg-blue-900/50 rounded-lg transition">
                     Upload Versi Baru
                 </a>
             </div>
@@ -31,7 +31,7 @@
                         <div class="px-6 py-4 hover:bg-gray-50 dark:hover:bg-gray-700/50 transition">
                             <div class="flex items-start justify-between">
                                 <div class="flex items-start gap-3">
-                                    <div class="w-10 h-10 bg-purple-50 rounded-lg flex items-center justify-center shrink-0 mt-0.5">
+                                    <div class="w-10 h-10 bg-purple-50 dark:bg-purple-900/30 rounded-lg flex items-center justify-center shrink-0 mt-0.5">
                                         <svg class="w-5 h-5 text-purple-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z" />
                                         </svg>
@@ -46,7 +46,7 @@
                                 </div>
                                 @if($version->zip_path)
                                     <a href="{{ route('studio.simulations.versions.download', [$simulation->slug, $version->id]) }}"
-                                       class="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-blue-600 bg-blue-50 hover:bg-blue-100 rounded-lg transition shrink-0">
+                                       class="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-900/30 hover:bg-blue-100 dark:hover:bg-blue-900/50 rounded-lg transition shrink-0">
                                         <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
                                         </svg>
@@ -67,7 +67,7 @@
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
                     </svg>
                     <p class="text-sm">Belum ada riwayat versi.</p>
-                    <p class="text-xs text-gray-400 mt-1">Versi akan tercatat saat Anda mengupload ZIP baru.</p>
+                    <p class="text-xs text-gray-400 dark:text-gray-500 mt-1">Versi akan tercatat saat Anda mengupload ZIP baru.</p>
                 </div>
             @endif
         </div>

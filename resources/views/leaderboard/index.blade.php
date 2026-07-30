@@ -33,7 +33,7 @@
 
             {{-- Top 3 Podium --}}
             @if($leaderboard->count() >= 3)
-                <div class="flex items-end justify-center gap-4 mb-8">
+                <div class="flex items-end justify-center gap-2 sm:gap-4 mb-8 overflow-x-auto px-2">
                     @php
                         $podiumColors = [2 => 'from-gray-400 to-gray-500', 1 => 'from-yellow-400 to-yellow-500', 3 => 'from-amber-600 to-amber-700'];
                         $podiumHeights = [2 => 'h-28', 1 => 'h-36', 3 => 'h-24'];
@@ -46,15 +46,15 @@
                                 @if($entry['user']->avatar)
                                     <img src="{{ Storage::disk('public')->url($entry['user']->avatar) }}"
                                          alt="{{ $entry['user']->name }}"
-                                         class="w-16 h-16 rounded-full object-cover border-2 {{ $rank === 1 ? 'border-yellow-400' : 'border-gray-300 dark:border-gray-600' }} shadow-lg mb-2" />
+                                         class="w-12 h-12 sm:w-16 sm:h-16 rounded-full object-cover border-2 {{ $rank === 1 ? 'border-yellow-400' : 'border-gray-300 dark:border-gray-600' }} shadow-lg mb-2" />
                                 @else
-                                    <div class="w-16 h-16 rounded-full bg-blue-100 dark:bg-blue-900/50 text-blue-600 dark:text-blue-400 flex items-center justify-center text-2xl font-bold border-2 {{ $rank === 1 ? 'border-yellow-400' : 'border-gray-300 dark:border-gray-600' }} shadow-lg mb-2">
+                                    <div class="w-12 h-12 sm:w-16 sm:h-16 rounded-full bg-blue-100 dark:bg-blue-900/50 text-blue-600 dark:text-blue-400 flex items-center justify-center text-xl sm:text-2xl font-bold border-2 {{ $rank === 1 ? 'border-yellow-400' : 'border-gray-300 dark:border-gray-600' }} shadow-lg mb-2">
                                         {{ strtoupper(substr($entry['user']->name, 0, 1)) }}
                                     </div>
                                 @endif
                                 <p class="text-sm font-semibold text-gray-900 dark:text-white max-w-[100px] truncate">{{ $entry['user']->name }}</p>
                                 <p class="text-xs text-gray-500 dark:text-gray-400">{{ number_format($entry['points']) }} pts</p>
-                                <div class="mt-2 w-20 bg-gray-100 dark:bg-gray-700 rounded-t-lg overflow-hidden {{ $podiumHeights[$rank] }}">
+                                <div class="mt-2 w-16 sm:w-20 bg-gray-100 dark:bg-gray-700 rounded-t-lg overflow-hidden {{ $podiumHeights[$rank] }}">
                                     <div class="w-full h-full bg-gradient-to-t {{ $podiumColors[$rank] }} rounded-t-lg flex items-center justify-center">
                                         <span class="text-white text-2xl font-bold">{{ $rank }}</span>
                                     </div>

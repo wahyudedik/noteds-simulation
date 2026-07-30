@@ -1,27 +1,27 @@
 <x-app-layout>
     <x-slot name="header">
         <div class="flex items-center justify-between">
-            <h2 class="font-semibold text-xl text-gray-800">Laporan Pengguna</h2>
-            <a href="{{ route('admin.dashboard') }}" class="text-sm text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:text-gray-300 dark:text-gray-300">? Kembali</a>
+            <h2 class="font-semibold text-xl text-gray-800 dark:text-white">Laporan Pengguna</h2>
+            <a href="{{ route('admin.dashboard') }}" class="text-sm text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300">← Kembali</a>
         </div>
     </x-slot>
 
     <div class="py-8 max-w-6xl mx-auto px-4 sm:px-6">
         {{-- Stats --}}
         <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
-            <div class="bg-white rounded-xl border border-gray-100 p-4">
+            <div class="bg-white dark:bg-gray-800 rounded-xl border border-gray-100 dark:border-gray-700 p-4">
                 <div class="text-2xl font-bold text-orange-600 dark:text-orange-400">{{ $counts['pending'] }}</div>
                 <div class="text-sm text-gray-500 dark:text-gray-400">Menunggu</div>
             </div>
-            <div class="bg-white rounded-xl border border-gray-100 p-4">
+            <div class="bg-white dark:bg-gray-800 rounded-xl border border-gray-100 dark:border-gray-700 p-4">
                 <div class="text-2xl font-bold text-blue-600 dark:text-blue-400">{{ $counts['reviewed'] }}</div>
                 <div class="text-sm text-gray-500 dark:text-gray-400">Direview</div>
             </div>
-            <div class="bg-white rounded-xl border border-gray-100 p-4">
+            <div class="bg-white dark:bg-gray-800 rounded-xl border border-gray-100 dark:border-gray-700 p-4">
                 <div class="text-2xl font-bold text-green-600 dark:text-green-400">{{ $counts['resolved'] }}</div>
                 <div class="text-sm text-gray-500 dark:text-gray-400">Diselesaikan</div>
             </div>
-            <div class="bg-white rounded-xl border border-gray-100 p-4">
+            <div class="bg-white dark:bg-gray-800 rounded-xl border border-gray-100 dark:border-gray-700 p-4">
                 <div class="text-2xl font-bold text-gray-600 dark:text-gray-400">{{ $counts['dismissed'] }}</div>
                 <div class="text-sm text-gray-500 dark:text-gray-400">Ditolak</div>
             </div>
@@ -38,7 +38,7 @@
         </div>
 
         {{-- Reports List --}}
-        <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
+        <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-700 overflow-hidden">
             @forelse($reports as $report)
                 <a href="{{ route('admin.reports.show', $report) }}" class="flex items-start gap-4 p-5 border-b border-gray-50 hover:bg-gray-50 dark:bg-gray-700/50 dark:hover:bg-gray-600/50 transition {{ $loop->last ? 'border-b-0' : '' }}">
                     <div class="flex-shrink-0 w-10 h-10 rounded-full bg-red-100 dark:bg-red-900/30 flex items-center justify-center">
@@ -68,7 +68,7 @@
                 </a>
             @empty
                 <div class="p-12 text-center">
-                    <svg class="w-12 h-12 text-gray-300 mx-auto mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                    <svg class="w-12 h-12 text-gray-300 dark:text-gray-600 mx-auto mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
                     <p class="text-gray-500 dark:text-gray-400">Tidak ada laporan ditemukan.</p>
                 </div>
             @endforelse

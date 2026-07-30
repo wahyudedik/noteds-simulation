@@ -50,7 +50,7 @@
                 <form method="GET" action="{{ route('admin.ads.index') }}" class="flex flex-wrap items-end gap-4">
                     <div>
                         <label class="block text-xs text-gray-500 dark:text-gray-400 mb-1">Posisi</label>
-                        <select name="position" class="text-sm border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500">
+                        <select name="position" class="text-sm border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-lg focus:ring-blue-500 focus:border-blue-500">
                             <option value="">Semua Posisi</option>
                             <option value="header" {{ request('position') === 'header' ? 'selected' : '' }}>Header</option>
                             <option value="sidebar" {{ request('position') === 'sidebar' ? 'selected' : '' }}>Sidebar</option>
@@ -63,7 +63,7 @@
                     </div>
                     <div>
                         <label class="block text-xs text-gray-500 dark:text-gray-400 mb-1">Tipe</label>
-                        <select name="type" class="text-sm border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500">
+                        <select name="type" class="text-sm border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-lg focus:ring-blue-500 focus:border-blue-500">
                             <option value="">Semua Tipe</option>
                             <option value="banner" {{ request('type') === 'banner' ? 'selected' : '' }}>Banner</option>
                             <option value="interstitial" {{ request('type') === 'interstitial' ? 'selected' : '' }}>Interstitial</option>

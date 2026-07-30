@@ -127,12 +127,12 @@
                                     <svg class="inline w-5 h-5 text-orange-500 mr-1" fill="currentColor" viewBox="0 0 24 24"><path d="M13 7.83l3.59 3.59L18 10l-6-6-6 6 1.41 1.41L11 7.83V20h2V7.83z"/></svg>
                                     Trending Experience
                                 </h2>
-                                <div class="flex items-center gap-1 bg-gray-100 dark:bg-gray-800 rounded-lg p-1">
+                                <div class="flex items-center gap-1 bg-gray-100 dark:bg-gray-800 rounded-lg p-1 overflow-x-auto flex-shrink-0">
                                     @php $currentPeriod = request('period', 'week'); @endphp
-                                    <a href="?period=day" class="px-3 py-1 text-xs font-medium rounded-md transition {{ $currentPeriod === 'day' ? 'bg-white dark:bg-gray-600 text-gray-900 dark:text-white shadow-sm' : 'text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200' }}">Hari Ini</a>
-                                    <a href="?period=week" class="px-3 py-1 text-xs font-medium rounded-md transition {{ $currentPeriod === 'week' ? 'bg-white dark:bg-gray-600 text-gray-900 dark:text-white shadow-sm' : 'text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200' }}">Minggu Ini</a>
-                                    <a href="?period=month" class="px-3 py-1 text-xs font-medium rounded-md transition {{ $currentPeriod === 'month' ? 'bg-white dark:bg-gray-600 text-gray-900 dark:text-white shadow-sm' : 'text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200' }}">Bulan Ini</a>
-                                    <a href="?period=year" class="px-3 py-1 text-xs font-medium rounded-md transition {{ $currentPeriod === 'year' ? 'bg-white dark:bg-gray-600 text-gray-900 dark:text-white shadow-sm' : 'text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200' }}">Tahun Ini</a>
+                                    <a href="?period=day" class="px-2 sm:px-3 py-1 text-xs font-medium rounded-md transition whitespace-nowrap {{ $currentPeriod === 'day' ? 'bg-white dark:bg-gray-600 text-gray-900 dark:text-white shadow-sm' : 'text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200' }}">Hari Ini</a>
+                                    <a href="?period=week" class="px-2 sm:px-3 py-1 text-xs font-medium rounded-md transition whitespace-nowrap {{ $currentPeriod === 'week' ? 'bg-white dark:bg-gray-600 text-gray-900 dark:text-white shadow-sm' : 'text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200' }}">Minggu Ini</a>
+                                    <a href="?period=month" class="px-2 sm:px-3 py-1 text-xs font-medium rounded-md transition whitespace-nowrap {{ $currentPeriod === 'month' ? 'bg-white dark:bg-gray-600 text-gray-900 dark:text-white shadow-sm' : 'text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200' }}">Bulan Ini</a>
+                                    <a href="?period=year" class="px-2 sm:px-3 py-1 text-xs font-medium rounded-md transition whitespace-nowrap {{ $currentPeriod === 'year' ? 'bg-white dark:bg-gray-600 text-gray-900 dark:text-white shadow-sm' : 'text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200' }}">Tahun Ini</a>
                                 </div>
                             </div>
                             @if($trending->count() > 0)
@@ -231,22 +231,7 @@
         </div>
     </section>
 
-    {{-- Footer --}}
-    <footer class="bg-white dark:bg-gray-800 border-t border-gray-200 dark:border-gray-700 mt-12">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-            <div class="flex flex-col md:flex-row items-center justify-between gap-4">
-                <div class="flex items-center gap-2">
-                    <img src="{{ asset('logo.jpeg') }}" alt="Noteds" class="w-6 h-6 rounded object-cover" />
-                    <span class="font-semibold text-gray-900 dark:text-white">Noteds</span>
-                </div>
-                <div class="flex items-center gap-4 text-sm text-gray-500 dark:text-gray-400">
-                    <a href="{{ route('privacy-policy') }}" class="hover:text-gray-700 dark:hover:text-gray-200 transition">Kebijakan Privasi</a>
-                    <a href="{{ route('terms-of-service') }}" class="hover:text-gray-700 dark:hover:text-gray-200 transition">Syarat & Ketentuan</a>
-                    <span>&copy; {{ date('Y') }}</span>
-                </div>
-            </div>
-        </div>
-    </footer>
+    <x-app-footer />
 
     {{-- Back to Top Button --}}
     <div x-data="{ show: false }" x-init="window.addEventListener('scroll', () => { show = window.scrollY > 300 })"

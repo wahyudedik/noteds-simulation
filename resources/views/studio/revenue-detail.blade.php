@@ -42,7 +42,8 @@
                 @php
                     $maxRevenue = collect($dailyRevenue)->max('creator_revenue') ?: 1;
                 @endphp
-                <div class="flex items-end gap-1 h-40">
+                <div class="overflow-x-auto">
+                <div class="flex items-end gap-1 h-40 min-w-[600px]">
                     @foreach($dailyRevenue as $day)
                         @php
                             $height = $maxRevenue > 0 ? ($day['creator_revenue'] / $maxRevenue) * 100 : 0;
@@ -63,6 +64,7 @@
                             @endif
                         </div>
                     @endforeach
+                </div>
                 </div>
                 <div class="flex items-center gap-4 mt-4 text-xs text-gray-500 dark:text-gray-400">
                     <span class="flex items-center gap-1"><span class="w-3 h-3 bg-emerald-400 rounded-sm"></span> Revenue Harian</span>

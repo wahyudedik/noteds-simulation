@@ -6,7 +6,32 @@
         </div>
     </x-slot>
 
-    <div class="py-12">
+    @php
+        $hasActiveFilters = ($activeCategory ?? null) || ($activeLicense ?? null) || ($search ?? null);
+    @endphp
+
+    <div x-data="{ loading: false, filterOpen: false }" class="py-12">
+
+    {{-- Loading Skeleton Overlay --}}
+    <div x-show="loading" x-transition:enter="transition ease-out duration-200" x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100" x-cloak class="fixed inset-0 z-50 bg-white/80 dark:bg-gray-900/80 backdrop-blur-sm">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 pt-20">
+            <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-5">
+                @foreach(range(1, 6) as $i)
+                    <div class="bg-white dark:bg-gray-800 rounded-xl overflow-hidden shadow-sm border border-gray-100 dark:border-gray-700">
+                        <div class="aspect-video bg-gray-200 dark:bg-gray-700 animate-pulse"></div>
+                        <div class="p-4 space-y-3">
+                            <div class="h-4 bg-gray-200 dark:bg-gray-700 rounded animate-pulse w-3/4"></div>
+                            <div class="h-3 bg-gray-200 dark:bg-gray-700 rounded animate-pulse w-full"></div>
+                            <div class="flex items-center gap-2 pt-2">
+                                <div class="w-8 h-8 bg-gray-200 dark:bg-gray-700 rounded-full animate-pulse"></div>
+                                <div class="h-3 bg-gray-200 dark:bg-gray-700 rounded animate-pulse w-20"></div>
+                            </div>
+                        </div>
+                    </div>
+                @endforeach
+            </div>
+        </div>
+    </div>
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
 
             <x-breadcrumb :items="[
@@ -30,7 +55,7 @@
                             class="w-full pl-12 pr-4 py-3 rounded-xl text-gray-900 bg-white/95 backdrop-blur border-0 shadow-lg focus:ring-2 focus:ring-emerald-300 text-sm"
                         />
                         <svg class="absolute left-4 top-3.5 w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>
-                        <button type="submit" class="absolute right-2 top-1.5 bg-emerald-600 hover:bg-emerald-700 text-white px-4 py-1.5 rounded-lg text-sm font-medium transition">
+                        <button type="submit" @click="loading = true" class="absolute right-2 top-1.5 bg-emerald-600 hover:bg-emerald-700 text-white px-4 py-1.5 rounded-lg text-sm font-medium transition">
                             Cari
                         </button>
                     </div>
@@ -48,9 +73,23 @@
             </div>
 
             <div class="flex flex-col lg:flex-row gap-8">
+                {{-- Mobile Filter Toggle --}}
+                <div class="lg:hidden">
+                    <button @click="filterOpen = !filterOpen" class="w-full flex items-center justify-between px-4 py-2.5 bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 text-sm font-medium text-gray-700 dark:text-gray-300">
+                        <span class="flex items-center gap-2">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z" /></svg>
+                            Filter & Urutkan
+                            @if($hasActiveFilters)
+                                <span class="bg-emerald-100 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-400 text-xs px-1.5 py-0.5 rounded-full">Aktif</span>
+                            @endif
+                        </span>
+                        <svg class="w-4 h-4 transition-transform" :class="filterOpen ? 'rotate-180' : ''" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" /></svg>
+                    </button>
+                </div>
+
                 {{-- Sidebar Filters --}}
-                <aside class="w-full lg:w-64 flex-shrink-0">
-                    <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 p-5 sticky top-24">
+                <aside class="w-full lg:w-64 flex-shrink-0" :class="filterOpen ? 'block' : 'hidden lg:block'">
+                    <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 p-5 lg:sticky lg:top-24">
                         <h3 class="font-semibold text-gray-900 dark:text-gray-100 text-sm mb-4 flex items-center gap-2">
                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z" /></svg>
                             Filter
@@ -60,12 +99,12 @@
                         <div class="mb-5">
                             <h4 class="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-2">Kategori</h4>
                             <div class="space-y-1">
-                                <a href="{{ route('marketplace.index', array_merge(request()->query(), ['category' => ''])) }}"
+                                <a href="{{ route('marketplace.index', array_merge(request()->query(), ['category' => ''])) }}" @click="loading = true"
                                     class="block px-3 py-1.5 text-sm rounded-lg transition {{ !($activeCategory ?? null) ? 'bg-emerald-50 dark:bg-emerald-900/20 text-emerald-700 dark:text-emerald-400 font-medium' : 'text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-700' }}">
                                     Semua Kategori
                                 </a>
                                 @foreach($categories as $cat)
-                                    <a href="{{ route('marketplace.index', array_merge(request()->query(), ['category' => $cat->category])) }}"
+                                    <a href="{{ route('marketplace.index', array_merge(request()->query(), ['category' => $cat->category])) }}" @click="loading = true"
                                         class="block px-3 py-1.5 text-sm rounded-lg transition {{ ($activeCategory ?? null) === $cat->category ? 'bg-emerald-50 dark:bg-emerald-900/20 text-emerald-700 dark:text-emerald-400 font-medium' : 'text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-700' }}">
                                         {{ $cat->category }}
                                         <span class="text-xs opacity-60">({{ $cat->count }})</span>
@@ -78,12 +117,12 @@
                         <div class="mb-5">
                             <h4 class="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-2">Tipe Lisensi</h4>
                             <div class="space-y-1">
-                                <a href="{{ route('marketplace.index', array_merge(request()->query(), ['license' => ''])) }}"
+                                <a href="{{ route('marketplace.index', array_merge(request()->query(), ['license' => ''])) }}" @click="loading = true"
                                     class="block px-3 py-1.5 text-sm rounded-lg transition {{ !($activeLicense ?? null) ? 'bg-emerald-50 dark:bg-emerald-900/20 text-emerald-700 dark:text-emerald-400 font-medium' : 'text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-700' }}">
                                     Semua Lisensi
                                 </a>
                                 @foreach($licenseTypes as $key => $label)
-                                    <a href="{{ route('marketplace.index', array_merge(request()->query(), ['license' => $key])) }}"
+                                    <a href="{{ route('marketplace.index', array_merge(request()->query(), ['license' => $key])) }}" @click="loading = true"
                                         class="block px-3 py-1.5 text-sm rounded-lg transition {{ ($activeLicense ?? null) === $key ? 'bg-emerald-50 dark:bg-emerald-900/20 text-emerald-700 dark:text-emerald-400 font-medium' : 'text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-700' }}">
                                         {{ $label }}
                                     </a>
@@ -106,12 +145,20 @@
                                     ];
                                 @endphp
                                 @foreach($sortOptions as $key => $label)
-                                    <a href="{{ route('marketplace.index', array_merge(request()->query(), ['sort' => $key])) }}"
+                                    <a href="{{ route('marketplace.index', array_merge(request()->query(), ['sort' => $key])) }}" @click="loading = true"
                                         class="block px-3 py-1.5 text-sm rounded-lg transition {{ ($sort ?? 'newest') === $key ? 'bg-emerald-50 dark:bg-emerald-900/20 text-emerald-700 dark:text-emerald-400 font-medium' : 'text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-700' }}">
                                         {{ $label }}
                                     </a>
                                 @endforeach
                             </div>
+                        {{-- Clear Filters --}}
+                        @if($hasActiveFilters)
+                            <div class="mt-4 pt-4 border-t border-gray-100 dark:border-gray-700">
+                                <a href="{{ route('marketplace.index') }}" class="block w-full text-center px-3 py-2 text-sm text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition font-medium">
+                                    Hapus Semua Filter
+                                </a>
+                            </div>
+                        @endif
                         </div>
                     </div>
                 </aside>
@@ -170,5 +217,6 @@
                 </main>
             </div>
         </div>
+    </div>
     </div>
 </x-app-layout>

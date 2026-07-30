@@ -9,7 +9,7 @@
                     <span class="text-lg font-bold text-gray-900 dark:text-white">Noteds</span>
                 </a>
                 <p class="text-sm text-gray-500 dark:text-gray-400 leading-relaxed">
-                    Platform simulasi interaktif untuk belajar sains, teknik, dan teknologi dengan cara yang menyenangkan.
+                    Platform interactive experience untuk belajar sains, teknik, dan teknologi dengan cara yang menyenangkan.
                 </p>
             </div>
 
@@ -32,6 +32,11 @@
                             Papan Skor
                         </a>
                     </li>
+                    <li>
+                        <a href="{{ route('marketplace.index') }}" class="text-sm text-gray-500 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 transition">
+                            Marketplace
+                        </a>
+                    </li>
                 </ul>
             </div>
 
@@ -45,7 +50,7 @@
                         </a>
                     </li>
                     <li>
-                        <a href="{{ route('become-creator') }}" class="text-sm text-gray-500 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 transition">
+                        <a href="{{ route('become-creator-page') }}" class="text-sm text-gray-500 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 transition">
                             Jadi Creator
                         </a>
                     </li>

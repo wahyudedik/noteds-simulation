@@ -45,6 +45,11 @@
         transform: translateX(-4px);
         transition: all 0.2s ease;
     }
+    .dark .wa-float-btn a .wa-label {
+        background: #1f2937;
+        color: #e5e7eb;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+    }
     .wa-float-btn a .wa-label::before {
         content: '';
         position: absolute;
@@ -53,6 +58,9 @@
         transform: translateY(-50%);
         border: 5px solid transparent;
         border-right-color: white;
+    }
+    .dark .wa-float-btn a .wa-label::before {
+        border-right-color: #1f2937;
     }
     .wa-float-btn a:hover .wa-label {
         opacity: 1;

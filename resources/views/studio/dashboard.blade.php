@@ -32,7 +32,7 @@
             </div>
             <div class="p-6">
                 {{-- Simple Bar Chart --}}
-                <div class="flex items-end gap-2 h-48">
+                <div class="flex items-end gap-1 sm:gap-2 h-48 overflow-x-auto">
                     @foreach($trendDays as $day)
                         @php
                             $maxVal = max($trendDays->pluck('views')->merge($trendDays->pluck('plays'))->max(), 1);

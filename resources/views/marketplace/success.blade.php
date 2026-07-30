@@ -50,7 +50,7 @@
                         </div>
                         <div class="flex justify-between text-sm">
                             <span class="text-gray-600 dark:text-gray-400">Status</span>
-                            <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-emerald-100 text-emerald-700">
+                            <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-400">
                                 Berhasil
                             </span>
                         </div>

@@ -33,7 +33,7 @@
                             <div class="flex items-center gap-2 flex-wrap">
                                 <span class="text-sm font-semibold text-gray-900 dark:text-white">{{ $comment->user->name }}</span>
                                 <span class="text-xs text-gray-400 dark:text-gray-500">·</span>
-                                <a href="{{ route('simulations.show', $comment->simulation->slug) }}" class="text-xs text-blue-600 hover:underline" target="_blank">
+                                <a href="{{ route('simulations.show', $comment->simulation->slug) }}" class="text-xs text-blue-600 dark:text-blue-400 hover:underline" target="_blank">
                                     {{ Str::limit($comment->simulation->title, 40) }}
                                 </a>
                                 <span class="text-xs text-gray-400 dark:text-gray-500">· {{ $comment->created_at->diffForHumans() }}</span>

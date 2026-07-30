@@ -5,14 +5,14 @@
             <button @click="open = !open" class="w-full flex items-center justify-between px-6 py-4 text-left">
                 <div class="flex items-center gap-3">
                     <svg class="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-                    <span class="font-semibold text-blue-900">Panduan Upload Experience</span>
+                    <span class="font-semibold text-blue-900 dark:text-blue-200">Panduan Upload Experience</span>
                 </div>
                 <svg class="w-5 h-5 text-blue-600 transition-transform" :class="{ 'rotate-180': open }" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
             </button>
             <div x-show="open" x-collapse class="px-6 pb-4">
                 <div class="text-sm text-blue-800 dark:text-blue-300 space-y-3">
                     <p><strong>Struktur ZIP Package:</strong></p>
-                    <pre class="bg-blue-100 rounded-lg p-3 text-xs font-mono">simulation.zip
+                    <pre class="bg-blue-100 dark:bg-blue-800/30 dark:text-blue-200 rounded-lg p-3 text-xs font-mono">simulation.zip
 ├── manifest.json      # Metadata experience
 ├── index.html         # File entry point
 ├── assets/
@@ -21,14 +21,14 @@
 │   └── images/
 └── README.md          # Dokumentasi (opsional)</pre>
                     <p><strong>Format manifest.json:</strong></p>
-                    <pre class="bg-blue-100 rounded-lg p-3 text-xs font-mono">{
+                    <pre class="bg-blue-100 dark:bg-blue-800/30 dark:text-blue-200 rounded-lg p-3 text-xs font-mono">{
     "name": "Hukum Newton",
     "version": "1.0.0",
     "category": "Fisika",
     "description": "Interactive experience...",
     "entryPoint": "index.html"
 }</pre>
-                    <p class="text-blue-700">✓ Pastikan <code>index.html</code> ada di root ZIP<br>
+                    <p class="text-blue-700 dark:text-blue-300">✓ Pastikan <code>index.html</code> ada di root ZIP<br>
                     ✓ Ukuran maksimal: 50MB<br>
                     ✓ Format yang didukung: .html, .js, .css, .json</p>
                 </div>
