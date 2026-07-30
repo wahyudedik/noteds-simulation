@@ -57,6 +57,7 @@ class AdController extends Controller
         $validated = $request->validate([
             'title' => 'required|string|max:255',
             'type' => 'required|in:banner,interstitial,video,native,adsense',
+            'ad_network' => 'nullable|in:adsense,monetag,propellerads,media_net,adsterra,ezoic',
             'position' => 'required|in:header,sidebar,pre_roll,mid_roll,post_simulation,feed_sponsored,search_sponsored',
             'content' => 'nullable|string|max:10000',
             'image' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:512',
@@ -72,6 +73,7 @@ class AdController extends Controller
         $data = [
             'title' => $validated['title'],
             'type' => $validated['type'],
+            'ad_network' => $validated['ad_network'] ?? null,
             'position' => $validated['position'],
             'content' => $validated['content'] ?? null,
             'target_url' => $validated['target_url'] ?? null,
@@ -83,6 +85,12 @@ class AdController extends Controller
             'end_date' => $validated['end_date'] ?? null,
             'created_by' => Auth::id(),
         ];
+
+        // Store ad_network_config (zone_id, slot_id, etc.)
+        $networkConfig = $this->extractNetworkConfig($request);
+        if ($networkConfig) {
+            $data['ad_network_config'] = $networkConfig;
+        }
 
         if ($request->hasFile('image')) {
             $data['image_path'] = $request->file('image')->store('ads', 'public');
@@ -110,6 +118,7 @@ class AdController extends Controller
         $validated = $request->validate([
             'title' => 'required|string|max:255',
             'type' => 'required|in:banner,interstitial,video,native,adsense',
+            'ad_network' => 'nullable|in:adsense,monetag,propellerads,media_net,adsterra,ezoic',
             'position' => 'required|in:header,sidebar,pre_roll,mid_roll,post_simulation,feed_sponsored,search_sponsored',
             'content' => 'nullable|string|max:10000',
             'image' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:512',
@@ -125,6 +134,7 @@ class AdController extends Controller
         $data = [
             'title' => $validated['title'],
             'type' => $validated['type'],
+            'ad_network' => $validated['ad_network'] ?? null,
             'position' => $validated['position'],
             'content' => $validated['content'] ?? null,
             'target_url' => $validated['target_url'] ?? null,
@@ -135,6 +145,11 @@ class AdController extends Controller
             'start_date' => $validated['start_date'] ?? null,
             'end_date' => $validated['end_date'] ?? null,
         ];
+
+        $networkConfig = $this->extractNetworkConfig($request);
+        if ($networkConfig !== null) {
+            $data['ad_network_config'] = $networkConfig;
+        }
 
         if ($request->hasFile('image')) {
             $data['image_path'] = $request->file('image')->store('ads', 'public');
@@ -168,5 +183,31 @@ class AdController extends Controller
 
         return redirect()->route('admin.ads.index')
             ->with('success', "Iklan berhasil {$status}.");
+    }
+
+    /**
+     * Extract ad network configuration from request (zone_id, slot_id, etc.).
+     */
+    private function extractNetworkConfig(Request $request): ?array
+    {
+        $network = $request->input('ad_network');
+
+        if (! $network) {
+            return null;
+        }
+
+        $config = [];
+        $zoneId = $request->input('zone_id');
+        $slotId = $request->input('slot_id');
+
+        if ($zoneId) {
+            $config['zone_id'] = $zoneId;
+        }
+
+        if ($slotId) {
+            $config['slot_id'] = $slotId;
+        }
+
+        return $config ?: null;
     }
 }

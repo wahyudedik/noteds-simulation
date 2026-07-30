@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Admin\AdAnalyticsController as AdminAdAnalyticsController;
 use App\Http\Controllers\Admin\AdController as AdminAdController;
+use App\Http\Controllers\Admin\AdNetworkController as AdminAdNetworkController;
 use App\Http\Controllers\Admin\AnalyticsController as AdminAnalyticsController;
 use App\Http\Controllers\Admin\CategoryController as AdminCategoryController;
 use App\Http\Controllers\Admin\CertificationController as AdminCertificationController;
@@ -361,6 +362,14 @@ Route::middleware(['auth', CheckRole::class.':superadmin,admin'])->prefix('admin
     Route::get('/analytics', [AdminAnalyticsController::class, 'index'])->name('analytics.index');
     Route::get('/analytics/users', [AdminAnalyticsController::class, 'users'])->name('analytics.users');
     Route::get('/analytics/revenue', [AdminAnalyticsController::class, 'revenue'])->name('analytics.revenue');
+
+    // Ad Network Settings (Global Configuration)
+    Route::get('/ad-networks', [AdminAdNetworkController::class, 'index'])->name('ad-networks.index');
+    Route::get('/ad-networks/{network}/edit', [AdminAdNetworkController::class, 'edit'])->name('ad-networks.edit');
+    Route::put('/ad-networks/{network}', [AdminAdNetworkController::class, 'update'])->name('ad-networks.update');
+    Route::post('/ad-networks/{network}/toggle', [AdminAdNetworkController::class, 'toggle'])->name('ad-networks.toggle');
+    Route::get('/ad-networks/ads-txt', [AdminAdNetworkController::class, 'adsTxt'])->name('ad-networks.ads-txt');
+    Route::post('/ad-networks/ads-txt', [AdminAdNetworkController::class, 'saveAdsTxt'])->name('ad-networks.ads-txt.save');
 
     // Ad Analytics
     Route::get('/ad-analytics', [AdminAdAnalyticsController::class, 'index'])->name('ad-analytics.index');

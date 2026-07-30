@@ -73,16 +73,21 @@
                             class="mt-1 block w-full border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 text-sm">
                     </div>
 
-                    {{-- AdSense --}}
-                    <div class="grid grid-cols-2 gap-4">
+                    {{-- AdSense / Ad Network IDs --}}
+                    <div class="grid grid-cols-3 gap-4">
                         <div>
-                            <label for="adsense_publisher_id" class="block text-sm font-medium text-gray-700 dark:text-gray-300 dark:text-gray-300">AdSense Publisher ID</label>
+                            <label for="adsense_publisher_id" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Publisher ID</label>
                             <input type="text" name="adsense_publisher_id" id="adsense_publisher_id" value="{{ old('adsense_publisher_id', $ad->adsense_publisher_id) }}"
                                 class="mt-1 block w-full border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 text-sm">
                         </div>
                         <div>
-                            <label for="adsense_ad_slot" class="block text-sm font-medium text-gray-700 dark:text-gray-300 dark:text-gray-300">AdSense Ad Slot</label>
+                            <label for="adsense_ad_slot" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Ad Slot</label>
                             <input type="text" name="adsense_ad_slot" id="adsense_ad_slot" value="{{ old('adsense_ad_slot', $ad->adsense_ad_slot) }}"
+                                class="mt-1 block w-full border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 text-sm">
+                        </div>
+                        <div>
+                            <label for="zone_id" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Zone ID (Monetag/etc)</label>
+                            <input type="text" name="zone_id" id="zone_id" value="{{ old('zone_id', $ad->ad_network_config['zone_id'] ?? '') }}"
                                 class="mt-1 block w-full border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 text-sm">
                         </div>
                     </div>

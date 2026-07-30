@@ -103,7 +103,12 @@
                                     <tr class="border-b border-gray-100 hover:bg-gray-50 dark:bg-gray-700/50 dark:hover:bg-gray-600/50">
                                         <td class="py-3 px-2 font-medium text-gray-900 dark:text-white">{{ Str::limit($ad->title, 30) }}</td>
                                         <td class="py-3 px-2 text-gray-500 dark:text-gray-400">
-                                            <span class="inline-flex px-2 py-0.5 text-xs font-medium bg-gray-100 text-gray-600 dark:text-gray-400 rounded-full">{{ ucfirst($ad->type) }}</span>
+                                            <div class="flex items-center gap-1">
+                                                <span class="inline-flex px-2 py-0.5 text-xs font-medium bg-gray-100 text-gray-600 dark:text-gray-400 rounded-full">{{ ucfirst($ad->type) }}</span>
+                                                @if($ad->ad_network)
+                                                    <span class="inline-flex px-1.5 py-0.5 text-[10px] font-medium bg-indigo-100 text-indigo-600 dark:bg-indigo-900/30 dark:text-indigo-400 rounded">{{ \App\Models\AdNetworkSetting::NETWORKS[$ad->ad_network] ?? $ad->ad_network }}</span>
+                                                @endif
+                                            </div>
                                         </td>
                                         <td class="py-3 px-2 text-gray-500 dark:text-gray-400">{{ str_replace('_', ' ', ucfirst($ad->position)) }}</td>
                                         <td class="py-3 px-2 text-center text-gray-500 dark:text-gray-400">{{ number_format($ad->impressions) }}</td>

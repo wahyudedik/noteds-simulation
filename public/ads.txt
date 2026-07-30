@@ -1,1 +1,5 @@
+# ads.txt — Noteds Interactive Experience Platform
+# Generated automatically. Do not edit manually unless needed.
+
+# Google AdSense
 google.com, pub-2771325503977360, DIRECT, f08c47fec0942fa0

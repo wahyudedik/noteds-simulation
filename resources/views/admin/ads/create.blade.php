@@ -23,16 +23,27 @@
                         @error('title') <p class="mt-1 text-sm text-red-600 dark:text-red-400">{{ $message }}</p> @enderror
                     </div>
 
-                    {{-- Type & Position --}}
-                    <div class="grid grid-cols-2 gap-4">
+                    {{-- Type, Network & Position --}}
+                    <div class="grid grid-cols-3 gap-4">
                         <div>
-                            <label for="type" class="block text-sm font-medium text-gray-700 dark:text-gray-300 dark:text-gray-300">Tipe Iklan</label>
+                            <label for="type" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Tipe Iklan</label>
                             <select name="type" id="type" required class="mt-1 block w-full border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 text-sm">
                                 <option value="banner" {{ old('type') === 'banner' ? 'selected' : '' }}>Banner</option>
-                                <option value="interstitial" {{ old('type') === 'interstitial' ? 'selected' : '' }}>Interstitial</option>
-                                <option value="video" {{ old('type') === 'video' ? 'selected' : '' }}>Video</option>
                                 <option value="native" {{ old('type') === 'native' ? 'selected' : '' }}>Native</option>
                                 <option value="adsense" {{ old('type') === 'adsense' ? 'selected' : '' }}>AdSense</option>
+                                <option value="video" {{ old('type') === 'video' ? 'selected' : '' }}>Video</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label for="ad_network" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Ad Network</label>
+                            <select name="ad_network" id="ad_network" class="mt-1 block w-full border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 text-sm">
+                                <option value="" {{ old('ad_network') === '' ? 'selected' : '' }}>Custom / Direct</option>
+                                <option value="adsense" {{ old('ad_network') === 'adsense' ? 'selected' : '' }}>Google AdSense</option>
+                                <option value="monetag" {{ old('ad_network') === 'monetag' ? 'selected' : '' }}>Monetag</option>
+                                <option value="propellerads" {{ old('ad_network') === 'propellerads' ? 'selected' : '' }}>PropellerAds</option>
+                                <option value="media_net" {{ old('ad_network') === 'media_net' ? 'selected' : '' }}>Media.net</option>
+                                <option value="adsterra" {{ old('ad_network') === 'adsterra' ? 'selected' : '' }}>Adsterra</option>
+                                <option value="ezoic" {{ old('ad_network') === 'ezoic' ? 'selected' : '' }}>Ezoic</option>
                             </select>
                         </div>
                         <div>
@@ -74,16 +85,21 @@
                         @error('target_url') <p class="mt-1 text-sm text-red-600 dark:text-red-400">{{ $message }}</p> @enderror
                     </div>
 
-                    {{-- AdSense --}}
-                    <div class="grid grid-cols-2 gap-4">
+                    {{-- AdSense / Ad Network IDs --}}
+                    <div class="grid grid-cols-3 gap-4">
                         <div>
-                            <label for="adsense_publisher_id" class="block text-sm font-medium text-gray-700 dark:text-gray-300 dark:text-gray-300">AdSense Publisher ID</label>
+                            <label for="adsense_publisher_id" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Publisher ID</label>
                             <input type="text" name="adsense_publisher_id" id="adsense_publisher_id" value="{{ old('adsense_publisher_id') }}" placeholder="ca-pub-XXXXX"
                                 class="mt-1 block w-full border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 text-sm">
                         </div>
                         <div>
-                            <label for="adsense_ad_slot" class="block text-sm font-medium text-gray-700 dark:text-gray-300 dark:text-gray-300">AdSense Ad Slot</label>
+                            <label for="adsense_ad_slot" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Ad Slot</label>
                             <input type="text" name="adsense_ad_slot" id="adsense_ad_slot" value="{{ old('adsense_ad_slot') }}" placeholder="XXXXX"
+                                class="mt-1 block w-full border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 text-sm">
+                        </div>
+                        <div>
+                            <label for="zone_id" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Zone ID (Monetag/etc)</label>
+                            <input type="text" name="zone_id" id="zone_id" value="{{ old('zone_id') }}" placeholder="Zone ID"
                                 class="mt-1 block w-full border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 text-sm">
                         </div>
                     </div>

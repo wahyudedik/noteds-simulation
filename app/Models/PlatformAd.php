@@ -14,6 +14,8 @@ class PlatformAd extends Model
         'title',
         'type',
         'position',
+        'ad_network',
+        'ad_network_config',
         'content',
         'image_path',
         'video_path',
@@ -36,6 +38,7 @@ class PlatformAd extends Model
     ];
 
     protected $casts = [
+        'ad_network_config' => 'array',
         'category_filter' => 'array',
         'is_active' => 'boolean',
         'is_sponsored' => 'boolean',
