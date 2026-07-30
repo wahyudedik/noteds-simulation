@@ -224,6 +224,7 @@ echo ""
 info "Step 1: Preparing directories & permissions..."
 mkdir -p storage/app/simulations
 mkdir -p storage/app/private/simulations
+mkdir -p storage/app/public/thumbnails
 mkdir -p storage/framework/cache/data
 mkdir -p storage/framework/sessions
 mkdir -p storage/framework/views
@@ -406,6 +407,17 @@ if echo "$QUEUE_OUTPUT" | grep -qi "Redis\|Class.*not found"; then
 else
     success "Queue restarted."
 fi
+echo ""
+
+# Step 15: Warm performance cache
+info "Step 15: Warming performance cache..."
+php artisan cache:clear --no-interaction 2>/dev/null || true
+# Pre-warm explore/landing caches
+php artisan tinker --execute '
+    App\Support\Cache::tags(["explore"])->flush();
+    App\Support\Cache::tags(["landing"])->flush();
+' 2>/dev/null || true
+success "Performance cache warmed."
 echo ""
 
 # ============================================================

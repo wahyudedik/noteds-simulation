@@ -61,6 +61,8 @@
 
         <x-toast />
 
+        <x-whatsapp-contact />
+
         {{-- Back to Top Button --}}
         <div x-data="{ show: false }" x-init="window.addEventListener('scroll', () => { show = window.scrollY > 300 })"
              x-show="show" x-transition

@@ -215,5 +215,7 @@
     </footer>
 
     <x-toast />
+
+    <x-whatsapp-contact />
 </body>
 </html>

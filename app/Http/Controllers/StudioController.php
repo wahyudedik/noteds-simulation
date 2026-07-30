@@ -2,6 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Jobs\ExtractSimulationJob;
+use App\Jobs\ProcessTagsJob;
+use App\Jobs\ResizeThumbnailJob;
+use App\Jobs\ScanSimulationJob;
 use App\Models\Bookmark;
 use App\Models\Category;
 use App\Models\Comment;
@@ -16,7 +20,6 @@ use App\Models\Share;
 use App\Models\Simulation;
 use App\Models\SimulationAnalytic;
 use App\Models\SimulationVersion;
-use App\Models\Tag;
 use App\Models\TrafficSource;
 use App\Models\User;
 use App\Services\AdRevenueService;
@@ -211,34 +214,16 @@ class StudioController extends Controller
             'published_at' => $request->boolean('is_published') ? now() : null,
         ]);
 
-        // Handle tags
+        // Dispatch async jobs — don't block the HTTP request
         if (! empty($validated['tags'])) {
-            $tagNames = array_map('trim', explode(',', $validated['tags']));
-            foreach ($tagNames as $tagName) {
-                if (empty($tagName)) {
-                    continue;
-                }
-
-                // Truncate tag name to fit DB column (max 255 chars)
-                $tagName = Str::limit($tagName, 255, '');
-                $tagSlug = Str::limit(Str::slug($tagName), 255, '');
-
-                $tag = Tag::firstOrCreate(
-                    ['slug' => $tagSlug],
-                    ['name' => $tagName]
-                );
-                $simulation->tagModels()->attach($tag->id);
-            }
+            ProcessTagsJob::dispatch($simulation->id, $validated['tags']);
         }
 
-        // Auto-scan (Layer 1) — run security scan on uploaded ZIP
-        $security = app(SecurityService::class);
-        $zipFullPath = Storage::disk('public')->path('simulations/'.$user->id.'/'.$slug.'.zip');
-        $scanResult = $security->autoScan($simulation, $zipFullPath);
+        ExtractSimulationJob::dispatch($simulation->id);
+        ScanSimulationJob::dispatch($simulation->id);
 
-        // If auto-scan rejects, auto-pend the simulation
-        if ($scanResult->result === 'reject' && $simulation->is_published) {
-            $simulation->update(['status' => 'pending']);
+        if ($simulation->thumbnail) {
+            ResizeThumbnailJob::dispatch($simulation->id);
         }
 
         // Update creator reputation
@@ -333,8 +318,10 @@ class StudioController extends Controller
         }
 
         // Handle thumbnail
+        $shouldResize = false;
         if ($request->hasFile('thumbnail')) {
             $data['thumbnail'] = $request->file('thumbnail')->store('thumbnails', 'public');
+            $shouldResize = true;
         }
 
         // Set published_at if publishing for the first time
@@ -344,26 +331,14 @@ class StudioController extends Controller
 
         $simulation->update($data);
 
-        // Sync tags
+        // Dispatch async thumbnail resize if new thumbnail uploaded
+        if ($shouldResize) {
+            ResizeThumbnailJob::dispatch($simulation->id);
+        }
+
+        // Sync tags async
         if ($request->has('tags')) {
-            $tagNames = array_map('trim', explode(',', $request->input('tags', '')));
-            $tagIds = [];
-            foreach ($tagNames as $tagName) {
-                if (empty($tagName)) {
-                    continue;
-                }
-
-                // Truncate tag name to fit DB column (max 255 chars)
-                $tagName = Str::limit($tagName, 255, '');
-                $tagSlug = Str::limit(Str::slug($tagName), 255, '');
-
-                $tag = Tag::firstOrCreate(
-                    ['slug' => $tagSlug],
-                    ['name' => $tagName]
-                );
-                $tagIds[] = $tag->id;
-            }
-            $simulation->tagModels()->sync($tagIds);
+            ProcessTagsJob::dispatch($simulation->id, $request->input('tags', ''));
         }
 
         return redirect()->route('studio.simulations')

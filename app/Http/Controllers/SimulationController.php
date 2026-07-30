@@ -25,22 +25,23 @@ class SimulationController extends Controller
      */
     public function explore(Request $request): View
     {
-        $categories = Simulation::published()
+        // Cache categories (rarely changes)
+        $categories = Cache::remember('explore:categories', 3600, fn () => Simulation::published()
             ->selectRaw('category, count(*) as count')
             ->groupBy('category')
             ->orderBy('count', 'desc')
-            ->get();
+            ->get());
 
         // Filter by category if provided
         $activeCategory = $request->input('category');
 
         // Filter by tag if provided
         $activeTag = $request->input('tag');
-        $tags = Tag::has('simulations', '>', 0)
+        $tags = Cache::remember('explore:tags:20', 3600, fn () => Tag::has('simulations', '>', 0)
             ->withCount('simulations')
             ->orderByDesc('simulations_count')
             ->take(20)
-            ->get();
+            ->get());
 
         // Shared scope: apply category + tag filters
         $applyFilters = fn ($q) => $q
@@ -56,60 +57,72 @@ class SimulationController extends Controller
             'year' => 'Tahun Ini',
         ];
 
-        $trendingQuery = Simulation::published()->tap($applyFilters);
+        $cacheKey = 'explore:trending:'.$trendingPeriod.($activeCategory ? ':'.$activeCategory : '').($activeTag ? ':'.$activeTag : '');
 
-        // Apply trending time filter
-        $trendingQuery->where('published_at', '>=', match ($trendingPeriod) {
-            'day' => now()->subDay(),
-            'week' => now()->subWeek(),
-            'month' => now()->subMonth(),
-            'year' => now()->subYear(),
-            default => now()->subWeek(),
+        $trending = Cache::remember($cacheKey, 300, function () use ($applyFilters, $trendingPeriod) {
+            return Simulation::published()
+                ->with('user')
+                ->tap($applyFilters)
+                ->where('published_at', '>=', match ($trendingPeriod) {
+                    'day' => now()->subDay(),
+                    'week' => now()->subWeek(),
+                    'month' => now()->subMonth(),
+                    'year' => now()->subYear(),
+                    default => now()->subWeek(),
+                })
+                ->orderByDesc('play_count')
+                ->take(12)
+                ->get();
         });
 
-        $trending = $trendingQuery
-            ->orderByDesc('play_count')
-            ->take(12)
-            ->get();
-
         // Featured simulations (always all-time)
-        $featured = Simulation::published()
-            ->tap($applyFilters)
-            ->orderByDesc('play_count')
-            ->take(6)
-            ->get();
+        $featured = Cache::remember('explore:featured'.($activeCategory ? ':'.$activeCategory : '').($activeTag ? ':'.$activeTag : ''), 1800, function () use ($applyFilters) {
+            return Simulation::published()
+                ->with('user')
+                ->tap($applyFilters)
+                ->orderByDesc('play_count')
+                ->take(6)
+                ->get();
+        });
 
         // Recently added
-        $recent = Simulation::published()
-            ->tap($applyFilters)
-            ->latest('published_at')
-            ->take(12)
-            ->get();
+        $recent = Cache::remember('explore:recent'.($activeCategory ? ':'.$activeCategory : '').($activeTag ? ':'.$activeTag : ''), 600, function () use ($applyFilters) {
+            return Simulation::published()
+                ->with('user')
+                ->tap($applyFilters)
+                ->latest('published_at')
+                ->take(12)
+                ->get();
+        });
 
         // Highest rated
-        $topRated = Simulation::published()
-            ->tap($applyFilters)
-            ->withAvg('ratings', 'rating')
-            ->orderByDesc('ratings_avg_rating')
-            ->take(12)
-            ->get();
+        $topRated = Cache::remember('explore:topRated'.($activeCategory ? ':'.$activeCategory : '').($activeTag ? ':'.$activeTag : ''), 1800, function () use ($applyFilters) {
+            return Simulation::published()
+                ->with('user')
+                ->tap($applyFilters)
+                ->withAvg('ratings', 'rating')
+                ->orderByDesc('ratings_avg_rating')
+                ->take(12)
+                ->get();
+        });
 
         // "For You" — personalized recommendations based on play history
         $forYou = collect();
         $user = $request->user();
         if ($user) {
-            $topCategories = PlayHistory::where('user_id', $user->id)
-                ->with('simulation')
-                ->get()
-                ->pluck('simulation.category')
-                ->filter()
-                ->countBy()
-                ->sortDesc()
-                ->keys()
-                ->take(3);
+            // Optimized: count top categories directly in database
+            $topCategories = PlayHistory::where('play_history.user_id', $user->id)
+                ->join('simulations', 'play_history.simulation_id', '=', 'simulations.id')
+                ->selectRaw('simulations.category, count(*) as cnt')
+                ->groupBy('simulations.category')
+                ->orderByDesc('cnt')
+                ->take(3)
+                ->pluck('simulations.category');
 
             if ($topCategories->isNotEmpty()) {
-                $playedIds = $user->playHistory()->pluck('simulation_id');
+                $playedIds = PlayHistory::where('user_id', $user->id)
+                    ->pluck('simulation_id');
+
                 $forYou = Simulation::published()
                     ->whereIn('category', $topCategories)
                     ->whereNotIn('id', $playedIds)
@@ -186,57 +199,60 @@ class SimulationController extends Controller
      */
     public function index(Request $request): View
     {
-        $categories = Simulation::published()
+        $categories = Cache::remember('landing:categories', 3600, fn () => Simulation::published()
             ->selectRaw('category, count(*) as count')
             ->groupBy('category')
             ->orderBy('count', 'desc')
-            ->get();
+            ->get());
 
         // Trending simulations — filter by period (day, week, month, year)
         $trendingPeriod = $request->input('period', 'week');
-        $trendingQuery = Simulation::published();
 
-        $trendingQuery->where('published_at', '>=', match ($trendingPeriod) {
-            'day' => now()->subDay(),
-            'week' => now()->subWeek(),
-            'month' => now()->subMonth(),
-            'year' => now()->subYear(),
-            default => now()->subWeek(),
+        $trending = Cache::remember('landing:trending:'.$trendingPeriod, 300, function () use ($trendingPeriod) {
+            return Simulation::published()
+                ->with('user')
+                ->where('published_at', '>=', match ($trendingPeriod) {
+                    'day' => now()->subDay(),
+                    'week' => now()->subWeek(),
+                    'month' => now()->subMonth(),
+                    'year' => now()->subYear(),
+                    default => now()->subWeek(),
+                })
+                ->orderByDesc('play_count')
+                ->take(12)
+                ->get();
         });
 
-        $trending = $trendingQuery
-            ->orderByDesc('play_count')
-            ->take(12)
-            ->get();
-
         // Latest simulations
-        $latest = Simulation::published()
+        $latest = Cache::remember('landing:latest', 600, fn () => Simulation::published()
+            ->with('user')
             ->latest('published_at')
             ->take(12)
-            ->get();
+            ->get());
 
         // Most popular all time
-        $popular = Simulation::published()
+        $popular = Cache::remember('landing:popular', 1800, fn () => Simulation::published()
+            ->with('user')
             ->orderByDesc('view_count')
             ->take(12)
-            ->get();
+            ->get());
 
         // Discovered for You — based on play history
         $discovered = collect();
         $user = $request->user();
         if ($user) {
-            $topCategories = PlayHistory::where('user_id', $user->id)
-                ->with('simulation')
-                ->get()
-                ->pluck('simulation.category')
-                ->filter()
-                ->countBy()
-                ->sortDesc()
-                ->keys()
-                ->take(3);
+            // Optimized: count top categories directly in database
+            $topCategories = PlayHistory::where('play_history.user_id', $user->id)
+                ->join('simulations', 'play_history.simulation_id', '=', 'simulations.id')
+                ->selectRaw('simulations.category, count(*) as cnt')
+                ->groupBy('simulations.category')
+                ->orderByDesc('cnt')
+                ->take(3)
+                ->pluck('simulations.category');
 
             if ($topCategories->isNotEmpty()) {
-                $playedSimulationIds = $user->playHistory()->pluck('simulation_id');
+                $playedSimulationIds = PlayHistory::where('user_id', $user->id)
+                    ->pluck('simulation_id');
                 $discovered = Simulation::published()
                     ->whereIn('category', $topCategories)
                     ->whereNotIn('id', $playedSimulationIds)
@@ -249,11 +265,11 @@ class SimulationController extends Controller
 
         // Fallback: if no history or no results, show highest rated
         if ($discovered->isEmpty()) {
-            $discovered = Simulation::published()
+            $discovered = Cache::remember('landing:discovered:fallback', 1800, fn () => Simulation::published()
                 ->with('user')
                 ->orderByDesc('average_rating')
                 ->take(12)
-                ->get();
+                ->get());
         }
 
         // Search

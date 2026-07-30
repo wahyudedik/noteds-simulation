@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Jobs\ResizeThumbnailJob;
 use App\Models\Category;
 use App\Models\Simulation;
 use Illuminate\Http\RedirectResponse;
@@ -121,6 +122,11 @@ class SimulationController extends Controller
             'is_published' => $request->boolean('is_published', false),
             'published_at' => $request->boolean('is_published', false) ? now() : null,
         ]);
+
+        // Dispatch async jobs
+        if ($thumbnailPath) {
+            ResizeThumbnailJob::dispatch($simulation->id);
+        }
 
         return redirect()->route('admin.simulations.show', $simulation)
             ->with('success', 'Simulation uploaded successfully!');

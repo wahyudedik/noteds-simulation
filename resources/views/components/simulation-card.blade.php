@@ -6,11 +6,28 @@
         <a href="{{ route('simulations.show', $simulation->slug) }}" class="block">
             <div class="relative aspect-video bg-gray-200 overflow-hidden">
                 @if($simulation->thumbnail)
+                    @php
+                        $variants = $simulation->thumbnail_variants;
+                        $hasVariants = is_array($variants) && !empty($variants);
+                    @endphp
                     <img
-                        src="{{ Storage::disk('public')->url($simulation->thumbnail) }}"
+                        @if($hasVariants)
+                            srcset="
+                                @if(!empty($variants['thumb'])){{ asset('storage/'.$variants['thumb']) }} 300w,@endif
+                                @if(!empty($variants['medium'])){{ asset('storage/'.$variants['medium']) }} 600w,@endif
+                                {{ asset('storage/'.$simulation->thumbnail) }} 1200w
+                            "
+                            sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
+                            src="{{ asset('storage/'.($variants['medium'] ?? $simulation->thumbnail)) }}"
+                        @else
+                            src="{{ Storage::disk('public')->url($simulation->thumbnail) }}"
+                        @endif
                         alt="{{ $simulation->title }}"
                         class="w-full h-full object-cover transition duration-300"
                         loading="lazy"
+                        width="600"
+                        height="400"
+                        fetchpriority="low"
                     />
                 @else
                     <div class="w-full h-full flex items-center justify-center bg-gradient-to-br from-blue-500 to-purple-600">

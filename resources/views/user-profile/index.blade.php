@@ -313,7 +313,7 @@
                                     <svg class="w-14 h-14 text-gray-300 dark:text-gray-600 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M17 8h2a2 2 0 012 2v6a2 2 0 01-2 2h-2v4l-4-4H9a2 2 0 01-2-2v-1m0-4V6a2 2 0 012-2h6a2 2 0 012 2v6a2 2 0 01-2 2h-2v4l-4-4z" /></svg>
                                     <h3 class="text-gray-500 dark:text-gray-400 text-lg font-medium">Belum ada thread</h3>
                                     <p class="text-gray-400 dark:text-gray-500 text-sm mt-2">Mulai diskusi dengan membuat thread baru.</p>
-                                    <a href="{{ route('forum.thread.create') }}" class="inline-flex items-center gap-2 mt-4 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium rounded-lg transition">
+                                    <a href="{{ route('forum.create') }}" class="inline-flex items-center gap-2 mt-4 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium rounded-lg transition">
                                         Buat Thread
                                     </a>
                                 </div>

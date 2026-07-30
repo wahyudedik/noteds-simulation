@@ -164,6 +164,8 @@
 
         <x-toast />
 
+        <x-whatsapp-contact />
+
         @stack('scripts')
     </body>
 </html>

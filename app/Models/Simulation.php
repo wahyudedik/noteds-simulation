@@ -24,6 +24,7 @@ class Simulation extends Model
         'subcategory',
         'tags',
         'thumbnail',
+        'thumbnail_variants',
         'version',
         'zip_path',
         'entry_point',
@@ -52,6 +53,7 @@ class Simulation extends Model
         'average_rating' => 'float',
         'rating_count' => 'integer',
         'published_at' => 'datetime',
+        'thumbnail_variants' => 'array',
     ];
 
     // ─── Boot ─────────────────────────────────────────────────────
