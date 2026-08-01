@@ -20,7 +20,7 @@
                     <div class="flex-1 min-w-[200px]">
                         <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Cari Nama Perusahaan</label>
                         <input type="text" name="search" value="{{ request('search') }}" placeholder="Nama perusahaan..."
-                            class="w-full rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm">
+                            class="w-full rounded-lg border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm">
                     </div>
                     <button type="submit" class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium rounded-lg transition">
                         Filter

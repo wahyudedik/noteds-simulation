@@ -18,19 +18,19 @@
                         <div>
                             <label for="title" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Judul Challenge</label>
                             <input type="text" name="title" id="title" value="{{ old('title', $challenge->title) }}" required
-                                class="w-full rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm" />
+                                class="w-full rounded-lg border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm" />
                         </div>
 
                         <div>
                             <label for="description" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Deskripsi</label>
                             <textarea name="description" id="description" rows="4" required
-                                class="w-full rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm">{{ old('description', $challenge->description) }}</textarea>
+                                class="w-full rounded-lg border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm">{{ old('description', $challenge->description) }}</textarea>
                         </div>
 
                         <div class="grid grid-cols-3 gap-4">
                             <div>
                                 <label for="type" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Tipe</label>
-                                <select name="type" id="type" required class="w-full rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm">
+                                <select name="type" id="type" required class="w-full rounded-lg border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm">
                                     <option value="weekly" {{ old('type', $challenge->type) === 'weekly' ? 'selected' : '' }}>Mingguan</option>
                                     <option value="monthly" {{ old('type', $challenge->type) === 'monthly' ? 'selected' : '' }}>Bulanan</option>
                                     <option value="annual" {{ old('type', $challenge->type) === 'annual' ? 'selected' : '' }}>Tahunan</option>
@@ -39,11 +39,11 @@
                             <div>
                                 <label for="theme" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Tema</label>
                                 <input type="text" name="theme" id="theme" value="{{ old('theme', $challenge->theme) }}" required
-                                    class="w-full rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm" />
+                                    class="w-full rounded-lg border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm" />
                             </div>
                             <div>
                                 <label for="status" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Status</label>
-                                <select name="status" id="status" required class="w-full rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm">
+                                <select name="status" id="status" required class="w-full rounded-lg border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm">
                                     <option value="upcoming" {{ old('status', $challenge->status) === 'upcoming' ? 'selected' : '' }}>Mendatang</option>
                                     <option value="active" {{ old('status', $challenge->status) === 'active' ? 'selected' : '' }}>Aktif</option>
                                     <option value="judging" {{ old('status', $challenge->status) === 'judging' ? 'selected' : '' }}>Penilaian</option>
@@ -57,20 +57,20 @@
                                 <label for="start_date" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Tanggal Mulai</label>
                                 <input type="datetime-local" name="start_date" id="start_date"
                                     value="{{ old('start_date', $challenge->start_date->format('Y-m-d\TH:i')) }}" required
-                                    class="w-full rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm" />
+                                    class="w-full rounded-lg border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm" />
                             </div>
                             <div>
                                 <label for="end_date" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Tanggal Selesai</label>
                                 <input type="datetime-local" name="end_date" id="end_date"
                                     value="{{ old('end_date', $challenge->end_date->format('Y-m-d\TH:i')) }}" required
-                                    class="w-full rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm" />
+                                    class="w-full rounded-lg border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm" />
                             </div>
                         </div>
 
                         <div>
                             <label for="prize_description" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Deskripsi Hadiah</label>
                             <textarea name="prize_description" id="prize_description" rows="2"
-                                class="w-full rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm">{{ old('prize_description', $challenge->prize_description) }}</textarea>
+                                class="w-full rounded-lg border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm">{{ old('prize_description', $challenge->prize_description) }}</textarea>
                         </div>
 
                         <div class="flex justify-between pt-4 border-t border-gray-100 dark:border-gray-700">

@@ -17,11 +17,11 @@
                     <div class="flex-1 min-w-[200px]">
                         <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Cari</label>
                         <input type="text" name="search" value="{{ request('search') }}" placeholder="Nama atau email..."
-                            class="w-full rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm">
+                            class="w-full rounded-lg border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm">
                     </div>
                     <div class="w-40">
                         <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Role</label>
-                        <select name="role" class="w-full rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm">
+                        <select name="role" class="w-full rounded-lg border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm">
                             <option value="">Semua Role</option>
                             <option value="user" {{ request('role') === 'user' ? 'selected' : '' }}>User</option>
                             <option value="creator" {{ request('role') === 'creator' ? 'selected' : '' }}>Creator</option>

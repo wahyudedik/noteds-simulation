@@ -17,7 +17,7 @@
                         <div>
                             <label for="company_name" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Nama Perusahaan <span class="text-red-500">*</span></label>
                             <input type="text" name="company_name" id="company_name" value="{{ old('company_name') }}" required
-                                class="w-full rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm" />
+                                class="w-full rounded-lg border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm" />
                             @error('company_name') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
                         </div>
 
@@ -25,13 +25,13 @@
                             <div>
                                 <label for="contact_name" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Nama Kontak <span class="text-red-500">*</span></label>
                                 <input type="text" name="contact_name" id="contact_name" value="{{ old('contact_name') }}" required
-                                    class="w-full rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm" />
+                                    class="w-full rounded-lg border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm" />
                                 @error('contact_name') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
                             </div>
                             <div>
                                 <label for="contact_email" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Email Kontak <span class="text-red-500">*</span></label>
                                 <input type="email" name="contact_email" id="contact_email" value="{{ old('contact_email') }}" required
-                                    class="w-full rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm" />
+                                    class="w-full rounded-lg border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm" />
                                 @error('contact_email') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
                             </div>
                         </div>
@@ -40,13 +40,13 @@
                             <div>
                                 <label for="contact_phone" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Telepon</label>
                                 <input type="text" name="contact_phone" id="contact_phone" value="{{ old('contact_phone') }}"
-                                    class="w-full rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm" />
+                                    class="w-full rounded-lg border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm" />
                                 @error('contact_phone') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
                             </div>
                             <div>
                                 <label for="industry" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Industri</label>
                                 <input type="text" name="industry" id="industry" value="{{ old('industry') }}" placeholder="misal: Teknologi, Pendidikan"
-                                    class="w-full rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm" />
+                                    class="w-full rounded-lg border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm" />
                                 @error('industry') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
                             </div>
                         </div>
@@ -54,14 +54,14 @@
                         <div>
                             <label for="website_url" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Website</label>
                             <input type="url" name="website_url" id="website_url" value="{{ old('website_url') }}" placeholder="https://..."
-                                class="w-full rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm" />
+                                class="w-full rounded-lg border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm" />
                             @error('website_url') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
                         </div>
 
                         <div>
                             <label for="logo" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Logo Sponsor</label>
                             <input type="file" name="logo" id="logo" accept="image/*"
-                                class="w-full rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm" />
+                                class="w-full rounded-lg border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm" />
                             <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">Format: JPG, PNG, atau SVG. Maks 512KB.</p>
                             @error('logo') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
                         </div>
@@ -69,11 +69,11 @@
                         <div>
                             <label for="notes" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Catatan</label>
                             <textarea name="notes" id="notes" rows="3"
-                                class="w-full rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm">{{ old('notes') }}</textarea>
+                                class="w-full rounded-lg border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm">{{ old('notes') }}</textarea>
                             @error('notes') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
                         </div>
 
-                        <div class="flex justify-end gap-3 pt-4 border-t border-gray-100">
+                        <div class="flex justify-end gap-3 pt-4 border-t border-gray-100 dark:border-gray-700">
                             <a href="{{ route('admin.sponsors.index') }}" class="px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 bg-gray-100 hover:bg-gray-200 rounded-lg transition">Batal</a>
                             <button type="submit" class="px-4 py-2 text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 rounded-lg transition">Simpan Sponsor</button>
                         </div>

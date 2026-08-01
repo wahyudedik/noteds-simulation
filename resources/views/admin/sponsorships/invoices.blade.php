@@ -4,7 +4,7 @@
             <a href="{{ route('admin.sponsorships.show', $sponsorship) }}" class="text-gray-400 dark:text-gray-500 hover:text-gray-600 dark:text-gray-400">
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
             </a>
-            <h2 class="font-semibold text-xl text-gray-800 dark:text-white leading-tight">Invoice — {{ $sponsorship->title }}</h2>
+            <h2 class="font-semibold text-xl text-gray-800 dark:text-white leading-tight">Invoice ï¿½ {{ $sponsorship->title }}</h2>
         </div>
     </x-slot>
 
@@ -19,19 +19,19 @@
                     <div class="flex-1 min-w-[150px]">
                         <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Jumlah (Rp)</label>
                         <input type="number" name="amount" required min="0" step="1000" placeholder="0"
-                            class="w-full rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm">
+                            class="w-full rounded-lg border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm">
                         @error('amount') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
                     </div>
                     <div class="min-w-[150px]">
                         <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Jatuh Tempo</label>
                         <input type="date" name="due_date" required
-                            class="w-full rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm">
+                            class="w-full rounded-lg border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm">
                         @error('due_date') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
                     </div>
                     <div class="flex-1 min-w-[150px]">
                         <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Catatan</label>
                         <input type="text" name="notes" placeholder="Opsional"
-                            class="w-full rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm">
+                            class="w-full rounded-lg border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm">
                     </div>
                     <button type="submit" class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium rounded-lg transition">
                         Buat Invoice
@@ -89,7 +89,7 @@
                                         </td>
                                     </tr>
                                     @if($invoice->notes)
-                                        <tr class="bg-gray-50">
+                                        <tr class="bg-gray-50 dark:bg-gray-700/30">
                                             <td colspan="6" class="py-2 px-2 text-xs text-gray-500 dark:text-gray-400">
                                                 <em>Catatan: {{ $invoice->notes }}</em>
                                             </td>
@@ -101,7 +101,7 @@
                         </div>
 
                         {{-- Summary --}}
-                        <div class="mt-6 pt-4 border-t border-gray-100 grid grid-cols-3 gap-4">
+                        <div class="mt-6 pt-4 border-t border-gray-100 dark:border-gray-700 grid grid-cols-3 gap-4">
                             <div class="text-center">
                                 <p class="text-lg font-bold text-gray-900 dark:text-white">Rp {{ number_format($invoices->sum('amount'), 0, ',', '.') }}</p>
                                 <p class="text-xs text-gray-500 dark:text-gray-400">Total Invoice</p>

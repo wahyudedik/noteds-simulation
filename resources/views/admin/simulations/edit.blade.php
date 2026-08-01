@@ -18,7 +18,7 @@
                         <div>
                             <label for="title" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Judul Experience *</label>
                             <input type="text" name="title" id="title" value="{{ old('title', $simulation->title) }}" required
-                                class="w-full rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm" />
+                                class="w-full rounded-lg border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm" />
                         </div>
 
                         {{-- Category --}}
@@ -26,7 +26,7 @@
                             <div>
                                 <label for="category" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Kategori *</label>
                                 <select name="category" id="category" required
-                                    class="w-full rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm">
+                                    class="w-full rounded-lg border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm">
                                     <option value="">Pilih Kategori</option>
                                     @foreach($categories as $cat)
                                         <option value="{{ $cat->slug }}" {{ old('category', $simulation->category) === $cat->slug ? 'selected' : '' }}>{{ $cat->name }}</option>
@@ -36,7 +36,7 @@
                             <div>
                                 <label for="subcategory" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Sub Kategori</label>
                                 <input type="text" name="subcategory" id="subcategory" value="{{ old('subcategory', $simulation->subcategory) }}"
-                                    class="w-full rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm" />
+                                    class="w-full rounded-lg border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm" />
                             </div>
                         </div>
 
@@ -44,7 +44,7 @@
                         <div>
                             <label for="tags" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Tags</label>
                             <input type="text" name="tags" id="tags" value="{{ old('tags', $simulation->tags) }}"
-                                class="w-full rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm"
+                                class="w-full rounded-lg border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm"
                                 placeholder="Pisahkan dengan koma" />
                         </div>
 
@@ -52,7 +52,7 @@
                         <div>
                             <label for="description" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Deskripsi</label>
                             <textarea name="description" id="description" rows="4"
-                                class="w-full rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm">{{ old('description', $simulation->description) }}</textarea>
+                                class="w-full rounded-lg border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm">{{ old('description', $simulation->description) }}</textarea>
                         </div>
 
                         {{-- Thumbnail --}}
@@ -65,7 +65,7 @@
                                 </div>
                             @endif
                             <input type="file" name="thumbnail" id="thumbnail" accept="image/jpeg,image/png,image/webp"
-                                class="w-full rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm
+                                class="w-full rounded-lg border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm
                                 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100" />
                         </div>
 

@@ -20,7 +20,7 @@
                     <div>
                         <label for="title" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Judul Iklan</label>
                         <input type="text" name="title" id="title" value="{{ old('title', $ad->title) }}" required
-                            class="mt-1 block w-full border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 text-sm">
+                            class="mt-1 block w-full border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 text-sm">
                         @error('title') <p class="mt-1 text-sm text-red-600 dark:text-red-400">{{ $message }}</p> @enderror
                     </div>
 
@@ -28,7 +28,7 @@
                     <div class="grid grid-cols-2 gap-4">
                         <div>
                             <label for="type" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Tipe Iklan</label>
-                            <select name="type" id="type" required class="mt-1 block w-full border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 text-sm">
+                            <select name="type" id="type" required class="mt-1 block w-full border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 text-sm">
                                 @foreach(['banner', 'interstitial', 'video', 'native', 'adsense'] as $type)
                                     <option value="{{ $type }}" {{ old('type', $ad->type) === $type ? 'selected' : '' }}>{{ ucfirst($type) }}</option>
                                 @endforeach
@@ -36,7 +36,7 @@
                         </div>
                         <div>
                             <label for="position" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Posisi</label>
-                            <select name="position" id="position" required class="mt-1 block w-full border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 text-sm">
+                            <select name="position" id="position" required class="mt-1 block w-full border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 text-sm">
                                 @foreach(['header' => 'Header', 'sidebar' => 'Sidebar', 'pre_roll' => 'Pre-Roll', 'mid_roll' => 'Mid-Roll', 'post_simulation' => 'Post-Simulation', 'feed_sponsored' => 'Feed Sponsored', 'search_sponsored' => 'Search Sponsored'] as $val => $label)
                                     <option value="{{ $val }}" {{ old('position', $ad->position) === $val ? 'selected' : '' }}>{{ $label }}</option>
                                 @endforeach
@@ -48,7 +48,7 @@
                     <div>
                         <label for="content" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Konten HTML</label>
                         <textarea name="content" id="content" rows="4"
-                            class="mt-1 block w-full border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 text-sm font-mono">{{ old('content', $ad->content) }}</textarea>
+                            class="mt-1 block w-full border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 text-sm font-mono">{{ old('content', $ad->content) }}</textarea>
                     </div>
 
                     {{-- Current Image --}}
@@ -63,14 +63,14 @@
                     <div>
                         <label for="image" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Ganti Gambar (opsional)</label>
                         <input type="file" name="image" id="image" accept="image/*"
-                            class="mt-1 block w-full text-sm text-gray-500 dark:text-gray-400 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-medium file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100">
+                            class="mt-1 block w-full border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white text-sm text-gray-500 dark:text-gray-400 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-medium file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100 dark:file:bg-blue-900/30 dark:file:text-blue-400 dark:hover:file:bg-blue-800/50">
                     </div>
 
                     {{-- Target URL --}}
                     <div>
                         <label for="target_url" class="block text-sm font-medium text-gray-700 dark:text-gray-300">URL Tujuan Klik</label>
                         <input type="url" name="target_url" id="target_url" value="{{ old('target_url', $ad->target_url) }}"
-                            class="mt-1 block w-full border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 text-sm">
+                            class="mt-1 block w-full border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 text-sm">
                     </div>
 
                     {{-- AdSense / Ad Network IDs --}}
@@ -78,17 +78,17 @@
                         <div>
                             <label for="adsense_publisher_id" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Publisher ID</label>
                             <input type="text" name="adsense_publisher_id" id="adsense_publisher_id" value="{{ old('adsense_publisher_id', $ad->adsense_publisher_id) }}"
-                                class="mt-1 block w-full border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 text-sm">
+                                class="mt-1 block w-full border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 text-sm">
                         </div>
                         <div>
                             <label for="adsense_ad_slot" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Ad Slot</label>
                             <input type="text" name="adsense_ad_slot" id="adsense_ad_slot" value="{{ old('adsense_ad_slot', $ad->adsense_ad_slot) }}"
-                                class="mt-1 block w-full border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 text-sm">
+                                class="mt-1 block w-full border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 text-sm">
                         </div>
                         <div>
                             <label for="zone_id" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Zone ID (Monetag/etc)</label>
                             <input type="text" name="zone_id" id="zone_id" value="{{ old('zone_id', $ad->ad_network_config['zone_id'] ?? '') }}"
-                                class="mt-1 block w-full border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 text-sm">
+                                class="mt-1 block w-full border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 text-sm">
                         </div>
                     </div>
 
@@ -97,17 +97,17 @@
                         <div>
                             <label for="weight" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Bobot Prioritas</label>
                             <input type="number" name="weight" id="weight" value="{{ old('weight', $ad->weight) }}" min="1" max="100"
-                                class="mt-1 block w-full border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 text-sm">
+                                class="mt-1 block w-full border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 text-sm">
                         </div>
                         <div>
                             <label for="start_date" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Mulai Tayang</label>
                             <input type="datetime-local" name="start_date" id="start_date" value="{{ old('start_date', $ad->start_date?->format('Y-m-d\TH:i')) }}"
-                                class="mt-1 block w-full border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 text-sm">
+                                class="mt-1 block w-full border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 text-sm">
                         </div>
                         <div>
                             <label for="end_date" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Akhir Tayang</label>
                             <input type="datetime-local" name="end_date" id="end_date" value="{{ old('end_date', $ad->end_date?->format('Y-m-d\TH:i')) }}"
-                                class="mt-1 block w-full border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 text-sm">
+                                class="mt-1 block w-full border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 text-sm">
                         </div>
                     </div>
 
@@ -118,7 +118,7 @@
                     </div>
 
                     {{-- Submit --}}
-                    <div class="flex items-center justify-end gap-3 pt-4 border-t border-gray-100">
+                    <div class="flex items-center justify-end gap-3 pt-4 border-t border-gray-100 dark:border-gray-700">
                         <a href="{{ route('admin.ads.index') }}" class="px-4 py-2 text-sm text-gray-600 dark:text-gray-400 hover:text-gray-800">Batal</a>
                         <button type="submit" class="px-6 py-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium rounded-lg transition">
                             Update Iklan

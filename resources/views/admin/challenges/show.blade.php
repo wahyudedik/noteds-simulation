@@ -36,7 +36,7 @@
                 </div>
 
                 @if ($challenge->criteria)
-                    <div class="mt-4 pt-4 border-t border-gray-100">
+                    <div class="mt-4 pt-4 border-t border-gray-100 dark:border-gray-700">
                         <h3 class="text-sm font-medium text-gray-500 dark:text-gray-400 mb-2">Kriteria Penilaian</h3>
                         <div class="flex flex-wrap gap-3">
                             @foreach ($challenge->criteria as $criterion)
@@ -97,34 +97,34 @@
     {{-- Score Modals --}}
     @foreach ($entries as $entry)
         <div id="score-modal-{{ $entry->id }}" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-black/50">
-            <div class="bg-white rounded-xl shadow-xl max-w-md w-full mx-4 p-6">
+            <div class="bg-white dark:bg-gray-800 rounded-xl shadow-xl max-w-md w-full mx-4 p-6">
                 <h4 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">Skor: {{ $entry->simulation->title ?? 'Experience' }}</h4>
                 <form method="POST" action="{{ route('admin.challenges.score-entry', ['challenge' => $challenge, 'entry' => $entry]) }}">
                     @csrf
                     <div class="space-y-3">
                         <div>
                             <label class="block text-xs font-medium text-gray-600 dark:text-gray-400">Akurasi Ilmiah (0-30)</label>
-                            <input type="number" name="scientific_accuracy" step="0.5" min="0" max="30" value="{{ $entry->scores['scientific_accuracy'] ?? 0 }}" required class="w-full rounded-lg border-gray-300 text-sm" />
+                            <input type="number" name="scientific_accuracy" step="0.5" min="0" max="30" value="{{ $entry->scores['scientific_accuracy'] ?? 0 }}" required class="w-full rounded-lg border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white text-sm" />
                         </div>
                         <div>
                             <label class="block text-xs font-medium text-gray-600 dark:text-gray-400">Interaktivitas & UX (0-25)</label>
-                            <input type="number" name="interactivity" step="0.5" min="0" max="25" value="{{ $entry->scores['interactivity'] ?? 0 }}" required class="w-full rounded-lg border-gray-300 text-sm" />
+                            <input type="number" name="interactivity" step="0.5" min="0" max="25" value="{{ $entry->scores['interactivity'] ?? 0 }}" required class="w-full rounded-lg border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white text-sm" />
                         </div>
                         <div>
                             <label class="block text-xs font-medium text-gray-600 dark:text-gray-400">Visual & Desain (0-20)</label>
-                            <input type="number" name="visual_design" step="0.5" min="0" max="20" value="{{ $entry->scores['visual_design'] ?? 0 }}" required class="w-full rounded-lg border-gray-300 text-sm" />
+                            <input type="number" name="visual_design" step="0.5" min="0" max="20" value="{{ $entry->scores['visual_design'] ?? 0 }}" required class="w-full rounded-lg border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white text-sm" />
                         </div>
                         <div>
                             <label class="block text-xs font-medium text-gray-600 dark:text-gray-400">Kreativitas (0-15)</label>
-                            <input type="number" name="creativity" step="0.5" min="0" max="15" value="{{ $entry->scores['creativity'] ?? 0 }}" required class="w-full rounded-lg border-gray-300 text-sm" />
+                            <input type="number" name="creativity" step="0.5" min="0" max="15" value="{{ $entry->scores['creativity'] ?? 0 }}" required class="w-full rounded-lg border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white text-sm" />
                         </div>
                         <div>
                             <label class="block text-xs font-medium text-gray-600 dark:text-gray-400">Popularitas (0-10)</label>
-                            <input type="number" name="popularity" step="0.5" min="0" max="10" value="{{ $entry->scores['popularity'] ?? 0 }}" required class="w-full rounded-lg border-gray-300 text-sm" />
+                            <input type="number" name="popularity" step="0.5" min="0" max="10" value="{{ $entry->scores['popularity'] ?? 0 }}" required class="w-full rounded-lg border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white text-sm" />
                         </div>
                         <div>
                             <label class="block text-xs font-medium text-gray-600 dark:text-gray-400">Catatan (opsional)</label>
-                            <textarea name="notes" rows="2" class="w-full rounded-lg border-gray-300 text-sm">{{ $entry->notes }}</textarea>
+                            <textarea name="notes" rows="2" class="w-full rounded-lg border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white text-sm">{{ $entry->notes }}</textarea>
                         </div>
                     </div>
                     <div class="flex justify-end gap-3 mt-4">

@@ -162,7 +162,7 @@
                             @csrf
                             @method('PUT')
                             <div class="flex-1">
-                                <select name="role" class="w-full rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm">
+                                <select name="role" class="w-full rounded-lg border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm">
                                     <option value="user" {{ $user->role === 'user' ? 'selected' : '' }}>User</option>
                                     <option value="creator" {{ $user->role === 'creator' ? 'selected' : '' }}>Creator</option>
                                     <option value="admin" {{ $user->role === 'admin' ? 'selected' : '' }}>Admin</option>
@@ -203,7 +203,7 @@
                                                 {{ Str::limit($sim->title, 40) }}
                                             </a>
                                             <div class="text-xs text-gray-500 dark:text-gray-400 mt-0.5">
-                                                {{ $sim->category }} · {{ number_format($sim->view_count) }} views
+                                                {{ $sim->category }} ï¿½ {{ number_format($sim->view_count) }} views
                                             </div>
                                         </div>
                                         <div class="ml-3 flex-shrink-0">

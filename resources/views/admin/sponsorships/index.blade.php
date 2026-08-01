@@ -40,11 +40,11 @@
                     <div class="flex-1 min-w-[200px]">
                         <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Cari Judul</label>
                         <input type="text" name="search" value="{{ request('search') }}" placeholder="Judul sponsorship..."
-                            class="w-full rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm">
+                            class="w-full rounded-lg border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm">
                     </div>
                     <div class="w-44">
                         <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Status</label>
-                        <select name="status" class="w-full rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm">
+                        <select name="status" class="w-full rounded-lg border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm">
                             <option value="">Semua Status</option>
                             <option value="draft" {{ request('status') === 'draft' ? 'selected' : '' }}>Draft</option>
                             <option value="pending_review" {{ request('status') === 'pending_review' ? 'selected' : '' }}>Menunggu Review</option>

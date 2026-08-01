@@ -17,7 +17,7 @@
                         <div>
                             <label for="title" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Judul Experience *</label>
                             <input type="text" name="title" id="title" value="{{ old('title') }}" required
-                                class="w-full rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm"
+                                class="w-full rounded-lg border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm"
                                 placeholder="Contoh: Hukum Newton Gerak" />
                             @error('title')
                                 <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
@@ -29,7 +29,7 @@
                             <div>
                                 <label for="category" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Kategori *</label>
                                 <select name="category" id="category" required
-                                    class="w-full rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm">
+                                    class="w-full rounded-lg border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm">
                                     <option value="">Pilih Kategori</option>
                                     @foreach($categories as $cat)
                                         <option value="{{ $cat->slug }}" {{ old('category') === $cat->slug ? 'selected' : '' }}>{{ $cat->name }}</option>
@@ -42,7 +42,7 @@
                             <div>
                                 <label for="subcategory" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Sub Kategori</label>
                                 <input type="text" name="subcategory" id="subcategory" value="{{ old('subcategory') }}"
-                                    class="w-full rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm"
+                                    class="w-full rounded-lg border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm"
                                     placeholder="Contoh: Mekanika" />
                             </div>
                         </div>
@@ -51,7 +51,7 @@
                         <div>
                             <label for="tags" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Tags</label>
                             <input type="text" name="tags" id="tags" value="{{ old('tags') }}"
-                                class="w-full rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm"
+                                class="w-full rounded-lg border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm"
                                 placeholder="Pisahkan dengan koma: newton, gaya, akselerasi" />
                             <p class="text-xs text-gray-400 dark:text-gray-500 mt-1">Pisahkan setiap tag dengan koma</p>
                         </div>
@@ -60,7 +60,7 @@
                         <div>
                             <label for="description" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Deskripsi</label>
                             <textarea name="description" id="description" rows="4"
-                                class="w-full rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm"
+                                class="w-full rounded-lg border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm"
                                 placeholder="Deskripsi singkat tentang experience ini...">{{ old('description') }}</textarea>
                         </div>
 
@@ -68,7 +68,7 @@
                         <div>
                             <label for="simulation_file" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">File Experience (.zip) *</label>
                             <input type="file" name="simulation_file" id="simulation_file" required accept=".zip"
-                                class="w-full rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm
+                                class="w-full rounded-lg border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm
                                 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100" />
                             <p class="text-xs text-gray-400 dark:text-gray-500 mt-1">Format: .zip (maks 50MB). Harus berisi file <code>index.html</code> dan opsional <code>manifest.json</code>.</p>
 
@@ -134,7 +134,7 @@
                         <div>
                             <label for="thumbnail" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Thumbnail</label>
                             <input type="file" name="thumbnail" id="thumbnail" accept="image/jpeg,image/png,image/webp"
-                                class="w-full rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm
+                                class="w-full rounded-lg border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm
                                 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100" />
                             <p class="text-xs text-gray-400 dark:text-gray-500 mt-1">Format: JPG, PNG, atau WebP (maks 5MB). Jika tidak diupload, thumbnail default akan digunakan.</p>
                         </div>
