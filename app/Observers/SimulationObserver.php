@@ -145,7 +145,8 @@ class SimulationObserver
     {
         try {
             $appName = config('app.name', 'Noteds');
-            $pageKey = 'simulation:'.$simulation->slug;
+            $slug = Str::limit($simulation->slug, 240, '');
+            $pageKey = 'simulation:'.$slug;
             $description = Str::limit(strip_tags($simulation->description ?? $simulation->title), 160);
             $ogDescription = Str::limit(strip_tags($simulation->description ?? $simulation->title), 200);
 

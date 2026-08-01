@@ -11,74 +11,16 @@ return new class extends Migration
      */
     public function up(): void
     {
-        // play_history: composite indexes for "Discovered for You" and "Recently Played"
-        Schema::table('play_history', function (Blueprint $table) {
-            if (! Schema::hasIndex('play_history', 'play_history_user_simulation_index')) {
-                $table->index(['user_id', 'simulation_id']);
-            }
-            if (! Schema::hasIndex('play_history', 'play_history_user_created_at_index')) {
-                $table->index(['user_id', 'created_at']);
-            }
-        });
-
-        // comments: composite index for ordering by simulation + date
-        Schema::table('comments', function (Blueprint $table) {
-            if (! Schema::hasIndex('comments', 'comments_simulation_created_at_index')) {
-                $table->index(['simulation_id', 'created_at']);
-            }
-        });
-
-        // notifications: composite index for unread count query
-        Schema::table('notifications', function (Blueprint $table) {
-            if (! Schema::hasIndex('notifications', 'notifications_user_read_at_index')) {
-                $table->index(['user_id', 'read_at']);
-            }
-        });
-
-        // ratings: index for rating distribution queries
-        Schema::table('ratings', function (Blueprint $table) {
-            if (! Schema::hasIndex('ratings', 'ratings_simulation_id_index')) {
-                $table->index('simulation_id');
-            }
-        });
-
-        // bookmarks: index for simulation lookups
-        Schema::table('bookmarks', function (Blueprint $table) {
-            if (! Schema::hasIndex('bookmarks', 'bookmarks_simulation_id_index')) {
-                $table->index('simulation_id');
-            }
-        });
-
-        // reactions: index for simulation lookups
-        Schema::table('reactions', function (Blueprint $table) {
-            if (! Schema::hasIndex('reactions', 'reactions_simulation_id_index')) {
-                $table->index('simulation_id');
-            }
-        });
-
-        // shares: index for simulation lookups
-        Schema::table('shares', function (Blueprint $table) {
-            if (! Schema::hasIndex('shares', 'shares_simulation_id_index')) {
-                $table->index('simulation_id');
-            }
-        });
-
-        // simulation_daily_metrics: composite index for analytics queries
-        Schema::table('simulation_daily_metrics', function (Blueprint $table) {
-            if (! Schema::hasIndex('simulation_daily_metrics', 'simulation_daily_metrics_simulation_recorded_at_index')) {
-                $table->index(['simulation_id', 'recorded_at']);
-            }
-        });
-
-        // simulations: additional composite indexes for studio & latest queries
-        Schema::table('simulations', function (Blueprint $table) {
-            if (! Schema::hasIndex('simulations', 'simulations_user_id_is_published_index')) {
-                $table->index(['user_id', 'is_published']);
-            }
-            if (! Schema::hasIndex('simulations', 'simulations_is_published_created_at_index')) {
-                $table->index(['is_published', 'created_at']);
-            }
-        });
+        $this->addIndexIfMissing('play_history', ['user_id', 'simulation_id']);
+        $this->addIndexIfMissing('play_history', ['user_id', 'created_at']);
+        $this->addIndexIfMissing('comments', ['simulation_id', 'created_at']);
+        $this->addIndexIfMissing('notifications', ['user_id', 'read_at']);
+        $this->addIndexIfMissing('ratings', ['simulation_id']);
+        $this->addIndexIfMissing('bookmarks', ['simulation_id']);
+        $this->addIndexIfMissing('reactions', ['simulation_id']);
+        $this->addIndexIfMissing('shares', ['simulation_id']);
+        $this->addIndexIfMissing('simulations', ['user_id', 'is_published']);
+        $this->addIndexIfMissing('simulations', ['is_published', 'created_at']);
     }
 
     /**
@@ -86,64 +28,72 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('play_history', function (Blueprint $table) {
-            if (Schema::hasIndex('play_history', 'play_history_user_simulation_index')) {
-                $table->dropIndex('play_history_user_simulation_index');
-            }
-            if (Schema::hasIndex('play_history', 'play_history_user_created_at_index')) {
-                $table->dropIndex('play_history_user_created_at_index');
-            }
-        });
+        $this->dropIndexIfMissing('play_history', ['user_id', 'simulation_id']);
+        $this->dropIndexIfMissing('play_history', ['user_id', 'created_at']);
+        $this->dropIndexIfMissing('comments', ['simulation_id', 'created_at']);
+        $this->dropIndexIfMissing('notifications', ['user_id', 'read_at']);
+        $this->dropIndexIfMissing('ratings', ['simulation_id']);
+        $this->dropIndexIfMissing('bookmarks', ['simulation_id']);
+        $this->dropIndexIfMissing('reactions', ['simulation_id']);
+        $this->dropIndexIfMissing('shares', ['simulation_id']);
+        $this->dropIndexIfMissing('simulations', ['user_id', 'is_published']);
+        $this->dropIndexIfMissing('simulations', ['is_published', 'created_at']);
+    }
 
-        Schema::table('comments', function (Blueprint $table) {
-            if (Schema::hasIndex('comments', 'comments_simulation_created_at_index')) {
-                $table->dropIndex('comments_simulation_created_at_index');
-            }
-        });
+    /**
+     * Add a composite index only if no index exists for the given columns.
+     */
+    private function addIndexIfMissing(string $table, array $columns): void
+    {
+        if (! $this->columnsAreIndexed($table, $columns)) {
+            Schema::table($table, function (Blueprint $table) use ($columns) {
+                $table->index($columns);
+            });
+        }
+    }
 
-        Schema::table('notifications', function (Blueprint $table) {
-            if (Schema::hasIndex('notifications', 'notifications_user_read_at_index')) {
-                $table->dropIndex('notifications_user_read_at_index');
-            }
-        });
+    /**
+     * Drop a composite index only if it exists for the given columns.
+     */
+    private function dropIndexIfMissing(string $table, array $columns): void
+    {
+        $indexName = $this->getIndexName($table, $columns);
 
-        Schema::table('ratings', function (Blueprint $table) {
-            if (Schema::hasIndex('ratings', 'ratings_simulation_id_index')) {
-                $table->dropIndex('ratings_simulation_id_index');
-            }
-        });
+        if ($this->columnsAreIndexed($table, $columns)) {
+            Schema::table($table, function (Blueprint $table) use ($indexName) {
+                $table->dropIndex($indexName);
+            });
+        }
+    }
 
-        Schema::table('bookmarks', function (Blueprint $table) {
-            if (Schema::hasIndex('bookmarks', 'bookmarks_simulation_id_index')) {
-                $table->dropIndex('bookmarks_simulation_id_index');
-            }
-        });
+    /**
+     * Check if the given columns are already indexed on a table.
+     * Uses Schema::getIndexes() which works across MySQL, SQLite, etc.
+     */
+    private function columnsAreIndexed(string $table, array $columns): bool
+    {
+        $indexes = Schema::getIndexes($table);
 
-        Schema::table('reactions', function (Blueprint $table) {
-            if (Schema::hasIndex('reactions', 'reactions_simulation_id_index')) {
-                $table->dropIndex('reactions_simulation_id_index');
-            }
-        });
+        $sortedColumns = $columns;
+        sort($sortedColumns);
 
-        Schema::table('shares', function (Blueprint $table) {
-            if (Schema::hasIndex('shares', 'shares_simulation_id_index')) {
-                $table->dropIndex('shares_simulation_id_index');
-            }
-        });
+        foreach ($indexes as $index) {
+            $indexColumns = $index['columns'] ?? [];
+            sort($indexColumns);
 
-        Schema::table('simulation_daily_metrics', function (Blueprint $table) {
-            if (Schema::hasIndex('simulation_daily_metrics', 'simulation_daily_metrics_simulation_recorded_at_index')) {
-                $table->dropIndex('simulation_daily_metrics_simulation_recorded_at_index');
+            if ($indexColumns === $sortedColumns) {
+                return true;
             }
-        });
+        }
 
-        Schema::table('simulations', function (Blueprint $table) {
-            if (Schema::hasIndex('simulations', 'simulations_user_id_is_published_index')) {
-                $table->dropIndex('simulations_user_id_is_published_index');
-            }
-            if (Schema::hasIndex('simulations', 'simulations_is_published_created_at_index')) {
-                $table->dropIndex('simulations_is_published_created_at_index');
-            }
-        });
+        return false;
+    }
+
+    /**
+     * Generate the standard Laravel index name for a table and columns.
+     */
+    private function getIndexName(string $table, array $columns): string
+    {
+        return $table.'_'.implode('_', $columns).'_index';
     }
 };

@@ -46,7 +46,7 @@ class SeoController extends Controller
     public function store(Request $request): RedirectResponse
     {
         $validated = $request->validate([
-            'page_key' => 'required|string|max:100|unique:seo_settings,page_key',
+            'page_key' => 'required|string|max:255|unique:seo_settings,page_key',
             'meta_title' => 'required|string|max:255',
             'meta_description' => 'required|string|max:500',
             'meta_keywords' => 'nullable|string|max:500',
