@@ -30,13 +30,39 @@ class ExportService
             mkdir($dir, 0755, true);
         }
 
+        // Remove any stale file before creating a fresh ZIP
+        if (file_exists($zipPath)) {
+            unlink($zipPath);
+        }
+
         $zip = new ZipArchive;
-        $zip->open($zipPath, ZipArchive::CREATE | ZipArchive::OVERWRITE);
+        $result = $zip->open($zipPath, ZipArchive::CREATE);
 
-        $zip->addFromString('index.html', $html);
-        $zip->addFromString('manifest.json', json_encode($manifest, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE));
+        if ($result !== true) {
+            throw new \RuntimeException('Failed to create ZIP archive: error code '.$result);
+        }
 
-        $zip->close();
+        if ($zip->addFromString('index.html', $html) === false) {
+            $zip->close();
+            unlink($zipPath);
+
+            throw new \RuntimeException('Failed to add index.html to ZIP archive.');
+        }
+
+        if ($zip->addFromString('manifest.json', json_encode($manifest, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE)) === false) {
+            $zip->close();
+            unlink($zipPath);
+
+            throw new \RuntimeException('Failed to add manifest.json to ZIP archive.');
+        }
+
+        if ($zip->close() === false) {
+            throw new \RuntimeException('Failed to close ZIP archive.');
+        }
+
+        if (! file_exists($zipPath)) {
+            throw new \RuntimeException('ZIP archive was not created at: '.$zipPath);
+        }
 
         return $zipPath;
     }

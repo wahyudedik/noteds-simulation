@@ -131,12 +131,12 @@
                                             @endif
                                             <div>
                                                 <p class="text-sm font-medium text-gray-900 dark:text-white">{{ $ad->title }}</p>
-                                                <p class="text-xs text-gray-500 dark:text-gray-400">{{ ucfirst($ad->position) }} · {{ $ad->type }}</p>
+                                                <p class="text-xs text-gray-500 dark:text-gray-400">{{ ucfirst($ad->position) }} ï¿½ {{ $ad->type }}</p>
                                             </div>
                                         </div>
                                         <div class="text-right text-xs text-gray-500 dark:text-gray-400">
                                             <div>{{ number_format($ad->impressions) }} imp / {{ number_format($ad->clicks) }} clk</div>
-                                            <div class="font-medium text-gray-700 dark:text-gray-300 dark:text-gray-300">CTR: {{ $ad->ctr }}%</div>
+                                            <div class="font-medium text-gray-700 dark:text-gray-300">CTR: {{ $ad->ctr }}%</div>
                                         </div>
                                     </div>
                                 @endforeach
@@ -260,7 +260,7 @@
                     @if($sponsorship->notes)
                         <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 p-6">
                             <h3 class="text-sm font-semibold text-gray-900 dark:text-white mb-3">Catatan</h3>
-                            <p class="text-sm text-gray-700 dark:text-gray-300 dark:text-gray-300">{{ $sponsorship->notes }}</p>
+                            <p class="text-sm text-gray-700 dark:text-gray-300">{{ $sponsorship->notes }}</p>
                         </div>
                     @endif
                 </div>

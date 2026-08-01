@@ -62,8 +62,8 @@
                             @forelse ($purchases as $purchase)
                                 <tr class="hover:bg-gray-50 dark:bg-gray-700/50 dark:hover:bg-gray-600/50">
                                     <td class="px-6 py-4 text-sm font-medium text-gray-900 dark:text-white">{{ $purchase->user->name ?? '-' }}</td>
-                                    <td class="px-6 py-4 text-sm text-gray-700 dark:text-gray-300 dark:text-gray-300">{{ $purchase->formatted_amount }}</td>
-                                    <td class="px-6 py-4 text-sm text-gray-700 dark:text-gray-300 dark:text-gray-300">{{ $purchase->payment_method ?? '-' }}</td>
+                                    <td class="px-6 py-4 text-sm text-gray-700 dark:text-gray-300">{{ $purchase->formatted_amount }}</td>
+                                    <td class="px-6 py-4 text-sm text-gray-700 dark:text-gray-300">{{ $purchase->payment_method ?? '-' }}</td>
                                     <td class="px-6 py-4">
                                         <span class="px-2 py-1 text-xs font-medium rounded-full {{ $purchase->status_badge_class }}">{{ $purchase->payment_status }}</span>
                                     </td>

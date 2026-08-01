@@ -17,6 +17,7 @@ class Simulation extends Model
 
     protected $fillable = [
         'user_id',
+        'experience_project_id',
         'title',
         'slug',
         'description',
@@ -75,6 +76,22 @@ class Simulation extends Model
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
+    }
+
+    /**
+     * Get the experience project this simulation was created from (nullable).
+     */
+    public function experienceProject(): BelongsTo
+    {
+        return $this->belongsTo(ExperienceProject::class);
+    }
+
+    /**
+     * Check if this simulation was created from a Builder experience.
+     */
+    public function isFromBuilder(): bool
+    {
+        return $this->experience_project_id !== null;
     }
 
     /**

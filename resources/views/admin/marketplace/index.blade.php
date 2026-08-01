@@ -67,12 +67,12 @@
                                         <div class="text-sm font-medium text-gray-900 dark:text-white">{{ $listing->simulation->title ?? '-' }}</div>
                                         <div class="text-xs text-gray-500 dark:text-gray-400">{{ $listing->created_at->diffForHumans() }}</div>
                                     </td>
-                                    <td class="px-6 py-4 text-sm text-gray-700 dark:text-gray-300 dark:text-gray-300">{{ $listing->creator->name ?? '-' }}</td>
+                                    <td class="px-6 py-4 text-sm text-gray-700 dark:text-gray-300">{{ $listing->creator->name ?? '-' }}</td>
                                     <td class="px-6 py-4 text-sm font-medium text-gray-900 dark:text-white">{{ $listing->formatted_price }}</td>
                                     <td class="px-6 py-4">
                                         <span class="px-2 py-1 text-xs font-medium rounded-full bg-slate-100 dark:bg-slate-700 text-slate-700">{{ $listing->license_type }}</span>
                                     </td>
-                                    <td class="px-6 py-4 text-sm text-gray-700 dark:text-gray-300 dark:text-gray-300">{{ $listing->total_sales }}</td>
+                                    <td class="px-6 py-4 text-sm text-gray-700 dark:text-gray-300">{{ $listing->total_sales }}</td>
                                     <td class="px-6 py-4 text-sm font-medium text-emerald-600 dark:text-emerald-400">Rp {{ number_format($listing->total_revenue, 0, ',', '.') }}</td>
                                     <td class="px-6 py-4">
                                         @if ($listing->is_active)

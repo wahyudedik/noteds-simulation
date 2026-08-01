@@ -74,12 +74,12 @@
                             <div class="flex items-center gap-2">
                                 <input type="checkbox" name="is_published" id="is_published" value="1" {{ old('is_published', $simulation->is_published) ? 'checked' : '' }}
                                     class="rounded border-gray-300 text-blue-600 dark:text-blue-400 shadow-sm focus:border-blue-500 focus:ring-blue-500" />
-                                <label for="is_published" class="text-sm text-gray-700 dark:text-gray-300 dark:text-gray-300">Published</label>
+                                <label for="is_published" class="text-sm text-gray-700 dark:text-gray-300">Published</label>
                             </div>
                             <div class="flex items-center gap-2">
                                 <input type="checkbox" name="is_featured" id="is_featured" value="1" {{ old('is_featured', $simulation->is_featured) ? 'checked' : '' }}
                                     class="rounded border-gray-300 text-blue-600 dark:text-blue-400 shadow-sm focus:border-blue-500 focus:ring-blue-500" />
-                                <label for="is_featured" class="text-sm text-gray-700 dark:text-gray-300 dark:text-gray-300">Featured</label>
+                                <label for="is_featured" class="text-sm text-gray-700 dark:text-gray-300">Featured</label>
                             </div>
                         </div>
 

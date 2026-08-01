@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Support\Str;
 
 class ExperienceProject extends Model
@@ -56,6 +57,32 @@ class ExperienceProject extends Model
     public function template(): BelongsTo
     {
         return $this->belongsTo(ExperienceTemplate::class, 'template_id');
+    }
+
+    /**
+     * Get the simulation created from this project (nullable).
+     */
+    public function simulation(): HasOne
+    {
+        return $this->hasOne(Simulation::class);
+    }
+
+    /**
+     * Check if this project has been published to the platform.
+     */
+    public function hasSimulation(): bool
+    {
+        return $this->simulation()->exists();
+    }
+
+    /**
+     * Get the public URL for this project's simulation.
+     */
+    public function getSimulationUrl(): ?string
+    {
+        $simulation = $this->simulation;
+
+        return $simulation ? route('simulations.show', $simulation->slug) : null;
     }
 
     /**

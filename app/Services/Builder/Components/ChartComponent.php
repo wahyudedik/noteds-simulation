@@ -55,60 +55,66 @@ class ChartComponent extends BaseComponent
         $labels = $properties['labels'] ?? 'Jan, Feb, Mar, Apr, May';
         $values = $properties['values'] ?? '10, 20, 15, 25, 30';
         $color = e($properties['color'] ?? '#3b82f6');
-        $id = 'chart-'.uniqid();
 
         $labelsArray = array_map('trim', explode(',', $labels));
-        $valuesArray = array_map('trim', explode(',', $values));
+        $valuesArray = array_map('floatval', array_map('trim', explode(',', $values)));
+        $count = count($valuesArray);
+        $maxVal = max($valuesArray) * 1.2;
+        if ($maxVal <= 0) {
+            $maxVal = 100;
+        }
 
-        $labelsJson = json_encode($labelsArray);
-        $valuesJson = json_encode(array_map('floatval', $valuesArray));
+        if ($type === 'bar') {
+            $barsHtml = '';
+            for ($i = 0; $i < $count; $i++) {
+                $pct = ($valuesArray[$i] / $maxVal) * 100;
+                $label = e($labelsArray[$i] ?? '');
+                $barsHtml .= <<<BARS
+                            <div class="flex flex-col items-center flex-1">
+                                <div class="w-full rounded-t transition-all duration-300" style="height: {$pct}%; background-color: {$color}"></div>
+                                <span class="text-xs text-gray-500 mt-1">{$label}</span>
+                            </div>
+                BARS;
+            }
+
+            return <<<HTML
+            <div class="space-y-2">
+                <h4 class="text-sm font-semibold text-gray-700">{$title}</h4>
+                <div class="relative h-48 bg-gray-50 rounded-lg p-4 overflow-hidden">
+                    <div class="flex items-end justify-around h-full gap-2">
+            {$barsHtml}
+                    </div>
+                </div>
+            </div>
+            HTML;
+        }
+
+        // Line chart: build static SVG
+        $points = [];
+        $lines = [];
+        for ($i = 0; $i < $count; $i++) {
+            $cx = $count > 1 ? ($i / ($count - 1)) * 380 + 10 : 195;
+            $cy = 170 - ($valuesArray[$i] / $maxVal * 160);
+            $points[] = '<circle cx="'.round($cx, 2).'" cy="'.round($cy, 2).'" r="4" fill="'.$color.'" />';
+
+            if ($i > 0) {
+                $prevCx = ($i - 1) / ($count - 1) * 380 + 10;
+                $prevCy = 170 - ($valuesArray[$i - 1] / $maxVal * 160);
+                $lines[] = '<line x1="'.round($prevCx, 2).'" y1="'.round($prevCy, 2).'" x2="'.round($cx, 2).'" y2="'.round($cy, 2).'" stroke="'.$color.'" stroke-width="2" fill="none" />';
+            }
+        }
+
+        $svgContent = implode("\n                            ", $lines)."\n                            ".implode("\n                            ", $points);
 
         return <<<HTML
-        <div class="space-y-2" x-data="{
-            labels: {$labelsJson},
-            values: {$valuesJson},
-            get maxVal() { return Math.max(...this.values) * 1.2 || 100; }
-        }">
-            <h4 class="text-sm font-semibold text-gray-700">{$title}</h4>
-            <div class="relative h-48 bg-gray-50 rounded-lg p-4 overflow-hidden">
-                @if('{$type}' === 'bar')
-                <div class="flex items-end justify-around h-full gap-2" x-ref="bars">
-                    <template x-for="(val, i) in values" :key="i">
-                        <div class="flex flex-col items-center flex-1">
-                            <div
-                                class="w-full rounded-t transition-all duration-300"
-                                :style="'height: ' + (val / maxVal * 100) + '%; background-color: {$color}'"
-                            ></div>
-                            <span class="text-xs text-gray-500 mt-1" x-text="labels[i]"></span>
-                        </div>
-                    </template>
+            <div class="space-y-2">
+                <h4 class="text-sm font-semibold text-gray-700">{$title}</h4>
+                <div class="relative h-48 bg-gray-50 rounded-lg p-4 overflow-hidden">
+                    <svg class="w-full h-full" viewBox="0 0 400 180" preserveAspectRatio="none">
+                            {$svgContent}
+                    </svg>
                 </div>
-                @else
-                <svg class="w-full h-full" viewBox="0 0 400 180" preserveAspectRatio="none">
-                    <template x-for="(val, i) in values" :key="i">
-                        <g>
-                            <circle
-                                :cx="(i / (values.length - 1 || 1)) * 380 + 10"
-                                :cy="170 - (val / maxVal * 160)"
-                                r="4"
-                                fill="{$color}"
-                            />
-                            <line
-                                x1="0" y1="0" x2="0" y2="0"
-                                :x1="i > 0 ? ((i - 1) / (values.length - 1 || 1)) * 380 + 10 : 0"
-                                :y1="i > 0 ? 170 - (values[i-1] / maxVal * 160) : 170"
-                                :x2="(i / (values.length - 1 || 1)) * 380 + 10"
-                                :y2="170 - (val / maxVal * 160)"
-                                stroke="{$color}"
-                                stroke-width="2"
-                                fill="none"
-                            />
-                        </g>
-                    </template>
-                </svg>
-                @endif
             </div>
-        </div>
-        HTML;
+            HTML;
     }
 }

@@ -112,9 +112,9 @@
                                     <td class="px-6 py-4">
                                         <span class="px-2 py-1 text-xs font-medium rounded-full {{ $cert->status_badge_class }}">{{ $cert->status }}</span>
                                     </td>
-                                    <td class="px-6 py-4 text-sm text-gray-700 dark:text-gray-300 dark:text-gray-300">{{ $cert->awarded_at?->format('d M Y') ?? '-' }}</td>
-                                    <td class="px-6 py-4 text-sm text-gray-700 dark:text-gray-300 dark:text-gray-300">{{ $cert->expires_at?->format('d M Y') ?? 'Seumur Hidup' }}</td>
-                                    <td class="px-6 py-4 text-sm text-gray-700 dark:text-gray-300 dark:text-gray-300">{{ $cert->reviewer->name ?? '-' }}</td>
+                                    <td class="px-6 py-4 text-sm text-gray-700 dark:text-gray-300">{{ $cert->awarded_at?->format('d M Y') ?? '-' }}</td>
+                                    <td class="px-6 py-4 text-sm text-gray-700 dark:text-gray-300">{{ $cert->expires_at?->format('d M Y') ?? 'Seumur Hidup' }}</td>
+                                    <td class="px-6 py-4 text-sm text-gray-700 dark:text-gray-300">{{ $cert->reviewer->name ?? '-' }}</td>
                                     <td class="px-6 py-4 text-sm">
                                         @if ($cert->isActive())
                                             <form method="POST" action="{{ route('admin.certifications.revoke', $cert) }}" class="inline">

@@ -88,11 +88,11 @@
                                         <td class="py-3 px-2">
                                             <a href="{{ route('admin.sponsorships.show', $sponsorship) }}" class="font-medium text-gray-900 dark:text-white hover:text-blue-600 dark:text-blue-400">{{ $sponsorship->title }}</a>
                                         </td>
-                                        <td class="py-3 px-2 text-gray-700 dark:text-gray-300 dark:text-gray-300">{{ $sponsorship->sponsor->company_name }}</td>
+                                        <td class="py-3 px-2 text-gray-700 dark:text-gray-300">{{ $sponsorship->sponsor->company_name }}</td>
                                         <td class="py-3 px-2">
                                             <span class="text-xs font-medium text-gray-600 dark:text-gray-400 bg-gray-100 px-2 py-0.5 rounded-full">{{ $sponsorship->package_label }}</span>
                                         </td>
-                                        <td class="py-3 px-2 text-right text-gray-700 dark:text-gray-300 dark:text-gray-300">
+                                        <td class="py-3 px-2 text-right text-gray-700 dark:text-gray-300">
                                             <div>Rp {{ number_format($sponsorship->budget, 0, ',', '.') }}</div>
                                             <div class="text-xs text-gray-500 dark:text-gray-400">Sisa: Rp {{ number_format($sponsorship->remaining_budget, 0, ',', '.') }}</div>
                                         </td>

@@ -5,7 +5,7 @@
                 <svg class="inline w-5 h-5 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
                 Buat Iklan Baru
             </h2>
-            <a href="{{ route('admin.ads.index') }}" class="text-sm text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:text-gray-300 dark:text-gray-300">&larr; Kembali</a>
+            <a href="{{ route('admin.ads.index') }}" class="text-sm text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300">&larr; Kembali</a>
         </div>
     </x-slot>
 
@@ -17,7 +17,7 @@
 
                     {{-- Title --}}
                     <div>
-                        <label for="title" class="block text-sm font-medium text-gray-700 dark:text-gray-300 dark:text-gray-300">Judul Iklan</label>
+                        <label for="title" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Judul Iklan</label>
                         <input type="text" name="title" id="title" value="{{ old('title') }}" required
                             class="mt-1 block w-full border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 text-sm">
                         @error('title') <p class="mt-1 text-sm text-red-600 dark:text-red-400">{{ $message }}</p> @enderror
@@ -47,7 +47,7 @@
                             </select>
                         </div>
                         <div>
-                            <label for="position" class="block text-sm font-medium text-gray-700 dark:text-gray-300 dark:text-gray-300">Posisi</label>
+                            <label for="position" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Posisi</label>
                             <select name="position" id="position" required class="mt-1 block w-full border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 text-sm">
                                 <option value="header">Header</option>
                                 <option value="sidebar">Sidebar</option>
@@ -62,7 +62,7 @@
 
                     {{-- Content --}}
                     <div>
-                        <label for="content" class="block text-sm font-medium text-gray-700 dark:text-gray-300 dark:text-gray-300">Konten HTML (untuk banner/interstitial)</label>
+                        <label for="content" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Konten HTML (untuk banner/interstitial)</label>
                         <textarea name="content" id="content" rows="4" placeholder="<iframe src='...' /> atau HTML konten iklan"
                             class="mt-1 block w-full border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 text-sm font-mono">{{ old('content') }}</textarea>
                         @error('content') <p class="mt-1 text-sm text-red-600 dark:text-red-400">{{ $message }}</p> @enderror
@@ -70,7 +70,7 @@
 
                     {{-- Image --}}
                     <div>
-                        <label for="image" class="block text-sm font-medium text-gray-700 dark:text-gray-300 dark:text-gray-300">Gambar Iklan (opsional)</label>
+                        <label for="image" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Gambar Iklan (opsional)</label>
                         <input type="file" name="image" id="image" accept="image/*"
                             class="mt-1 block w-full text-sm text-gray-500 dark:text-gray-400 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-medium file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100">
                         <p class="mt-1 text-xs text-gray-400 dark:text-gray-500">JPG/PNG/WebP, maks 512KB. Ukuran: 728x90, 300x250, 160x600</p>
@@ -79,7 +79,7 @@
 
                     {{-- Target URL --}}
                     <div>
-                        <label for="target_url" class="block text-sm font-medium text-gray-700 dark:text-gray-300 dark:text-gray-300">URL Tujuan Klik</label>
+                        <label for="target_url" class="block text-sm font-medium text-gray-700 dark:text-gray-300">URL Tujuan Klik</label>
                         <input type="url" name="target_url" id="target_url" value="{{ old('target_url') }}" placeholder="https://example.com"
                             class="mt-1 block w-full border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 text-sm">
                         @error('target_url') <p class="mt-1 text-sm text-red-600 dark:text-red-400">{{ $message }}</p> @enderror
@@ -107,17 +107,17 @@
                     {{-- Weight & Schedule --}}
                     <div class="grid grid-cols-3 gap-4">
                         <div>
-                            <label for="weight" class="block text-sm font-medium text-gray-700 dark:text-gray-300 dark:text-gray-300">Bobot Prioritas</label>
+                            <label for="weight" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Bobot Prioritas</label>
                             <input type="number" name="weight" id="weight" value="{{ old('weight', 1) }}" min="1" max="100"
                                 class="mt-1 block w-full border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 text-sm">
                         </div>
                         <div>
-                            <label for="start_date" class="block text-sm font-medium text-gray-700 dark:text-gray-300 dark:text-gray-300">Mulai Tayang</label>
+                            <label for="start_date" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Mulai Tayang</label>
                             <input type="datetime-local" name="start_date" id="start_date" value="{{ old('start_date') }}"
                                 class="mt-1 block w-full border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 text-sm">
                         </div>
                         <div>
-                            <label for="end_date" class="block text-sm font-medium text-gray-700 dark:text-gray-300 dark:text-gray-300">Akhir Tayang</label>
+                            <label for="end_date" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Akhir Tayang</label>
                             <input type="datetime-local" name="end_date" id="end_date" value="{{ old('end_date') }}"
                                 class="mt-1 block w-full border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 text-sm">
                         </div>
@@ -126,7 +126,7 @@
                     {{-- Active --}}
                     <div class="flex items-center gap-2">
                         <input type="checkbox" name="is_active" value="1" {{ old('is_active', true) ? 'checked' : '' }} class="rounded border-gray-300 text-blue-600 dark:text-blue-400">
-                        <label class="text-sm text-gray-700 dark:text-gray-300 dark:text-gray-300">Iklan Aktif</label>
+                        <label class="text-sm text-gray-700 dark:text-gray-300">Iklan Aktif</label>
                     </div>
 
                     {{-- Submit --}}

@@ -72,9 +72,9 @@
                                     <td class="px-6 py-4">
                                         <span class="px-2 py-1 text-xs font-medium rounded-full bg-slate-100 dark:bg-slate-700 text-slate-700">{{ $challenge->type_label }}</span>
                                     </td>
-                                    <td class="px-6 py-4 text-sm text-gray-700 dark:text-gray-300 dark:text-gray-300">{{ $challenge->theme }}</td>
+                                    <td class="px-6 py-4 text-sm text-gray-700 dark:text-gray-300">{{ $challenge->theme }}</td>
                                     <td class="px-6 py-4 text-xs text-gray-500 dark:text-gray-400">
-                                        {{ $challenge->start_date->format('d M Y') }} —<br>{{ $challenge->end_date->format('d M Y') }}
+                                        {{ $challenge->start_date->format('d M Y') }} ï¿½<br>{{ $challenge->end_date->format('d M Y') }}
                                     </td>
                                     <td class="px-6 py-4 text-sm font-medium text-gray-900 dark:text-white">{{ $challenge->entries_count }}</td>
                                     <td class="px-6 py-4">

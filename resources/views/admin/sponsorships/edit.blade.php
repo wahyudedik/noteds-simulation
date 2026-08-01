@@ -73,7 +73,7 @@
                                     <label class="flex items-center gap-2 p-2 rounded-lg border border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:bg-gray-700/50 dark:hover:bg-gray-600/50 cursor-pointer">
                                         <input type="checkbox" name="positions[]" value="{{ $value }}" {{ in_array($value, $currentPositions) ? 'checked' : '' }}
                                             class="rounded border-gray-300 text-blue-600 dark:text-blue-400 shadow-sm focus:ring-blue-500">
-                                        <span class="text-sm text-gray-700 dark:text-gray-300 dark:text-gray-300">{{ $label }}</span>
+                                        <span class="text-sm text-gray-700 dark:text-gray-300">{{ $label }}</span>
                                     </label>
                                 @endforeach
                             </div>

@@ -112,7 +112,7 @@ it('can update project config', function () {
     expect($project->config['components'])->toHaveCount(1);
 });
 
-it('can publish a project', function () {
+it('can access publish page for a project', function () {
     $project = ExperienceProject::factory()->create([
         'user_id' => $this->user->id,
         'status' => 'draft',
@@ -120,12 +120,9 @@ it('can publish a project', function () {
     ]);
 
     $this->actingAs($this->user)
-        ->post(route('studio.builder.projects.publish', $project->slug))
-        ->assertRedirect();
-
-    $project->refresh();
-    expect($project->status)->toBe('published')
-        ->and($project->published_at)->not->toBeNull();
+        ->get(route('studio.builder.projects.publish', $project->slug))
+        ->assertOk()
+        ->assertSee('Category');
 });
 
 it('can delete a project', function () {

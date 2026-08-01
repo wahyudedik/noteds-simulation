@@ -31,7 +31,7 @@
                     </div>
                     <div>
                         <h3 class="text-sm font-medium text-gray-500 dark:text-gray-400 mb-2">Hadiah</h3>
-                        <p class="text-sm text-gray-700 dark:text-gray-300 dark:text-gray-300">{{ $challenge->prize_description ?? 'Tidak ada deskripsi hadiah.' }}</p>
+                        <p class="text-sm text-gray-700 dark:text-gray-300">{{ $challenge->prize_description ?? 'Tidak ada deskripsi hadiah.' }}</p>
                     </div>
                 </div>
 
@@ -71,7 +71,7 @@
                                 <tr class="hover:bg-gray-50 dark:bg-gray-700/50 dark:hover:bg-gray-600/50">
                                     <td class="px-6 py-4 text-sm font-bold text-gray-900 dark:text-white">#{{ $entry->rank ?? ($index + 1) }}</td>
                                     <td class="px-6 py-4 text-sm font-medium text-gray-900 dark:text-white">{{ $entry->simulation->title ?? '-' }}</td>
-                                    <td class="px-6 py-4 text-sm text-gray-700 dark:text-gray-300 dark:text-gray-300">{{ $entry->user->name ?? '-' }}</td>
+                                    <td class="px-6 py-4 text-sm text-gray-700 dark:text-gray-300">{{ $entry->user->name ?? '-' }}</td>
                                     <td class="px-6 py-4 text-sm font-bold text-blue-600 dark:text-blue-400">{{ $entry->total_score }}</td>
                                     <td class="px-6 py-4">
                                         <span class="px-2 py-1 text-xs font-medium rounded-full {{ $entry->status_badge_class }}">{{ $entry->status }}</span>

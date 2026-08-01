@@ -6,6 +6,7 @@ use App\Models\SeoSetting;
 use App\Models\Simulation;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
@@ -34,6 +35,7 @@ class SimulationObserver
     {
         $this->regenerateSitemap();
         $this->logAnalyticsChanges($simulation);
+        $this->flushExploreCache();
 
         if ($simulation->is_published) {
             $this->generateSeoSettings($simulation);
@@ -47,6 +49,7 @@ class SimulationObserver
     {
         $this->regenerateSitemap();
         $this->deleteSeoSettings($simulation);
+        $this->flushExploreCache();
     }
 
     /**
@@ -215,6 +218,37 @@ class SimulationObserver
                 'file' => $e->getFile(),
                 'line' => $e->getLine(),
             ]);
+        }
+    }
+
+    /**
+     * Flush cached explore and landing page data.
+     *
+     * Called when a simulation is created (published), updated, or deleted
+     * to ensure stale data is not served to users.
+     */
+    private function flushExploreCache(): void
+    {
+        $periods = ['day', 'week', 'month', 'year'];
+
+        // Static cache keys
+        $staticKeys = [
+            'explore:categories:v2',
+            'landing:categories:v2',
+            'explore:tags:20:v2',
+            'landing:latest_ids',
+            'landing:popular_ids',
+            'landing:discovered:fallback_ids',
+        ];
+
+        foreach ($staticKeys as $key) {
+            Cache::forget($key);
+        }
+
+        // Dynamic cache keys (period-based)
+        foreach ($periods as $period) {
+            Cache::forget('explore:trending:'.$period);
+            Cache::forget('landing:trending_ids:'.$period);
         }
     }
 }

@@ -79,7 +79,7 @@
                                 {{-- Pin/Unpin --}}
                                 <form method="POST" action="{{ route('studio.comments.pin', $comment->id) }}">
                                     @csrf
-                                    <button type="submit" class="text-xs {{ $comment->is_pinned ? 'text-yellow-600' : 'text-gray-400' }} hover:text-yellow-600 font-medium">
+                                    <button type="submit" class="text-xs {{ $comment->is_pinned ? 'text-yellow-600 dark:text-yellow-400' : 'text-gray-400 dark:text-gray-500' }} hover:text-yellow-600 dark:hover:text-yellow-400 font-medium">
                                         {{ $comment->is_pinned ? 'Lepas Sematan' : 'Sematkan' }}
                                     </button>
                                 </form>
@@ -88,7 +88,7 @@
                                 <form method="POST" action="{{ route('studio.comments.destroy', $comment->id) }}">
                                     @csrf
                                     @method('DELETE')
-                                    <button type="button" onclick="confirmSubmit(this.closest('form'), 'Hapus komentar ini?')" class="text-xs text-gray-400 hover:text-red-500 font-medium">Hapus</button>
+                                    <button type="button" onclick="confirmSubmit(this.closest('form'), 'Hapus komentar ini?')" class="text-xs text-gray-400 dark:text-gray-500 hover:text-red-500 dark:hover:text-red-400 font-medium">Hapus</button>
                                 </form>
                             </div>
                         </div>

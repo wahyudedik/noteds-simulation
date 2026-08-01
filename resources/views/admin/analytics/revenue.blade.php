@@ -65,8 +65,8 @@
                                 @php $percentage = $totalRevenue > 0 ? round(($tier->total / $totalRevenue) * 100, 1) : 0; @endphp
                                 <div>
                                     <div class="flex items-center justify-between mb-1">
-                                        <span class="text-sm font-medium text-gray-700 dark:text-gray-300 dark:text-gray-300">{{ $tierLabels[$tier->revenue_tier] ?? ucfirst($tier->revenue_tier) }}</span>
-                                        <span class="text-sm text-gray-500 dark:text-gray-400">{{ number_format($tier->creators) }} creator · Rp {{ number_format($tier->total, 0, ',', '.') }}</span>
+                                        <span class="text-sm font-medium text-gray-700 dark:text-gray-300">{{ $tierLabels[$tier->revenue_tier] ?? ucfirst($tier->revenue_tier) }}</span>
+                                        <span class="text-sm text-gray-500 dark:text-gray-400">{{ number_format($tier->creators) }} creator ï¿½ Rp {{ number_format($tier->total, 0, ',', '.') }}</span>
                                     </div>
                                     <div class="w-full bg-gray-100 rounded-full h-3 overflow-hidden">
                                         <div class="{{ $tierColors[$tier->revenue_tier] ?? 'bg-gray-500' }} h-full rounded-full transition-all" style="width: {{ $maxTierRevenue > 0 ? ($tier->total / $maxTierRevenue) * 100 : 0 }}%"></div>
@@ -92,7 +92,7 @@
                             <div class="flex items-center gap-4">
                                 <div class="flex-1">
                                     <div class="flex items-center justify-between mb-1">
-                                        <span class="text-sm font-medium text-gray-700 dark:text-gray-300 dark:text-gray-300">Creator</span>
+                                        <span class="text-sm font-medium text-gray-700 dark:text-gray-300">Creator</span>
                                         <span class="text-sm text-gray-500 dark:text-gray-400">{{ $creatorPercent }}%</span>
                                     </div>
                                     <div class="w-full bg-gray-100 rounded-full h-6 overflow-hidden">
@@ -107,7 +107,7 @@
                             <div class="flex items-center gap-4">
                                 <div class="flex-1">
                                     <div class="flex items-center justify-between mb-1">
-                                        <span class="text-sm font-medium text-gray-700 dark:text-gray-300 dark:text-gray-300">Platform</span>
+                                        <span class="text-sm font-medium text-gray-700 dark:text-gray-300">Platform</span>
                                         <span class="text-sm text-gray-500 dark:text-gray-400">{{ $platformPercent }}%</span>
                                     </div>
                                     <div class="w-full bg-gray-100 rounded-full h-6 overflow-hidden">

@@ -1,11 +1,5 @@
+@php $pageTitle = 'Pilih Template'; @endphp
 <x-studio-layout>
-    <x-slot name="header">
-        <div class="flex items-center gap-2">
-            <svg class="w-5 h-5 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 5a1 1 0 011-1h14a1 1 0 011 1v2a1 1 0 01-1 1H5a1 1 0 01-1-1V5zM4 13a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H5a1 1 0 01-1-1v-6zM16 13a1 1 0 011-1h2a1 1 0 011 1v6a1 1 0 01-1 1h-2a1 1 0 01-1-1v-6z" /></svg>
-            <h2 class="font-semibold text-xl text-gray-800 dark:text-white leading-tight">Pilih Template</h2>
-        </div>
-    </x-slot>
-
     <div class="py-12">
         <div class="max-w-5xl mx-auto sm:px-6 lg:px-8">
             <x-breadcrumb :items="[

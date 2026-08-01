@@ -32,7 +32,7 @@
                     <span class="text-xl font-bold text-gray-900 dark:text-white">Noteds</span>
                 </a>
 
-                {{-- Desktop Nav Links — only 3 core links --}}
+                {{-- Desktop Nav Links — 3 core + CTA --}}
                 <div class="hidden sm:flex items-center gap-1">
                     <a href="{{ route('home') }}" class="px-3 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 hover:text-blue-600 hover:bg-gray-50 dark:hover:bg-gray-800 rounded-lg transition">
                         Beranda
@@ -40,11 +40,13 @@
                     <a href="{{ route('simulations.explore') }}" class="px-3 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 hover:text-blue-600 hover:bg-gray-50 dark:hover:bg-gray-800 rounded-lg transition">
                         Jelajahi
                     </a>
-                    <a href="{{ route('leaderboard.index') }}" class="px-3 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 hover:text-blue-600 hover:bg-gray-50 dark:hover:bg-gray-800 rounded-lg transition">
-                        Papan Skor
-                    </a>
                     <a href="{{ route('forum.index') }}" class="px-3 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 hover:text-blue-600 hover:bg-gray-50 dark:hover:bg-gray-800 rounded-lg transition">
                         Komunitas
+                    </a>
+                </div>
+                <div class="hidden sm:flex items-center">
+                    <a href="{{ route('become-creator-page') }}" class="ml-1 px-4 py-1.5 text-xs font-semibold text-white bg-purple-600 hover:bg-purple-700 dark:bg-purple-500 dark:hover:bg-purple-600 rounded-full transition">
+                        Jadi Kreator
                     </a>
                 </div>
             </div>

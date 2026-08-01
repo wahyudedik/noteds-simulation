@@ -95,9 +95,9 @@
 +-- manifest.json          <span class="text-gray-400 dark:text-gray-500"># Metadata experience (judul, kategori, versi, dll.)</span>
 +-- index.html             <span class="text-gray-400 dark:text-gray-500"># File entry point experience</span>
 +-- assets/
-¦   +-- css/
-¦   +-- js/
-¦   +-- images/
+ï¿½   +-- css/
+ï¿½   +-- js/
+ï¿½   +-- images/
 +-- README.md              <span class="text-gray-400 dark:text-gray-500"># Dokumentasi teknis (opsional)</span></code></pre>
 
                                     <div class="mt-3 pt-3 border-t border-gray-200 dark:border-gray-700">
@@ -143,7 +143,7 @@
                         <div class="flex items-center gap-3">
                             <input type="checkbox" name="is_published" id="is_published" value="1" {{ old('is_published') ? 'checked' : '' }}
                                 class="rounded border-gray-300 text-blue-600 dark:text-blue-400 shadow-sm focus:border-blue-500 focus:ring-blue-500" />
-                            <label for="is_published" class="text-sm text-gray-700 dark:text-gray-300 dark:text-gray-300">
+                            <label for="is_published" class="text-sm text-gray-700 dark:text-gray-300">
                                 Langsung publikasikan (Published)
                             </label>
                         </div>

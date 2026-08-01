@@ -57,7 +57,7 @@
                             <div class="hidden group-hover:block absolute bottom-full mb-2 bg-gray-900 dark:bg-gray-700 text-white text-xs rounded-lg px-3 py-2 whitespace-nowrap z-10 shadow-lg">
                                 <p class="font-medium">{{ $day['label'] }}</p>
                                 <p>Rp {{ number_format($day['creator_revenue'], 0, ',', '.') }}</p>
-                                <p class="text-gray-400">{{ number_format($day['impressions']) }} impressions</p>
+                                <p class="text-gray-400 dark:text-gray-500">{{ number_format($day['impressions']) }} impressions</p>
                             </div>
                             @if($loop->index % 5 === 0 || $loop->last)
                                 <span class="text-[10px] text-gray-400 dark:text-gray-500 mt-1">{{ $day['label'] }}</span>

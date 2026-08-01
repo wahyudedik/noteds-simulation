@@ -82,7 +82,7 @@
                         <div class="flex items-center gap-2">
                             <input type="checkbox" name="is_active" id="is_active" value="1" {{ old('is_active', $sponsor->is_active) ? 'checked' : '' }}
                                 class="rounded border-gray-300 text-blue-600 dark:text-blue-400 shadow-sm focus:ring-blue-500">
-                            <label for="is_active" class="text-sm font-medium text-gray-700 dark:text-gray-300 dark:text-gray-300">Aktif</label>
+                            <label for="is_active" class="text-sm font-medium text-gray-700 dark:text-gray-300">Aktif</label>
                         </div>
 
                         <div class="flex justify-end gap-3 pt-4 border-t border-gray-100">

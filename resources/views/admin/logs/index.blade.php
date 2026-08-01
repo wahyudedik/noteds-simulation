@@ -19,7 +19,7 @@
                         </button>
                     </form>
                 @endif
-                <a href="{{ route('admin.dashboard') }}" class="text-sm text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:text-gray-300 dark:text-gray-300">&larr; Kembali</a>
+                <a href="{{ route('admin.dashboard') }}" class="text-sm text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300">&larr; Kembali</a>
             </div>
         </div>
     </x-slot>

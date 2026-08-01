@@ -266,7 +266,9 @@ Route::middleware(['auth', 'verified'])->prefix('studio')->name('studio.')->grou
         Route::put('/projects/{project}', [ExperienceBuilderController::class, 'update'])->name('projects.update');
         Route::post('/projects/{project}/preview', [ExperienceBuilderController::class, 'preview'])->name('projects.preview');
         Route::post('/projects/{project}/export', [ExperienceBuilderController::class, 'export'])->name('projects.export');
-        Route::post('/projects/{project}/publish', [ExperienceBuilderController::class, 'publish'])->name('projects.publish');
+        Route::get('/projects/{project}/publish', [ExperienceBuilderController::class, 'publish'])->name('projects.publish');
+        Route::post('/projects/{project}/publish', [ExperienceBuilderController::class, 'publishConfirm'])->name('projects.publish-confirm');
+        Route::post('/projects/{project}/unpublish', [ExperienceBuilderController::class, 'unpublish'])->name('projects.unpublish');
         Route::delete('/projects/{project}', [ExperienceBuilderController::class, 'destroy'])->name('projects.destroy');
     });
 });

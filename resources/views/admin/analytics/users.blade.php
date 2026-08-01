@@ -79,7 +79,7 @@
                                 @php $percentage = $totalUsers > 0 ? round(($role->count / $totalUsers) * 100, 1) : 0; @endphp
                                 <div>
                                     <div class="flex items-center justify-between mb-1">
-                                        <span class="text-sm font-medium text-gray-700 dark:text-gray-300 dark:text-gray-300">{{ $roleLabels[$role->role] ?? ucfirst($role->role) }}</span>
+                                        <span class="text-sm font-medium text-gray-700 dark:text-gray-300">{{ $roleLabels[$role->role] ?? ucfirst($role->role) }}</span>
                                         <span class="text-sm text-gray-500 dark:text-gray-400">{{ number_format($role->count) }} ({{ $percentage }}%)</span>
                                     </div>
                                     <div class="w-full bg-gray-100 rounded-full h-3 overflow-hidden">

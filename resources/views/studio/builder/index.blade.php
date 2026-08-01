@@ -1,17 +1,5 @@
+@php $pageTitle = 'Experience Builder'; @endphp
 <x-studio-layout>
-    <x-slot name="header">
-        <div class="flex items-center justify-between">
-            <div class="flex items-center gap-2">
-                <svg class="w-5 h-5 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" /></svg>
-                <h2 class="font-semibold text-xl text-gray-800 dark:text-white leading-tight">Experience Builder</h2>
-            </div>
-            <a href="{{ route('studio.builder.templates') }}" class="inline-flex items-center gap-2 px-4 py-2 bg-purple-600 hover:bg-purple-700 text-white text-sm font-medium rounded-lg transition">
-                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" /></svg>
-                New Project
-            </a>
-        </div>
-    </x-slot>
-
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <x-breadcrumb :items="[
@@ -19,7 +7,7 @@
                 ['label' => 'Experience Builder'],
             ]" />
 
-            {{-- Stats --}}
+            {{-- Stats + New Project --}}
             <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mt-6">
                 <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 p-5">
                     <div class="text-sm text-gray-500 dark:text-gray-400">Total Projects</div>
@@ -76,6 +64,18 @@
                                         <span>v{{ $project->version }}</span>
                                     </div>
 
+                                    {{-- Published Badge --}}
+                                    @if($project->hasSimulation())
+                                        <div class="flex items-center gap-1.5 mt-2 px-2 py-1 rounded-md bg-emerald-50 dark:bg-emerald-900/20 border border-emerald-200 dark:border-emerald-800">
+                                            <svg class="w-3.5 h-3.5 text-emerald-500" fill="currentColor" viewBox="0 0 20 20">
+                                                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+                                            </svg>
+                                            <a href="{{ $project->getSimulationUrl() }}" target="_blank" class="text-xs font-medium text-emerald-700 dark:text-emerald-400 hover:underline">
+                                                View on Platform →
+                                            </a>
+                                        </div>
+                                    @endif
+
                                     {{-- Actions --}}
                                     <div class="flex items-center gap-2 mt-3 pt-3 border-t border-gray-100 dark:border-gray-700">
                                         <a href="{{ route('studio.builder.projects.edit', $project->slug) }}"
@@ -83,19 +83,14 @@
                                             <svg class="w-3.5 h-3.5 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" /></svg>
                                             Edit
                                         </a>
-                                        @if($project->isDraft())
-                                            <form action="{{ route('studio.builder.projects.publish', $project->slug) }}" method="POST" class="flex-1">
-                                                @csrf
-                                                <button type="submit" class="w-full inline-flex items-center justify-center px-3 py-1.5 text-xs font-medium text-emerald-700 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-900/20 rounded-lg hover:bg-emerald-100 dark:hover:bg-emerald-900/30 transition">
-                                                    <svg class="w-3.5 h-3.5 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" /></svg>
-                                                    Publish
-                                                </button>
-                                            </form>
-                                        @endif
-                                        <form action="{{ route('studio.builder.projects.destroy', $project->slug) }}" method="POST" class="flex-shrink-0"
-                                              x-data x-on:submit.prevent="confirmSubmit(this.closest('form'), 'Yakin ingin menghapus project ini?', { title: 'Hapus Project', confirmText: 'Ya, Hapus' })">
+                                        <a href="{{ route('studio.builder.projects.publish', $project->slug) }}"
+                                           class="flex-1 inline-flex items-center justify-center px-3 py-1.5 text-xs font-medium {{ $project->hasSimulation() ? 'text-amber-700 dark:text-amber-400 bg-amber-50 dark:bg-amber-900/20 hover:bg-amber-100 dark:hover:bg-amber-900/30' : 'text-emerald-700 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-900/20 hover:bg-emerald-100 dark:hover:bg-emerald-900/30' }} rounded-lg transition">
+                                            <svg class="w-3.5 h-3.5 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                                            {{ $project->hasSimulation() ? 'Update' : 'Publish' }}
+                                        </a>
+                                        <form action="{{ route('studio.builder.projects.destroy', $project->slug) }}" method="POST" class="flex-shrink-0">
                                             @csrf @method('DELETE')
-                                            <button type="submit" class="p-1.5 text-gray-400 hover:text-red-500 dark:hover:text-red-400 transition rounded-lg hover:bg-red-50 dark:hover:bg-red-900/20">
+                                            <button type="button" onclick="confirmSubmit(this.closest('form'), 'Yakin ingin menghapus project ini?', { title: 'Hapus Project', confirmText: 'Ya, Hapus' })" class="p-1.5 text-gray-400 hover:text-red-500 dark:hover:text-red-400 transition rounded-lg hover:bg-red-50 dark:hover:bg-red-900/20">
                                                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>
                                             </button>
                                         </form>

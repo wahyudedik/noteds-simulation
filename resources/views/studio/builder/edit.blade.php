@@ -1,39 +1,41 @@
-<x-studio-layout>
-    <x-slot name="header">
-        <div class="flex items-center justify-between">
-            <div class="flex items-center gap-2 min-w-0">
-                <a href="{{ route('studio.builder.index') }}" class="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 transition flex-shrink-0">
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" /></svg>
-                </a>
-                <svg class="w-5 h-5 text-purple-600 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" /></svg>
-                <h2 class="font-semibold text-lg text-gray-800 dark:text-white leading-tight truncate">{{ $project->title }}</h2>
-                <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium {{ $project->status_badge_class }} flex-shrink-0">
-                    {{ ucfirst($project->status) }}
-                </span>
-            </div>
-            <div class="flex items-center gap-2 flex-shrink-0">
-                <button x-on:click="previewProject()" class="inline-flex items-center gap-1.5 px-3 py-1.5 text-sm font-medium text-gray-700 dark:text-gray-300 bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 rounded-lg transition">
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" /></svg>
-                    Preview
-                </button>
-                <form action="{{ route('studio.builder.projects.export', $project->slug) }}" method="POST" class="inline">
-                    @csrf
-                    <button type="submit" class="inline-flex items-center gap-1.5 px-3 py-1.5 text-sm font-medium text-gray-700 dark:text-gray-300 bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 rounded-lg transition">
-                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" /></svg>
-                        Export ZIP
-                    </button>
-                </form>
-                <button x-on:click="saveProject()" class="inline-flex items-center gap-1.5 px-3 py-1.5 text-sm font-medium text-white bg-purple-600 hover:bg-purple-700 rounded-lg transition" :class="{ 'opacity-50 pointer-events-none': saving }">
-                    <svg x-show="!saving" class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" /></svg>
-                    <svg x-show="saving" class="w-4 h-4 animate-spin" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path></svg>
-                    <span x-text="saving ? 'Saving...' : 'Save'"></span>
-                </button>
-            </div>
+@php $pageTitle = $project->title . ' — Builder'; @endphp
+<x-studio-layout><div x-data="builder()" x-init="init()">
+    {{-- Toolbar --}}
+    <div class="flex items-center justify-between mb-4">
+        <div class="flex items-center gap-2 min-w-0">
+            <a href="{{ route('studio.builder.index') }}" class="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 transition flex-shrink-0" aria-label="Kembali ke Builder">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" /></svg>
+            </a>
+            <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium {{ $project->status_badge_class }} flex-shrink-0">
+                {{ ucfirst($project->status) }}
+            </span>
         </div>
-    </x-slot>
+        <div class="flex items-center gap-2 flex-shrink-0">
+            <button x-on:click="previewProject()" class="inline-flex items-center gap-1.5 px-3 py-1.5 text-sm font-medium text-gray-700 dark:text-gray-300 bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 rounded-lg transition">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" /></svg>
+                Preview
+            </button>
+            <form action="{{ route('studio.builder.projects.export', $project->slug) }}" method="POST" class="inline">
+                @csrf
+                <button type="submit" class="inline-flex items-center gap-1.5 px-3 py-1.5 text-sm font-medium text-gray-700 dark:text-gray-300 bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 rounded-lg transition">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" /></svg>
+                    Export ZIP
+                </button>
+            </form>
+            <button x-on:click="saveProject()" class="inline-flex items-center gap-1.5 px-3 py-1.5 text-sm font-medium text-white bg-purple-600 hover:bg-purple-700 rounded-lg transition" :class="{ 'opacity-50 pointer-events-none': saving }">
+                <svg x-show="!saving" class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" /></svg>
+                <svg x-show="saving" class="w-4 h-4 animate-spin" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path></svg>
+                <span x-text="saving ? 'Saving...' : 'Save'"></span>
+            </button>
+            <a href="{{ route('studio.builder.projects.publish', $project->slug) }}" class="inline-flex items-center gap-1.5 px-3 py-1.5 text-sm font-medium text-white bg-emerald-600 hover:bg-emerald-700 rounded-lg transition">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                Publish
+            </a>
+        </div>
+    </div>
 
     {{-- Editor Container --}}
-    <div class="h-[calc(100vh-8rem)] flex" x-data="builder()" x-init="init()">
+    <div class="h-[calc(100vh-12rem)] flex">
 
         {{-- Left Panel: Component Tree --}}
         <div class="w-64 flex-shrink-0 bg-white dark:bg-gray-800 border-r border-gray-200 dark:border-gray-700 flex flex-col overflow-hidden"
@@ -123,7 +125,8 @@
                 </button>
             </div>
 
-            <div class="flex-1 overflow-y-auto p-4 space-y-4" x-show="selectedIndex !== null && components[selectedIndex]">
+            <template x-if="selectedIndex !== null && components[selectedIndex]">
+            <div class="flex-1 overflow-y-auto p-4 space-y-4">
                 {{-- Component Label --}}
                 <div>
                     <label class="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1">Label</label>
@@ -179,6 +182,7 @@
                     </div>
                 </template>
             </div>
+            </template>
         </div>
     </div>
 
@@ -331,4 +335,4 @@
         }
     </script>
     @endpush
-</x-studio-layout>
+</div></x-studio-layout>

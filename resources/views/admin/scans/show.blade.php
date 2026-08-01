@@ -71,7 +71,7 @@
                                             <span class="text-xs text-gray-500 dark:text-gray-400 font-mono">{{ $finding['file'] }}</span>
                                         @endif
                                     </div>
-                                    <p class="text-sm text-gray-700 dark:text-gray-300 dark:text-gray-300">{{ $finding['description'] ?? '-' }}</p>
+                                    <p class="text-sm text-gray-700 dark:text-gray-300">{{ $finding['description'] ?? '-' }}</p>
                                 </div>
                             @endforeach
                         </div>
@@ -97,15 +97,15 @@
                             <div class="space-y-3 mb-4">
                                 <label class="flex items-center gap-2 text-sm">
                                     <input type="radio" name="result" value="pass" class="text-green-500">
-                                    <span class="text-green-700">(ok) Pass — Experience aman</span>
+                                    <span class="text-green-700">(ok) Pass ï¿½ Experience aman</span>
                                 </label>
                                 <label class="flex items-center gap-2 text-sm">
                                     <input type="radio" name="result" value="flag" class="text-yellow-500">
-                                    <span class="text-yellow-700">(!) Flag — Perlu perhatian</span>
+                                    <span class="text-yellow-700">(!) Flag ï¿½ Perlu perhatian</span>
                                 </label>
                                 <label class="flex items-center gap-2 text-sm">
                                     <input type="radio" name="result" value="reject" class="text-red-500">
-                                    <span class="text-red-700">(x) Reject — Tidak aman</span>
+                                    <span class="text-red-700">(x) Reject ï¿½ Tidak aman</span>
                                 </label>
                             </div>
                             <textarea name="notes" rows="3" class="w-full border border-gray-200 dark:border-gray-700 rounded-xl px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 mb-3" placeholder="Catatan review..."></textarea>

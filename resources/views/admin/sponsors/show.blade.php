@@ -67,7 +67,7 @@
                         @if($sponsor->notes)
                             <div class="mt-4 pt-4 border-t border-gray-100">
                                 <p class="text-xs text-gray-500 dark:text-gray-400 font-medium mb-1">Catatan</p>
-                                <p class="text-sm text-gray-700 dark:text-gray-300 dark:text-gray-300">{{ $sponsor->notes }}</p>
+                                <p class="text-sm text-gray-700 dark:text-gray-300">{{ $sponsor->notes }}</p>
                             </div>
                         @endif
 
@@ -97,7 +97,7 @@
                                         <div class="flex items-center gap-4 text-xs text-gray-500 dark:text-gray-400">
                                             <span>{{ $sponsorship->package_label }}</span>
                                             <span>Rp {{ number_format($sponsorship->budget, 0, ',', '.') }}</span>
-                                            <span>{{ $sponsorship->start_date->format('d M Y') }} — {{ $sponsorship->end_date->format('d M Y') }}</span>
+                                            <span>{{ $sponsorship->start_date->format('d M Y') }} ï¿½ {{ $sponsorship->end_date->format('d M Y') }}</span>
                                         </div>
                                         {{-- Budget Progress --}}
                                         <div class="mt-2">

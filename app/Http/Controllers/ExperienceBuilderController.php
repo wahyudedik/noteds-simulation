@@ -5,10 +5,13 @@ namespace App\Http\Controllers;
 use App\Models\ExperienceProject;
 use App\Services\Builder\ComponentRegistry;
 use App\Services\Builder\ExportService;
+use App\Services\Builder\PublishService;
 use App\Services\ExperienceBuilderService;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\View\View;
 
 class ExperienceBuilderController extends Controller
@@ -119,15 +122,72 @@ class ExperienceBuilderController extends Controller
     }
 
     /**
-     * Publish a project.
+     * Show publish modal for a project.
      */
-    public function publish(ExperienceProject $project): RedirectResponse
+    public function publish(ExperienceProject $project): View
     {
         $this->authorizeProject($project);
 
-        $project->publish();
+        $categories = DB::table('simulations')
+            ->whereNotNull('category')
+            ->distinct()
+            ->pluck('category')
+            ->sort()
+            ->values();
 
-        return back()->with('success', 'Project published successfully.');
+        return view('studio.builder.publish', compact('project', 'categories'));
+    }
+
+    /**
+     * Handle publish form submission (AJAX).
+     */
+    public function publishConfirm(ExperienceProject $project, Request $request): JsonResponse
+    {
+        $this->authorizeProject($project);
+
+        $validated = $request->validate([
+            'category' => 'required|string|max:255',
+            'subcategory' => 'nullable|string|max:255',
+            'tags' => 'nullable|string|max:500',
+            'description' => 'nullable|string|max:2000',
+            'thumbnail' => 'nullable|image|max:2048',
+        ]);
+
+        try {
+            $publishService = new PublishService;
+            $simulation = $publishService->publish($project, [
+                'category' => $validated['category'],
+                'subcategory' => $validated['subcategory'] ?? null,
+                'tags' => $validated['tags'] ?? null,
+                'description' => $validated['description'] ?? null,
+                'thumbnail' => $request->file('thumbnail'),
+            ]);
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Experience published to platform!',
+                'simulation_id' => $simulation->id,
+                'redirect' => route('simulations.show', $simulation->slug),
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Failed to publish: '.$e->getMessage(),
+            ], 500);
+        }
+    }
+
+    /**
+     * Unpublish a project from the platform.
+     */
+    public function unpublish(ExperienceProject $project): RedirectResponse
+    {
+        $this->authorizeProject($project);
+
+        $publishService = new PublishService;
+        $publishService->unpublish($project);
+
+        return back()->with('success', 'Experience unpublished from platform.');
     }
 
     /**
