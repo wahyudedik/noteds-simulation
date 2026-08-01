@@ -11,6 +11,12 @@
     </x-slot>
 
     <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+        <x-breadcrumb :items="[
+            ['label' => 'Komunitas', 'url' => route('forum.index')],
+            ['label' => $thread->title, 'url' => route('forum.show', $thread->slug)],
+            ['label' => 'Edit'],
+        ]" />
+
         <form action="{{ route('forum.update', $thread->slug) }}" method="POST">
             @csrf
             @method('PUT')

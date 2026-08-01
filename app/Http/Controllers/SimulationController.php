@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Models\PlayHistory;
-use App\Models\SeoSetting;
 use App\Models\Simulation;
 use App\Models\Tag;
 use App\Models\User;
@@ -325,6 +324,7 @@ class SimulationController extends Controller
         $searchResults = null;
         if ($search) {
             $searchResults = Simulation::published()
+                ->with('user')
                 ->search($search)
                 ->orderByDesc('play_count')
                 ->paginate(20);
@@ -412,9 +412,6 @@ class SimulationController extends Controller
             ->orderByDesc('play_count')
             ->paginate(8);
 
-        // Load SEO settings for this simulation
-        $seoSetting = SeoSetting::findByKey('simulation:'.$simulation->slug);
-
         return view('simulations.show', compact(
             'simulation',
             'related',
@@ -428,7 +425,6 @@ class SimulationController extends Controller
             'isFollowingSimulation',
             'reactionCounts',
             'userCollections',
-            'seoSetting',
         ));
     }
 
@@ -718,6 +714,7 @@ class SimulationController extends Controller
         $sort = $request->input('sort', 'popular');
 
         $simulations = Simulation::published()
+            ->with('user')
             ->where('category', $category)
             ->when($sort === 'newest', fn ($q) => $q->latest('published_at'))
             ->when($sort === 'rating', fn ($q) => $q->withAvg('ratings', 'rating')->orderByDesc('ratings_avg_rating'))

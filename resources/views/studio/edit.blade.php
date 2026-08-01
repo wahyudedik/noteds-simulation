@@ -111,6 +111,20 @@
                     <textarea id="changelog" name="changelog" rows="3"
                               class="mt-1 block w-full border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white focus:border-blue-500 focus:ring-blue-500 rounded-lg shadow-sm"
                               placeholder="Jelaskan perubahan pada versi ini...">{{ old('changelog') }}</textarea>
+                    <div x-data="{ showTemplate: false }" class="mt-2">
+                        <button type="button" @click="showTemplate = !showTemplate" class="text-xs text-blue-600 dark:text-blue-400 hover:underline inline-flex items-center gap-1">
+                            <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                            <span x-text="showTemplate ? 'Sembunyikan template' : 'Lihat template changelog'"></span>
+                        </button>
+                        <div x-show="showTemplate" x-collapse class="mt-2 p-3 bg-gray-50 dark:bg-gray-700/50 rounded-lg text-xs text-gray-600 dark:text-gray-400 font-mono space-y-0.5">
+                            <p>## Added</p>
+                            <p>- Fitur baru yang ditambahkan</p>
+                            <p>## Changed</p>
+                            <p>- Perubahan pada fitur yang sudah ada</p>
+                            <p>## Fixed</p>
+                            <p>- Bug yang sudah diperbaiki</p>
+                        </div>
+                    </div>
                 </div>
 
                 {{-- Thumbnail --}}

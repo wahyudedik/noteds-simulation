@@ -4,7 +4,7 @@
             <a href="{{ route('admin.scans.index') }}" class="text-gray-400 dark:text-gray-500 hover:text-gray-600 dark:text-gray-400 transition">
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/></svg>
             </a>
-            <h2 class="font-semibold text-xl text-gray-800">Scan Log #{{ $log->id }}</h2>
+            <h2 class="font-semibold text-xl text-gray-800 dark:text-white">Scan Log #{{ $log->id }}</h2>
         </div>
     </x-slot>
 
@@ -12,7 +12,7 @@
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
             {{-- Scan Details --}}
             <div class="lg:col-span-2 space-y-6">
-                <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
+                <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-700 p-6">
                     <h3 class="font-semibold text-gray-900 dark:text-white mb-4">Detail Scan</h3>
                     <dl class="grid grid-cols-2 gap-4 text-sm">
                         <div>
@@ -58,7 +58,7 @@
 
                 {{-- Findings --}}
                 @if($log->findings && count($log->findings) > 0)
-                    <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
+                    <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-700 p-6">
                         <h3 class="font-semibold text-gray-900 dark:text-white mb-4">Temuan ({{ count($log->findings) }})</h3>
                         <div class="space-y-3">
                             @foreach($log->findings as $finding)
@@ -90,7 +90,7 @@
 
                 {{-- Manual Review Form (for admins) --}}
                 @if($log->simulation)
-                    <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
+                    <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-700 p-6">
                         <h3 class="font-semibold text-gray-900 dark:text-white mb-4">Review Manual</h3>
                         <form method="POST" action="{{ route('admin.scans.manual-review', $log->simulation) }}">
                             @csrf
@@ -117,7 +117,7 @@
 
             {{-- Sidebar --}}
             <div class="space-y-6">
-                <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
+                <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-700 p-6">
                     <h3 class="font-semibold text-gray-900 dark:text-white mb-3">Riwayat Scan</h3>
                     <div class="space-y-2">
                         @foreach($allScans as $scan)
@@ -135,7 +135,7 @@
                 </div>
 
                 @if($log->simulation)
-                <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
+                <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-700 p-6">
                     <h3 class="font-semibold text-gray-900 dark:text-white mb-3">Experience</h3>
                     <a href="{{ route('simulations.show', $log->simulation->slug) }}" class="text-sm text-blue-600 dark:text-blue-400 hover:underline">{{ $log->simulation->title }}</a>
                     <div class="text-xs text-gray-400 dark:text-gray-500 mt-1">oleh {{ $log->simulation->user->name ?? 'N/A' }}</div>

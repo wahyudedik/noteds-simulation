@@ -8,22 +8,30 @@
         {{-- SEO Meta Tags --}}
         <title>{{ $seo['title'] }}</title>
         <meta name="description" content="{{ $seo['description'] }}">
+        @if($seo['meta_keywords'] ?? null)
+            <meta name="keywords" content="{{ $seo['meta_keywords'] }}">
+        @endif
         <meta name="robots" content="{{ $robots ?? 'index, follow' }}">
         <link rel="canonical" href="{{ $seo['url'] }}">
 
         {{-- Open Graph / Facebook --}}
         <meta property="og:type" content="{{ $seo['type'] }}">
         <meta property="og:url" content="{{ $seo['url'] }}">
-        <meta property="og:title" content="{{ $seo['title'] }}">
-        <meta property="og:description" content="{{ $seo['description'] }}">
-        <meta property="og:image" content="{{ $seo['image'] }}">
+        <meta property="og:title" content="{{ $seo['og_title'] ?? $seo['title'] }}">
+        <meta property="og:description" content="{{ $seo['og_description'] ?? $seo['description'] }}">
+        <meta property="og:image" content="{{ $seo['og_image'] ?? $seo['image'] }}">
         <meta property="og:site_name" content="{{ $seo['site_name'] }}">
 
         {{-- Twitter Card --}}
         <meta name="twitter:card" content="summary_large_image">
-        <meta name="twitter:title" content="{{ $seo['title'] }}">
-        <meta name="twitter:description" content="{{ $seo['description'] }}">
-        <meta name="twitter:image" content="{{ $seo['image'] }}">
+        <meta name="twitter:title" content="{{ $seo['og_title'] ?? $seo['title'] }}">
+        <meta name="twitter:description" content="{{ $seo['og_description'] ?? $seo['description'] }}">
+        <meta name="twitter:image" content="{{ $seo['og_image'] ?? $seo['image'] }}">
+
+        {{-- Structured Data (Schema.org JSON-LD) --}}
+        @if($seo['structured_data'] ?? null)
+            <script type="application/ld+json">{!! json_encode($seo['structured_data'], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) !!}</script>
+        @endif
 
         <link rel="icon" type="image/jpeg" href="{{ asset('favicon.jpeg') }}">
 

@@ -73,7 +73,7 @@
 
                 {{-- Previous Reports --}}
                 @if($previousReports->isNotEmpty())
-                    <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
+                    <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-700 p-6">
                         <h3 class="font-semibold text-gray-900 dark:text-white mb-4">Laporan Sebelumnya ({{ $previousReports->count() }})</h3>
                         <div class="space-y-3">
                             @foreach($previousReports as $prev)
@@ -134,7 +134,7 @@
                 </div>
 
                 {{-- Quick Actions --}}
-                <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
+                <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-700 p-6">
                     <h3 class="font-semibold text-gray-900 dark:text-white mb-3">Aksi Cepat</h3>
                     <div class="space-y-2">
                         <a href="{{ route('admin.simulations.show', $report->simulation) }}" class="block w-full text-center px-4 py-2.5 bg-gray-100 hover:bg-gray-200 text-gray-700 dark:text-gray-300 text-sm font-medium rounded-xl transition">

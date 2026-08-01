@@ -173,14 +173,15 @@
                         <div class="flex items-center gap-3">
                             @if($project->hasSimulation())
                                 <form
+                                    id="unpublish-form"
                                     action="{{ route('studio.builder.projects.unpublish', $project->slug) }}"
                                     method="POST"
-                                    onsubmit="return confirm('Unpublish this experience from the platform?')"
                                 >
                                     @csrf
                                     @method('POST')
                                     <button
-                                        type="submit"
+                                        type="button"
+                                        onclick="confirmSubmit(document.getElementById('unpublish-form'), 'Unpublish this experience from the platform?', { title: 'Unpublish', confirmText: 'Ya, Unpublish' })"
                                         class="px-4 py-2 text-sm font-medium text-red-700 dark:text-red-400 bg-red-50 dark:bg-red-900/20 hover:bg-red-100 dark:hover:bg-red-900/30 rounded-lg transition"
                                     >
                                         Unpublish

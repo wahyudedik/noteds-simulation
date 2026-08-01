@@ -19,6 +19,11 @@
     </x-slot>
 
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+        <x-breadcrumb :items="[
+            ['label' => 'Komunitas', 'url' => route('forum.index')],
+            ['label' => $category->name],
+        ]" />
+
         <div class="lg:grid lg:grid-cols-4 lg:gap-8">
             {{-- Main Content --}}
             <div class="lg:col-span-3">

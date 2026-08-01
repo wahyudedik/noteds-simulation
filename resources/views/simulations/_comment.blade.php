@@ -7,7 +7,7 @@
     $isCollapsed = $depth >= $maxDepth && $replies->count() > 0;
 @endphp
 
-<div class="comment-item" id="comment-{{ $comment->id }}" style="margin-left: {{ $depth * 24 }}px;" x-data="{ expanded: false }">
+<div class="comment-item" id="comment-{{ $comment->id }}" style="margin-left: {{ $depth * 16 }}px;" x-data="{ expanded: false }">
     <div class="flex gap-3 {{ $depth > 0 ? 'mt-3' : '' }}">
         <a href="{{ route('creators.show', $comment->user->username) }}" class="flex-shrink-0">
             <div class="w-8 h-8 rounded-full bg-gray-200 dark:bg-gray-700 flex items-center justify-center text-gray-600 dark:text-gray-300 text-xs font-semibold overflow-hidden">

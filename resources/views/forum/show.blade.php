@@ -36,6 +36,11 @@
     </x-slot>
 
     <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+        <x-breadcrumb :items="[
+            ['label' => 'Komunitas', 'url' => route('forum.index')],
+            ['label' => $thread->title],
+        ]" />
+
         {{-- Thread Content --}}
         <div class="bg-white rounded-xl border border-gray-100 dark:bg-gray-800 dark:border-gray-700 p-6">
             <div class="flex items-start gap-4">

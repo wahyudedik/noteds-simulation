@@ -8,6 +8,9 @@
 
     <div class="py-12">
         <div class="max-w-6xl mx-auto sm:px-6 lg:px-8">
+
+            <x-breadcrumb :items="[['label' => 'Collection Tersimpan']]" />
+
             <div class="flex items-center justify-between mb-8">
                 <div>
                     <p class="text-gray-500 dark:text-gray-400 text-sm mt-1">Collection yang Anda simpan dari pengguna lain</p>

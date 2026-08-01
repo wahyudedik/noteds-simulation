@@ -9,6 +9,8 @@
     <div class="py-12">
         <div class="max-w-2xl mx-auto sm:px-6 lg:px-8">
 
+            <x-breadcrumb :items="[['label' => 'Notifikasi']]" />
+
             <div class="flex items-center justify-between mb-6">
                 <div></div>
                 @if($notifications->count() > 0)

@@ -17,6 +17,8 @@
     </x-slot>
 
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+        <x-breadcrumb :items="[['label' => 'Komunitas']]" />
+
         <div class="lg:grid lg:grid-cols-4 lg:gap-8">
 
             {{-- Main Content --}}

@@ -1,42 +1,5 @@
-<!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="csrf-token" content="{{ csrf_token() }}">
-
-    {{-- SEO: use database settings if available, fallback to simulation attributes --}}
-    @php
-        $seoTitle = $seoSetting?->meta_title ?? ($simulation->title.' — '.config('app.name', 'Noteds'));
-        $seoDescription = $seoSetting?->meta_description ?? Str::limit(strip_tags($simulation->description ?? $simulation->title), 160);
-        $seoOgTitle = $seoSetting?->og_title ?? $simulation->title;
-        $seoOgDescription = $seoSetting?->og_description ?? Str::limit(strip_tags($simulation->description ?? $simulation->title), 200);
-        $seoOgImage = $seoSetting?->og_image ?? ($simulation->thumbnail ? Storage::disk('public')->url($simulation->thumbnail) : null);
-        $seoCanonical = $seoSetting?->canonical_url ?? route('simulations.show', $simulation->slug);
-    @endphp
-
-    <meta name="description" content="{{ $seoDescription }}">
-    @if($seoSetting?->meta_keywords)
-        <meta name="keywords" content="{{ $seoSetting->meta_keywords }}">
-    @endif
-    <meta property="og:title" content="{{ $seoOgTitle }}">
-    <meta property="og:description" content="{{ $seoOgDescription }}">
-    <meta property="og:type" content="website">
-    <meta property="og:url" content="{{ $seoCanonical }}">
-    @if($seoOgImage)
-        <meta property="og:image" content="{{ $seoOgImage }}">
-    @endif
-    <link rel="canonical" href="{{ $seoCanonical }}">
-    <title>{{ $seoTitle }}</title>
-
-    {{-- Structured Data (Schema.org JSON-LD) --}}
-    @if($seoSetting?->structured_data)
-        <script type="application/ld+json">{!! json_encode($seoSetting->structured_data, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) !!}</script>
-    @endif
-    <link rel="icon" type="image/jpeg" href="{{ asset('favicon.jpeg') }}">
-    <link rel="preconnect" href="https://fonts.bunny.net">
-    <link href="https://fonts.bunny.net/css?family=roboto:400,500,700&display=swap" rel="stylesheet" />
-    @vite(['resources/css/app.css', 'resources/js/app.js'])
+<x-app-layout>
+    {{-- Page-specific styles for simulation player --}}
     <style>
         .player-sticky-active {
             position: fixed;
@@ -44,7 +7,7 @@
             left: 0;
             right: 0;
             z-index: 50;
-            max-width: 900px;
+            max-width: min(900px, 100%);
             margin: 0 auto;
             box-shadow: 0 4px 24px rgba(0, 0, 0, 0.6);
             border-radius: 0 0 0.75rem 0.75rem;
@@ -90,10 +53,6 @@
         .comment-reply { display: none; }
         .comment-reply.show { display: block; }
     </style>
-</head>
-<body class="bg-gray-50 dark:bg-gray-900 font-sans antialiased">
-
-    @include('components.app-header')
 
     <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
         <x-breadcrumb :items="[['label' => $simulation->category, 'url' => route('simulations.category', $simulation->category)], ['label' => $simulation->title]]" />
@@ -571,7 +530,7 @@
                 <div class="space-y-3">
                     @forelse($related as $rel)
                         <a href="{{ route('simulations.show', $rel->slug) }}" class="flex gap-3 group">
-                            <div class="w-40 aspect-video bg-gray-100 dark:bg-gray-700 rounded-lg overflow-hidden flex-shrink-0">
+                            <div class="w-28 sm:w-36 lg:w-40 aspect-video bg-gray-100 dark:bg-gray-700 rounded-lg overflow-hidden flex-shrink-0">
                                 @if($rel->thumbnail)
                                     <img src="{{ Storage::disk('public')->url($rel->thumbnail) }}" alt="{{ $rel->title }}" class="w-full h-full object-cover" />
                                 @else
@@ -599,6 +558,7 @@
         </div>
     </main>
 
+    @push('scripts')
     <script>
         // ========== Player Controls ==========
         var isPlaying = false;
@@ -928,21 +888,6 @@
         }
 
     </script>
+    @endpush
 
-    <x-app-footer />
-
-    {{-- Back to Top Button --}}
-    <div x-data="{ show: false }" x-init="window.addEventListener('scroll', () => { show = window.scrollY > 300 })"
-         x-show="show" x-transition
-         class="fixed bottom-6 right-6 z-50">
-        <button @click="window.scrollTo({ top: 0, behavior: 'smooth' })"
-                class="w-10 h-10 bg-blue-600 hover:bg-blue-700 text-white rounded-full shadow-lg flex items-center justify-center transition">
-            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7"/></svg>
-        </button>
-    </div>
-
-    <x-toast />
-
-    <x-whatsapp-contact />
-</body>
-</html>
+</x-app-layout>

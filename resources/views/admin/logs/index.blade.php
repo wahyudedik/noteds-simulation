@@ -35,39 +35,39 @@
 
         {{-- Stats Grid --}}
         <div class="grid grid-cols-3 md:grid-cols-5 lg:grid-cols-9 gap-3 mb-6">
-            <div class="bg-white rounded-xl border border-gray-100 p-3 text-center shadow-sm">
+            <div class="bg-white dark:bg-gray-800 rounded-xl border border-gray-100 dark:border-gray-700 p-3 text-center shadow-sm">
                 <div class="text-xl font-bold text-gray-900 dark:text-white">{{ $stats['total'] }}</div>
                 <div class="text-xs text-gray-500 dark:text-gray-400">Total</div>
             </div>
-            <div class="bg-white rounded-xl border border-gray-100 p-3 text-center shadow-sm">
+            <div class="bg-white dark:bg-gray-800 rounded-xl border border-gray-100 dark:border-gray-700 p-3 text-center shadow-sm">
                 <div class="text-xl font-bold text-red-600 dark:text-red-400">{{ $stats['error'] }}</div>
                 <div class="text-xs text-gray-500 dark:text-gray-400">Error</div>
             </div>
-            <div class="bg-white rounded-xl border border-gray-100 p-3 text-center shadow-sm">
-                <div class="text-xl font-bold text-red-800">{{ $stats['critical'] }}</div>
+            <div class="bg-white dark:bg-gray-800 rounded-xl border border-gray-100 dark:border-gray-700 p-3 text-center shadow-sm">
+                <div class="text-xl font-bold text-red-800 dark:text-red-300">{{ $stats['critical'] }}</div>
                 <div class="text-xs text-gray-500 dark:text-gray-400">Critical</div>
             </div>
-            <div class="bg-white rounded-xl border border-gray-100 p-3 text-center shadow-sm">
-                <div class="text-xl font-bold text-red-900">{{ $stats['emergency'] }}</div>
+            <div class="bg-white dark:bg-gray-800 rounded-xl border border-gray-100 dark:border-gray-700 p-3 text-center shadow-sm">
+                <div class="text-xl font-bold text-red-900 dark:text-red-300">{{ $stats['emergency'] }}</div>
                 <div class="text-xs text-gray-500 dark:text-gray-400">Emergency</div>
             </div>
-            <div class="bg-white rounded-xl border border-gray-100 p-3 text-center shadow-sm">
+            <div class="bg-white dark:bg-gray-800 rounded-xl border border-gray-100 dark:border-gray-700 p-3 text-center shadow-sm">
                 <div class="text-xl font-bold text-pink-600 dark:text-pink-400">{{ $stats['alert'] }}</div>
                 <div class="text-xs text-gray-500 dark:text-gray-400">Alert</div>
             </div>
-            <div class="bg-white rounded-xl border border-gray-100 p-3 text-center shadow-sm">
+            <div class="bg-white dark:bg-gray-800 rounded-xl border border-gray-100 dark:border-gray-700 p-3 text-center shadow-sm">
                 <div class="text-xl font-bold text-yellow-600 dark:text-yellow-400">{{ $stats['warning'] }}</div>
                 <div class="text-xs text-gray-500 dark:text-gray-400">Warning</div>
             </div>
-            <div class="bg-white rounded-xl border border-gray-100 p-3 text-center shadow-sm">
+            <div class="bg-white dark:bg-gray-800 rounded-xl border border-gray-100 dark:border-gray-700 p-3 text-center shadow-sm">
                 <div class="text-xl font-bold text-blue-600 dark:text-blue-400">{{ $stats['notice'] }}</div>
                 <div class="text-xs text-gray-500 dark:text-gray-400">Notice</div>
             </div>
-            <div class="bg-white rounded-xl border border-gray-100 p-3 text-center shadow-sm">
+            <div class="bg-white dark:bg-gray-800 rounded-xl border border-gray-100 dark:border-gray-700 p-3 text-center shadow-sm">
                 <div class="text-xl font-bold text-green-600 dark:text-green-400">{{ $stats['info'] }}</div>
                 <div class="text-xs text-gray-500 dark:text-gray-400">Info</div>
             </div>
-            <div class="bg-white rounded-xl border border-gray-100 p-3 text-center shadow-sm">
+            <div class="bg-white dark:bg-gray-800 rounded-xl border border-gray-100 dark:border-gray-700 p-3 text-center shadow-sm">
                 <div class="text-xl font-bold text-gray-400 dark:text-gray-500">{{ $stats['debug'] }}</div>
                 <div class="text-xs text-gray-500 dark:text-gray-400">Debug</div>
             </div>
@@ -120,7 +120,7 @@
         </div>
 
         {{-- Log Entries --}}
-        <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
+        <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-700 overflow-hidden">
             @if(count($entries) > 0)
                 <table class="w-full">
                     <thead>

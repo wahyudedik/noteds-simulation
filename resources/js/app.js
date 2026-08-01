@@ -231,3 +231,45 @@ window.confirmSubmit = function (form, message, options) {
         }
     });
 };
+
+// ─── Keyboard Shortcuts ────────────────────────────────────────────────────────
+
+document.addEventListener('keydown', function (e) {
+    // Don't trigger shortcuts when typing in inputs/textareas/selects
+    var tag = (e.target.tagName || '').toLowerCase();
+    if (tag === 'input' || tag === 'textarea' || tag === 'select' || e.target.isContentEditable) {
+        return;
+    }
+
+    // "/" — Focus search bar
+    if (e.key === '/' && !e.ctrlKey && !e.metaKey && !e.altKey) {
+        e.preventDefault();
+        var searchInput = document.querySelector('header input[type="search"], header input[x-model="searchQuery"], nav input[type="search"]');
+        if (searchInput) {
+            searchInput.focus();
+        }
+    }
+
+    // "Escape" — Close open modals, dropdowns, and search overlays
+    if (e.key === 'Escape') {
+        // Close any open confirm modal
+        var confirmOverlay = document.querySelector('.confirm-modal-overlay');
+        if (confirmOverlay) {
+            confirmOverlay.querySelector('.confirm-modal-cancel')?.click();
+            return;
+        }
+
+        // Close Alpine.js open dropdowns by dispatching click.outside
+        document.querySelectorAll('[x-data]').forEach(function (el) {
+            var data = el.__x;
+            if (data && data.$data) {
+                // Reset common open states
+                ['open', 'shareOpen', 'collectionOpen', 'searchOpen', 'filterOpen'].forEach(function (key) {
+                    if (data.$data[key] === true) {
+                        data.$data[key] = false;
+                    }
+                });
+            }
+        });
+    }
+});

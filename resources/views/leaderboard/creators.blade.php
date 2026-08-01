@@ -13,6 +13,11 @@
     <div class="py-12">
         <div class="max-w-5xl mx-auto sm:px-6 lg:px-8">
 
+            <x-breadcrumb :items="[
+                ['label' => 'Leaderboard', 'url' => route('leaderboard.index')],
+                ['label' => 'Top Creators'],
+            ]" />
+
             {{-- Period Tabs --}}
             <div class="flex flex-wrap items-center gap-2 mb-4">
                 @foreach(['all' => 'Semua Waktu', 'month' => 'Bulan Ini', 'week' => 'Minggu Ini'] as $key => $label)

@@ -8,6 +8,8 @@
     <div class="py-12">
         <div class="max-w-4xl mx-auto sm:px-6 lg:px-8">
 
+            <x-breadcrumb :items="[['label' => 'Leaderboard']]" />
+
             {{-- Leaderboard Type Tabs --}}
             <div class="flex items-center justify-between mb-6">
                 <div class="flex items-center gap-2">

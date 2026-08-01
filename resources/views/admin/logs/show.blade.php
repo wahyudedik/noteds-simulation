@@ -5,7 +5,7 @@
                 <a href="{{ route('admin.logs.index') }}" class="text-gray-400 dark:text-gray-500 hover:text-gray-600 dark:text-gray-400 transition">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/></svg>
                 </a>
-                <h2 class="font-semibold text-xl text-gray-800">Error Log #{{ $entryId }}</h2>
+                <h2 class="font-semibold text-xl text-gray-800 dark:text-white">Error Log #{{ $entryId }}</h2>
             </div>
             <div class="flex items-center gap-3">
                 <button
@@ -22,7 +22,7 @@
     <div class="py-8 max-w-4xl mx-auto px-4 sm:px-6">
 
         {{-- Entry Info --}}
-        <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 mb-6">
+        <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-700 p-6 mb-6">
             <h3 class="font-semibold text-gray-900 dark:text-white mb-4">Detail Error</h3>
             <dl class="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
                 <div>
@@ -60,7 +60,7 @@
         </div>
 
         {{-- Error Message --}}
-        <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 mb-6">
+        <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-700 p-6 mb-6">
             <div class="flex items-center justify-between mb-4">
                 <h3 class="font-semibold text-gray-900 dark:text-white">Pesan Error</h3>
                 <button onclick="copySection('message')" class="inline-flex items-center gap-1 px-2 py-1 text-xs font-medium text-orange-600 dark:text-orange-400 hover:bg-orange-50 rounded-lg transition">
@@ -73,7 +73,7 @@
 
         {{-- Context --}}
         @if($entry['context'])
-            <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 mb-6">
+            <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-700 p-6 mb-6">
                 <div class="flex items-center justify-between mb-4">
                     <h3 class="font-semibold text-gray-900 dark:text-white">Context</h3>
                     <button onclick="copySection('context')" class="inline-flex items-center gap-1 px-2 py-1 text-xs font-medium text-orange-600 dark:text-orange-400 hover:bg-orange-50 rounded-lg transition">
@@ -87,7 +87,7 @@
 
         {{-- Stack Trace --}}
         @if($entry['stackTrace'])
-            <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 mb-6">
+            <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-700 p-6 mb-6">
                 <div class="flex items-center justify-between mb-4">
                     <h3 class="font-semibold text-gray-900 dark:text-white">Stack Trace</h3>
                     <button onclick="copySection('stackTrace')" class="inline-flex items-center gap-1 px-2 py-1 text-xs font-medium text-orange-600 dark:text-orange-400 hover:bg-orange-50 rounded-lg transition">
@@ -102,7 +102,7 @@
         @endif
 
         {{-- Raw Entry --}}
-        <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
+        <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-700 p-6">
             <div class="flex items-center justify-between mb-4">
                 <h3 class="font-semibold text-gray-900 dark:text-white">Raw Entry (untuk AI)</h3>
                 <button onclick="copyEntry()" class="inline-flex items-center gap-1 px-2 py-1 text-xs font-medium text-orange-600 dark:text-orange-400 hover:bg-orange-50 rounded-lg transition">
