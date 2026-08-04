@@ -2,14 +2,59 @@
     $robots = 'noindex, nofollow';
 @endphp
 
-<x-app-layout>
+<x-app-layout x-data="{ loading: true }" x-init="setTimeout(() => loading = false, 500)">
     <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
 
+        {{-- Loading Skeleton --}}
+        <template x-if="loading">
+            <div class="space-y-6">
+                {{-- Profile Header Skeleton --}}
+                <div class="bg-white dark:bg-gray-800 rounded-2xl p-6 sm:p-8 shadow-sm border border-gray-100 dark:border-gray-700">
+                    <div class="flex flex-col sm:flex-row items-center sm:items-start gap-6">
+                        <div class="w-24 h-24 rounded-full bg-gray-200 dark:bg-gray-700 animate-pulse shrink-0"></div>
+                        <div class="flex-1 text-center sm:text-left space-y-3">
+                            <div class="h-7 bg-gray-200 dark:bg-gray-700 rounded w-48 mx-auto sm:mx-0 animate-pulse"></div>
+                            <div class="h-4 bg-gray-200 dark:bg-gray-700 rounded w-64 mx-auto sm:mx-0 animate-pulse"></div>
+                            <div class="h-3 bg-gray-200 dark:bg-gray-700 rounded w-32 mx-auto sm:mx-0 animate-pulse"></div>
+                            <div class="flex gap-6 mt-4 justify-center sm:justify-start">
+                                @for($i = 0; $i < 4; $i++)
+                                    <div class="text-center">
+                                        <div class="h-6 bg-gray-200 dark:bg-gray-700 rounded w-10 mx-auto animate-pulse mb-1"></div>
+                                        <div class="h-3 bg-gray-200 dark:bg-gray-700 rounded w-14 animate-pulse"></div>
+                                    </div>
+                                @endfor
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {{-- Tabs Skeleton --}}
+                <div class="border-b border-gray-200 dark:border-gray-700">
+                    <div class="flex gap-1">
+                        @for($i = 0; $i < 5; $i++)
+                            <div class="h-10 bg-gray-200 dark:bg-gray-700 rounded w-24 animate-pulse"></div>
+                        @endfor
+                    </div>
+                </div>
+                {{-- Content Skeleton --}}
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                    @for($i = 0; $i < 6; $i++)
+                        <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 overflow-hidden">
+                            <div class="aspect-video bg-gray-200 dark:bg-gray-700 animate-pulse"></div>
+                            <div class="p-4 space-y-2">
+                                <div class="h-4 bg-gray-200 dark:bg-gray-700 rounded w-3/4 animate-pulse"></div>
+                                <div class="h-3 bg-gray-200 dark:bg-gray-700 rounded w-1/2 animate-pulse"></div>
+                            </div>
+                        </div>
+                    @endfor
+                </div>
+            </div>
+        </template>
+
         {{-- Profile Header --}}
-        <div class="bg-white dark:bg-gray-800 rounded-2xl p-6 sm:p-8 shadow-sm border border-gray-100 dark:border-gray-700">
+        <div x-show="!loading" x-transition class="bg-white dark:bg-gray-800 rounded-2xl p-6 sm:p-8 shadow-sm border border-gray-100 dark:border-gray-700">
             <div class="flex flex-col sm:flex-row items-center sm:items-start gap-6">
                 {{-- Avatar --}}
-                <div class="w-24 h-24 rounded-full bg-blue-100 dark:bg-blue-900/50 flex items-center justify-center text-blue-600 dark:text-blue-400 text-3xl font-bold overflow-hidden flex-shrink-0">
+                <div class="w-20 h-20 sm:w-24 sm:h-24 rounded-full bg-blue-100 dark:bg-blue-900/50 flex items-center justify-center text-blue-600 dark:text-blue-400 text-2xl sm:text-3xl font-bold overflow-hidden flex-shrink-0">
                     @if($user->avatar)
                         <img src="{{ Storage::disk('public')->url($user->avatar) }}" alt="{{ $user->name }}" class="w-full h-full object-cover" />
                     @else
@@ -61,7 +106,7 @@
         </div>
 
         {{-- Tabs --}}
-        <div class="mt-8">
+        <div x-show="!loading" x-transition class="mt-8">
             <div class="border-b border-gray-200 dark:border-gray-700">
                 <nav class="flex gap-1 -mb-px overflow-x-auto">
                     <a href="{{ route('user-profile.index') }}"

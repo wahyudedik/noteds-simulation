@@ -1,4 +1,4 @@
-<x-app-layout>
+<x-app-layout x-data="{ loading: true }" x-init="setTimeout(() => loading = false, 600)">
     <x-slot name="header">
         <div class="flex items-center justify-between">
             <div>
@@ -13,9 +13,60 @@
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 space-y-6">
 
+            {{-- Loading Skeleton --}}
+            <template x-if="loading">
+                <div class="space-y-6">
+                    {{-- Profile Card Skeleton --}}
+                    <div class="bg-white dark:bg-gray-800 shadow-sm border border-gray-100 dark:border-gray-700 rounded-xl p-6">
+                        <div class="flex items-center gap-5">
+                            <div class="w-16 h-16 rounded-full bg-gray-200 dark:bg-gray-700 animate-pulse"></div>
+                            <div class="flex-1 space-y-2">
+                                <div class="h-5 bg-gray-200 dark:bg-gray-700 rounded w-40 animate-pulse"></div>
+                                <div class="h-4 bg-gray-200 dark:bg-gray-700 rounded w-56 animate-pulse"></div>
+                                <div class="h-3 bg-gray-200 dark:bg-gray-700 rounded w-32 animate-pulse"></div>
+                            </div>
+                        </div>
+                    </div>
+                    {{-- Stats Skeleton --}}
+                    <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
+                        @for($i = 0; $i < 6; $i++)
+                            <div class="bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700 shadow-sm rounded-xl p-4 text-center">
+                                <div class="h-7 bg-gray-200 dark:bg-gray-700 rounded w-12 mx-auto animate-pulse mb-2"></div>
+                                <div class="h-3 bg-gray-200 dark:bg-gray-700 rounded w-16 mx-auto animate-pulse"></div>
+                            </div>
+                        @endfor
+                    </div>
+                    {{-- Level Card Skeleton --}}
+                    <div class="bg-gradient-to-r from-blue-600/50 to-purple-600/50 rounded-xl p-5 animate-pulse">
+                        <div class="flex items-center gap-4">
+                            <div class="w-14 h-14 rounded-full bg-white/20"></div>
+                            <div class="space-y-2">
+                                <div class="h-5 bg-white/20 rounded w-32"></div>
+                                <div class="h-3 bg-white/20 rounded w-24"></div>
+                            </div>
+                        </div>
+                        <div class="mt-4 h-2 bg-white/20 rounded-full"></div>
+                    </div>
+                    {{-- Quick Actions Skeleton --}}
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                        @for($i = 0; $i < 3; $i++)
+                            <div class="bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700 shadow-sm rounded-xl p-4">
+                                <div class="flex items-center gap-3">
+                                    <div class="w-10 h-10 rounded-lg bg-gray-200 dark:bg-gray-700 animate-pulse"></div>
+                                    <div class="space-y-2 flex-1">
+                                        <div class="h-4 bg-gray-200 dark:bg-gray-700 rounded w-24 animate-pulse"></div>
+                                        <div class="h-3 bg-gray-200 dark:bg-gray-700 rounded w-32 animate-pulse"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        @endfor
+                    </div>
+                </div>
+            </template>
+
             {{-- Profile Card --}}
-            <div class="bg-white dark:bg-gray-800 shadow-sm border border-gray-100 dark:border-gray-700 rounded-xl p-6">
-                <div class="flex items-center gap-5">
+            <div x-show="!loading" x-transition class="bg-white dark:bg-gray-800 shadow-sm border border-gray-100 dark:border-gray-700 rounded-xl p-4 sm:p-6">
+                <div class="flex flex-col sm:flex-row items-center sm:items-center gap-4 sm:gap-5">
                     @if(auth()->user()->avatar)
                         <img src="{{ Storage::disk('public')->url(auth()->user()->avatar) }}" alt="{{ auth()->user()->name }}" class="w-16 h-16 rounded-full object-cover" />
                     @else
@@ -140,7 +191,7 @@
             @endif
 
             {{-- Stats Cards --}}
-            <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
+            <div x-show="!loading" x-transition class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
                 <div class="bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700 shadow-sm rounded-xl p-4 text-center">
                     <div class="text-2xl font-bold text-gray-900 dark:text-white">{{ $stats['bookmarks'] }}</div>
                     <div class="text-xs text-gray-500 dark:text-gray-400 mt-1">Bookmark</div>
@@ -168,18 +219,18 @@
             </div>
 
             {{-- Level & Points Card --}}
-            <div class="bg-gradient-to-r from-blue-600 to-purple-600 rounded-xl p-5 text-white shadow-sm">
-                <div class="flex items-center justify-between">
+            <div x-show="!loading" x-transition class="bg-gradient-to-r from-blue-600 to-purple-600 rounded-xl p-4 sm:p-5 text-white shadow-sm">
+                <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
                     <div class="flex items-center gap-4">
-                        <div class="w-14 h-14 rounded-full bg-white/20 flex items-center justify-center text-2xl font-bold">
+                        <div class="w-12 h-12 sm:w-14 sm:h-14 rounded-full bg-white/20 flex items-center justify-center text-xl sm:text-2xl font-bold shrink-0">
                             {{ $levelProgress['current_level'] }}
                         </div>
                         <div>
-                            <h3 class="text-lg font-semibold">{{ $levelProgress['title'] }}</h3>
+                            <h3 class="text-base sm:text-lg font-semibold">{{ $levelProgress['title'] }}</h3>
                             <p class="text-sm text-blue-100">{{ number_format($levelProgress['current_points']) }} poin total</p>
                         </div>
                     </div>
-                    <a href="{{ route('leaderboard.index') }}" class="px-4 py-2 bg-white/20 hover:bg-white/30 text-white text-sm font-medium rounded-lg transition">
+                    <a href="{{ route('leaderboard.index') }}" class="px-4 py-2 bg-white/20 hover:bg-white/30 text-white text-sm font-medium rounded-lg transition text-center sm:text-left">
                         #1 Leaderboard
                     </a>
                 </div>
@@ -202,7 +253,7 @@
             </div>
 
             {{-- Quick Actions --}}
-            <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+            <div x-show="!loading" x-transition class="grid grid-cols-1 sm:grid-cols-3 gap-4">
                 <a href="{{ route('profile.edit') }}" class="flex items-center gap-3 bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700 shadow-sm rounded-xl p-4 hover:shadow-md transition">
                     <div class="w-10 h-10 rounded-lg bg-blue-100 dark:bg-blue-900/50 text-blue-600 dark:text-blue-400 flex items-center justify-center">
                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg>
@@ -234,7 +285,7 @@
 
             {{-- Recent Bookmarks --}}
             @if($recent_bookmarks->count() > 0)
-            <div class="bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700 shadow-sm rounded-xl p-6">
+            <div x-show="!loading" x-transition class="bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700 shadow-sm rounded-xl p-4 sm:p-6">
                 <h3 class="text-base font-semibold text-gray-900 dark:text-white mb-4">Bookmark Terbaru</h3>
                 <div class="space-y-3">
                     @foreach($recent_bookmarks as $sim)
@@ -262,7 +313,7 @@
 
             {{-- Recent History --}}
             @if($recent_history->count() > 0)
-            <div class="bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700 shadow-sm rounded-xl p-6">
+            <div x-show="!loading" x-transition class="bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700 shadow-sm rounded-xl p-4 sm:p-6">
                 <h3 class="text-base font-semibold text-gray-900 dark:text-white mb-4">Riwayat Terbaru</h3>
                 <div class="space-y-3">
                     @foreach($recent_history as $sim)
@@ -290,7 +341,7 @@
 
             {{-- Empty State --}}
             @if($stats['bookmarks'] === 0 && $stats['simulations_played'] === 0)
-            <div class="bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700 shadow-sm rounded-xl p-8 text-center">
+            <div x-show="!loading" x-transition class="bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700 shadow-sm rounded-xl p-6 sm:p-8 text-center">
                 <svg class="w-12 h-12 mx-auto text-gray-300 dark:text-gray-600 mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z"/></svg>
                 <h3 class="text-base font-semibold text-gray-700 dark:text-gray-300 mb-1">Mulai Menjelajahi</h3>
                 <p class="text-sm text-gray-500 dark:text-gray-400 mb-4">Jelajahi interactive experience dan mulai belajar!</p>

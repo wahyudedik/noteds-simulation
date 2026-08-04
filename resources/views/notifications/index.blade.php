@@ -1,4 +1,4 @@
-<x-app-layout>
+<x-app-layout x-data="{ loading: true }" x-init="setTimeout(() => loading = false, 500)">
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 dark:text-white leading-tight">
             <svg class="inline w-5 h-5 mr-1 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" /></svg>
@@ -6,7 +6,34 @@
         </h2>
     </x-slot>
 
-    <div class="py-12">
+    {{-- Loading Skeleton --}}
+    <template x-if="loading">
+        <div class="py-12">
+            <div class="max-w-2xl mx-auto sm:px-6 lg:px-8">
+                <div class="mb-6"><div class="h-4 bg-gray-200 dark:bg-gray-700 rounded w-20 animate-pulse"></div></div>
+                <div class="flex items-center justify-between mb-6">
+                    <div></div>
+                    <div class="h-4 bg-gray-200 dark:bg-gray-700 rounded w-40 animate-pulse"></div>
+                </div>
+                <div class="space-y-2">
+                    @foreach(range(1, 5) as $i)
+                        <div class="p-4 rounded-xl bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700">
+                            <div class="flex items-start gap-3">
+                                <div class="w-10 h-10 rounded-full bg-gray-200 dark:bg-gray-700 animate-pulse flex-shrink-0"></div>
+                                <div class="flex-1 space-y-2">
+                                    <div class="h-3.5 bg-gray-200 dark:bg-gray-700 rounded animate-pulse w-3/4"></div>
+                                    <div class="h-3 bg-gray-200 dark:bg-gray-700 rounded animate-pulse w-full"></div>
+                                    <div class="h-2.5 bg-gray-200 dark:bg-gray-700 rounded animate-pulse w-16"></div>
+                                </div>
+                            </div>
+                        </div>
+                    @endforeach
+                </div>
+            </div>
+        </div>
+    </template>
+
+    <div class="py-12" x-show="!loading" x-transition>
         <div class="max-w-2xl mx-auto sm:px-6 lg:px-8">
 
             <x-breadcrumb :items="[['label' => 'Notifikasi']]" />

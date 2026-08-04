@@ -74,9 +74,9 @@
         {{-- Terms --}}
         <p class="mt-4 text-xs text-gray-500 dark:text-gray-400">
             Dengan mendaftar, Anda menyetujui
-            <a href="#" class="text-blue-600 dark:text-blue-400 hover:underline">Syarat & Ketentuan</a>
+            <a href="{{ route('terms-of-service') }}" target="_blank" class="text-blue-600 dark:text-blue-400 hover:underline">Syarat & Ketentuan</a>
             dan
-            <a href="#" class="text-blue-600 dark:text-blue-400 hover:underline">Kebijakan Privasi</a>
+            <a href="{{ route('privacy-policy') }}" target="_blank" class="text-blue-600 dark:text-blue-400 hover:underline">Kebijakan Privasi</a>
             kami.
         </p>
 

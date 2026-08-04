@@ -1,4 +1,4 @@
-<x-app-layout>
+<x-app-layout x-data="{ loading: true }" x-init="setTimeout(() => loading = false, 500)">
     <x-slot name="header">
         <div class="max-w-7xl mx-auto py-4 px-4 sm:px-6 lg:px-8">
             <div class="flex items-center justify-between">
@@ -16,7 +16,65 @@
         </div>
     </x-slot>
 
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+    {{-- Loading Skeleton --}}
+    <template x-if="loading">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+            <div class="mb-6"><div class="h-4 bg-gray-200 dark:bg-gray-700 rounded w-24 animate-pulse"></div></div>
+            <div class="lg:grid lg:grid-cols-4 lg:gap-8">
+                <div class="lg:col-span-3">
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4 mb-6">
+                        @foreach(range(1, 3) as $i)
+                            <div class="bg-white dark:bg-gray-800 rounded-xl border border-gray-100 dark:border-gray-700 p-4 text-center">
+                                <div class="h-7 bg-gray-200 dark:bg-gray-700 rounded animate-pulse w-12 mx-auto mb-2"></div>
+                                <div class="h-3 bg-gray-200 dark:bg-gray-700 rounded animate-pulse w-16 mx-auto"></div>
+                            </div>
+                        @endforeach
+                    </div>
+                    <div class="bg-white dark:bg-gray-800 rounded-xl border border-gray-100 dark:border-gray-700 p-1 mb-6">
+                        <div class="flex gap-1">
+                            @foreach(range(1, 3) as $i)
+                                <div class="flex-1 h-9 bg-gray-200 dark:bg-gray-700 rounded-lg animate-pulse"></div>
+                            @endforeach
+                        </div>
+                    </div>
+                    <div class="space-y-3">
+                        @foreach(range(1, 4) as $i)
+                            <div class="bg-white dark:bg-gray-800 rounded-xl border border-gray-100 dark:border-gray-700 p-4">
+                                <div class="flex items-start gap-3">
+                                    <div class="w-10 h-10 rounded-full bg-gray-200 dark:bg-gray-700 animate-pulse flex-shrink-0"></div>
+                                    <div class="flex-1 space-y-2">
+                                        <div class="h-4 bg-gray-200 dark:bg-gray-700 rounded animate-pulse w-3/4"></div>
+                                        <div class="h-3 bg-gray-200 dark:bg-gray-700 rounded animate-pulse w-full"></div>
+                                        <div class="flex gap-4 mt-2">
+                                            <div class="h-2.5 bg-gray-200 dark:bg-gray-700 rounded animate-pulse w-16"></div>
+                                            <div class="h-2.5 bg-gray-200 dark:bg-gray-700 rounded animate-pulse w-12"></div>
+                                            <div class="h-2.5 bg-gray-200 dark:bg-gray-700 rounded animate-pulse w-14"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        @endforeach
+                    </div>
+                </div>
+                <div class="mt-8 lg:mt-0 space-y-4">
+                    <div class="bg-white dark:bg-gray-800 rounded-xl border border-gray-100 dark:border-gray-700 p-5">
+                        <div class="h-4 bg-gray-200 dark:bg-gray-700 rounded animate-pulse w-20 mb-3"></div>
+                        <div class="space-y-2">
+                            @foreach(range(1, 4) as $i)
+                                <div class="flex items-center gap-3">
+                                    <div class="w-3 h-3 rounded-full bg-gray-200 dark:bg-gray-700 animate-pulse"></div>
+                                    <div class="h-3 bg-gray-200 dark:bg-gray-700 rounded animate-pulse flex-1"></div>
+                                    <div class="h-3 bg-gray-200 dark:bg-gray-700 rounded animate-pulse w-6"></div>
+                                </div>
+                            @endforeach
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </template>
+
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6" x-show="!loading" x-transition>
         <x-breadcrumb :items="[['label' => 'Komunitas']]" />
 
         <div class="lg:grid lg:grid-cols-4 lg:gap-8">

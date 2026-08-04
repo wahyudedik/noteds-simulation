@@ -95,7 +95,7 @@
                 @endif
             </section>
         @else
-            <div x-data="{ loading: true }" x-init="$nextTick(() => loading = false, 500)">
+            <div x-data="{ loading: true }" x-init="setTimeout(() => loading = false, 500)">
                 {{-- Skeleton Loading --}}
                 <template x-if="loading">
                     <div>
