@@ -91,18 +91,18 @@
                     </div>
 
                     {{-- Player Control Bar --}}
-                    <div id="player-controls" class="hidden bg-gray-800 border-t border-gray-700 px-3 py-2 flex items-center justify-between rounded-b-xl">
-                        <div class="flex items-center gap-2">
-                            <button onclick="closeSimulation()" class="p-1.5 text-gray-300 hover:text-white rounded-lg hover:bg-gray-700 transition" title="Tutup experience">
+                    <div id="player-controls" class="hidden bg-gray-800 border-t border-gray-700 px-2 sm:px-3 py-1.5 sm:py-2 flex items-center justify-between rounded-b-xl">
+                        <div class="flex items-center gap-1 sm:gap-2">
+                            <button onclick="closeSimulation()" class="min-w-[44px] min-h-[44px] flex items-center justify-center p-1.5 text-gray-300 hover:text-white rounded-lg hover:bg-gray-700 transition" title="Tutup experience">
                                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
                             </button>
-                            <button onclick="reloadSimulation()" class="p-1.5 text-gray-300 hover:text-white rounded-lg hover:bg-gray-700 transition" title="Muat ulang">
+                            <button onclick="reloadSimulation()" class="min-w-[44px] min-h-[44px] flex items-center justify-center p-1.5 text-gray-300 hover:text-white rounded-lg hover:bg-gray-700 transition" title="Muat ulang">
                                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" /></svg>
                             </button>
                         </div>
-                        <div class="flex items-center gap-1">
+                        <div class="flex items-center gap-0.5 sm:gap-1">
                             <span class="text-xs text-gray-300 mr-2 hidden sm:inline">{{ $simulation->title }}</span>
-                            <button onclick="toggleFullscreen()" id="btn-fullscreen" class="p-1.5 text-gray-300 hover:text-white rounded-lg hover:bg-gray-700 transition" title="Layar penuh">
+                            <button onclick="toggleFullscreen()" id="btn-fullscreen" class="min-w-[44px] min-h-[44px] flex items-center justify-center p-1.5 text-gray-300 hover:text-white rounded-lg hover:bg-gray-700 transition" title="Layar penuh">
                                 <svg id="icon-fullscreen-enter" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4" /></svg>
                                 <svg id="icon-fullscreen-exit" class="w-5 h-5 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 9V4.5M9 9H4.5M9 9L3.75 3.75M9 15v4.5M9 15H4.5M9 15l-5.25 5.25M15 9h4.5M15 9V4.5M15 9l5.25-5.25M15 15h4.5M15 15v4.5m0-4.5l5.25 5.25" /></svg>
                             </button>

@@ -1,4 +1,4 @@
-<x-app-layout>
+<x-app-layout x-data="{ loading: true }" x-init="setTimeout(() => loading = false, 500)">
     <x-slot name="header">
         <div class="flex items-center justify-between">
             <h2 class="font-semibold text-xl text-gray-800 dark:text-white leading-tight">
@@ -10,7 +10,41 @@
         </div>
     </x-slot>
 
-    <div class="py-12">
+    {{-- Loading Skeleton --}}
+    <template x-if="loading">
+        <div class="py-12">
+            <div class="max-w-5xl mx-auto sm:px-6 lg:px-8">
+                <div class="mb-4"><div class="h-4 bg-gray-200 dark:bg-gray-700 rounded w-32 animate-pulse"></div></div>
+                <div class="flex gap-2 mb-4">
+                    <div class="h-9 bg-gray-200 dark:bg-gray-700 rounded-lg w-28 animate-pulse"></div>
+                    <div class="h-9 bg-gray-200 dark:bg-gray-700 rounded-lg w-24 animate-pulse"></div>
+                    <div class="h-9 bg-gray-200 dark:bg-gray-700 rounded-lg w-28 animate-pulse"></div>
+                </div>
+                <div class="flex gap-2 mb-8">
+                    <div class="h-7 bg-gray-200 dark:bg-gray-700 rounded-full w-20 animate-pulse"></div>
+                    <div class="h-7 bg-gray-200 dark:bg-gray-700 rounded-full w-24 animate-pulse"></div>
+                    <div class="h-7 bg-gray-200 dark:bg-gray-700 rounded-full w-28 animate-pulse"></div>
+                    <div class="h-7 bg-gray-200 dark:bg-gray-700 rounded-full w-20 animate-pulse"></div>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                    @for($i = 0; $i < 6; $i++)
+                        <div class="bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700 rounded-xl p-5 shadow-sm animate-pulse">
+                            <div class="flex items-center gap-4">
+                                <div class="w-14 h-14 rounded-full bg-gray-200 dark:bg-gray-700"></div>
+                                <div class="flex-1 space-y-2">
+                                    <div class="h-4 bg-gray-200 dark:bg-gray-700 rounded w-32"></div>
+                                    <div class="h-3 bg-gray-200 dark:bg-gray-700 rounded w-24"></div>
+                                    <div class="h-3 bg-gray-200 dark:bg-gray-700 rounded w-20"></div>
+                                </div>
+                            </div>
+                        </div>
+                    @endfor
+                </div>
+            </div>
+        </div>
+    </template>
+
+    <div class="py-12" x-show="!loading" x-transition>
         <div class="max-w-5xl mx-auto sm:px-6 lg:px-8">
 
             <x-breadcrumb :items="[

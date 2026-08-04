@@ -1,5 +1,5 @@
 @php
-    $pageTitle = 'Publish: ' . $project->title;
+    $pageTitle = 'Publikasi: ' . $project->title;
 @endphp
 
 <x-studio-layout>
@@ -10,16 +10,16 @@
                 ['label' => 'Dashboard', 'url' => route('studio.dashboard')],
                 ['label' => 'Builder', 'url' => route('studio.builder.index')],
                 ['label' => $project->title, 'url' => route('studio.builder.projects.edit', $project->slug)],
-                ['label' => 'Publish'],
+                ['label' => 'Publikasi'],
             ]" />
 
             {{-- Header --}}
             <div class="mt-6 mb-8">
                 <h1 class="text-2xl font-bold text-gray-900 dark:text-white">
-                    Publish Experience
+                    Publikasikan Experience
                 </h1>
                 <p class="mt-1 text-sm text-gray-600 dark:text-gray-400">
-                    Make your experience available on the platform for everyone to discover and play.
+                    Jadikan experience Anda tersedia di platform untuk semua orang menemukan dan memainkannya.
                 </p>
             </div>
 
@@ -34,10 +34,10 @@
                         </div>
                         <div class="flex-1">
                             <p class="text-sm font-medium text-emerald-800 dark:text-emerald-200">
-                                This experience is published on the platform.
+                                Experience ini sudah dipublikasikan di platform.
                             </p>
                             <a href="{{ $project->getSimulationUrl() }}" target="_blank" class="text-sm text-emerald-600 dark:text-emerald-400 hover:underline">
-                                View on platform →
+                                Lihat di platform →
                             </a>
                         </div>
                     </div>
@@ -58,7 +58,7 @@
                     {{-- Thumbnail Preview --}}
                     <div class="mb-6">
                         <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                            Thumbnail
+                            Gambar Sampul
                         </label>
                         <div class="flex items-start gap-4">
                             <div class="w-48 h-27 rounded-lg overflow-hidden bg-gray-100 dark:bg-gray-700 flex-shrink-0">
@@ -82,7 +82,7 @@
                                     class="block w-full text-sm text-gray-500 dark:text-gray-400 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-purple-50 file:text-purple-700 hover:file:bg-purple-100 dark:file:bg-purple-900/30 dark:file:text-purple-400 dark:hover:file:bg-purple-900/50"
                                 />
                                 <p class="mt-1 text-xs text-gray-500 dark:text-gray-400">
-                                    PNG, JPG, WEBP (max 2MB). Recommended: 1280×720
+                                    PNG, JPG, WEBP (maks 2MB). Disarankan: 1280×720
                                 </p>
                             </div>
                         </div>
@@ -91,7 +91,7 @@
                     {{-- Category --}}
                     <div class="mb-4">
                         <label for="category" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                            Category <span class="text-red-500">*</span>
+                            Kategori <span class="text-red-500">*</span>
                         </label>
                         <select
                             id="category"
@@ -100,7 +100,7 @@
                             required
                             class="block w-full rounded-lg border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white shadow-sm focus:border-purple-500 focus:ring-purple-500 text-sm"
                         >
-                            <option value="">Select category...</option>
+                            <option value="">Pilih kategori...</option>
                             @foreach($categories as $cat)
                                 <option value="{{ $cat }}">{{ $cat }}</option>
                             @endforeach
@@ -110,14 +110,14 @@
                     {{-- Subcategory --}}
                     <div class="mb-4">
                         <label for="subcategory" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                            Subcategory
+                            Subkategori
                         </label>
                         <input
                             type="text"
                             id="subcategory"
                             name="subcategory"
                             x-model="subcategory"
-                            placeholder="Optional subcategory"
+                            placeholder="Subkategori opsional"
                             class="block w-full rounded-lg border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white shadow-sm focus:border-purple-500 focus:ring-purple-500 text-sm"
                         />
                     </div>
@@ -125,14 +125,14 @@
                     {{-- Tags --}}
                     <div class="mb-4">
                         <label for="tags" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                            Tags
+                            Tag
                         </label>
                         <input
                             type="text"
                             id="tags"
                             name="tags"
                             x-model="tags"
-                            placeholder="Comma-separated tags (e.g. education, math, interactive)"
+                            placeholder="Tag dipisah koma (contoh: edukasi, matematika, interaktif)"
                             class="block w-full rounded-lg border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white shadow-sm focus:border-purple-500 focus:ring-purple-500 text-sm"
                         />
                     </div>
@@ -140,14 +140,14 @@
                     {{-- Description --}}
                     <div class="mb-6">
                         <label for="description" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                            Description
+                            Deskripsi
                         </label>
                         <textarea
                             id="description"
                             name="description"
                             x-model="description"
                             rows="3"
-                            placeholder="Describe your experience..."
+                            placeholder="Deskripsikan experience Anda..."
                             class="block w-full rounded-lg border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white shadow-sm focus:border-purple-500 focus:ring-purple-500 text-sm"
                         ></textarea>
                     </div>
@@ -168,7 +168,7 @@
                             href="{{ route('studio.builder.projects.edit', $project->slug) }}"
                             class="text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition"
                         >
-                            ← Back to editor
+                            ← Kembali ke editor
                         </a>
                         <div class="flex items-center gap-3">
                             @if($project->hasSimulation())
@@ -181,10 +181,10 @@
                                     @method('POST')
                                     <button
                                         type="button"
-                                        onclick="confirmSubmit(document.getElementById('unpublish-form'), 'Unpublish this experience from the platform?', { title: 'Unpublish', confirmText: 'Ya, Unpublish' })"
+                                        onclick="confirmSubmit(document.getElementById('unpublish-form'), 'Batalkan publikasi experience ini dari platform?', { title: 'Batalkan Publikasi', confirmText: 'Ya, Batalkan' })"
                                         class="px-4 py-2 text-sm font-medium text-red-700 dark:text-red-400 bg-red-50 dark:bg-red-900/20 hover:bg-red-100 dark:hover:bg-red-900/30 rounded-lg transition"
                                     >
-                                        Unpublish
+                                        Batalkan Publikasi
                                     </button>
                                 </form>
                             @endif
@@ -199,7 +199,7 @@
                                         <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                                     </svg>
                                 </template>
-                                <span x-text="submitting ? 'Publishing...' : 'Publish to Platform'"></span>
+                                <span x-text="submitting ? 'Mempublikasikan...' : 'Publikasikan ke Platform'"></span>
                             </button>
                         </div>
                     </div>
@@ -227,7 +227,7 @@ function publishForm() {
             if (!file) return;
 
             if (file.size > 2 * 1024 * 1024) {
-                this.errorMessage = 'Thumbnail must be less than 2MB';
+                this.errorMessage = 'Ukuran gambar sampul harus kurang dari 2MB';
                 return;
             }
 
@@ -238,7 +238,7 @@ function publishForm() {
 
         async submit() {
             if (!this.category) {
-                this.errorMessage = 'Category is required';
+                this.errorMessage = 'Kategori wajib diisi';
                 return;
             }
 
@@ -274,10 +274,10 @@ function publishForm() {
                         window.location.href = data.redirect;
                     }, 1500);
                 } else {
-                    this.errorMessage = data.message || 'Failed to publish. Please try again.';
+                    this.errorMessage = data.message || 'Gagal mempublikasikan. Silakan coba lagi.';
                 }
             } catch (error) {
-                this.errorMessage = 'An error occurred. Please try again.';
+                this.errorMessage = 'Terjadi kesalahan. Silakan coba lagi.';
             } finally {
                 this.submitting = false;
             }

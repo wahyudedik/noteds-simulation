@@ -1,4 +1,4 @@
-<x-app-layout>
+<x-app-layout x-data="{ loading: true }" x-init="setTimeout(() => loading = false, 500)">
     <x-slot name="header">
         <div class="flex items-center justify-between gap-3">
             <h2 class="font-semibold text-lg sm:text-xl text-gray-800 dark:text-white leading-tight truncate">
@@ -13,7 +13,28 @@
         </div>
     </x-slot>
 
-    <div class="py-12">
+    {{-- Loading Skeleton --}}
+    <template x-if="loading">
+        <div class="py-12">
+            <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+                <div class="mb-4"><div class="h-4 bg-gray-200 dark:bg-gray-700 rounded w-32 animate-pulse"></div></div>
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                    @for($i = 0; $i < 6; $i++)
+                        <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 overflow-hidden animate-pulse">
+                            <div class="aspect-video bg-gray-200 dark:bg-gray-700"></div>
+                            <div class="p-4 space-y-3">
+                                <div class="h-4 bg-gray-200 dark:bg-gray-700 rounded w-3/4"></div>
+                                <div class="h-3 bg-gray-200 dark:bg-gray-700 rounded w-1/2"></div>
+                                <div class="h-3 bg-gray-200 dark:bg-gray-700 rounded w-full"></div>
+                            </div>
+                        </div>
+                    @endfor
+                </div>
+            </div>
+        </div>
+    </template>
+
+    <div class="py-12" x-show="!loading" x-transition>
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
 
             <x-breadcrumb :items="[['label' => 'Collection Saya']]" />

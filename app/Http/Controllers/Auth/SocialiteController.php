@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use App\Models\User;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
@@ -39,7 +40,7 @@ class SocialiteController extends Controller
     /**
      * Handle the Google callback.
      */
-    public function callback(): RedirectResponse
+    public function callback(Request $request): RedirectResponse
     {
         Log::info('Google OAuth callback received', [
             'session_id' => session()->getId(),
@@ -102,7 +103,9 @@ class SocialiteController extends Controller
             ]);
         }
 
-        Auth::login($user);
+        Auth::login($user, true);
+
+        $request->session()->regenerate();
 
         return redirect()->intended(route('dashboard', absolute: false));
     }

@@ -6,8 +6,11 @@
                 {{ Str::limit($simulation->title, 50) }}
             </h2>
             <div class="flex items-center gap-2">
+                <a href="{{ route('admin.simulations.index') }}" class="px-3 py-1.5 bg-gray-100 hover:bg-gray-200 text-gray-700 dark:text-gray-300 text-sm font-medium rounded-lg transition">
+                    ← Kembali
+                </a>
                 <a href="{{ route('admin.simulations.edit', $simulation) }}" class="px-3 py-1.5 bg-yellow-100 dark:bg-yellow-900/30 hover:bg-yellow-200 text-yellow-700 text-sm font-medium rounded-lg transition">Edit</a>
-                <a href="{{ route('simulations.show', $simulation->slug) }}" target="_blank" class="px-3 py-1.5 bg-blue-100 dark:bg-blue-900/30 hover:bg-blue-200 text-blue-700 text-sm font-medium rounded-lg transition">Lihat Publik ?</a>
+                <a href="{{ route('simulations.show', $simulation->slug) }}" target="_blank" class="px-3 py-1.5 bg-blue-100 dark:bg-blue-900/30 hover:bg-blue-200 text-blue-700 text-sm font-medium rounded-lg transition">Lihat Publik</a>
             </div>
         </div>
     </x-slot>

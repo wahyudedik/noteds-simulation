@@ -24,7 +24,7 @@
                             <input type="text" name="title" id="title" value="{{ old('title', $collection->title) }}" required
                                 class="mt-1 block w-full border-gray-300 focus:border-blue-500 focus:ring-blue-500 rounded-md shadow-sm text-sm dark:border-gray-600 dark:bg-gray-700 dark:text-white" />
                             @error('title')
-                                <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                                <p class="mt-1 text-xs text-red-500">{{ $message }}</p>
                             @enderror
                         </div>
 
@@ -34,7 +34,7 @@
                                 class="mt-1 block w-full border-gray-300 focus:border-blue-500 focus:ring-blue-500 rounded-md shadow-sm text-sm dark:border-gray-600 dark:bg-gray-700 dark:text-white">{{ old('description', $collection->description) }}</textarea>
                             <p class="mt-1 text-xs text-gray-400 dark:text-gray-500 text-right"><span x-text="text.length"></span>/1000 karakter</p>
                             @error('description')
-                                <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                                <p class="mt-1 text-xs text-red-500">{{ $message }}</p>
                             @enderror
                         </div>
 

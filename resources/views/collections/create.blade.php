@@ -16,7 +16,7 @@
                                 class="mt-1 block w-full border-gray-300 focus:border-blue-500 focus:ring-blue-500 rounded-md shadow-sm text-sm dark:border-gray-600 dark:bg-gray-700 dark:text-white"
                                 placeholder="Contoh: Fisika Dasar - Mekanika" />
                             @error('title')
-                                <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                                <p class="mt-1 text-xs text-red-500">{{ $message }}</p>
                             @enderror
                         </div>
 
@@ -30,7 +30,7 @@
                                 placeholder="Jelaskan tentang collection ini...">{{ old('description') }}</textarea>
                             <p class="text-xs text-gray-400 dark:text-gray-500 mt-1"><span x-text="text.length"></span>/1000 karakter</p>
                             @error('description')
-                                <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                                <p class="mt-1 text-xs text-red-500">{{ $message }}</p>
                             @enderror
                         </div>
 

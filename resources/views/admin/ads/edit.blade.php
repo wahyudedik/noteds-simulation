@@ -21,7 +21,7 @@
                         <label for="title" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Judul Iklan</label>
                         <input type="text" name="title" id="title" value="{{ old('title', $ad->title) }}" required
                             class="mt-1 block w-full border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 text-sm">
-                        @error('title') <p class="mt-1 text-sm text-red-600 dark:text-red-400">{{ $message }}</p> @enderror
+                        @error('title') <p class="mt-1 text-xs text-red-500">{{ $message }}</p> @enderror
                     </div>
 
                     {{-- Type & Position --}}

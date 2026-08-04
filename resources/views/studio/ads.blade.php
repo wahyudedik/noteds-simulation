@@ -180,11 +180,12 @@
                 </table>
             </div>
         @else
-            <div class="text-center py-8 text-gray-500 dark:text-gray-400">
-                <svg class="w-12 h-12 mx-auto text-gray-300 dark:text-gray-600 mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <div class="text-center py-12">
+                <svg class="w-16 h-16 text-gray-300 dark:text-gray-600 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/>
                 </svg>
-                <p>Belum ada iklan untuk experience ini.</p>
+                <h3 class="text-lg font-medium text-gray-900 dark:text-white mb-2">Belum ada iklan</h3>
+                <p class="text-sm text-gray-500 dark:text-gray-400">Ajukan iklan pertama menggunakan form di atas.</p>
             </div>
         @endif
     </div>

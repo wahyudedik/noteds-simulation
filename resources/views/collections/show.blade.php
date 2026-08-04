@@ -1,4 +1,4 @@
-<x-app-layout>
+<x-app-layout x-data="{ loading: true }" x-init="setTimeout(() => loading = false, 500)">
     <x-slot name="header">
         <div class="flex items-center justify-between">
             <h2 class="font-semibold text-xl text-gray-800 dark:text-white leading-tight">
@@ -16,7 +16,39 @@
         </div>
     </x-slot>
 
-    <div class="py-12">
+    {{-- Loading Skeleton --}}
+    <template x-if="loading">
+        <div class="py-12">
+            <div class="max-w-5xl mx-auto sm:px-6 lg:px-8">
+                <div class="mb-4"><div class="h-4 bg-gray-200 dark:bg-gray-700 rounded w-40 animate-pulse"></div></div>
+                <div class="bg-white dark:bg-gray-800 rounded-2xl p-6 sm:p-8 shadow-sm border border-gray-100 dark:border-gray-700 mb-8 animate-pulse">
+                    <div class="flex flex-col sm:flex-row items-start gap-6">
+                        <div class="w-full sm:w-48 aspect-video sm:aspect-square bg-gray-200 dark:bg-gray-700 rounded-xl"></div>
+                        <div class="flex-1 space-y-3">
+                            <div class="h-7 bg-gray-200 dark:bg-gray-700 rounded w-64"></div>
+                            <div class="h-4 bg-gray-200 dark:bg-gray-700 rounded w-96"></div>
+                            <div class="h-3 bg-gray-200 dark:bg-gray-700 rounded w-48"></div>
+                            <div class="h-3 bg-gray-200 dark:bg-gray-700 rounded w-64"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="space-y-3">
+                    @for($i = 0; $i < 4; $i++)
+                        <div class="flex items-center gap-4 bg-white dark:bg-gray-800 rounded-xl p-4 shadow-sm border border-gray-100 dark:border-gray-700 animate-pulse">
+                            <div class="w-8 h-8 rounded-full bg-gray-200 dark:bg-gray-700"></div>
+                            <div class="w-32 aspect-video bg-gray-200 dark:bg-gray-700 rounded-lg"></div>
+                            <div class="flex-1 space-y-2">
+                                <div class="h-4 bg-gray-200 dark:bg-gray-700 rounded w-3/4"></div>
+                                <div class="h-3 bg-gray-200 dark:bg-gray-700 rounded w-1/2"></div>
+                            </div>
+                        </div>
+                    @endfor
+                </div>
+            </div>
+        </div>
+    </template>
+
+    <div class="py-12" x-show="!loading" x-transition>
         <div class="max-w-5xl mx-auto sm:px-6 lg:px-8">
 
             <x-breadcrumb :items="[['label' => 'Collections', 'url' => route('collections.index')], ['label' => $collection->title]]" />

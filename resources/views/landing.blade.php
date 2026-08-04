@@ -29,14 +29,6 @@
     <link rel="preconnect" href="https://fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=roboto:400,500,700&display=swap" rel="stylesheet" />
     @vite(['resources/css/app.css', 'resources/js/app.js'])
-    <style>
-        .simulation-card:hover .thumbnail-overlay { opacity: 1; }
-        .simulation-card:hover img { transform: scale(1.05); }
-        .category-pill:hover { background-color: #2563eb; color: white; }
-        .hero-gradient {
-            background: linear-gradient(135deg, #1e3a5f 0%, #0f172a 50%, #1e293b 100%);
-        }
-    </style>
 </head>
 <body class="bg-gray-50 dark:bg-gray-900 font-sans antialiased">
     <a href="#main-content" class="sr-only focus:not-sr-only focus:absolute focus:z-50 focus:top-2 focus:left-2 focus:bg-blue-600 focus:text-white focus:px-4 focus:py-2 focus:rounded-lg focus:font-medium focus:shadow-lg">

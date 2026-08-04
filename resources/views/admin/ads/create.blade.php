@@ -20,7 +20,7 @@
                         <label for="title" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Judul Iklan</label>
                         <input type="text" name="title" id="title" value="{{ old('title') }}" required
                             class="mt-1 block w-full border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 text-sm">
-                        @error('title') <p class="mt-1 text-sm text-red-600 dark:text-red-400">{{ $message }}</p> @enderror
+                        @error('title') <p class="mt-1 text-xs text-red-500">{{ $message }}</p> @enderror
                     </div>
 
                     {{-- Type, Network & Position --}}
@@ -65,7 +65,7 @@
                         <label for="content" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Konten HTML (untuk banner/interstitial)</label>
                         <textarea name="content" id="content" rows="4" placeholder="<iframe src='...' /> atau HTML konten iklan"
                             class="mt-1 block w-full border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 text-sm font-mono">{{ old('content') }}</textarea>
-                        @error('content') <p class="mt-1 text-sm text-red-600 dark:text-red-400">{{ $message }}</p> @enderror
+                        @error('content') <p class="mt-1 text-xs text-red-500">{{ $message }}</p> @enderror
                     </div>
 
                     {{-- Image --}}
@@ -74,7 +74,7 @@
                         <input type="file" name="image" id="image" accept="image/*"
                             class="mt-1 block w-full border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white text-sm text-gray-500 dark:text-gray-400 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-medium file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100 dark:file:bg-blue-900/30 dark:file:text-blue-400 dark:hover:file:bg-blue-800/50">
                         <p class="mt-1 text-xs text-gray-400 dark:text-gray-500">JPG/PNG/WebP, maks 512KB. Ukuran: 728x90, 300x250, 160x600</p>
-                        @error('image') <p class="mt-1 text-sm text-red-600 dark:text-red-400">{{ $message }}</p> @enderror
+                        @error('image') <p class="mt-1 text-xs text-red-500">{{ $message }}</p> @enderror
                     </div>
 
                     {{-- Target URL --}}
@@ -82,7 +82,7 @@
                         <label for="target_url" class="block text-sm font-medium text-gray-700 dark:text-gray-300">URL Tujuan Klik</label>
                         <input type="url" name="target_url" id="target_url" value="{{ old('target_url') }}" placeholder="https://example.com"
                             class="mt-1 block w-full border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 text-sm">
-                        @error('target_url') <p class="mt-1 text-sm text-red-600 dark:text-red-400">{{ $message }}</p> @enderror
+                        @error('target_url') <p class="mt-1 text-xs text-red-500">{{ $message }}</p> @enderror
                     </div>
 
                     {{-- AdSense / Ad Network IDs --}}
