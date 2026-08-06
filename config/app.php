@@ -124,4 +124,20 @@ return [
         'store' => env('APP_MAINTENANCE_STORE', 'database'),
     ],
 
+    /*
+    |--------------------------------------------------------------------------
+    | Social Media URLs
+    |--------------------------------------------------------------------------
+    |
+    | URLs for social media profiles used in footer and other UI elements.
+    | Set these in your ".env" file. Leave empty to hide the link.
+    |
+    */
+
+    'social' => [
+        'twitter' => env('SOCIAL_TWITTER_URL', 'https://x.com/notedshq'),
+        'instagram' => env('SOCIAL_INSTAGRAM_URL', 'https://instagram.com/notedshq'),
+        'github' => env('SOCIAL_GITHUB_URL', 'https://github.com/notedshq'),
+    ],
+
 ];

@@ -538,3 +538,21 @@ Yang mereka lihat hanyalah Experience yang menarik, interaktif, dan mudah dipela
 
 
 Menurutku, roadmap ini menjaga keseimbangan antara target jangka pendek (mengembangkan produk yang sudah production), target menengah (membangun ekosistem kreator), dan visi jangka panjang (menjadikan Noteds sebagai standar distribusi Experience interaktif), tanpa mengorbankan kompatibilitas dengan konten yang sudah dibuat sejak versi pertama.
+
+---
+
+## Changelog (Quality Improvements)
+
+### v12.1 — Lightweight Improvements (2026-08-06)
+
+**Code Quality & UX**
+- Social media links di footer sekarang menggunakan configurable URLs via `config('app.social.*')` dengan env variables (`SOCIAL_TWITTER_URL`, `SOCIAL_INSTAGRAM_URL`, `SOCIAL_GITHUB_URL`). Link tidak akan muncul jika env kosong.
+- CSS inline pada WhatsApp contact button dipindahkan ke [`app.css`](resources/css/app.css) untuk konsistensi dan caching yang lebih baik.
+- CSS inline hover effects pada [`explore.blade.php`](resources/views/simulations/explore.blade.php) dan [`creators/show.blade.php`](resources/views/creators/show.blade.php) dipindahkan ke [`app.css`](resources/css/app.css) sebagai reusable classes.
+- Touch-friendly active states dan `@media (hover: none)` media query ditambahkan ke app.css untuk mobile UX yang lebih baik.
+
+**Dark Mode**
+- Marketplace search input ([`marketplace/index.blade.php`](resources/views/marketplace/index.blade.php:55)) mendapatkan dark mode styling (`dark:text-white`, `dark:bg-gray-800/95`).
+
+**Accessibility**
+- Play overlay pada halaman simulasi ([`simulations/show.blade.php`](resources/views/simulations/show.blade.php:79)) mendapatkan `role="button"`, `tabindex="0"`, `aria-label="Putar simulasi"`, dan keyboard support (Enter/Space).

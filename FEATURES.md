@@ -2405,6 +2405,7 @@ Semua halaman dan komponen UI harus mengikuti sistem desain ini secara konsisten
 *   Hindari warna murni `black`/`white` di dark mode — gunakan `gray-800`/`gray-900` untuk surface dan `gray-100`/`gray-200` untuk teks.
 *   Thumbnail tetap sama di kedua mode (tidak perlu filter).
 *   Gunakan `dark:` prefix secara konsisten di semua Tailwind classes.
+*   **Input fields** harus memiliki `dark:text-white dark:bg-gray-800/95` saat menggunakan backdrop-blur.
 
 ### I. Komponen Khusus Halaman
 
@@ -2837,3 +2838,17 @@ $table->fullText(['title', 'description']); // Full-text search
     *   Image optimization: WebP format, lazy loading, responsive images.
     *   Gzip/Brotli compression untuk semua text-based assets.
     *   HTTP/2 atau HTTP/3 untuk multiplexing.
+
+---
+
+## Changelog (Quality Improvements)
+
+### v12.1 — 2026-08-06
+
+| Perubahan | Detail | File |
+|:---|:---|:---|
+| **Social Media Configurable** | Social media links di footer sekarang dikonfigurasi via `SOCIAL_*_URL` env variables. Jika kosong, link tidak ditampilkan. | [`config/app.php`](config/app.php), [`app-footer.blade.php`](resources/views/components/app-footer.blade.php), [`.env.example`](.env.example) |
+| **CSS Consolidation** | Inline CSS dari 3 file (whatsapp-contact, explore, creators/show) dipindahkan ke [`app.css`](resources/css/app.css) untuk caching lebih baik dan maintainability. | [`app.css`](resources/css/app.css), [`whatsapp-contact.blade.php`](resources/views/components/whatsapp-contact.blade.php), [`explore.blade.php`](resources/views/simulations/explore.blade.php), [`creators/show.blade.php`](resources/views/creators/show.blade.php) |
+| **Dark Mode Fix** | Search input di marketplace sebelumnya tidak memiliki dark mode variant. | [`marketplace/index.blade.php`](resources/views/marketplace/index.blade.php) |
+| **Accessibility Fix** | Play overlay di detail simulasi ditambahkan `role="button"`, `tabindex="0"`, `aria-label`, dan keyboard handler. | [`simulations/show.blade.php`](resources/views/simulations/show.blade.php) |
+| **Touch-friendly CSS** | Ditambahkan media query `@media (hover: none)` untuk mobile dan `.category-chip` reusable class. | [`app.css`](resources/css/app.css) |

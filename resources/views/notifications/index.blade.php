@@ -1,4 +1,24 @@
-<x-app-layout x-data="{ loading: true }" x-init="setTimeout(() => loading = false, 500)">
+<x-app-layout x-data="{
+    loading: true,
+    async markAsRead(id, url) {
+        const data = await ajaxPost('/notifications/' + id + '/mark-read');
+        if (data && data.message) {
+            showToast(data.message, 'success');
+        }
+        if (url && url !== '#') {
+            window.location.href = url;
+        } else {
+            window.location.reload();
+        }
+    },
+    async markAllAsRead() {
+        const data = await ajaxPost('/notifications/mark-all-read');
+        if (data && data.message) {
+            showToast(data.message, 'success');
+        }
+        window.location.reload();
+    }
+}" x-init="setTimeout(() => loading = false, 500)">
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 dark:text-white leading-tight">
             <svg class="inline w-5 h-5 mr-1 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" /></svg>
@@ -42,7 +62,7 @@
                 <div></div>
                 @if($notifications->count() > 0)
                     <button
-                        onclick="markAllAsRead()"
+                        @click="markAllAsRead()"
                         class="text-sm text-blue-600 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300 font-medium transition"
                     >
                         Tandai semua sudah dibaca
@@ -55,7 +75,10 @@
                     @foreach($notifications as $notification)
                         <div
                             class="p-4 rounded-xl transition cursor-pointer {{ $notification->read_at ? 'bg-white hover:bg-gray-50 dark:bg-gray-800 dark:hover:bg-gray-700' : 'bg-blue-50 hover:bg-blue-100 border-l-2 border-blue-500 dark:bg-blue-900/20 dark:hover:bg-blue-900/30' }}"
-                            onclick="markAsRead('{{ $notification->id }}', '{{ $notification->data['url'] ?? '#' }}')"
+                            @click="markAsRead('{{ $notification->id }}', '{{ $notification->data['url'] ?? '#' }}')"
+                            @keydown.enter="markAsRead('{{ $notification->id }}', '{{ $notification->data['url'] ?? '#' }}')"
+                            role="button"
+                            tabindex="0"
                         >
                             <div class="flex items-start gap-3">
                                 {{-- Icon based on type --}}
@@ -111,71 +134,4 @@
         </div>
     </div>
 
-    <script>
-        function markAsRead(id, url) {
-            try {
-                fetch('/notifications/' + id + '/mark-read', {
-                    method: 'POST',
-                    headers: {
-                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
-                        'X-Requested-With': 'XMLHttpRequest',
-                        'Accept': 'application/json'
-                    }
-                })
-                .then(function(response) {
-                    if (!response.ok || !(response.headers.get('content-type') || '').includes('application/json')) {
-                        return null;
-                    }
-                    return response.json();
-                })
-                .then(function(data) {
-                    if (data && data.message) {
-                        window.showToast(data.message, 'success');
-                    }
-                    if (url && url !== '#' && typeof url === 'string') {
-                        window.location.href = url;
-                    } else {
-                        window.location.reload();
-                    }
-                })
-                .catch(function() {
-                    if (url && url !== '#' && typeof url === 'string') {
-                        window.location.href = url;
-                    }
-                });
-            } catch (e) {
-                window.location.reload();
-            }
-        }
-
-        function markAllAsRead() {
-            try {
-                fetch('/notifications/mark-all-read', {
-                    method: 'POST',
-                    headers: {
-                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
-                        'X-Requested-With': 'XMLHttpRequest',
-                        'Accept': 'application/json'
-                    }
-                })
-                .then(function(response) {
-                    if (!response.ok || !(response.headers.get('content-type') || '').includes('application/json')) {
-                        return null;
-                    }
-                    return response.json();
-                })
-                .then(function(data) {
-                    if (data && data.message) {
-                        window.showToast(data.message, 'success');
-                    }
-                    window.location.reload();
-                })
-                .catch(function() {
-                    window.location.reload();
-                });
-            } catch (e) {
-                window.location.reload();
-            }
-        }
-    </script>
 </x-app-layout>

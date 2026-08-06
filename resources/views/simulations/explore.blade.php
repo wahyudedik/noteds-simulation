@@ -7,18 +7,6 @@
     </x-slot>
 
     <div x-data="{ loading: false }">
-    <style>
-        .simulation-card:hover .thumbnail-overlay { opacity: 1; }
-        .simulation-card:hover img { transform: scale(1.05); }
-        .category-chip:hover { background-color: #2563eb; color: white; }
-        .category-chip.active { background-color: #2563eb; color: white; }
-        /* Touch-friendly: ensure active state works on mobile tap */
-        .simulation-card:active .thumbnail-overlay { opacity: 1; }
-        @media (hover: none) {
-            .simulation-card .thumbnail-overlay { opacity: 0.7; }
-            .simulation-card:active img { transform: scale(1.05); }
-        }
-    </style>
 
     {{-- Loading Skeleton Overlay --}}
     <div x-show="loading" x-transition:enter="transition ease-out duration-200" x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100" x-cloak class="fixed inset-0 z-50 bg-white/80 dark:bg-gray-900/80 backdrop-blur-sm">

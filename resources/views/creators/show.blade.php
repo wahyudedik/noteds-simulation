@@ -6,17 +6,6 @@
         </div>
     </x-slot>
 
-    <style>
-        .simulation-card:hover .thumbnail-overlay { opacity: 1; }
-        .simulation-card:hover img { transform: scale(1.05); }
-        /* Touch-friendly: ensure active state works on mobile tap */
-        .simulation-card:active .thumbnail-overlay { opacity: 1; }
-        @media (hover: none) {
-            .simulation-card .thumbnail-overlay { opacity: 0.7; }
-            .simulation-card:active img { transform: scale(1.05); }
-        }
-    </style>
-
     <div class="py-6 sm:py-12">
         <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
 
