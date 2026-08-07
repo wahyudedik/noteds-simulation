@@ -5,6 +5,10 @@
  *   data-serve-url, data-play-url, data-simulation-id,
  *   data-comments-url, data-favorites-url, data-bookmarks-url,
  *   data-reactions-url, data-ratings-url, data-collections-url
+ *
+ * All functions are explicitly assigned to `window` so they are accessible
+ * from inline event handlers (onclick) in Blade templates, since this file
+ * is imported as an ES module.
  */
 
 // ─── Player State ──────────────────────────────────────────────────────────────
@@ -15,7 +19,7 @@ var isSticky = false;
 var stickyThreshold = 0;
 var scrollTicking = false;
 
-function getPlayerConfig() {
+window.getPlayerConfig = function () {
     var wrapper = document.getElementById('player-wrapper');
     return {
         serveUrl: wrapper.dataset.serveUrl,
@@ -29,11 +33,11 @@ function getPlayerConfig() {
         ratingsUrl: wrapper.dataset.ratingsUrl,
         collectionsUrl: wrapper.dataset.collectionsUrl,
     };
-}
+};
 
 // ─── Player Controls ──────────────────────────────────────────────────────────
 
-function playSimulation() {
+window.playSimulation = function () {
     if (isPlaying) return;
     isPlaying = true;
 
@@ -41,13 +45,13 @@ function playSimulation() {
     var container = document.getElementById('player-iframe-container');
     var controls = document.getElementById('player-controls');
     var iframe = document.getElementById('simulation-iframe');
-    var config = getPlayerConfig();
+    var config = window.getPlayerConfig();
 
     poster.classList.add('hidden');
     container.classList.remove('hidden');
     controls.classList.remove('hidden');
     iframe.src = config.serveUrl;
-    updateStickyThreshold();
+    window.updateStickyThreshold();
 
     fetch(config.playUrl, {
         method: 'GET',
@@ -56,12 +60,12 @@ function playSimulation() {
         if (!r.ok || !(r.headers.get('content-type') || '').includes('application/json')) return null;
         return r.json();
     }).catch(function () { });
-}
+};
 
-function closeSimulation() {
+window.closeSimulation = function () {
     isPlaying = false;
-    exitFullscreen();
-    exitSticky();
+    window.exitFullscreen();
+    window.exitSticky();
 
     var container = document.getElementById('player-iframe-container');
     var controls = document.getElementById('player-controls');
@@ -72,54 +76,54 @@ function closeSimulation() {
     controls.classList.add('hidden');
     poster.classList.remove('hidden');
     iframe.src = '';
-}
+};
 
-function reloadSimulation() {
+window.reloadSimulation = function () {
     var iframe = document.getElementById('simulation-iframe');
     if (iframe.src) { iframe.src = iframe.src; }
-}
+};
 
-function toggleFullscreen() {
-    isFullscreen ? exitFullscreen() : enterFullscreen();
-}
+window.toggleFullscreen = function () {
+    isFullscreen ? window.exitFullscreen() : window.enterFullscreen();
+};
 
-function enterFullscreen() {
+window.enterFullscreen = function () {
     isFullscreen = true;
     var playerWrapper = document.getElementById('player-wrapper');
     document.body.classList.add('fullscreen-mode');
     playerWrapper.classList.add('player-fullscreen');
     document.getElementById('icon-fullscreen-enter').classList.add('hidden');
     document.getElementById('icon-fullscreen-exit').classList.remove('hidden');
-}
+};
 
-function exitFullscreen() {
+window.exitFullscreen = function () {
     isFullscreen = false;
     var playerWrapper = document.getElementById('player-wrapper');
     document.body.classList.remove('fullscreen-mode');
     playerWrapper.classList.remove('player-fullscreen');
     document.getElementById('icon-fullscreen-enter').classList.remove('hidden');
     document.getElementById('icon-fullscreen-exit').classList.add('hidden');
-}
+};
 
-function updateStickyThreshold() {
+window.updateStickyThreshold = function () {
     var playerWrapper = document.getElementById('player-wrapper');
     var rect = playerWrapper.getBoundingClientRect();
     stickyThreshold = window.scrollY + rect.top + rect.height;
-}
+};
 
-function enterSticky() {
+window.enterSticky = function () {
     isSticky = true;
     var playerWrapper = document.getElementById('player-wrapper');
     playerWrapper.classList.add('player-sticky-active');
     playerWrapper.style.maxWidth = playerWrapper.parentElement.offsetWidth + 'px';
-}
+};
 
-function exitSticky() {
+window.exitSticky = function () {
     isSticky = false;
     var playerWrapper = document.getElementById('player-wrapper');
     playerWrapper.classList.remove('player-sticky-active');
     playerWrapper.style.maxWidth = '';
-}
+};
 
 // ─── Scroll & Resize Listeners ────────────────────────────────────────────────
 
@@ -128,8 +132,8 @@ window.addEventListener('scroll', function () {
         window.requestAnimationFrame(function () {
             if (isPlaying && !isFullscreen) {
                 var scrollPos = window.scrollY;
-                if (scrollPos > stickyThreshold && !isSticky) { enterSticky(); }
-                else if (scrollPos <= stickyThreshold && isSticky) { exitSticky(); }
+                if (scrollPos > stickyThreshold && !isSticky) { window.enterSticky(); }
+                else if (scrollPos <= stickyThreshold && isSticky) { window.exitSticky(); }
             }
             scrollTicking = false;
         });
@@ -141,22 +145,22 @@ window.addEventListener('resize', function () {
     if (isPlaying) {
         var playerWrapper = document.getElementById('player-wrapper');
         if (isSticky) { playerWrapper.style.maxWidth = ''; }
-        updateStickyThreshold();
+        window.updateStickyThreshold();
         if (isSticky) { playerWrapper.style.maxWidth = playerWrapper.parentElement.offsetWidth + 'px'; }
     }
 });
 
 document.addEventListener('keydown', function (e) {
-    if (e.key === 'Escape' && isFullscreen) { exitFullscreen(); }
+    if (e.key === 'Escape' && isFullscreen) { window.exitFullscreen(); }
 });
 
 // ─── Copy Link ────────────────────────────────────────────────────────────────
 
-function copyLink() {
+window.copyLink = function () {
     var url = window.location.href;
     if (navigator.clipboard && navigator.clipboard.writeText) {
         navigator.clipboard.writeText(url).then(function () {
-            showToast('Link berhasil disalin!');
+            window.showToast('Link berhasil disalin!');
         });
     } else {
         var textarea = document.createElement('textarea');
@@ -167,19 +171,19 @@ function copyLink() {
         textarea.select();
         try {
             document.execCommand('copy');
-            showToast('Link berhasil disalin!');
+            window.showToast('Link berhasil disalin!');
         } catch (err) {
-            showToast('Gagal menyalin link');
+            window.showToast('Gagal menyalin link');
         }
         document.body.removeChild(textarea);
     }
-}
+};
 
 // ─── Favorite ─────────────────────────────────────────────────────────────────
 
-function toggleFavorite() {
-    var config = getPlayerConfig();
-    ajaxPost(config.favoritesUrl, {}, function (result) {
+window.toggleFavorite = function () {
+    var config = window.getPlayerConfig();
+    window.ajaxPost(config.favoritesUrl, {}, function (result) {
         if (!result) return;
         var btn = document.getElementById('favorite-btn');
         var countEl = document.getElementById('favorite-count');
@@ -193,20 +197,20 @@ function toggleFavorite() {
         }
         countEl.textContent = '(' + (result.favorite_count || 0) + ')';
     });
-}
+};
 
 // ─── Share Tracking ───────────────────────────────────────────────────────────
 
-function trackShare(platform) {
-    var config = getPlayerConfig();
-    ajaxPost(config.shareUrl, { platform: platform }, function () { });
-}
+window.trackShare = function (platform) {
+    var config = window.getPlayerConfig();
+    window.ajaxPost(config.shareUrl, { platform: platform }, function () { });
+};
 
 // ─── Bookmark ─────────────────────────────────────────────────────────────────
 
-function toggleBookmark() {
-    var config = getPlayerConfig();
-    ajaxPost(config.bookmarksUrl, { simulation_id: config.simulationId }, function (result) {
+window.toggleBookmark = function () {
+    var config = window.getPlayerConfig();
+    window.ajaxPost(config.bookmarksUrl, { simulation_id: config.simulationId }, function (result) {
         if (!result) return;
         var btn = document.getElementById('bookmark-btn');
         var text = document.getElementById('bookmark-text');
@@ -220,13 +224,13 @@ function toggleBookmark() {
             text.textContent = 'Bookmark';
         }
     });
-}
+};
 
 // ─── Add to Collection ────────────────────────────────────────────────────────
 
-function addToCollection(collectionId) {
-    var config = getPlayerConfig();
-    ajaxPost(config.collectionsUrl, {
+window.addToCollection = function (collectionId) {
+    var config = window.getPlayerConfig();
+    window.ajaxPost(config.collectionsUrl, {
         collection_id: collectionId,
         simulation_id: config.simulationId
     }, function (result) {
@@ -235,13 +239,13 @@ function addToCollection(collectionId) {
             setTimeout(function () { window.location.reload(); }, 500);
         }
     });
-}
+};
 
 // ─── Reactions ────────────────────────────────────────────────────────────────
 
-function toggleReaction(type) {
-    var config = getPlayerConfig();
-    ajaxPost(config.reactionsUrl, { simulation_id: config.simulationId, type: type }, function (result) {
+window.toggleReaction = function (type) {
+    var config = window.getPlayerConfig();
+    window.ajaxPost(config.reactionsUrl, { simulation_id: config.simulationId, type: type }, function (result) {
         if (!result) return;
         var btn = document.getElementById('reaction-' + type);
         var countEl = document.getElementById('reaction-count-' + type);
@@ -252,13 +256,13 @@ function toggleReaction(type) {
         }
         countEl.textContent = '(' + (result.count || 0) + ')';
     });
-}
+};
 
 // ─── Rating ───────────────────────────────────────────────────────────────────
 
-function setRating(value) {
-    var config = getPlayerConfig();
-    ajaxPost(config.ratingsUrl, { simulation_id: config.simulationId, rating: value }, function (result) {
+window.setRating = function (value) {
+    var config = window.getPlayerConfig();
+    window.ajaxPost(config.ratingsUrl, { simulation_id: config.simulationId, rating: value }, function (result) {
         if (!result) return;
         var stars = document.querySelectorAll('#rating-stars .rating-star');
         stars.forEach(function (star, index) {
@@ -272,12 +276,12 @@ function setRating(value) {
         });
         document.getElementById('rating-text').textContent = value + '/5';
     });
-}
+};
 
 // ─── Follow ───────────────────────────────────────────────────────────────────
 
-function toggleFollow(username) {
-    ajaxPost('/follows/' + username + '/toggle', {}, function (result) {
+window.toggleFollow = function (username) {
+    window.ajaxPost('/follows/' + username + '/toggle', {}, function (result) {
         if (!result) return;
         var btn = document.getElementById('follow-btn');
         var text = document.getElementById('follow-text');
@@ -291,12 +295,12 @@ function toggleFollow(username) {
             text.textContent = 'Ikuti';
         }
     });
-}
+};
 
 // ─── Comments ─────────────────────────────────────────────────────────────────
 
-function postComment(parentId) {
-    var config = getPlayerConfig();
+window.postComment = function (parentId) {
+    var config = window.getPlayerConfig();
     var inputId = parentId ? 'reply-input-' + parentId : 'comment-input';
     var input = document.getElementById(inputId);
     var content = input.value.trim();
@@ -328,7 +332,7 @@ function postComment(parentId) {
     var data = { simulation_id: config.simulationId, body: content };
     if (parentId) { data.parent_id = parentId; }
 
-    ajaxPost(config.commentsUrl, data, function (result) {
+    window.ajaxPost(config.commentsUrl, data, function (result) {
         if (isMainComment) {
             var submitBtn = document.getElementById('comment-submit-btn');
             var submitText = document.getElementById('comment-submit-text');
@@ -356,23 +360,23 @@ function postComment(parentId) {
             window.location.reload();
         }
     });
-}
+};
 
-function deleteComment(commentId) {
-    showConfirm('Hapus komentar ini?').then(function (confirmed) {
+window.deleteComment = function (commentId) {
+    window.showConfirm('Hapus komentar ini?').then(function (confirmed) {
         if (!confirmed) return;
-        var config = getPlayerConfig();
+        var config = window.getPlayerConfig();
         var url = config.commentsUrl.replace('/store', '') + '/' + commentId;
-        ajaxPost(url, { _method: 'DELETE' }, function (result) {
+        window.ajaxPost(url, { _method: 'DELETE' }, function (result) {
             if (!result) return;
             if (result.success) {
                 window.location.reload();
             }
         });
     });
-}
+};
 
-function toggleReplyForm(commentId) {
+window.toggleReplyForm = function (commentId) {
     var form = document.getElementById('reply-form-' + commentId);
     form.classList.toggle('show');
-}
+};
